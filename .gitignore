@@ -1,5 +1,6 @@
 HELP.md
 .gradle
+
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
@@ -39,18 +40,11 @@ out/
 ### Project ###
 *.properties
 *.yml
-# Maven
-target/
-*.xml
-/.mvn/
-mvnw
-mvnw.cmd
+
+
 
 # Gradle
-*.gradle
 /gradle/
-gradlew
-gradlew.bat
 
 # Application Logs
 logs/
