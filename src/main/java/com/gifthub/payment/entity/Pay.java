@@ -25,15 +25,15 @@ public class Pay {
 @Embeddable
 class PayId {
 
-    @JoinColumn(name = "payee")
+    @JoinColumn(name = "payee_id")
     @ManyToOne
     private User payee;
 
-    @JoinColumn(name = "payer")
+    @JoinColumn(name = "payer_id")
     @ManyToOne
     private User payer;
 
-    @JoinColumn(name = "payment")
+    @JoinColumn(name = "payment_id")
     @ManyToOne
     private Payment payment;
 

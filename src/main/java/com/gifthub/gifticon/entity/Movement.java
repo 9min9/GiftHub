@@ -36,6 +36,7 @@ public class Movement extends BaseTimeEntity {
     @ManyToOne
     private Gifticon gifticon;
 
+    @Enumerated(EnumType.STRING)
     private MovementStatus movementStatus;
 
 }
