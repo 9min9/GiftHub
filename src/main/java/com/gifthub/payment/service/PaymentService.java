@@ -4,7 +4,11 @@ import com.gifthub.payment.dto.PaymentDto;
 import com.gifthub.payment.entity.Payment;
 import com.gifthub.payment.repository.PaymentRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -30,6 +34,12 @@ public class PaymentService {
         payment.setPaid();
 
         paymentRepository.save(payment);
+    }
+
+    public List<PaymentDto> getAll(Pageable pageable) {
+        return paymentRepository.findAllByOrderByIdDesc(pageable).get()
+                .map(PaymentDto::toDto)
+                .collect(Collectors.toList());
     }
 
 }
