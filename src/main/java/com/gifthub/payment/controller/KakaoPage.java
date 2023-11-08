@@ -10,7 +10,7 @@ public class KakaoPage {
 
     @GetMapping
     public String payment() {
-        return "/payment";
+        return "/payment/payment";
     }
 
 
