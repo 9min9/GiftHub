@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -91,35 +92,39 @@ public class KakaoPayController {
     }
 
     @GetMapping("/approve")
-    public void approve(@ModelAttribute KakaoApproveRequestDto dto, HttpServletRequest request, HttpServletResponse response, BindingResult bindingResult) {
-        KakaoPayApproveResponseDto approvedResponseDto = null;
-
-        String cid = "TC0ONETIME";
-        String tid = paymentService.get(Long.parseLong(dto.getPaymentId())).getPayCode();
-        String partnerOrderId = dto.getPaymentId();
-        String partnerUserId = "Test123";
-
-        KakaoPayApproveRequestDto requestDto = KakaoPayApproveRequestDto.builder()
-                .cid(cid)
-                .tid(tid)
-                .partner_order_id(partnerOrderId)
-                .partner_user_id(partnerUserId)
-                .pg_token(dto.getPg_token())
-                .build();
-
-        log.info("[KakaoPay Approve Request]", requestDto);
-
-        paymentService.setPaid(Long.parseLong(dto.getPaymentId()));
-        approvedResponseDto = service.approve(requestDto);
+    public ResponseEntity<?> approve(@ModelAttribute KakaoApproveRequestDto dto, HttpServletRequest request, HttpServletResponse response, BindingResult bindingResult) {
+        String redirectUrl = "";
+        HttpHeaders headers = new HttpHeaders();
 
         try {
+            KakaoPayApproveResponseDto approvedResponseDto = null;
+
+            String cid = "TC0ONETIME";
+            String tid = paymentService.get(Long.parseLong(dto.getPaymentId())).getPayCode();
+            String partnerOrderId = dto.getPaymentId();
+            String partnerUserId = "Test123";
+
+            KakaoPayApproveRequestDto requestDto = KakaoPayApproveRequestDto.builder()
+                    .cid(cid)
+                    .tid(tid)
+                    .partner_order_id(partnerOrderId)
+                    .partner_user_id(partnerUserId)
+                    .pg_token(dto.getPg_token())
+                    .build();
+
+            log.info("[KakaoPay Approve Request]", requestDto);
+
+            paymentService.setPaid(Long.parseLong(dto.getPaymentId()));
+            approvedResponseDto = service.approve(requestDto);
+
+
             if (request.isSecure()) {
-                response.sendRedirect("https://localhost/payment/close");
+                headers.set("location", "https://localhost/payment/close");
             } else {
-                response.sendRedirect("http://localhost/payment/close");
+                headers.set("location", "http://localhost/payment/close");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } finally {
+            return new ResponseEntity<String>("ok", headers, HttpStatus.TEMPORARY_REDIRECT);
         }
 
     }
