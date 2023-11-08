@@ -91,9 +91,7 @@ public class KakaoPayController {
     }
 
     @GetMapping("/approve")
-    public void approve(@ModelAttribute KakaoApproveRequestDto dto, HttpServletResponse response) {
-        System.out.println("dto = " + dto);
-
+    public void approve(@ModelAttribute KakaoApproveRequestDto dto, HttpServletRequest request, HttpServletResponse response, BindingResult bindingResult) {
         KakaoPayApproveResponseDto approvedResponseDto = null;
 
         String cid = "TC0ONETIME";
@@ -115,10 +113,15 @@ public class KakaoPayController {
         approvedResponseDto = service.approve(requestDto);
 
         try {
-            response.sendRedirect("https://localhost/payment/close");
+            if (request.isSecure()) {
+                response.sendRedirect("https://localhost/payment/close");
+            } else {
+                response.sendRedirect("http://localhost/payment/close");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
 }
