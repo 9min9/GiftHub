@@ -28,6 +28,8 @@ public class PaymentService {
         Payment payment = paymentRepository.findById(id).orElseThrow();
 
         payment.setPaid();
+
+        paymentRepository.save(payment);
     }
 
 }
