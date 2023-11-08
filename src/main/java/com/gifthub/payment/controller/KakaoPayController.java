@@ -42,8 +42,8 @@ public class KakaoPayController {
             Integer totalAmount = dto.getTotalAmount();
 
             String approvalUrl = "https://localhost/api/kakao/pay/approve?paymentId=" + partnerOrderId;
-            String cancelUrl = "https://localhost";
-            String failUrl = "https://localhost";
+            String cancelUrl = "https://localhost/payment/close";
+            String failUrl = "https://localhost/payment/close";
 
             String paymentMethodType = "MONEY";             // 현금 결제만 가능하도록 제한
             Integer installMonth = 1;
