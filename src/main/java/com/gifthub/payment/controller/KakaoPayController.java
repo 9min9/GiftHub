@@ -35,24 +35,33 @@ public class KakaoPayController {
 
         try {
             String cid = "TC0ONETIME";
-            String partnerOrderId = paymentService.nextVal().toString();
             String partnerUserId = "Test123";               // FIXME 세션에서 값 가져오게 변경
             String itemName = dto.getItemName();
             Integer quantity = 1;                           // 고정 (기프티콘 하나씩 거래)
             Integer totalAmount = dto.getTotalAmount();
-
-            String approvalUrl = "https://localhost/api/kakao/pay/approve?paymentId=" + partnerOrderId;
-            String cancelUrl = "https://localhost/payment/close";
-            String failUrl = "https://localhost/payment/close";
 
             String paymentMethodType = "MONEY";             // 현금 결제만 가능하도록 제한
             Integer installMonth = 1;
 
             Integer taxFreeAmount = 0;
 
+            PaymentDto paymentDto = PaymentDto.builder()
+                    .price(totalAmount.longValue())
+                    .payMethod(PayMethod.MONEY)
+                    .paymentSite(Site.KAKAO)
+                    .payStatus(PayStatus.PAYING)
+                    .build();
+
+            // 결제 정보 저장
+            Long paidPaymentId = paymentService.pay(paymentDto);
+
+            String approvalUrl = "https://localhost/api/kakao/pay/approve?paymentId=" + paidPaymentId;
+            String cancelUrl = "https://localhost/payment/close";
+            String failUrl = "https://localhost/payment/close";
+
             KakaoPayReadyRequestDto requestDto = KakaoPayReadyRequestDto.builder()
                     .cid(cid)
-                    .partner_order_id(Long.parseLong(partnerOrderId))
+                    .partner_order_id(paidPaymentId)
                     .partner_user_id(partnerUserId)
                     .item_name(itemName)
                     .quantity(quantity)
@@ -69,16 +78,8 @@ public class KakaoPayController {
 
             readyResponseDto = service.ready(requestDto);
 
-            PaymentDto paymentDto = PaymentDto.builder()
-                    .id(Long.parseLong(partnerOrderId))
-                    .price(totalAmount.longValue())
-                    .payMethod(PayMethod.MONEY)
-                    .paymentSite(Site.KAKAO)
-                    .payCode(readyResponseDto.getTid())
-                    .payStatus(PayStatus.PAYING)
-                    .build();
+            paymentService.setPayCode(paidPaymentId, readyResponseDto.getTid());
 
-            Long paidPaymentId = paymentService.pay(paymentDto);
         } catch (Exception e) {
             e.printStackTrace();
             bindingResult.reject("Error");
@@ -124,7 +125,11 @@ public class KakaoPayController {
                 headers.set("location", "http://localhost/payment/close");
             }
         } finally {
-            return new ResponseEntity<String>("ok", headers, HttpStatus.TEMPORARY_REDIRECT);
+            if (!bindingResult.hasErrors()) {
+                return new ResponseEntity<String>("<html><body><script>window.close();</script></body></html>", headers, HttpStatus.TEMPORARY_REDIRECT);
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
         }
 
     }

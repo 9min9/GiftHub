@@ -21,8 +21,8 @@ import lombok.NoArgsConstructor;
 public class Payment extends BaseTimeEntity {
 
     @Id
-//    @SequenceGenerator(name = "seq_payment", sequenceName = "seq_payment", allocationSize = 1)
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_payment")
+    @SequenceGenerator(name = "seq_payment", sequenceName = "seq_payment", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_payment")
     private Long id;
     private Long price;
     @Enumerated(EnumType.STRING)
@@ -35,5 +35,9 @@ public class Payment extends BaseTimeEntity {
 
     public void setPaid() {
         this.payStatus = PayStatus.PAID;
+    }
+
+    public void setTid(String tid) {
+        this.payCode = tid;
     }
 }

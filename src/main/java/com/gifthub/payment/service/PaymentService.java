@@ -42,4 +42,11 @@ public class PaymentService {
                 .collect(Collectors.toList());
     }
 
+    public void setPayCode(Long id, String tid) {
+        Payment payment = paymentRepository.findById(id).orElseThrow();
+
+        payment.setTid(tid);
+
+        paymentRepository.save(payment);
+    }
 }
