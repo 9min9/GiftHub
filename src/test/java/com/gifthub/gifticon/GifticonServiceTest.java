@@ -1,11 +1,10 @@
 package com.gifthub.gifticon;
 
-import org.assertj.core.api.Assertions;
+import com.gifthub.gifticon.service.GifticonService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class GifticonServiceTest {
 

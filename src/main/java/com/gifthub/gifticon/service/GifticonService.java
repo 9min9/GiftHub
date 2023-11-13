@@ -1,4 +1,4 @@
-package com.gifthub.gifticon;
+package com.gifthub.gifticon.service;
 
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.MultiFormatReader;
