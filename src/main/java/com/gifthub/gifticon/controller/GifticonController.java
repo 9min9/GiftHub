@@ -1,10 +1,9 @@
 package com.gifthub.gifticon.controller;
 
-import com.gifthub.gifticon.GifticonService;
+import com.gifthub.gifticon.service.GifticonService;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
