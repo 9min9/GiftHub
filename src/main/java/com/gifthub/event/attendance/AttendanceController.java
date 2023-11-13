@@ -33,9 +33,9 @@ public class AttendanceController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다. 로그인을 해주세요");
             }
 
-//            if (!service.canAttendance(userId)) {
-//                return ResponseEntity.badRequest().body("출석체크는 하루에 한 번만 가능합니다. 내일 다시 시도해주세요");
-//            }
+            if (!service.canAttendance(userId)) {
+                return ResponseEntity.badRequest().body("출석체크는 하루에 한 번만 가능합니다. 내일 다시 시도해주세요");
+            }
 
             User user = User.builder() // TODO UserService에서 가져와야함
                     .id(userId)
