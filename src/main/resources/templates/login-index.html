@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>기프티콘 허브</title>
+</head>
+<script src="/login.js">
+
+
+</script>
+<body>
+
+<h1> 기프티콘 허브 </h1>
+<th:block th:if="${session.userId == null}">
+    <a href="https://kauth.kakao.com/oauth/authorize?client_id=578c006810acb509f2ccc52277d13ec9&redirect_uri=http://localhost:8081/api/kakao/login&response_type=code">
+        <img src="https://developers.kakao.com/tool/resource/static/img/button/login/full/ko/kakao_login_medium_narrow.png">
+    </a>
+
+</th:block>
+<th:block th:if="${session.userId != null}">
+    <H3> 로그인 성공 </H3>
+    <p th:utext="' ' + ${session.userId} + ' 님 환영합니다.'">User ID</p>
+
+
+</th:block>
+<button th:attr="onclick='window.location.href=\'' + @{/api/kakao/logout} + '\''">로그아웃</button>
+<a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=578c006810acb509f2ccc52277d13ec9&redirect_uri=http://localhost:8081/api/kakao/login&prompt=select_account">테스트</a>
+<h3> 대표번호 : 070-8983-4936</h3> <br/>
+<div> 전화가능 시간 : 08:00 ~ 18:00 </div> <br/>
+
+
+<div>
+    <div id="rest-nickname"></div>
+    <div id="rest-email"></div>
+
+
+</div>
+
+</body>
+</html>
