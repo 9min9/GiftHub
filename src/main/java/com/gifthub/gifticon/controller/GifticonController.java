@@ -20,18 +20,14 @@ public class GifticonController {
     private final GifticonService service;
 
     @PostMapping("/kakao/chatbot/add")
-    public ResponseEntity<Object> addGificonByKakao(@RequestBody Map<Object, Object> gifticon, HttpServletResponse response) {
-        ServletOutputStream outputStream = null;
+    public ResponseEntity<Object> addGificonByKakao(@RequestBody Map<Object, Object> gifticon) {
 
         try {
             List<String> barcodeUrlList = JsonConverter.kakaoChatbotConverter(gifticon);
-            outputStream = response.getOutputStream();
 
             for (String barcodeUrl : barcodeUrlList) {
-                GifticonService.writeBarcode(barcodeUrl, outputStream);
+                String barcode = GifticonService.readBarcode(barcodeUrl);
                 //todo : ocr
-
-
 
                 //todo : save DB
             }
