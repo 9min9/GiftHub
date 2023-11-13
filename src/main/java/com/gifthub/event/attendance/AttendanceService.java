@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 @Slf4j
@@ -19,12 +19,12 @@ public class AttendanceService {
         return repository.plusOneAttendance(user);
     }
 
-    public boolean canAttendance(Long userId) {
-        LocalDate now = LocalDate.now();
+    public boolean canAttendance(User user) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime today = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 0, 0, 0);
+        LocalDateTime tomorrow = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth() + 1, 0, 0, 0);
 
-        LocalDate endDate = now.plusDays(1L);
-
-        if (repository.findByBetweenDateAndUserId(now, endDate, userId).size() == 0) {
+        if (repository.findByBetweenDateAndUserId(today, tomorrow, user).isEmpty()) {
             return true;
         }
 
@@ -32,7 +32,7 @@ public class AttendanceService {
     }
 
     public boolean firstAttendance(Long userId) {
-        if (!repository.findByUserId(userId).isPresent()) {
+        if (repository.findByUserId(userId).isEmpty()) {
             return true;
         }
 
