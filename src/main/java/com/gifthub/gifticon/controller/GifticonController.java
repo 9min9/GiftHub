@@ -1,6 +1,7 @@
 package com.gifthub.gifticon.controller;
 
 import com.gifthub.chatbot.util.JsonConverter;
+import com.gifthub.gifticon.OcrService;
 import com.gifthub.gifticon.service.GifticonService;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import java.util.Map;
 public class GifticonController {
 
     private final GifticonService service;
+    private final OcrService ocrService;
 
     @PostMapping("/kakao/chatbot/add")
     public ResponseEntity<Object> addGificonByKakao(@RequestBody Map<Object, Object> gifticon) {
@@ -28,6 +30,7 @@ public class GifticonController {
             for (String barcodeUrl : barcodeUrlList) {
                 String barcode = GifticonService.readBarcode(barcodeUrl);
                 //todo : ocr
+                ocrService.readOcr(barcodeUrl);
 
                 //todo : save DB
             }
