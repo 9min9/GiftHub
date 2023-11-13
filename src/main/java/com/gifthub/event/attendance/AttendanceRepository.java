@@ -8,29 +8,24 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 
-    @Modifying
-    @Transactional
-    @Query(value = "Update Attendance a Set a.attendance = a.attendance + 1, a.modifiedDate = sysdate Where a.user = :user")
-    int plusOneAttendance(@Param("user") User user);
-
     /**
      * 날짜 기간 동안 특정 유저의 출석 기록을 확인하는 메서드
      * @param startDate
      * @param endDate
-     * @param userId
+     * @param user
      * @return List<Attendance>
      */
-    @Query(value = "Select * From Attendance a Where modified_date Between :startDate And :endDate And user_id = :userId", nativeQuery = true)
-    List<Attendance> findByBetweenDateAndUserId(@Param("startDate") LocalDate startDate,
-                                                  @Param("endDate") LocalDate endDate,
-                                                  @Param("userId") Long userId);
+    @Query(value = "Select a From Attendance a Where (a.modifiedDate Between :startDate And :endDate) And user = :user")
+    List<Attendance> findByBetweenDateAndUserId(@Param("startDate") LocalDateTime startDate,
+                                                  @Param("endDate") LocalDateTime endDate,
+                                                  @Param("user") User user);
 
     Optional<Attendance> findByUserId(Long userId);
 }

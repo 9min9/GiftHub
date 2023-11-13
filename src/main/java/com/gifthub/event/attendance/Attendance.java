@@ -21,9 +21,12 @@ public class Attendance extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_payment")
     private Long id;
 
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "userId", unique = true)
     @OneToOne
     private User user;
     private Integer attendance;
 
+    public void setAttendance(Integer attendance) {
+        this.attendance = attendance;
+    }
 }
