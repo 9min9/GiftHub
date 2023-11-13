@@ -16,7 +16,20 @@ public class AttendanceService {
     private final AttendanceRepository repository;
 
     public Integer attend(User user) {
-        return repository.plusOneAttendance(user);
+        Attendance attendance = null;
+        try {
+            attendance = repository.findByUserId(user.getId()).orElseThrow();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return 0;
+        }
+
+        attendance.setAttendance(attendance.getAttendance() + 1);
+
+        repository.save(attendance);
+
+        return 1;
     }
 
     public boolean canAttendance(User user) {
@@ -31,17 +44,17 @@ public class AttendanceService {
         return false;
     }
 
-    public boolean firstAttendance(Long userId) {
-        if (repository.findByUserId(userId).isEmpty()) {
+    public boolean firstAttendance(User user) {
+        if (repository.findByUserId(user.getId()).isEmpty()) {
             return true;
         }
 
         return false;
     }
 
-    public void createAttendance(Long userId) {
+    public void createAttendance(User user) {
         User u = User.builder() // TODO 세션에서 가져온 아이디로 UserService에서 유저 정보 가져옴
-                .id(userId)
+                .id(user.getId())
                 .build();
 
         Attendance attendance = Attendance.builder()

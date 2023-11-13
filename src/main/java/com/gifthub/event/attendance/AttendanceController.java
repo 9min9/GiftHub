@@ -26,7 +26,7 @@ public class AttendanceController {
         Integer attend = null;
 
         try {
-            Long userId = (Long) session.getAttribute("userId");
+            Long userId = (Long) session.getAttribute("userId"); // TODO jwt에서 정보 가져와야함
             userId = 1L;
 
             User user = User.builder() // TODO UserService에서 가져와야함
@@ -41,8 +41,8 @@ public class AttendanceController {
                 return ResponseEntity.badRequest().body("출석체크는 하루에 한 번만 가능합니다. 내일 다시 시도해주세요");
             }
 
-            if (service.firstAttendance(userId)) {
-                service.createAttendance(userId);
+            if (service.firstAttendance(user)) {
+                service.createAttendance(user);
             }
 
             attend = service.attend(user);

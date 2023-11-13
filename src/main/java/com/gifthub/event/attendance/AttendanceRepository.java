@@ -15,11 +15,6 @@ import java.util.Optional;
 @Repository
 public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 
-    @Modifying
-    @Transactional
-    @Query(value = "Update Attendance a Set a.attendance = a.attendance + 1, a.modifiedDate = sysdate Where a.user = :user")
-    int plusOneAttendance(@Param("user") User user);
-
     /**
      * 날짜 기간 동안 특정 유저의 출석 기록을 확인하는 메서드
      * @param startDate
