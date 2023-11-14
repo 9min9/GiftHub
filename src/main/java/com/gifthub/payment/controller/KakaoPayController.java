@@ -13,12 +13,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @Slf4j
 @RestController
@@ -26,21 +23,21 @@ import java.io.IOException;
 @RequestMapping("/api/kakao/pay")
 public class KakaoPayController {
 
-    private final KakaoPayService service;
+    private final KakaoPayService kakaoPayService;
     private final PaymentService paymentService;
 
     @PostMapping("/ready")
-    public ResponseEntity<?> ready(@RequestBody KakaoPayRequestDto dto, BindingResult bindingResult) {
+    public ResponseEntity<Object> ready(@RequestBody KakaoPayRequestDto dto, BindingResult bindingResult) {
         KakaoPayReadyResponseDto readyResponseDto = null;
 
         try {
             String cid = "TC0ONETIME";
-            String partnerUserId = "Test123";               // FIXME 세션에서 값 가져오게 변경
+            String partnerUserId = "Test123";               // FIXME jwt에서 값 가져오게 변경
             String itemName = dto.getItemName();
-            Integer quantity = 1;                           // 고정 (기프티콘 하나씩 거래)
+            Integer quantity = 1;
             Integer totalAmount = dto.getTotalAmount();
 
-            String paymentMethodType = "MONEY";             // 현금 결제만 가능하도록 제한
+            String paymentMethodType = "MONEY";
             Integer installMonth = 1;
 
             Integer taxFreeAmount = 0;
@@ -76,7 +73,7 @@ public class KakaoPayController {
 
             log.info("[KakaoPay Ready Request]", requestDto);
 
-            readyResponseDto = service.ready(requestDto);
+            readyResponseDto = kakaoPayService.ready(requestDto);
 
             paymentService.setPayCode(paidPaymentId, readyResponseDto.getTid());
 
@@ -116,7 +113,7 @@ public class KakaoPayController {
             log.info("[KakaoPay Approve Request]", requestDto);
 
             paymentService.setPaid(Long.parseLong(dto.getPaymentId()));
-            approvedResponseDto = service.approve(requestDto);
+            approvedResponseDto = kakaoPayService.approve(requestDto);
 
 
             if (request.isSecure()) {

@@ -1,7 +1,8 @@
-package com.gifthub.event.attendance;
+package com.gifthub.event.attendance.controller;
 
-import com.gifthub.user.entity.User;
-import jakarta.servlet.http.HttpSession;
+import com.gifthub.event.attendance.dto.AttendanceDto;
+import com.gifthub.event.attendance.entity.Attendance;
+import com.gifthub.event.attendance.service.AttendanceService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,43 +11,49 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
+import java.util.Optional;
 
-/**
- * 출석체크
- */
 @RestController
 @RequestMapping("/attendances")
 @AllArgsConstructor
 public class AttendanceController {
 
-    private final AttendanceService service;
+    private final AttendanceService attendanceService;
+
+    @GetMapping
+    public ResponseEntity<Object> attendList() {
+        // TODO jwt에서 가져옴
+        Long userId = 1L;
+
+        AttendanceDto searched = attendanceService.getByUserId(userId);
+
+        if (searched != null) {
+            return ResponseEntity.ok(searched);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
     @PostMapping
-    public ResponseEntity<?> attend(HttpSession session) {
+    public ResponseEntity<Object> attend() {
         Integer attend = null;
 
         try {
-            Long userId = (Long) session.getAttribute("userId"); // TODO jwt에서 정보 가져와야함
-            userId = 1L;
-
-            User user = User.builder() // TODO UserService에서 가져와야함
-                    .id(userId)
-                    .build();
+            Long userId = 1L;
 
             if (userId == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다. 로그인을 해주세요");
             }
 
-            if (!service.canAttendance(user)) {
+            if (!attendanceService.canAttendance(userId)) {
                 return ResponseEntity.badRequest().body("출석체크는 하루에 한 번만 가능합니다. 내일 다시 시도해주세요");
             }
 
-            if (service.firstAttendance(user)) {
-                service.createAttendance(user);
+            if (attendanceService.firstAttendance(userId)) {
+                attendanceService.createAttendance(userId);
             }
 
-            attend = service.attend(user);
+            attend = attendanceService.attend(userId);
         } catch (Exception e) {
             e.printStackTrace();
         }

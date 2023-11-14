@@ -10,9 +10,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-/**
- * 결제 정보를 저장하는 엔티티
- */
 @Entity
 @Getter
 @AllArgsConstructor

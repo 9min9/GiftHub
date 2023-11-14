@@ -1,14 +1,11 @@
-package com.gifthub.event.attendance;
+package com.gifthub.event.attendance.entity;
 
+import com.gifthub.event.attendance.dto.AttendanceDto;
 import com.gifthub.global.BaseTimeEntity;
 import com.gifthub.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * 출석 체크 테이블
- */
 @Entity
 @Getter
 @AllArgsConstructor
@@ -26,7 +23,17 @@ public class Attendance extends BaseTimeEntity {
     private User user;
     private Integer attendance;
 
-    public void setAttendance(Integer attendance) {
+    public void updateAttendance(Integer attendance) {
         this.attendance = attendance;
     }
+
+
+    public AttendanceDto toDto() {
+        return AttendanceDto.builder()
+                .id(this.id)
+                .userDto(this.user.toDto())
+                .attendance(this.attendance)
+                .build();
+    }
+
 }

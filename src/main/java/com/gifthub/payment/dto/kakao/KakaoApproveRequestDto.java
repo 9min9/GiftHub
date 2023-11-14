@@ -2,9 +2,6 @@ package com.gifthub.payment.dto.kakao;
 
 import lombok.*;
 
-/**
- * approve 요청을 받는 DTO
- */
 @Getter
 @Setter
 @AllArgsConstructor

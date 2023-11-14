@@ -4,7 +4,6 @@ import com.gifthub.cart.dto.CartDto;
 import com.gifthub.cart.entity.Cart;
 import com.gifthub.cart.repository.CartRepository;
 import com.gifthub.gifticon.entity.Gifticon;
-import com.gifthub.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,20 +15,20 @@ import java.util.List;
 @AllArgsConstructor
 public class CartService {
 
-    private final CartRepository repository;
+    private final CartRepository cartRepository;
 
     public Long addToCart(CartDto dto) {
-        Cart saved = repository.save(dto.toEntity());
+        Cart saved = cartRepository.save(dto.toEntity());
 
         return saved.getId();
     }
 
     public void removeFromCart(Long id) {
-        repository.deleteById(id);
+        cartRepository.deleteById(id);
     }
 
-    public List<CartDto> findByUser(User user) {
-        return repository.findByUser(user).stream().map(CartDto::toDto).toList();
+    public List<CartDto> findByUser(Long userId) {
+        return cartRepository.findByUser(userId).stream().map(Cart::toDto).toList();
     }
 
 }

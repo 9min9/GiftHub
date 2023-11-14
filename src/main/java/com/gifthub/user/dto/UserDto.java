@@ -1,7 +1,6 @@
-package com.gifthub.user.entity;
+package com.gifthub.user.dto;
 
-import com.gifthub.global.BaseTimeEntity;
-import com.gifthub.user.dto.UserDto;
+import com.gifthub.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,32 +9,23 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Entity
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "users")
-public class User extends BaseTimeEntity {
+@Getter
+public class UserDto {
 
-    @Id
-    @SequenceGenerator(name = "seq_user", sequenceName = "seq_user", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_user")
     private Long id;
-
     private String username;
     private String password;
     private String name;
-
-    @Column(name = "email", unique = true)
     private String email;
-
     private String userType;
     private LocalDate birthDate;
     private String tel;
 
-    public UserDto toDto() {
-        return UserDto.builder()
+    public User toEntity() {
+        return User.builder()
                 .id(this.id)
                 .username(this.username)
                 .password(this.password)

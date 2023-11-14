@@ -10,9 +10,5 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CartRepository extends JpaRepository<Cart, Long> {
-
-    @Query("Select c From Cart As c Where user = :user")
-    List<Cart> findByUser(@Param("user") User user);
-
+public interface CartRepository extends JpaRepository<Cart, Long>, CartRepositorySupport {
 }
