@@ -13,12 +13,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @Slf4j
 @RestController
@@ -26,7 +23,7 @@ import java.io.IOException;
 @RequestMapping("/api/kakao/pay")
 public class KakaoPayController {
 
-    private final KakaoPayService service;
+    private final KakaoPayService kakaoPayService;
     private final PaymentService paymentService;
 
     @PostMapping("/ready")
@@ -76,7 +73,7 @@ public class KakaoPayController {
 
             log.info("[KakaoPay Ready Request]", requestDto);
 
-            readyResponseDto = service.ready(requestDto);
+            readyResponseDto = kakaoPayService.ready(requestDto);
 
             paymentService.setPayCode(paidPaymentId, readyResponseDto.getTid());
 
@@ -116,7 +113,7 @@ public class KakaoPayController {
             log.info("[KakaoPay Approve Request]", requestDto);
 
             paymentService.setPaid(Long.parseLong(dto.getPaymentId()));
-            approvedResponseDto = service.approve(requestDto);
+            approvedResponseDto = kakaoPayService.approve(requestDto);
 
 
             if (request.isSecure()) {
