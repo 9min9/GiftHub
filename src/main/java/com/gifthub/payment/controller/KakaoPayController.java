@@ -34,10 +34,10 @@ public class KakaoPayController {
             String cid = "TC0ONETIME";
             String partnerUserId = "Test123";               // FIXME jwt에서 값 가져오게 변경
             String itemName = dto.getItemName();
-            Integer quantity = 1;                           // 고정 (기프티콘 하나씩 거래)
+            Integer quantity = 1;
             Integer totalAmount = dto.getTotalAmount();
 
-            String paymentMethodType = "MONEY";             // 현금 결제만 가능하도록 제한
+            String paymentMethodType = "MONEY";
             Integer installMonth = 1;
 
             Integer taxFreeAmount = 0;
