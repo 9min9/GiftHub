@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Long> {
 
-    @Query("Select c From Cart As c Where user = :user")
-    List<Cart> findByUser(@Param("user") User user);
+    @Query("Select c From Cart As c Where user.id = :userId")
+    List<Cart> findByUser(@Param("userId") Long userId);
 
 }

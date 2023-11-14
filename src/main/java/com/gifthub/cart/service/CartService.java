@@ -28,8 +28,8 @@ public class CartService {
         repository.deleteById(id);
     }
 
-    public List<CartDto> findByUser(User user) {
-        return repository.findByUser(user).stream().map(CartDto::toDto).toList();
+    public List<CartDto> findByUser(Long userId) {
+        return repository.findByUser(userId).stream().map(CartDto::toDto).toList();
     }
 
 }

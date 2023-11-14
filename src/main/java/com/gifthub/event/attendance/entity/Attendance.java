@@ -1,4 +1,4 @@
-package com.gifthub.event.attendance;
+package com.gifthub.event.attendance.entity;
 
 import com.gifthub.global.BaseTimeEntity;
 import com.gifthub.user.entity.User;

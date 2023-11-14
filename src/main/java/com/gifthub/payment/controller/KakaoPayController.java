@@ -30,7 +30,7 @@ public class KakaoPayController {
     private final PaymentService paymentService;
 
     @PostMapping("/ready")
-    public ResponseEntity<?> ready(@RequestBody KakaoPayRequestDto dto, BindingResult bindingResult) {
+    public ResponseEntity<Object> ready(@RequestBody KakaoPayRequestDto dto, BindingResult bindingResult) {
         KakaoPayReadyResponseDto readyResponseDto = null;
 
         try {
