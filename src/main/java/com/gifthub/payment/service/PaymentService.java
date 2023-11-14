@@ -24,10 +24,6 @@ public class PaymentService {
         return PaymentDto.toDto(paymentRepository.findById(num).orElseThrow());
     }
 
-    public Long nextVal() {
-        return paymentRepository.nextVal();
-    }
-
     public void setPaid(Long id) {
         Payment payment = paymentRepository.findById(id).orElseThrow();
 
