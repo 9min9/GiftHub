@@ -1,5 +1,6 @@
 package com.gifthub.event.attendance.service;
 
+import com.gifthub.event.attendance.dto.AttendanceDto;
 import com.gifthub.event.attendance.repository.AttendanceRepository;
 import com.gifthub.event.attendance.entity.Attendance;
 import com.gifthub.user.entity.User;
@@ -8,27 +9,38 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @Slf4j
 @AllArgsConstructor
 public class AttendanceService {
 
-    private final AttendanceRepository repository;
+    private final AttendanceRepository attendanceRepository;
+
+    public AttendanceDto getByUserId(Long userId) {
+        Optional<Attendance> searched = attendanceRepository.findByUserId(userId);
+
+        if (searched.isEmpty()) {
+            return null;
+        }
+
+        return searched.orElseThrow().toDto();
+    }
 
     public Integer attend(Long userId) {
         Attendance attendance = null;
         try {
-            attendance = repository.findByUserId(userId).orElseThrow();
+            attendance = attendanceRepository.findByUserId(userId).orElseThrow();
         } catch (Exception e) {
             e.printStackTrace();
 
             return 0;
         }
 
-        attendance.setAttendance(attendance.getAttendance() + 1);
+        attendance.updateAttendance(attendance.getAttendance() + 1);
 
-        repository.save(attendance);
+        attendanceRepository.save(attendance);
 
         return 1;
     }
@@ -38,7 +50,7 @@ public class AttendanceService {
         LocalDateTime today = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 0, 0, 0);
         LocalDateTime tomorrow = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth() + 1, 0, 0, 0);
 
-        if (repository.findByBetweenDateAndUserId(today, tomorrow, userId).isEmpty()) {
+        if (attendanceRepository.findByBetweenDateAndUserId(today, tomorrow, userId).isEmpty()) {
             return true;
         }
 
@@ -46,7 +58,7 @@ public class AttendanceService {
     }
 
     public boolean firstAttendance(Long userId) {
-        if (repository.findByUserId(userId).isEmpty()) {
+        if (attendanceRepository.findByUserId(userId).isEmpty()) {
             return true;
         }
 
@@ -63,7 +75,7 @@ public class AttendanceService {
                 .attendance(1)
                 .build();
 
-        Attendance saved = repository.save(attendance);
+        Attendance saved = attendanceRepository.save(attendance);
     }
 
 }

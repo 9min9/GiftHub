@@ -1,12 +1,17 @@
 package com.gifthub.event.attendance.controller;
 
+import com.gifthub.event.attendance.dto.AttendanceDto;
+import com.gifthub.event.attendance.entity.Attendance;
 import com.gifthub.event.attendance.service.AttendanceService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/attendances")
@@ -14,6 +19,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class AttendanceController {
 
     private final AttendanceService attendanceService;
+
+    @GetMapping
+    public ResponseEntity<Object> attendList() {
+        // TODO jwt에서 가져옴
+        Long userId = 1L;
+
+        AttendanceDto searched = attendanceService.getByUserId(userId);
+
+        if (searched != null) {
+            return ResponseEntity.ok(searched);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
     @PostMapping
     public ResponseEntity<Object> attend() {
