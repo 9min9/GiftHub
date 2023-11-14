@@ -35,7 +35,7 @@ public class KakaoPayController {
 
         try {
             String cid = "TC0ONETIME";
-            String partnerUserId = "Test123";               // FIXME 세션에서 값 가져오게 변경
+            String partnerUserId = "Test123";               // FIXME jwt에서 값 가져오게 변경
             String itemName = dto.getItemName();
             Integer quantity = 1;                           // 고정 (기프티콘 하나씩 거래)
             Integer totalAmount = dto.getTotalAmount();

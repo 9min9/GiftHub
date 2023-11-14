@@ -27,13 +27,13 @@ public class CartController {
         // TODO MemberService에서 검색
         Optional<User> searched = Optional.empty();
 
-//        User user = searched.get();  TODO 추후 주석 해제
+//        User user = searched.get(); // TODO 추후 주석 해제
         User user = User.builder()
                 .id(userId)
                 .build();
 
 
-        if (searched.isEmpty()) {
+        if (/*searched.isEmpty()*/ user == null) { // TODO 추후 주석 제거 예정
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -42,7 +42,7 @@ public class CartController {
 
     @PostMapping
     public ResponseEntity<?> addToCart(@ModelAttribute CartRequestDto dto, BindingResult bindingResult) {
-        if (dto.getId() == null || dto.getUserId() == null || dto.getGifticonId() == null) {
+        if (dto.getGifticonId() == null) {
             bindingResult.reject("400", "값이 들어오지 않았습니다. 값을 입력해주세요");
         }
 
@@ -70,7 +70,7 @@ public class CartController {
         }
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> removeFromCart(@PathVariable("id") Long id) {
         try {
             // TODO 유저의 id와 카트에 있는 기프티콘의 주인의 아이디 비교

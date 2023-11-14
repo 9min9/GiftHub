@@ -53,7 +53,7 @@ public class AttendanceService {
     }
 
     public void createAttendance(User user) {
-        User u = User.builder() // TODO 세션에서 가져온 아이디로 UserService에서 유저 정보 가져옴
+        User u = User.builder() // TODO jwt에서 가져온 아이디로 UserService에서 유저 정보 가져옴
                 .id(user.getId())
                 .build();
 
