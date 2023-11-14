@@ -2,17 +2,16 @@ package com.gifthub.gifticon;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.UUID;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +28,7 @@ private String ocrAPIURL;
 //private String receivedImg; // 방금 카카오 챗봇으로 받은 이미지의 url을 받아옴
 
 
-public void readOcr(String imageUrl){
+public String readOcr(String imageUrl){
     try{
         URL url = new URL(ocrAPIURL);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -74,13 +73,43 @@ public void readOcr(String imageUrl){
         }
         br.close();
 
-        System.out.println(response);
+        return response.toString();
+
 
     } catch (MalformedURLException e) {
         e.printStackTrace();
     } catch (IOException e) {
         e.printStackTrace();
     }
+    return null;
+}
+public String parseOcr(String response){
+    try{
+        JSONParser parser = new JSONParser();
+        JSONObject jsonResponse = (JSONObject) parser.parse(response);
+
+        JSONArray images = (JSONArray) jsonResponse.get("images");
+        JSONObject objImage1 = (JSONObject) images.get(0);
+
+        StringBuilder sb = new StringBuilder();
+        JSONArray fields = (JSONArray) objImage1.get("fields");
+        for(int i=0; i<fields.size(); i++){
+            JSONObject eachResult = (JSONObject) fields.get(i);
+            String inferText = (String) eachResult.get("inferText");
+            Boolean lineBreak = (Boolean) eachResult.get("lineBreak");
+            sb.append(inferText);
+            if(lineBreak){
+                sb.append("\n");
+            }
+            if(!lineBreak){
+                sb.append(" ");
+            }
+        }
+        return sb.toString();
+    } catch (ParseException e) {
+        throw new RuntimeException(e);
+    }
+
 
 }
 
