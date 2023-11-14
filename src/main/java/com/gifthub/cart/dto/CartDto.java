@@ -1,7 +1,7 @@
 package com.gifthub.cart.dto;
 
 import com.gifthub.cart.entity.Cart;
-import com.gifthub.gifticon.GifticonDto;
+import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.user.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package com.gifthub.gifticon;
+package com.gifthub.gifticon.service;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

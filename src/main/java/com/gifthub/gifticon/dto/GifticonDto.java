@@ -1,10 +1,8 @@
-package com.gifthub.gifticon;
+package com.gifthub.gifticon.dto;
 
 import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.payment.enumeration.SaleStatus;
 import com.gifthub.user.dto.UserDto;
-import com.gifthub.user.entity.User;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

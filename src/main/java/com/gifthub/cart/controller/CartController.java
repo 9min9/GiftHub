@@ -2,7 +2,7 @@ package com.gifthub.cart.controller;
 
 import com.gifthub.cart.dto.CartDto;
 import com.gifthub.cart.service.CartService;
-import com.gifthub.gifticon.GifticonDto;
+import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.user.dto.UserDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
