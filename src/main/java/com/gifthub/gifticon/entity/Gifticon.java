@@ -1,6 +1,6 @@
 package com.gifthub.gifticon.entity;
 
-import com.gifthub.gifticon.GifticonDto;
+import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.user.entity.User;
 import com.gifthub.global.BaseTimeEntity;
 import com.gifthub.payment.enumeration.SaleStatus;
