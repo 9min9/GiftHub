@@ -1,5 +1,6 @@
 package com.gifthub.cart.entity;
 
+import com.gifthub.cart.dto.CartDto;
 import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.user.entity.User;
 import jakarta.persistence.*;
@@ -27,5 +28,13 @@ public class Cart {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gifticon_id")
     private Gifticon gifticon;
+
+    public CartDto toDto() {
+        return CartDto.builder()
+                .id(this.id)
+                .userDto(this.user.toDto())
+                .gifticonDto(this.gifticon.toDto())
+                .build();
+    }
 
 }

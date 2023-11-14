@@ -1,9 +1,9 @@
-package com.gifthub.gifticon.entity;
+package com.gifthub.gifticon;
 
-import com.gifthub.gifticon.GifticonDto;
-import com.gifthub.user.entity.User;
-import com.gifthub.global.BaseTimeEntity;
+import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.payment.enumeration.SaleStatus;
+import com.gifthub.user.dto.UserDto;
+import com.gifthub.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,33 +12,24 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Entity
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Gifticon extends BaseTimeEntity {
+@Getter
+public class GifticonDto {
 
-    @Id
-    @SequenceGenerator(name = "seq_gifticon", sequenceName = "seq_gificon", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_gifticon")
     private Long id;
-
-    @JoinColumn(name = "user_id")
-    @ManyToOne
-    private User user;
-
+    private UserDto user;
     private String barcode;
     private LocalDate due;
     private String usablePlace;
     private String productName;
-    @Enumerated(EnumType.STRING)
     private SaleStatus saleStatus;
 
-    public GifticonDto toDto() {
-        return GifticonDto.builder()
+    public Gifticon toEntity() {
+        return Gifticon.builder()
                 .id(this.id)
-                .user(this.user.toDto())
+                .user(this.user.toEntity())
                 .barcode(this.barcode)
                 .due(this.due)
                 .usablePlace(this.usablePlace)
@@ -46,4 +37,5 @@ public class Gifticon extends BaseTimeEntity {
                 .saleStatus(this.saleStatus)
                 .build();
     }
+
 }
