@@ -6,9 +6,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * 출석 체크 테이블
- */
 @Entity
 @Getter
 @AllArgsConstructor

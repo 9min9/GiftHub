@@ -11,9 +11,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-/**
- * 기프티콘 정보를 DB에 저장하는 엔티티
- */
 @Entity
 @Getter
 @AllArgsConstructor

@@ -9,9 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-/**
- * 회원가입된 유저의 정보를 저장하는 엔티티
- */
 @Entity
 @Getter
 @AllArgsConstructor

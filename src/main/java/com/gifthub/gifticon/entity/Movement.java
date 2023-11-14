@@ -9,9 +9,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-/**
- * 기프티콘이 거래나 선물되었을 때 사용되는 연관관계 엔티티
- */
 @Entity
 @Getter
 @AllArgsConstructor
