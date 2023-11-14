@@ -30,8 +30,8 @@ public class GifticonController {
             for (String barcodeUrl : barcodeUrlList) {
                 String barcode = GifticonService.readBarcode(barcodeUrl);
                 //todo : ocr
-                ocrService.readOcr(barcodeUrl);
-
+                String resultOcr = ocrService.parseOcr(ocrService.readOcr(barcodeUrl));
+                System.out.println(resultOcr);
                 //todo : save DB
             }
 
