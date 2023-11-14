@@ -3,32 +3,30 @@ package com.gifthub.cart.controller;
 import com.gifthub.cart.dto.CartDto;
 import com.gifthub.cart.dto.CartRequestDto;
 import com.gifthub.cart.service.CartService;
-import com.gifthub.gifticon.entity.Gifticon;
-import com.gifthub.user.entity.User;
+import com.gifthub.gifticon.GifticonDto;
+import com.gifthub.user.dto.UserDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @AllArgsConstructor
 @RequestMapping("/carts")
 public class CartController {
 
-    private final CartService service;
+    private final CartService cartService;
 
     @GetMapping
     public ResponseEntity<Object> list() {
         Long userId = 1L; //TODO jwt에서 가져옴
-        
+
         if (/*searched.isEmpty()*/ userId == null) { // TODO 추후 주석 제거 예정
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        return ResponseEntity.ok(service.findByUser(userId));
+        return ResponseEntity.ok(cartService.findByUser(userId));
     }
 
     @PostMapping
@@ -38,22 +36,22 @@ public class CartController {
         }
 
         try {
-            // TODO jwt에서 유저 정보 가져옴
-            User user = User.builder()
+            // TODO jwt에서 유저 정보 가져옴 DTO
+            UserDto userDto = UserDto.builder()
                     .id(1L)
                     .build();
 
             // TODO 기프티콘 검색
-            Gifticon gifticon = Gifticon.builder()
+            GifticonDto gifticonDto = GifticonDto.builder()
                     .id(dto.getGifticonId())
                     .build();
 
             CartDto cartDto = CartDto.builder()
-                    .user(user)
-                    .gifticon(gifticon)
+                    .userDto(userDto)
+                    .gifticonDto(gifticonDto)
                     .build();
 
-            Long cartId = service.addToCart(cartDto);
+            Long cartId = cartService.addToCart(cartDto);
 
             return ResponseEntity.ok().body(cartId);
         } catch (Exception exception) {
@@ -65,8 +63,8 @@ public class CartController {
     public ResponseEntity<Object> removeFromCart(@PathVariable("id") Long id) {
         try {
             // TODO 유저의 id와 카트에 있는 기프티콘의 주인의 아이디 비교
-            
-            service.removeFromCart(id);
+
+            cartService.removeFromCart(id);
         } catch (Exception e) {
             e.printStackTrace();
 
