@@ -2,10 +2,9 @@ package com.gifthub.payment.entity;
 
 import com.gifthub.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.io.Serializable;
 
 /**
  * 결제 테이블과 멤버테이블에 다대다 관계를 만들기 위한 엔티티
@@ -23,7 +22,8 @@ public class Pay {
 }
 
 @Embeddable
-class PayId {
+@ToString
+class PayId implements Serializable {
 
     @JoinColumn(name = "payee_id")
     @ManyToOne
