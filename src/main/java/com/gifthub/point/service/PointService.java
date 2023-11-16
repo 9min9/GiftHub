@@ -26,6 +26,10 @@ public class PointService {
     public UserDto usePoint(Long price, Long userId) {
         User user = userRepository.findById(userId).orElseThrow();
 
+        if (user.getPoint() < price) {
+            return null;
+        }
+
         user.usePoint(price);
 
         userRepository.save(user);

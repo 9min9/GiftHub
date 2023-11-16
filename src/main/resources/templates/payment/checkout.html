@@ -86,12 +86,8 @@
 
                                                         <a class="gl-link">Terms of Service.</a>
                                                     </div>
-                                                    <div class="u-s-m-b-15">
-                                                        <button class="btn btn--e-brand-b-2 btn-kakao-pay" id="kakao-pay" type="button">카카오 페이</button>
-                                                    </div>
-
                                                     <div>
-                                                        <button class="btn btn--e-brand-b-2" type="submit">다른 결제 방식</button>
+                                                        <button class="btn btn--e-brand-b-2" type="button" id="pay-with-point">포인트 결제</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -446,8 +442,8 @@
     <th:block th:replace="/fragments/base/script :: script"></th:block>
     <script th:src="@{/payment.js}"></script>
     <script th:inline="javascript">
-        addKakaoPayEvent("testItem", 10000);
         loadItem([[${param.gifticonIds}]]);
+        payWithPointEvent(10000, "itemTest");
     </script>
 </body>
 </html>

@@ -83,3 +83,27 @@ let loadItem = (items) => {
     xhr.send()
 
 }
+
+let payWithPointEvent = (point, item) => {
+    document.querySelector("#pay-with-point").addEventListener("click", function() {
+        let xhr = new XMLHttpRequest();
+
+        xhr.open("post", "/api/points/use");
+
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        xhr.onload = () => {
+            if (xhr.status !== 200) {
+                alert(xhr.responseText);
+
+                return;
+            }
+
+            window.location = "/";
+        }
+
+        let sendDate = "point=" + point;
+
+        xhr.send(sendDate);
+    });
+}
