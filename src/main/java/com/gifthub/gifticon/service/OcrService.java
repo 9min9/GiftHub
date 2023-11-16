@@ -72,8 +72,11 @@ public String readOcr(String imageUrl){
             response.append(inputLine);
         }
         br.close();
+        String parsedOcr = parseOcr(String.valueOf(response));
 
-        return response.toString();
+
+
+        return parsedOcr;
 
 
     } catch (MalformedURLException e) {
@@ -83,7 +86,7 @@ public String readOcr(String imageUrl){
     }
     return null;
 }
-public String parseOcr(String response){
+private String parseOcr(String response){
     try{
         JSONParser parser = new JSONParser();
         JSONObject jsonResponse = (JSONObject) parser.parse(response);
@@ -110,7 +113,8 @@ public String parseOcr(String response){
         throw new RuntimeException(e);
     }
 
-
 }
+
+//public
 
 }
