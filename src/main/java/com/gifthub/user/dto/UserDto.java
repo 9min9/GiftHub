@@ -23,11 +23,11 @@ public class UserDto {
     private String userType;
     private LocalDate birthDate;
     private String tel;
+    private Long point;
 
     public User toEntity() {
         return User.builder()
                 .id(this.id)
-                .username(this.username)
                 .password(this.password)
                 .name(this.name)
                 .email(this.email)

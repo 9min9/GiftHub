@@ -34,6 +34,7 @@ public class Gifticon extends BaseTimeEntity {
     private String productName;
     @Enumerated(EnumType.STRING)
     private SaleStatus saleStatus;
+    private Long price;
 
     public GifticonDto toDto() {
         return GifticonDto.builder()
@@ -44,6 +45,7 @@ public class Gifticon extends BaseTimeEntity {
                 .usablePlace(this.usablePlace)
                 .productName(this.productName)
                 .saleStatus(this.saleStatus)
+                .price(this.price)
                 .build();
     }
 }

@@ -1,7 +1,6 @@
 package com.gifthub.cart.controller;
 
 import com.gifthub.cart.dto.CartDto;
-import com.gifthub.cart.dto.CartRequestDto;
 import com.gifthub.cart.service.CartService;
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.user.dto.UserDto;
@@ -22,7 +21,7 @@ public class CartController {
     public ResponseEntity<Object> list() {
         Long userId = 1L; //TODO jwt에서 가져옴
 
-        if (/*searched.isEmpty()*/ userId == null) { // TODO 추후 주석 제거 예정
+        if (userId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -30,11 +29,7 @@ public class CartController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> addToCart(@ModelAttribute CartRequestDto dto, BindingResult bindingResult) {
-        if (dto.getGifticonId() == null) {
-            bindingResult.reject("400", "값이 들어오지 않았습니다. 값을 입력해주세요");
-        }
-
+    public ResponseEntity<Object> addToCart(Long gifticonId) {
         try {
             // TODO jwt에서 유저 정보 가져옴 DTO
             UserDto userDto = UserDto.builder()
@@ -43,7 +38,8 @@ public class CartController {
 
             // TODO 기프티콘 검색
             GifticonDto gifticonDto = GifticonDto.builder()
-                    .id(dto.getGifticonId())
+                    .id(gifticonId)
+                    .user(UserDto.builder().id(1L).build())
                     .build();
 
             CartDto cartDto = CartDto.builder()
@@ -55,6 +51,8 @@ public class CartController {
 
             return ResponseEntity.ok().body(cartId);
         } catch (Exception exception) {
+            exception.printStackTrace();
+
             return ResponseEntity.badRequest().build();
         }
     }

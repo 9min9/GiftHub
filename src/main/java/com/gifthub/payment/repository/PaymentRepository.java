@@ -10,9 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
-    @Query(value = "Select seq_payment.Nextval From dual", nativeQuery = true)
-    Long nextVal();
-
     Page<Payment> findAllByOrderByIdDesc(Pageable pageable);
 
 }

@@ -1,11 +1,15 @@
 package com.gifthub.gifticon.service;
 
+import com.gifthub.gifticon.dto.GifticonDto;
+import com.gifthub.gifticon.entity.Gifticon;
+import com.gifthub.gifticon.repository.GifticonRepository;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.result.Output;
 import org.krysalis.barcode4j.impl.code39.Code39Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
@@ -18,9 +22,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class GifticonService {
+
+    private final GifticonRepository gifticonRepository;
 
     public static String readBarcode(String url) {
         try {
@@ -63,6 +72,10 @@ public class GifticonService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public GifticonDto findGifticon(Long gifticonId) {
+        return gifticonRepository.findById(gifticonId).orElseThrow().toDto();
     }
 
 }

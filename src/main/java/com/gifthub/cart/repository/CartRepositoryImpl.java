@@ -21,7 +21,6 @@ public class CartRepositoryImpl implements CartRepositorySupport {
     public List<Cart> findByUser(Long userId) {
         return queryFactory.selectFrom(cart)
                 .where(cart.user.id.eq(userId))
-                .join(QUser.user)
                 .fetch();
     }
 

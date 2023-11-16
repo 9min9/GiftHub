@@ -23,6 +23,7 @@ public class GifticonDto {
     private String usablePlace;
     private String productName;
     private SaleStatus saleStatus;
+    private Long price;
 
     public Gifticon toEntity() {
         return Gifticon.builder()
@@ -33,6 +34,7 @@ public class GifticonDto {
                 .usablePlace(this.usablePlace)
                 .productName(this.productName)
                 .saleStatus(this.saleStatus)
+                .price(this.price)
                 .build();
     }
 
