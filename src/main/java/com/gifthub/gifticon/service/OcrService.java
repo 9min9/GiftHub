@@ -1,5 +1,12 @@
 package com.gifthub.gifticon.service;
 
+import static com.gifthub.gifticon.constant.OcrField.DUEDATE;
+import static com.gifthub.gifticon.constant.OcrField.PRODUCTNAME;
+import static com.gifthub.gifticon.constant.OcrField.USABLEPLACE;
+
+import com.gifthub.gifticon.constant.OcrField;
+import com.gifthub.gifticon.dto.GifticonDto;
+import com.gifthub.gifticon.util.OcrUtil;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -7,6 +14,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import java.util.UUID;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -25,10 +36,43 @@ private String ocrSecretKey;
 private String ocrAPIURL;
 
 
-//private String receivedImg; // 방금 카카오 챗봇으로 받은 이미지의 url을 받아옴
+public GifticonDto readOcrToGifticonDto(String barcodeurl, String barcode){
+//    Map<String, String> map = OcrUtil.parseArrayToMap(OcrUtil.parseString(barcodeurl));
+    Map<String, String> map = OcrUtil.parseArrayToMap(OcrUtil.parseString(readOcr(barcodeurl)));
+
+    // iterator로 돌면서 날짜를 인식하면 날짜로 넣고,
+    String dueDate = null;
+    String usablePlace = null;
+    String productName = null;
+    for(String s: map.keySet()){
+        if(s.equals(DUEDATE.getField())){
+            dueDate = s;
+        }
+        if (s.equals(USABLEPLACE.getField())){
+            usablePlace = s;
+        }
+        if(s.equals(PRODUCTNAME.getField())){
+            productName = s;
+        }
+    }
+    try{
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+        LocalDateTime  dateTime = LocalDateTime.parse(dueDate, formatter);
+        GifticonDto gifticonDto = GifticonDto.builder().barcode(barcode).due(LocalDate.from(dateTime)).usablePlace(usablePlace).productName(productName).build();
 
 
-public String readOcr(String imageUrl){
+        return gifticonDto;
+    } catch (RuntimeException e){
+        e.printStackTrace();
+    }
+
+    return null;
+
+
+}
+
+
+private String readOcr(String imageUrl){
     try{
         URL url = new URL(ocrAPIURL);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -72,11 +116,11 @@ public String readOcr(String imageUrl){
             response.append(inputLine);
         }
         br.close();
-        String parsedOcr = parseOcr(String.valueOf(response));
 
 
 
-        return parsedOcr;
+
+        return parseOcr(String.valueOf(response));
 
 
     } catch (MalformedURLException e) {
@@ -115,6 +159,5 @@ private String parseOcr(String response){
 
 }
 
-//public
 
 }

@@ -78,4 +78,10 @@ public class GifticonService {
         return gifticonRepository.findById(gifticonId).orElseThrow().toDto();
     }
 
+    public Long saveGifticon(GifticonDto gifticonDto){
+
+        Gifticon gifticon = gifticonRepository.save(gifticonDto.toEntity());
+        return gifticon.getId();
+    }
+
 }
