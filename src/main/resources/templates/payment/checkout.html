@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="no-js" lang="en">
 <head>
-    <th:block th:replace="/fragments/base/head :: head"></th:block>
+    <th:block th:replace="fragments/base/head :: head"></th:block>
     <style>
         .btn-kakao-pay {
             background-color: #FEE500 !important;
@@ -21,7 +21,7 @@
 
         <!--====== Main Header ======-->
         <header class="header--style-1 header--box-shadow">
-            <th:block th:replace="/fragments/base/header :: header"></th:block>
+            <th:block th:replace="fragments/base/header :: header"></th:block>
         </header>
         <!--====== End - Main Header ======-->
 
@@ -443,7 +443,7 @@
     </div>
     <!--====== End - Main App ======-->
 
-    <th:block th:replace="/fragments/base/script :: script"></th:block>
+    <th:block th:replace="fragments/base/script :: script"></th:block>
     <script th:src="@{/payment.js}"></script>
     <script th:inline="javascript">
         addKakaoPayEvent("testItem", 10000);
