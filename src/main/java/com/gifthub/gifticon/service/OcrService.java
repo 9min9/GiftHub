@@ -47,12 +47,15 @@ public GifticonDto readOcrToGifticonDto(String barcodeurl, String barcode){
     for(String s: map.keySet()){
         if(s.equals(DUEDATE.getField())){
             dueDate = s;
+            System.out.println(dueDate);
         }
         if (s.equals(USABLEPLACE.getField())){
             usablePlace = s;
+            System.out.println(usablePlace);
         }
         if(s.equals(PRODUCTNAME.getField())){
             productName = s;
+            System.out.println(productName);
         }
     }
     try{
