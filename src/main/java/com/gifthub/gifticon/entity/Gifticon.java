@@ -45,6 +45,7 @@ public class Gifticon extends BaseTimeEntity {
                 .usablePlace(this.usablePlace)
                 .productName(this.productName)
                 .saleStatus(this.saleStatus)
+                .price(this.price)
                 .build();
     }
 }

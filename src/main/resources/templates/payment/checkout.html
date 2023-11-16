@@ -2,6 +2,13 @@
 <html class="no-js" lang="en">
 <head>
     <th:block th:replace="/fragments/base/head :: head"></th:block>
+    <style>
+        .btn-kakao-pay {
+            background-color: #FEE500 !important;
+            color: #645C11 !important;
+            border: #FEE500 !important;
+        }
+    </style>
 </head>
 <body class="config">
     <div class="preloader is-active">
@@ -31,79 +38,8 @@
                                 <div class="col-lg-6">
                                     <h1 class="checkout-f__h1">구매 목록</h1>
                                     <div class="o-summary__section u-s-m-b-30">
-                                        <div class="o-summary__item-wrap gl-scroll" style="max-height: 400px;">
-                                            <div class="o-card">
-                                                <div class="o-card__flex">
-                                                    <div class="o-card__img-wrap">
-
-                                                        <img class="u-img-fluid" src="images/product/electronic/product3.jpg" alt=""></div>
-                                                    <div class="o-card__info-wrap">
-
-                                                            <span class="o-card__name">
-
-                                                                <a href="product-detail.html">Yellow Wireless Headphone</a></span>
-
-                                                        <span class="o-card__quantity">Quantity x 1</span>
-
-                                                        <span class="o-card__price">$150.00</span></div>
-                                                </div>
-
-                                                <a class="o-card__del far fa-trash-alt"></a>
-                                            </div>
-                                            <div class="o-card">
-                                                <div class="o-card__flex">
-                                                    <div class="o-card__img-wrap">
-
-                                                        <img class="u-img-fluid" src="images/product/electronic/product18.jpg" alt=""></div>
-                                                    <div class="o-card__info-wrap">
-
-                                                            <span class="o-card__name">
-
-                                                                <a href="product-detail.html">Nikon DSLR Camera 4k</a></span>
-
-                                                        <span class="o-card__quantity">Quantity x 1</span>
-
-                                                        <span class="o-card__price">$150.00</span></div>
-                                                </div>
-
-                                                <a class="o-card__del far fa-trash-alt"></a>
-                                            </div>
-                                            <div class="o-card">
-                                                <div class="o-card__flex">
-                                                    <div class="o-card__img-wrap">
-
-                                                        <img class="u-img-fluid" src="images/product/women/product8.jpg" alt=""></div>
-                                                    <div class="o-card__info-wrap">
-
-                                                            <span class="o-card__name">
-
-                                                                <a href="product-detail.html">New Dress D Nice Elegant</a></span>
-
-                                                        <span class="o-card__quantity">Quantity x 1</span>
-
-                                                        <span class="o-card__price">$150.00</span></div>
-                                                </div>
-
-                                                <a class="o-card__del far fa-trash-alt"></a>
-                                            </div>
-                                            <div class="o-card">
-                                                <div class="o-card__flex">
-                                                    <div class="o-card__img-wrap">
-
-                                                        <img class="u-img-fluid" src="images/product/men/product8.jpg" alt=""></div>
-                                                    <div class="o-card__info-wrap">
-
-                                                            <span class="o-card__name">
-
-                                                                <a href="product-detail.html">New Fashion D Nice Elegant</a></span>
-
-                                                        <span class="o-card__quantity">Quantity x 1</span>
-
-                                                        <span class="o-card__price">$150.00</span></div>
-                                                </div>
-
-                                                <a class="o-card__del far fa-trash-alt"></a>
-                                            </div>
+                                        <div class="o-summary__item-wrap gl-scroll" style="max-height: 400px;" id="main-gifticon">
+                                            <!--/* 결제 품목할 품목이 위치함 */-->
                                         </div>
                                     </div>
                                 </div>
@@ -118,15 +54,15 @@
                                                     <tbody>
                                                         <tr>
                                                             <td>가격</td>
-                                                            <td>30000원</td>
+                                                            <td id="total-price">30000원</td>
                                                         </tr>
                                                         <tr>
                                                             <td>할인된 금액?</td>
-                                                            <td>10000원</td>
+                                                            <td id="discount-price">10000원</td>
                                                         </tr>
                                                         <tr>
                                                             <td>최종 금액</td>
-                                                            <td>20000</td>
+                                                            <td id="final-price">20000</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -150,15 +86,13 @@
 
                                                         <a class="gl-link">Terms of Service.</a>
                                                     </div>
-
                                                     <div class="u-s-m-b-15">
-                                                        <button class="gl-s-api__btn" type="button">
-                                                            <img src="/images/kakaologin/kakao_login_medium_wide.png">
-                                                        </button>
+                                                        <button class="btn btn--e-brand-b-2 btn-kakao-pay" type="submit">카카오 페이</button>
                                                     </div>
 
                                                     <div>
-                                                        <button class="btn btn--e-brand-b-2" type="submit">다른 결제 방식</button></div>
+                                                        <button class="btn btn--e-brand-b-2" type="submit">다른 결제 방식</button>
+                                                    </div>
                                                 </form>
                                             </div>
                                         </div>
@@ -510,5 +444,10 @@
     <!--====== End - Main App ======-->
 
     <th:block th:replace="/fragments/base/script :: script"></th:block>
+    <script th:src="@{/payment.js}"></script>
+    <script th:inline="javascript">
+        addKakaoPayEvent("testItem", 10000);
+        loadItem([[${param.gifticonIds}]]);
+    </script>
 </body>
 </html>
