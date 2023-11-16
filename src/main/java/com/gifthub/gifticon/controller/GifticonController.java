@@ -30,7 +30,8 @@ public class GifticonController {
             for (String barcodeUrl : barcodeUrlList) {
                 String barcode = GifticonService.readBarcode(barcodeUrl);
                 //todo : ocr
-                String resultOcr = ocrService.parseOcr(ocrService.readOcr(barcodeUrl));
+                String resultOcr = ocrService.readOcr(barcodeUrl);
+
                 System.out.println(resultOcr);
                 //todo : save DB
             }
@@ -43,7 +44,7 @@ public class GifticonController {
     }
 
 
-    @GetMapping("{barcode}")
+    @GetMapping("/barcode/{barcode}")
     public void barcode(@PathVariable("barcode") String barcode, HttpServletResponse response) {
         ServletOutputStream outputStream = null;
 
