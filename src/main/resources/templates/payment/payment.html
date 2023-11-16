@@ -10,29 +10,11 @@
         <img src="/images/kakaopay/payment_icon_yellow_large.png" alt="카카오 페이 결제">
     </button>
 
-    <script>
-        document.querySelector("#kakao-pay").addEventListener("click", function() {
-            let xhr = new XMLHttpRequest();
-
-            xhr.open("post", "/api/kakao/pay/ready");
-
-            xhr.onload = () => {
-                let parsedResponse = JSON.parse(xhr.responseText);
-
-                let redirect_url = parsedResponse.next_redirect_pc_url;
-
-                window.open(redirect_url, "_blank", "width = 450, height = 700");
-            }
-
-            let sendDate = {
-                itemName: "testItem",
-                totalAmount: 10000,
-            };
-
-            xhr.setRequestHeader("Content-type", "application/json");
-
-            xhr.send(JSON.stringify(sendDate));
-        });
+    <script th:src="@{/payment.js}"></script>
+    <script th:inline="javascript">
+        window.onload = () => {
+            addKakaoPayEvent("testItem", 10000);
+        }
     </script>
 </body>
 </html>
