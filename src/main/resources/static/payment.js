@@ -6,11 +6,16 @@ let addKakaoPayEvent = (itemName, totalAmount) => {
         xhr.open("post", "/api/kakao/pay/ready");
 
         xhr.onload = () => {
+            if (xhr.status !== 200) {
+                return;
+            }
             let parsedResponse = JSON.parse(xhr.responseText);
 
             let redirect_url = parsedResponse.next_redirect_pc_url;
 
-            window.open(redirect_url, "_blank", "width = 450, height = 700");
+            let opened = window.open(redirect_url, "_blank", "width = 450, height = 700");
+
+            checkClosing(opened, () => location.href = "/");
         }
 
         let sendDate = {
@@ -82,4 +87,39 @@ let loadItem = (items) => {
 
     xhr.send()
 
+}
+
+let payWithPointEvent = (point, item) => {
+    document.querySelector("#pay-with-point").addEventListener("click", function() {
+        let xhr = new XMLHttpRequest();
+
+        xhr.open("post", "/api/points/use");
+
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+        xhr.onload = () => {
+            if (xhr.status !== 200) {
+                alert(xhr.responseText);
+
+                return;
+            }
+
+            window.location = "/";
+        }
+
+        let sendDate = "point=" + point;
+
+        xhr.send(sendDate);
+    });
+}
+
+let checkClosing = (childWindow, callback) => {
+    setInterval(() => {
+        if (typeof childWindow == undefined || childWindow.closed) {
+
+            callback();
+
+            return;
+        }
+    }, 1000);
 }

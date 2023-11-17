@@ -4,6 +4,7 @@ import com.gifthub.global.BaseTimeEntity;
 import com.gifthub.payment.enumeration.PayMethod;
 import com.gifthub.payment.enumeration.PayStatus;
 import com.gifthub.payment.enumeration.Site;
+import com.gifthub.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,6 +30,10 @@ public class Payment extends BaseTimeEntity {
     private String payCode;
     @Enumerated(EnumType.STRING)
     private PayStatus payStatus;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public void setPaid() {
         this.payStatus = PayStatus.PAID;

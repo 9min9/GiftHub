@@ -45,4 +45,8 @@ public class PaymentService {
 
         paymentRepository.save(payment);
     }
+
+    public Long countMyOrders(Long userId) {
+        return paymentRepository.countPaymentByUserId(userId);
+    }
 }
