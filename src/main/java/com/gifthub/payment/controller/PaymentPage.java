@@ -32,8 +32,12 @@ public class PaymentPage {
     public String orders(Criteria criteria, Model model) {
         Long userId = 1L; //TODO jwt에서 가져옴
 
-        if (criteria.getSize() == 0) {
-            criteria.setSize(10);
+        if (criteria.getSize() == 0L) {
+            criteria.setSize(10L);
+        }
+
+        if (criteria.getPage() == 0L) {
+            criteria.setPage(1L);
         }
 
         Long myOrderCount = paymentService.countMyOrders(userId);
@@ -41,7 +45,7 @@ public class PaymentPage {
 
         Pagination pagination = new Pagination(criteria);
 
-        model.addAttribute("paginataion", pagination);
+        model.addAttribute("pagination", pagination);
 
         return "/payment/orders";
     }

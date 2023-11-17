@@ -1,11 +1,11 @@
 let loadOrders = (page, size) => {
-    page = page || 0;
+    page = page || 1;
     size = size || 10;
 
 
     let xhr = new XMLHttpRequest();
 
-    xhr.open("get", "/api/payments?page=" + page + "&size=" + size);
+    xhr.open("get", "/api/payments?page=" + (page - 1) + "&size=" + size);
 
     xhr.onload = function() {
         if (xhr.status !== 200) {

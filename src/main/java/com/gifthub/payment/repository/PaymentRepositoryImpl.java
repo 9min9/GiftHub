@@ -19,7 +19,7 @@ public class PaymentRepositoryImpl implements PaymentRepositorySupport {
     public Long countPaymentByUserId(Long userId) {
         return jpaQueryFactory.select(payment.count())
                 .from(payment)
-                .where(QUser.user.id.eq(userId))
+                .where(payment.user.id.eq(userId))
                 .fetchOne();
     }
 

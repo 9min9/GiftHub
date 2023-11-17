@@ -2,6 +2,13 @@
 <html class="no-js" lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="fragments/base/head :: head"></th:block>
+    <style>
+        .disabled {
+            pointer-events: none;
+            cursor: default;
+            border-radius: 50%;
+        }
+    </style>
 </head>
 <body class="config">
 <div class="preloader is-active">
@@ -145,7 +152,17 @@
                                         <div class="m-order__list" id="order-list">
                                             <!--/* 주문 목록 */-->
                                         </div>
-
+                                        <div class="u-s-p-y-60">
+                                            <!--====== Pagination ======-->
+                                            <ul class="shop-p__pagination">
+                                                <th:block th:each="num : ${#numbers.sequence(pagination.begin, pagination.end)}">
+                                                    <li th:classappend="${(num eq pagination.criteria.page ? 'is-active' : '') + (num gt pagination.endPage ? ' disabled' : '')}">
+                                                        <a th:href="@{orders(page=${num})}" th:text="${num}">{</a>
+                                                    </li>
+                                                </th:block>
+                                            </ul>
+                                            <!--====== End - Pagination ======-->
+                                        </div>
                                     </div>
                                 </div>
                             </div>

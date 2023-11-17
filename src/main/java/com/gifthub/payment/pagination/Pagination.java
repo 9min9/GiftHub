@@ -19,12 +19,26 @@ public class Pagination {
     private long endPage;
 
     public Pagination(Criteria criteria) {
-        begin = 1;
+        this.criteria = criteria;
 
-        end = 1 + SHOW_PAGE - 1;
+        begin = criteria.getPage();
+
+        if (begin <= 2) {
+            begin = 1;
+        } else if(begin >= 3) {
+            begin = criteria.getPage() - 1;
+        }
+
+        end = criteria.getPage() + 2;
+
+        if (end <= 3) {
+            end = 4;
+        }
 
         long pages = criteria.getTotalAmount() / criteria.getSize();
-        endPage = pages == 0 ? pages : pages + 1;
+        endPage = criteria.getTotalAmount() % criteria.getSize() == 0 ? pages : pages + 1;
+
+        System.out.println(endPage);
     }
 
 }
