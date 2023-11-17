@@ -23,8 +23,10 @@ public class Attendance extends BaseTimeEntity {
     private User user;
     private Integer attendance;
 
-    public void updateAttendance(Integer attendance) {
+    public Integer updateAttendance(Integer attendance) {
         this.attendance = attendance;
+
+        return this.attendance;
     }
 
 

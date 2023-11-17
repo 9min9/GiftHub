@@ -3,6 +3,7 @@ package com.gifthub.event.attendance.controller;
 import com.gifthub.event.attendance.dto.AttendanceDto;
 import com.gifthub.event.attendance.entity.Attendance;
 import com.gifthub.event.attendance.service.AttendanceService;
+import com.gifthub.point.service.PointService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,9 @@ import java.util.Optional;
 public class AttendanceController {
 
     private final AttendanceService attendanceService;
+    private final PointService pointService;
+
+    private static final Long attendancePoint = 100L;
 
     @GetMapping
     public ResponseEntity<Object> attendList() {
@@ -36,7 +40,7 @@ public class AttendanceController {
 
     @PostMapping
     public ResponseEntity<Object> attend() {
-        Integer attend = null;
+        Integer attendCount = null;
 
         try {
             Long userId = 1L;
@@ -53,12 +57,18 @@ public class AttendanceController {
                 attendanceService.createAttendance(userId);
             }
 
-            attend = attendanceService.attend(userId);
+            attendCount = attendanceService.attend(userId);
+
+            if (attendCount >= 25) {
+                attendanceService.resetAttendance(userId);
+
+                pointService.plusPoint(attendancePoint, userId);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if (attend == null || attend == 0) {
+        if (attendCount == null || attendCount == 0) {
             return ResponseEntity.badRequest().body("출석체크에 실패했습니다. 다시 시도해주세요");
         }
 

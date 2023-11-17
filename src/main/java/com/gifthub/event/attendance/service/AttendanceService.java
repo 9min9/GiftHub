@@ -3,6 +3,7 @@ package com.gifthub.event.attendance.service;
 import com.gifthub.event.attendance.dto.AttendanceDto;
 import com.gifthub.event.attendance.repository.AttendanceRepository;
 import com.gifthub.event.attendance.entity.Attendance;
+import com.gifthub.point.service.PointService;
 import com.gifthub.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,14 +36,14 @@ public class AttendanceService {
         } catch (Exception e) {
             e.printStackTrace();
 
-            return 0;
+            return -1;
         }
 
         attendance.updateAttendance(attendance.getAttendance() + 1);
 
         attendanceRepository.save(attendance);
 
-        return 1;
+        return attendance.getAttendance();
     }
 
     public boolean canAttendance(Long userId) {
@@ -76,6 +77,12 @@ public class AttendanceService {
                 .build();
 
         Attendance saved = attendanceRepository.save(attendance);
+    }
+
+    public Integer resetAttendance(Long userId) {
+        Attendance attendance = attendanceRepository.findByUserId(userId).orElseThrow();
+
+        return attendance.updateAttendance(0);
     }
 
 }
