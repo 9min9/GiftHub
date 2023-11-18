@@ -1,6 +1,7 @@
 package com.gifthub.payment.entity;
 
 import com.gifthub.global.BaseTimeEntity;
+import com.gifthub.payment.dto.PaymentDto;
 import com.gifthub.payment.enumeration.PayMethod;
 import com.gifthub.payment.enumeration.PayStatus;
 import com.gifthub.payment.enumeration.Site;
@@ -41,5 +42,16 @@ public class Payment extends BaseTimeEntity {
 
     public void setTid(String tid) {
         this.payCode = tid;
+    }
+
+    public PaymentDto toDto() {
+        return PaymentDto.builder()
+                .id(this.id)
+                .price(this.price)
+                .payMethod(this.payMethod)
+                .paymentSite(this.paymentSite)
+                .payCode(this.payCode)
+                .payStatus(this.payStatus)
+                .build();
     }
 }
