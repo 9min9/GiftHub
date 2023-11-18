@@ -152,17 +152,8 @@
                                         <div class="m-order__list" id="order-list">
                                             <!--/* 주문 목록 */-->
                                         </div>
-                                        <div class="u-s-p-y-60">
-                                            <!--====== Pagination ======-->
-                                            <ul class="shop-p__pagination">
-                                                <th:block th:each="num : ${#numbers.sequence(pagination.begin, pagination.end)}">
-                                                    <li th:classappend="${(num eq pagination.criteria.page ? 'is-active' : '') + (num gt pagination.endPage ? ' disabled' : '')}">
-                                                        <a th:href="@{orders(page=${num})}" th:text="${num}">{</a>
-                                                    </li>
-                                                </th:block>
-                                            </ul>
-                                            <!--====== End - Pagination ======-->
-                                        </div>
+                                        <ul class="shop-p__pagination" id="pagination-place">
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
@@ -527,6 +518,7 @@
 <!--====== End - Main App ======-->
 
 <th:block th:replace="fragments/base/script :: script"></th:block>
+<script th:src="@{/jquery.twbsPagination.min.js}"></script>
 <script th:src="@{/orders.js}"></script>
 <script th:inline="javascript">
     window.onload = () => {

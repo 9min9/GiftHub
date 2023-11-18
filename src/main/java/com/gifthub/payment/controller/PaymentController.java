@@ -21,7 +21,7 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @GetMapping
-    public List<PaymentDto> list(Pageable pageable) {
+    public Page<PaymentDto> list(Pageable pageable) {
         return paymentService.getAll(pageable);
     }
 

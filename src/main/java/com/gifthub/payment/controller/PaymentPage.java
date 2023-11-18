@@ -30,23 +30,6 @@ public class PaymentPage {
 
     @GetMapping("orders")
     public String orders(Criteria criteria, Model model) {
-        Long userId = 1L; //TODO jwt에서 가져옴
-
-        if (criteria.getSize() == 0L) {
-            criteria.setSize(10L);
-        }
-
-        if (criteria.getPage() == 0L) {
-            criteria.setPage(1L);
-        }
-
-        Long myOrderCount = paymentService.countMyOrders(userId);
-        criteria.setTotalAmount(myOrderCount);
-
-        Pagination pagination = new Pagination(criteria);
-
-        model.addAttribute("pagination", pagination);
-
         return "/payment/orders";
     }
 

@@ -14,7 +14,21 @@ let loadOrders = (page, size) => {
 
         let orders = JSON.parse(xhr.responseText);
 
-        for (let o of orders) {
+        $("#pagination-place").twbsPagination({
+            totalPages: orders.totalElements % size == 0 ? orders.totalElements / size : orders.totalElements / size + 1,
+            visiblePages: 4,
+            onPageClick: function(evt, page) {
+                window.scrollTo(0, 0);
+
+                $("div.m-order__get").each(function () {
+                    $(this).remove();
+                });
+
+                loadOrders(page);
+            },
+        });
+
+        for (let o of orders.content) {
             let html = "";
 
             let element = document.createElement("div");
