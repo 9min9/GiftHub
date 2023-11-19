@@ -20,7 +20,7 @@ public class GifticonDto {
     private UserDto user;
     private String barcode;
     private LocalDate due;
-    private String usablePlace;
+    private String brandName;
     private String productName;
     private SaleStatus saleStatus;
     private Long price;
@@ -31,7 +31,7 @@ public class GifticonDto {
                 .user(this.user.toEntity())
                 .barcode(this.barcode)
                 .due(this.due)
-                .usablePlace(this.usablePlace)
+                .brandName(this.brandName)
                 .productName(this.productName)
                 .saleStatus(this.saleStatus)
                 .price(this.price)

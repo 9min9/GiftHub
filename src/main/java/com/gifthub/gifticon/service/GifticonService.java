@@ -9,21 +9,15 @@ import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
-import lombok.RequiredArgsConstructor;
-import org.hibernate.result.Output;
-import org.krysalis.barcode4j.impl.code39.Code39Bean;
-import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
-import org.springframework.stereotype.Service;
-
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
-import java.util.List;
-import java.util.stream.Collectors;
+import javax.imageio.ImageIO;
+import lombok.RequiredArgsConstructor;
+import org.krysalis.barcode4j.impl.code39.Code39Bean;
+import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

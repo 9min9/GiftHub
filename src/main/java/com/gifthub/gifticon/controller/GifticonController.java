@@ -1,17 +1,21 @@
 package com.gifthub.gifticon.controller;
 
 import com.gifthub.chatbot.util.JsonConverter;
-import com.gifthub.gifticon.service.OcrService;
 import com.gifthub.gifticon.service.GifticonService;
+import com.gifthub.gifticon.service.OcrService;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
@@ -32,7 +36,9 @@ public class GifticonController {
                 //todo : ocr
 //                String resultOcr = ocrService.readOcr(barcodeUrl);
 //                System.out.println(resultOcr);
-                System.out.println(ocrService.readOcrToGifticonDto(barcodeUrl, barcode));
+                System.out.println(ocrService.readOcrToGifticonDto(barcodeUrl).getBrandName()
+                        + ocrService.readOcrToGifticonDto(barcodeUrl).getProductName()
+                        + ocrService.readOcrToGifticonDto(barcodeUrl).getDue());
                 //todo : save DB
             }
 

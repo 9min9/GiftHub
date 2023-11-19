@@ -2,10 +2,12 @@ package com.gifthub.gifticon.service;
 
 import static com.gifthub.gifticon.constant.OcrField.DUEDATE;
 import static com.gifthub.gifticon.constant.OcrField.PRODUCTNAME;
-import static com.gifthub.gifticon.constant.OcrField.USABLEPLACE;
+import static com.gifthub.gifticon.constant.OcrField.brandName;
 
-import com.gifthub.gifticon.constant.OcrField;
 import com.gifthub.gifticon.dto.GifticonDto;
+import com.gifthub.gifticon.dto.ProductDto;
+import com.gifthub.gifticon.entity.Product;
+import com.gifthub.gifticon.repository.ProductRepository;
 import com.gifthub.gifticon.util.OcrUtil;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -17,8 +19,11 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -27,6 +32,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class OcrService {
 
 @Value("${ocrSecretKey}")
@@ -35,48 +41,42 @@ private String ocrSecretKey;
 @Value("${ocrAPIURL}")
 private String ocrAPIURL;
 
+private final ProductRepository productRepository;
 
-public GifticonDto readOcrToGifticonDto(String barcodeurl, String barcode){
-//    Map<String, String> map = OcrUtil.parseArrayToMap(OcrUtil.parseString(barcodeurl));
-    Map<String, String> map = OcrUtil.parseArrayToMap(OcrUtil.parseString(readOcr(barcodeurl)));
+public GifticonDto readOcrToGifticonDto(String barcodeurl) {
+    List<ProductDto> productList = productRepository.findAllProduct();
 
-    // iterator로 돌면서 날짜를 인식하면 날짜로 넣고,
+    String parsedBarcodeImg = readOcr(barcodeurl);
+
     String dueDate = null;
-    String usablePlace = null;
+    String brandName = null;
     String productName = null;
-    for(String s: map.keySet()){
-        if(s.equals(DUEDATE.getField())){
-            dueDate = s;
-            System.out.println(dueDate);
+
+    for (ProductDto productDto : productList) {
+        if (OcrUtil.findMatchString(parsedBarcodeImg, productDto.getName())) {
+            productName = productDto.getName();
         }
-        if (s.equals(USABLEPLACE.getField())){
-            usablePlace = s;
-            System.out.println(usablePlace);
-        }
-        if(s.equals(PRODUCTNAME.getField())){
-            productName = s;
-            System.out.println(productName);
+        if (OcrUtil.findMatchString(parsedBarcodeImg, productDto.getBrandName())) {
+            brandName = productDto.getBrandName();
         }
     }
-    try{
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
-        LocalDateTime  dateTime = LocalDateTime.parse(dueDate, formatter);
-        GifticonDto gifticonDto = GifticonDto.builder().barcode(barcode).due(LocalDate.from(dateTime)).usablePlace(usablePlace).productName(productName).build();
 
+//    OcrUtil.checkBrandInDb(productName);
 
-        return gifticonDto;
-    } catch (RuntimeException e){
-        e.printStackTrace();
+    if (OcrUtil.dateParserTilde(parsedBarcodeImg) != null) {
+        dueDate = OcrUtil.dateParserTilde(parsedBarcodeImg);
+    } else {
+        dueDate = OcrUtil.dateParserHangul(parsedBarcodeImg);
     }
+    LocalDate due = OcrUtil.localDateFormatter(dueDate);
 
-    return null;
-
+    return GifticonDto.builder().due(due).productName(productName).brandName(brandName).build();
 
 }
 
 
-private String readOcr(String imageUrl){
-    try{
+private String readOcr(String imageUrl) {
+    try {
         URL url = new URL(ocrAPIURL);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setUseCaches(false);
@@ -108,20 +108,17 @@ private String readOcr(String imageUrl){
 
         int responseCode = con.getResponseCode();
         BufferedReader br;
-        if (responseCode == 200){
+        if (responseCode == 200) {
             br = new BufferedReader(new InputStreamReader(con.getInputStream()));
         } else {
             br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
         }
         String inputLine;
         StringBuffer response = new StringBuffer();
-        while((inputLine = br.readLine()) != null){
+        while ((inputLine = br.readLine()) != null) {
             response.append(inputLine);
         }
         br.close();
-
-
-
 
         return parseOcr(String.valueOf(response));
 
@@ -133,8 +130,9 @@ private String readOcr(String imageUrl){
     }
     return null;
 }
-private String parseOcr(String response){
-    try{
+
+private String parseOcr(String response) {
+    try {
         JSONParser parser = new JSONParser();
         JSONObject jsonResponse = (JSONObject) parser.parse(response);
 
@@ -143,15 +141,15 @@ private String parseOcr(String response){
 
         StringBuilder sb = new StringBuilder();
         JSONArray fields = (JSONArray) objImage1.get("fields");
-        for(int i=0; i<fields.size(); i++){
+        for (int i = 0; i < fields.size(); i++) {
             JSONObject eachResult = (JSONObject) fields.get(i);
             String inferText = (String) eachResult.get("inferText");
             Boolean lineBreak = (Boolean) eachResult.get("lineBreak");
             sb.append(inferText);
-            if(lineBreak){
+            if (lineBreak) {
                 sb.append("\n");
             }
-            if(!lineBreak){
+            if (!lineBreak) {
                 sb.append(" ");
             }
         }
