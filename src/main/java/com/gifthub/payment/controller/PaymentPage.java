@@ -1,7 +1,5 @@
 package com.gifthub.payment.controller;
 
-import com.gifthub.payment.pagination.Criteria;
-import com.gifthub.payment.pagination.Pagination;
 import com.gifthub.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +27,7 @@ public class PaymentPage {
     }
 
     @GetMapping("orders")
-    public String orders(Criteria criteria, Model model) {
+    public String orders() {
         return "/payment/orders";
     }
 
