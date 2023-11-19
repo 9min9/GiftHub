@@ -18,7 +18,7 @@ let loadOrders = (page, size) => {
             totalPages: orders.totalElements % size == 0 ? orders.totalElements / size : orders.totalElements / size + 1,
             visiblePages: 4,
             onPageClick: function(evt, page) {
-                window.scrollTo(0, 0);
+                window.scrollTo({top: 0, left:0, behavior: "smooth"});
 
                 $("div.m-order__get").each(function () {
                     $(this).remove();
