@@ -10,4 +10,6 @@ public interface CartRepositorySupport {
 
     List<Cart> findByUser(@Param("userId") Long userId);
 
+    Long deleteAllByUserId(Long userId);
+
 }
