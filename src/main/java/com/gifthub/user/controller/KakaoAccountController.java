@@ -1,95 +1,157 @@
 package com.gifthub.user.controller;
+import com.gifthub.user.KakaoUserJwtTokenProvider;
 import com.gifthub.user.LogInFailException;
+import com.gifthub.user.dto.KakaoUserDto;
+import com.gifthub.user.exception.DuplicateEmailException;
+import com.gifthub.user.service.CommonUserService;
 import com.gifthub.user.service.KakaoAccountService;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
-@RestController
-@RequestMapping("/api/kakao")
+@Controller
+
+@RequestMapping(value="/api/kakao/")
 @RequiredArgsConstructor
 public class KakaoAccountController {
-
+    //http://localhost:8081/api/kakao/oauth?code=z70LayKZDGKkQ1db2aCnSzCBKf6ah0miXpavho_Lyd5YnChRJjAFDe6ULX8KPXPsAAABi6d6z_Gt1856Xp2T3g
+//    /**
+//     * 카카오 callback
+//     * [GET] /api/kakao/login
+//     */
     private final KakaoAccountService kakaoAccountService;
+    private final CommonUserService commonUserService;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final KakaoUserJwtTokenProvider kakaoUserJwtTokenProvider;
 
-
-    @PostMapping("url")
-    public ResponseEntity<Object> methodName (@Valid Object params, BindingResult bindingResult) {
-        try {
-
-        } catch (Exception e) {     //사용자에게 보여줄 에러가 있다면
-            bindingResult.reject("error", "errorMsg");
-        } finally {
-            if (bindingResult.hasErrors()) {        //만약 에러가 있다면
-                return ResponseEntity.badRequest().body(bindingResult);     //ajax에 400코드를 보내고 우리가 처리한 에러 내용을 보냄
-            }
-
-            return ResponseEntity.ok().body("본인이 전송할 DTO");     //에러가 없다면 AJAX에 200코드를 보내고 내가 전송할 DTO를 BODY에 담아서 보냄
-//            return ResponseEntity.ok().build();                  //view에 response를 할 것이 없다면 ok().build();
-        }
+    @GetMapping("/login/index")
+    public String loginPage() {
+        return "/login-index";
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<Object> login (@Valid @RequestParam("code") String code, HttpSession session, BindingResult bindingResult) {
-        String access_Token = kakaoAccountService.getAccessToken(code);
-        HashMap<String , Object> userInfo = new HashMap<>();
+    @RequestMapping(value = "/signup")
+    public String signup(@RequestParam("code") String code, HttpSession session) {
+        String access_Token = kakaoAccountService.getKakaoAccessToken(code);
+        KakaoUserDto userInfo = kakaoAccountService.getKakaoUserInfo(access_Token);
+
         try {
-            userInfo = kakaoAccountService.getUserInfo(access_Token);
+            commonUserService.duplicateEmailValidate(userInfo.getEmail());
 
-            //TODO : JWT Token 방식으로 변경하기
-            if(userInfo.get("email") !=null){
-                session.setAttribute("userId",userInfo.get("email"));
-                session.setAttribute("access_Token",access_Token);
+            kakaoAccountService.save(
+                    KakaoUserDto.builder()
+                            .kakaoAccountId(userInfo.getKakaoAccountId())
+                            .email(userInfo.getEmail())
+                            .name(userInfo.getName())
+                            .nickname(userInfo.getNickname())
+                            .gender(userInfo.getGender())
+                            .year(userInfo.getYear())
+                            .date(userInfo.getDate())
+                            .phoneNumber(userInfo.getPhoneNumber())
+                            .point(0L)
+                            .build());
 
-            }
-            System.out.println("code : " + code);
-
-
-        } catch(LogInFailException e){
-            bindingResult.reject("login.exception","");
-
-        }
-        finally {
-            if (bindingResult.hasErrors()) {
-                return ResponseEntity.badRequest().body(bindingResult);
-
-            }
-
-            return ResponseEntity.ok().body(userInfo);
+            return "redirect:/";
+        } catch (DuplicateEmailException e) {
+            session.setAttribute("msg", "로그인실패");
+            return "redirect:/";
 
         }
-
 
     }
 
-
-    @PostMapping("/logout")
-    public ResponseEntity<Object> logout(HttpSession session, BindingResult bindingResult) {
+    public Map login(String email, String kakaoAccountId) {
         try {
-            kakaoAccountService.kakaoLogoutV2((String)session.getAttribute("access_Token"));
-            session.removeAttribute("access_Token");
-            session.removeAttribute("userId");
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(kakaoAccountId, email);
+            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        } catch (IOException e) {
-            bindingResult.reject("IOE", "IOE Exception 발생");
-
+            if (authentication.isAuthenticated()) {
+                String token = kakaoUserJwtTokenProvider.generateKakaoJwtToken(new KakaoUserDto(kakaoAccountId, email, null, "", "", "", null, null, 0l));
+                Map<String, Object> map = new HashMap<>();
+                map.put("token", token);
+                return map;
+            }
         } catch (LogInFailException e) {
-            bindingResult.rejectValue("code", e.getCode());
-            bindingResult.rejectValue("message", e.getMessage());
-            bindingResult.reject("logout.exception", "");
+            // 인증 예외 처리
+        }
+        return null;
+    }
+
+
+//    @PostMapping("/login")
+//    public Map login(String email, String kakaoAccountId, String eamil, String nickname) {
+//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(kakaoAccountId,email);
+//        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+//        System.out.println(authentication.isAuthenticated());
+//
+//        Map map = new HashMap();
+//        boolean flag = authentication.isAuthenticated();
+//
+//        if (flag) {
+//            String token = kakaoUserJwtTokenProvider.generateKakaoJwtToken(new KakaoUserDto(kakaoAccountId, email ,null,"","","",null,null,0l));
+//            flag = true;
+//            map.put("token", token);
+//        }
+//        map.put("flag", flag);
+//        return map;
+//    }
+
+    @RequestMapping(value = "/login")
+    public String login(@RequestParam("code") String code, HttpSession session, Model model) {
+        String access_Token = kakaoAccountService.getKakaoAccessToken(code);
+        KakaoUserDto userInfo = kakaoAccountService.getKakaoUserInfo(access_Token);
+        Map<String, Object> loginToken = new HashMap<>();
+
+
+        try {
+            commonUserService.duplicateEmailValidate(userInfo.getEmail());
+
+            kakaoAccountService.save(
+                    KakaoUserDto.builder()
+                            .kakaoAccountId(userInfo.getKakaoAccountId())
+                            .email(userInfo.getEmail())
+                            .name(userInfo.getName())
+                            .nickname(userInfo.getNickname())
+                            .gender(userInfo.getGender())
+                            .year(userInfo.getYear())
+                            .date(userInfo.getDate())
+                            .phoneNumber(userInfo.getPhoneNumber())
+                            .point(0L)
+                            .build());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        } finally {
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userInfo.getKakaoAccountId(), userInfo.getEmail());
+            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+            if (authentication.isAuthenticated()) {
+                String token = kakaoUserJwtTokenProvider.generateKakaoJwtToken(
+                        KakaoUserDto.builder().kakaoAccountId(userInfo.getKakaoAccountId()).email(userInfo.getEmail()).build());
+                loginToken.put("token", token);
+            }
+            model.addAttribute("loginToken", loginToken);
+            return "redirect:/";
         }
 
-        finally {
-            if (bindingResult.hasErrors()) {
-                return ResponseEntity.badRequest().body(bindingResult);
-            }
-            return ResponseEntity.ok().build();
-        }
+
     }
+
+
+    @RequestMapping(value = "/logout")
+    public String logout(HttpSession session) {
+        kakaoAccountService.kakaoLogout((String) session.getAttribute("access_Token"));
+        session.removeAttribute("access_Token");
+        session.removeAttribute("userId");
+        return "/index";
+    }
+
 }
