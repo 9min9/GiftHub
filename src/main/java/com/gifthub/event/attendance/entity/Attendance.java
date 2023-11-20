@@ -5,17 +5,18 @@ import com.gifthub.global.BaseTimeEntity;
 import com.gifthub.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-@Entity
-@Getter
+@Entity @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 public class Attendance extends BaseTimeEntity {
 
     @Id
     @SequenceGenerator(name = "seq_payment", sequenceName = "seq_payment", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_payment")
+    @Column(name = "attendance_id")
     private Long id;
 
     @JoinColumn(name = "userId", unique = true)
@@ -28,7 +29,6 @@ public class Attendance extends BaseTimeEntity {
 
         return this.attendance;
     }
-
 
     public AttendanceDto toDto() {
         return AttendanceDto.builder()

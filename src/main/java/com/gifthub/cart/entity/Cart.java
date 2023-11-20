@@ -2,23 +2,23 @@ package com.gifthub.cart.entity;
 
 import com.gifthub.cart.dto.CartDto;
 import com.gifthub.gifticon.entity.Gifticon;
+import com.gifthub.global.BaseTimeEntity;
 import com.gifthub.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-@Entity
-@Getter
+@Entity @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class Cart {
-
+@SuperBuilder
+public class Cart extends BaseTimeEntity {
     @Id
     @SequenceGenerator(name = "seq_cart", sequenceName = "seq_cart", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_cart")
+    @Column(name = "cart_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -8,20 +8,20 @@ import com.gifthub.payment.enumeration.Site;
 import com.gifthub.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-@Entity
-@Getter
+@Entity @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 public class Payment extends BaseTimeEntity {
 
     @Id
     @SequenceGenerator(name = "seq_payment", sequenceName = "seq_payment", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_payment")
+    @Column(name = "payment_id")
     private Long id;
     private Long price;
     @Enumerated(EnumType.STRING)
