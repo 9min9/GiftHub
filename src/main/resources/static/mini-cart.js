@@ -13,6 +13,7 @@ let loadMiniCart = () => {
                 let miniCart = document.createElement("div");
 
                 miniCart.classList = "card-mini-product";
+                miniCart.id = `div-mini-cart-${r.id}`;
 
                 sum += parseInt(r.gifticonDto.price);
                 let html = `
@@ -27,7 +28,7 @@ let loadMiniCart = () => {
                             <span class="mini-product__quantity">1</span>
                             <span class="mini-product__price">${r.gifticonDto.price}</span></div>
                     </div>
-                    <a class="mini-product__delete-link far fa-trash-alt"></a>`;
+                    <a class="mini-product__delete-link far fa-trash-alt mini-delete" id="mini-delete-${r.id}"></a>`;
 
                 miniCart.innerHTML = html;
 
@@ -36,8 +37,38 @@ let loadMiniCart = () => {
 
             $("#subtotal-value").text(sum);
 
+            miniDeleteEvent();
+
         }
     });
+}
+
+let miniDeleteEvent = function (){
+    $(".mini-delete").each(function() {
+        $(this).on("click", function(event) {
+            event.preventDefault();
+
+            let id = $(this).attr("id").replace("mini-delete-", "");
+
+            console.log(id);
+
+            $.ajax({
+                url: "/api/carts/" + id,
+                type: "delete",
+                success: function () {
+                    $("#div-mini-cart-" + id).remove();
+
+                    $(".total-item-round").each(function() {
+                        $(this).text(parseInt($(this).text()) - 1);
+                    });
+                },
+                error: function () {
+                    alert("삭제 실패! 다시 시도해주세요.")
+                }
+            });
+        });
+    });
+
 }
 
 loadMiniCart();
