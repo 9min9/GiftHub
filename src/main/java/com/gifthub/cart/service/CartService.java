@@ -7,6 +7,7 @@ import com.gifthub.gifticon.entity.Gifticon;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -25,6 +26,11 @@ public class CartService {
 
     public void removeFromCart(Long id) {
         cartRepository.deleteById(id);
+    }
+
+    @Transactional
+    public Long removeAllFromCart(Long userId) {
+        return cartRepository.deleteAllByUserId(userId);
     }
 
     public List<CartDto> findByUser(Long userId) {

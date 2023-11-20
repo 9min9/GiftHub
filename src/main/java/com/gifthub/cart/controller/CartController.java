@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/carts")
+@RequestMapping("/api/carts")
 public class CartController {
 
     private final CartService cartService;
@@ -63,6 +63,22 @@ public class CartController {
             // TODO 유저의 id와 카트에 있는 기프티콘의 주인의 아이디 비교
 
             cartService.removeFromCart(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Object> removeAllFromCart() {
+        try {
+            // TODO 유저의 id와 카트에 있는 기프티콘의 주인의 아이디 비교
+            Long userId = 1L;
+
+            cartService.removeAllFromCart(userId);
         } catch (Exception e) {
             e.printStackTrace();
 

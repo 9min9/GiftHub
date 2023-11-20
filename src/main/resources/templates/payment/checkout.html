@@ -436,7 +436,7 @@
     <script th:src="@{/payment.js}"></script>
     <script th:inline="javascript">
         loadItem([[${param.gifticonIds}]]);
-        payWithPointEvent(10000, "itemTest");
+        payWithPointEvent(parseInt($("tr#final-price").text()), $(""));
     </script>
 </body>
 </html>

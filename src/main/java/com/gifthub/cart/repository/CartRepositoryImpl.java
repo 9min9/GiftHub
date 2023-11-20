@@ -24,5 +24,12 @@ public class CartRepositoryImpl implements CartRepositorySupport {
                 .fetch();
     }
 
+    @Override
+    public Long deleteAllByUserId(Long userId) {
+        return queryFactory.delete(cart)
+                .where(cart.user.id.eq(userId))
+                .execute();
+    }
+
 
 }
