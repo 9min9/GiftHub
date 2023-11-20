@@ -1,9 +1,10 @@
 package com.gifthub.user.dto;
 
+import com.gifthub.user.entity.KakaoUser;
+import com.gifthub.user.entity.LocalUser;
 import com.gifthub.user.entity.User;
 import com.gifthub.user.entity.enumeration.LoginType;
 import com.gifthub.user.entity.enumeration.UserType;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,11 +28,11 @@ public class UserDto {
     private LocalDate date;
     private String tel;
     private Long point;
+    private String kakaoAccountId;
 
     public User toEntity() {
-        return (User) User.builder()
+        return User.builder()
                 .id(this.id)
-                .password(this.password)
                 .name(this.name)
                 .email(this.email)
                 .userType(UserType.ADMIN)
@@ -40,6 +41,14 @@ public class UserDto {
                 .tel(this.tel)
                 .point(this.point)
                 .build();
+    }
+
+    public LocalUser toLocalUserEntity() {
+        return LocalUser.builder().password(this.password).build();
+    }
+
+    public KakaoUser toKakaoUserEntity() {
+        return KakaoUser.builder().kakaoAccountId(this.kakaoAccountId).build();
     }
 
 }

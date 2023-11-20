@@ -1,70 +1,126 @@
 package com.gifthub.user.entity;
+
+import com.gifthub.global.BaseTimeEntity;
+import com.gifthub.user.dto.KakaoUserDto;
 import com.gifthub.user.dto.UserDto;
+import com.gifthub.user.entity.enumeration.LoginType;
+import com.gifthub.user.entity.enumeration.UserType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Collections;
 
-@Entity
-@Getter
+import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.InheritanceType.JOINED;
+
+@Entity @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
+@Inheritance(strategy = JOINED)
+@DiscriminatorColumn(name = "user_login_type")
 @Table(name = "users")
-public class User extends BaseUser {
+@SuperBuilder
+public class User extends BaseTimeEntity implements UserDetails {
 
     @Id
     @SequenceGenerator(name = "seq_user", sequenceName = "seq_user", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_user")
+    @Column(name = "user_id")
     private Long id;
-    private String password;
 
-    public UserDto toDto() {
-        return UserDto.builder()
-                .id(this.id)
-                .email(super.getEmail())
-                .password(this.password)
-                .name(super.getName())
-                .userType(super.getUserType().name())
-                .loginType(super.getLoginType().name())
-                .year(super.getYear())
-                .date(super.getBirthDate())
-                .tel(super.getTel())
-                .point(super.getPoint())
-                .build();
+    @Column(name = "email", unique = true)
+    private String email;
+    private String name;
+    private String nickname;
+    private String gender;
+    private LocalDate year;
+    private LocalDate birthDate;
+    private String tel;
+    private Long point;
+
+    @Enumerated(STRING)
+    private UserType userType;
+    @Enumerated(STRING)
+    private LoginType loginType;
+
+    public Long usePoint(Long price) {
+        this.point -= price;
+        return this.point;
+    }
+
+    public Long plusPoint(Long price) {
+        this.point += price;
+        return this.point;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singleton(new SimpleGrantedAuthority(userType.name()));
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return this.email;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
+
+    @Override
+    public String getPassword() {
+        return null;
+    }
+
+
+    public UserDto toDto() {
+        return UserDto.builder()
+                .id(this.id)
+                .email(this.email)
+                .name(this.name)
+                .userType(this.userType.name())
+                .loginType(this.loginType.name())
+                .year(this.year)
+                .date(this.birthDate)
+                .tel(this.tel)
+                .point(this.point)
+                .build();
+    }
+
+    public KakaoUserDto toKakaoUserDto() {
+//        KakaoUserDto.builder()
+        return null;
+    }
+
+
+
+
+
+
+
+
 }

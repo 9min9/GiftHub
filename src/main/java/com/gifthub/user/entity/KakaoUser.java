@@ -12,9 +12,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class KakaoUser extends BaseUser {
+@DiscriminatorValue("kakao")
+public class KakaoUser extends User {
 
-    @Id
     private String kakaoAccountId;
 
     public KakaoUserDto toKakaoUserDto() {
