@@ -8,22 +8,27 @@ public class AccountPageController {
 
     @GetMapping("/signup")
     public String signup() {
-        return "signup";
+        return "account/signup";
     }
 
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return "account/login";
     }
 
     @GetMapping("/mypage")
     public String mypage() {
-        return "dash-my-profile";
+        return "account/my-profile";
+    }
+
+    @GetMapping("/edit/profile")
+    public String editPage() {
+        return "account/edit-profile";
     }
 
     @GetMapping("/wishlist")
     public String wishlist() {
-        return "wishlist";
+        return "user/wishlist";
     }
 
 

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+
+    <th block th:replace="fragments/base/head :: head"></th>
+</head>
+
+<body class="config">
+    <div class="preloader is-active">
+        <div class="preloader__wrap">
+
+            <img class="preloader__img" src="images/preloader.png" alt=""></div>
+    </div>
+
+    <!--====== Main App ======-->
+    <div id="app">
+
+        <!--====== Main Header ======-->
+        <header class="header--style-1 header--box-shadow">
+            <th:block th:replace="fragments/base/header :: header"></th:block>
+        </header>
+        <!--====== End - Main Header ======-->
+
+
+        <!--====== App Content ======-->
+        <div class="app-content">
+            <!--====== Section 2 ======-->
+            <div class="u-s-p-b-60">
+
+                <!--====== Section Intro ======-->
+                <div class="section__intro u-s-m-y-60">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="section__text-wrap">
+                                    <h1 class="section__heading u-c-secondary">회원 가입</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--====== End - Section Intro ======-->
+
+                <!--====== Section Content ======-->
+                <div class="section__content">
+                    <div class="container">
+                        <div class="row row--center">
+                            <div class="col-lg-6 col-md-8 u-s-m-b-30">
+                                <div class="l-f-o">
+                                    <div class="l-f-o__pad-box">
+                                        <h1 class="gl-h1">소셜 회원가입</h1>
+                                        <form class="l-f-o__form">
+                                            <div class="gl-s-api">
+
+                                                <div class="u-s-m-b-15">
+                                                    <button class="btn--icon" type="button">
+                                                        <img src="/images/kakaologin/kakao_signup_medium_wide.png" class="btn u-img-fluid">
+                                                    </button>
+                                                </div>
+
+                                                <div class="u-s-m-b-30">
+                                                    <button class="btn--icon" type="button">
+                                                        <img src="/images/naver-login/naver_login_large.png" class="btn u-img-fluid">
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="u-s-m-b-30">
+                                                <label class="gl-label" for="email">이메일</label>
+                                                <input id="email" class="input-text input-text--primary-style" type="text" placeholder="이메일"></div>
+
+                                            <div class="gl-inline">
+                                                <div class="u-s-m-b-30">
+                                                    <label class="gl-label" for="password">비밀번호</label>
+                                                    <input id="password" class="input-text input-text--primary-style" type="text" placeholder="비밀번호">
+                                                </div>
+
+                                                <div class="u-s-m-b-30">
+                                                    <label class="gl-label" for="confirm-password">비밀번호 확인</label>
+                                                    <input id="confirm-password" class="input-text input-text--primary-style" type="text" placeholder="비밀번호">
+                                                </div>
+                                            </div>
+
+                                            <div class="gl-inline">
+                                                <div class="u-s-m-b-30">
+                                                    <label class="gl-label" for="name">이름</label>
+                                                    <input id="name" class="input-text input-text--primary-style" type="text"  placeholder="이름을 입력해주세요">
+                                                </div>
+                                            </div>
+
+                                            <div class="u-s-m-b-30">
+                                                <label class="gl-label" for="tel">전화번호</label>
+                                                <input id="tel" class="input-text input-text--primary-style" type="text" placeholder="전화번호를 입력해주세요">
+                                            </div>
+
+                                            <div class="gl-inline">
+                                                <div class="u-s-m-b-30">
+                                                    <!--====== Date of Birth Select-Box ======-->
+                                                    <span class="gl-label">생년 월일</span>
+                                                    <div class="gl-dob">
+                                                        <select id="year" class="select-box select-box--primary-style">
+                                                            <option selected>년도</option>
+                                                            <option value="1991">1991</option>
+                                                            <option value="1992">1992</option>
+                                                            <option value="1993">1993</option>
+                                                            <option value="1994">1994</option>
+                                                        </select>
+
+                                                        <select id="month" class="select-box select-box--primary-style">
+                                                            <option selected>월</option>
+                                                            <option value="male">1월</option>
+                                                            <option value="male">2월</option>
+                                                            <option value="male">3월</option>
+                                                            <option value="male">4월</option>
+                                                            <option value="male">5월</option>
+                                                            <option value="male">6월</option>
+                                                            <option value="male">7월</option>
+                                                            <option value="male">8월</option>
+                                                            <option value="male">9월</option>
+                                                            <option value="male">10월</option>
+                                                            <option value="male">11월</option>
+                                                            <option value="male">12월</option>
+                                                        </select>
+
+                                                        <select id="day" class="select-box select-box--primary-style">
+                                                            <option selected>일</option>
+                                                            <option value="01">01</option>
+                                                            <option value="02">02</option>
+                                                            <option value="03">03</option>
+                                                            <option value="04">04</option>
+                                                        </select>
+
+
+                                                    </div>
+                                                    <!--====== End - Date of Birth Select-Box ======-->
+                                                </div>
+                                                <div class="u-s-m-b-30">
+
+                                                    <label class="gl-label" for="gender">성별</label><select class="select-box select-box--primary-style u-w-100" id="gender">
+                                                        <option selected>성별</option>
+                                                        <option value="m">남자</option>
+                                                        <option value="f">여자</option>
+                                                    </select></div>
+                                            </div>
+
+                                            <div class="u-s-m-b-15" style="display: flex; justify-content: end;">
+                                                <button class="btn btn--e-transparent-brand-b-2" type="submit">회원가입</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--====== End - Section Content ======-->
+            </div>
+            <!--====== End - Section 2 ======-->
+        </div>
+        <!--====== End - App Content ======-->
+
+
+        <!--====== Main Footer ======-->
+        <footer>
+            <th:block th:replace="fragments/base/footer :: footer"></th:block>
+        </footer>
+    </div>
+    <!--====== End - Main App ======-->
+
+    <th:block th:replace="fragments/base/script :: script"></th:block>
+
+</body>
+</html>
