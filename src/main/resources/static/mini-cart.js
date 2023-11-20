@@ -3,6 +3,10 @@ let loadMiniCart = () => {
         url: "/api/carts",
         type: "get",
         success: function(response) {
+            $(".total-item-round").each(function() {
+                $(this).text(response.length);
+            });
+
             let sum = 0;
 
             for (let r of response) {
