@@ -1,11 +1,11 @@
 let loadOrders = (page, size) => {
-    page = page || 0;
+    page = page || 1;
     size = size || 10;
 
 
     let xhr = new XMLHttpRequest();
 
-    xhr.open("get", "/api/payments?page=" + page + "&size=" + size);
+    xhr.open("get", "/api/payments?page=" + (page - 1) + "&size=" + size);
 
     xhr.onload = function() {
         if (xhr.status !== 200) {
@@ -14,7 +14,21 @@ let loadOrders = (page, size) => {
 
         let orders = JSON.parse(xhr.responseText);
 
-        for (let o of orders) {
+        $("#pagination-place").twbsPagination({
+            totalPages: orders.totalElements % size == 0 ? orders.totalElements / size : orders.totalElements / size + 1,
+            visiblePages: 4,
+            onPageClick: function(evt, page) {
+                window.scrollTo({top: 0, left:0, behavior: "smooth"});
+
+                $("div.m-order__get").each(function () {
+                    $(this).remove();
+                });
+
+                loadOrders(page);
+            },
+        });
+
+        for (let o of orders.content) {
             let html = "";
 
             let element = document.createElement("div");

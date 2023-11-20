@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/pay/kakao")
-public class KakaoPage {
+public class KakaoPageController {
 
     @GetMapping
     public String payment() {

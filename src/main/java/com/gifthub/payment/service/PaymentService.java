@@ -4,6 +4,7 @@ import com.gifthub.payment.dto.PaymentDto;
 import com.gifthub.payment.entity.Payment;
 import com.gifthub.payment.repository.PaymentRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ public class PaymentService {
     }
 
     public PaymentDto get(Long num) {
-        return PaymentDto.toDto(paymentRepository.findById(num).orElseThrow());
+        return paymentRepository.findById(num).orElseThrow().toDto();
     }
 
     public void setPaid(Long id) {
@@ -32,10 +33,9 @@ public class PaymentService {
         paymentRepository.save(payment);
     }
 
-    public List<PaymentDto> getAll(Pageable pageable) {
-        return paymentRepository.findAllByOrderByIdDesc(pageable).get()
-                .map(PaymentDto::toDto)
-                .collect(Collectors.toList());
+    public Page<PaymentDto> getAll(Pageable pageable) {
+        return paymentRepository.findAllByOrderByIdDesc(pageable)
+                .map(Payment::toDto);
     }
 
     public void setPayCode(Long id, String tid) {

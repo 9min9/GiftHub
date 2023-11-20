@@ -31,15 +31,4 @@ public class PaymentDto {
                 .build();
     }
 
-    public static PaymentDto toDto(Payment payment) {
-        return PaymentDto.builder()
-                .id(payment.getId())
-                .price(payment.getPrice())
-                .payMethod(payment.getPayMethod())
-                .paymentSite(payment.getPaymentSite())
-                .payCode(payment.getPayCode())
-                .payStatus(payment.getPayStatus())
-                .build();
-    }
-
 }

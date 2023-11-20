@@ -2,6 +2,13 @@
 <html class="no-js" lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="fragments/base/head :: head"></th:block>
+    <style>
+        .disabled {
+            pointer-events: none;
+            cursor: default;
+            border-radius: 50%;
+        }
+    </style>
 </head>
 <body class="config">
 <div class="preloader is-active">
@@ -145,7 +152,8 @@
                                         <div class="m-order__list" id="order-list">
                                             <!--/* 주문 목록 */-->
                                         </div>
-
+                                        <ul class="shop-p__pagination" id="pagination-place">
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
@@ -510,6 +518,7 @@
 <!--====== End - Main App ======-->
 
 <th:block th:replace="fragments/base/script :: script"></th:block>
+<script th:src="@{/jquery.twbsPagination.min.js}"></script>
 <script th:src="@{/orders.js}"></script>
 <script th:inline="javascript">
     window.onload = () => {

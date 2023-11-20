@@ -1,12 +1,9 @@
 package com.gifthub.payment.controller;
 
-import com.gifthub.payment.pagination.Criteria;
-import com.gifthub.payment.pagination.Pagination;
 import com.gifthub.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -14,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/payment")
 @RequiredArgsConstructor
-public class PaymentPage {
+public class PaymentPageController {
 
     private final PaymentService paymentService;
 
@@ -29,20 +26,7 @@ public class PaymentPage {
     }
 
     @GetMapping("orders")
-    public String orders(Criteria criteria, Model model) {
-        Long userId = 1L; //TODO jwt에서 가져옴
-
-        if (criteria.getSize() == 0) {
-            criteria.setSize(10);
-        }
-
-        Long myOrderCount = paymentService.countMyOrders(userId);
-        criteria.setTotalAmount(myOrderCount);
-
-        Pagination pagination = new Pagination(criteria);
-
-        model.addAttribute("paginataion", pagination);
-
+    public String orders() {
         return "/payment/orders";
     }
 
