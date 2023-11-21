@@ -74,7 +74,14 @@ let loadItem = (items) => {
             mainGifticon.appendChild(created);
         }
 
+        let discountPrice = 0;
+        let finalPrice = totalPrice - discountPrice;
+
         document.querySelector("#total-price").innerText = totalPrice + " 원";
+        document.querySelector("#discount-price").innerText = discountPrice;
+        document.querySelector("#final-price").innerHTML = finalPrice;
+
+        payWithPointEvent(finalPrice, "기프티콘"); // TODO 아이템 이름 변경 필요
 
         document.querySelectorAll(".trash").forEach((element) => {
             element.addEventListener("click", function() {
