@@ -1,4 +1,6 @@
 let loadMiniCart = () => {
+    $(".card-mini-product").remove();
+
     $.ajax({
         url: "/api/carts",
         type: "get",
@@ -49,8 +51,6 @@ let miniDeleteEvent = function (){
             event.preventDefault();
 
             let id = $(this).attr("id").replace("mini-delete-", "");
-
-            console.log(id);
 
             $.ajax({
                 url: "/api/carts/" + id,

@@ -9,6 +9,7 @@ import com.gifthub.payment.service.KakaoPayService;
 import com.gifthub.payment.service.PaymentService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -27,7 +28,7 @@ public class KakaoPayController {
     private final PaymentService paymentService;
 
     @PostMapping("/ready")
-    public ResponseEntity<Object> ready(@RequestBody KakaoPayRequestDto dto, BindingResult bindingResult) {
+    public ResponseEntity<Object> ready(@RequestBody KakaoPayRequestDto dto, BindingResult bindingResult, HttpServletRequest request) {
         KakaoPayReadyResponseDto readyResponseDto = null;
 
         try {
@@ -52,9 +53,11 @@ public class KakaoPayController {
             // 결제 정보 저장
             Long paidPaymentId = paymentService.pay(paymentDto);
 
-            String approvalUrl = "https://localhost/api/kakao/pay/approve?paymentId=" + paidPaymentId;
-            String cancelUrl = "https://localhost/payment/close";
-            String failUrl = "https://localhost/payment/close";
+            String baseUrl = makeBaseUrl(request);
+
+            String approvalUrl = baseUrl + "/api/kakao/pay/approve?paymentId=" + paidPaymentId;
+            String cancelUrl = baseUrl + "/payment/close";
+            String failUrl = baseUrl + "/payment/close";
 
             KakaoPayReadyRequestDto requestDto = KakaoPayReadyRequestDto.builder()
                     .cid(cid)
@@ -117,9 +120,9 @@ public class KakaoPayController {
 
 
             if (request.isSecure()) {
-                headers.set("location", "https://localhost/payment/close");
+                headers.set("location", makeBaseUrl(request) + "/payment/close");
             } else {
-                headers.set("location", "http://localhost/payment/close");
+                headers.set("location", makeBaseUrl(request) + "/payment/close");
             }
         } finally {
             if (!bindingResult.hasErrors()) {
@@ -129,6 +132,20 @@ public class KakaoPayController {
             }
         }
 
+    }
+
+    private static String makeBaseUrl(HttpServletRequest request) {
+        String baseUrl = "";
+        if (request.isSecure()) {
+            baseUrl += "https://";
+        } else {
+            baseUrl += "http://";
+        }
+
+        baseUrl += request.getServerName();
+        baseUrl += ":";
+        baseUrl += request.getLocalPort();
+        return baseUrl;
     }
 
 }
