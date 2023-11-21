@@ -25,11 +25,11 @@ public class Gifticon extends BaseTimeEntity {
     @Column(name = "gifticon_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne // gifticon은 users와의 관계에서 주인 -> 아래 편의메서드 작성
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    @ManyToOne
+    @ManyToOne // gifticon은 product와의 관계에서 주인 -> 편의메서드
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;
 
@@ -52,6 +52,11 @@ public class Gifticon extends BaseTimeEntity {
                 .saleStatus(this.saleStatus)
                 .price(this.price)
                 .build();
+    }
+
+    public void addUser(User user) {
+        this.user = user;
+        user.getGifticons().add(this);
     }
 
     public void addProduct(Product product) {
