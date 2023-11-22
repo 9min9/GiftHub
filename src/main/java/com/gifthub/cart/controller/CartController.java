@@ -3,8 +3,10 @@ package com.gifthub.cart.controller;
 import com.gifthub.cart.dto.CartDto;
 import com.gifthub.cart.service.CartService;
 import com.gifthub.gifticon.dto.GifticonDto;
+import com.gifthub.user.UserJwtTokenProvider;
 import com.gifthub.user.dto.UserDto;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -16,10 +18,16 @@ import org.springframework.web.bind.annotation.*;
 public class CartController {
 
     private final CartService cartService;
+    private final UserJwtTokenProvider userJwtTokenProvider;
 
     @GetMapping
-    public ResponseEntity<Object> list() {
-        Long userId = 1L; //TODO jwt에서 가져옴
+    public ResponseEntity<Object> list(@RequestHeader HttpHeaders headers) {
+        Long userId = null;
+        try {
+            userId = userJwtTokenProvider.getUserIdFromToken(headers.get("token").get(0));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("로그인을 해주세요.");
+        }
 
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -57,7 +65,7 @@ public class CartController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/delete/{id}")
     public ResponseEntity<Object> removeFromCart(@PathVariable("id") Long id) {
         try {
             // TODO 유저의 id와 카트에 있는 기프티콘의 주인의 아이디 비교
@@ -72,7 +80,7 @@ public class CartController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping
+    @PostMapping("/delete")
     public ResponseEntity<Object> removeAllFromCart() {
         try {
             // TODO 유저의 id와 카트에 있는 기프티콘의 주인의 아이디 비교
