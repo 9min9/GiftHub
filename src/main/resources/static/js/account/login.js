@@ -2,7 +2,7 @@ const urlParams = new URL(location.href).searchParams;
 
 window.onload = function () {
     Kakao.init('578c006810acb509f2ccc52277d13ec9'); //발급받은 키 중 javascript키를 사용해준다.
-    // console.log(Kakao.isInitialized()); // sdk초기화여부판단
+    Kakao.isInitialized()
 
     //TODO : getJwt가 카카오 실행 후 리다이렉트 시 호출되어야 함
     getJwt();
@@ -39,23 +39,3 @@ function getJwt() {
         }
     });
 }
-
-function logout() {
-    $.ajax({
-        type:"GET",
-        url:"/api/kakao/logout",
-        dataType: 'json',
-
-        success: function(jsonData){
-            console.log("로그아웃 성공")
-        },
-        error:function(error) {
-            console.log("로그아웃 실패")
-
-        }
-    });
-}
-
-
-
-
