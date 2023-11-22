@@ -1,5 +1,6 @@
 package com.gifthub.user.entity;
 
+import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.global.BaseTimeEntity;
 import com.gifthub.user.dto.KakaoUserDto;
 import com.gifthub.user.dto.UserDto;
@@ -14,8 +15,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.InheritanceType.JOINED;
@@ -50,6 +53,9 @@ public class User extends BaseTimeEntity implements UserDetails {
 
 //    @Enumerated(STRING)
 //    private LoginType loginType;
+
+    @OneToMany(mappedBy ="user")
+    private List<Gifticon> gifticons = new ArrayList<Gifticon>();
 
     public Long usePoint(Long price) {
         this.point -= price;

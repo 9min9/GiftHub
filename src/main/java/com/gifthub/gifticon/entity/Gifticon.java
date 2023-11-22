@@ -25,11 +25,11 @@ public class Gifticon extends BaseTimeEntity {
     @Column(name = "gifticon_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PRODUCT_ID")
     private Product product;
 
@@ -52,6 +52,11 @@ public class Gifticon extends BaseTimeEntity {
                 .saleStatus(this.saleStatus)
                 .price(this.price)
                 .build();
+    }
+
+    public void addUser(User user) {
+        this.user = user;
+        user.getGifticons().add(this);
     }
 
     public void addProduct(Product product) {

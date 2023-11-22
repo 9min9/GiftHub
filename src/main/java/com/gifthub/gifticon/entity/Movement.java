@@ -21,16 +21,16 @@ public class Movement extends BaseTimeEntity {
     @Column(name = "movement_id")
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "from_user_id")
-    @ManyToOne
     private User fromUser;
 
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_user_id")
-    @ManyToOne
     private User toUser;
 
-    @JoinColumn(name = "gifticon_id")
     @ManyToOne
+    @JoinColumn(name = "gifticon_id")
     private Gifticon gifticon;
 
     @Enumerated(EnumType.STRING)
