@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-@DiscriminatorValue("local")
+@DiscriminatorValue("LOCAL")
 public class LocalUser extends User {
 
     private String password;
@@ -23,13 +23,11 @@ public class LocalUser extends User {
                 .email(super.getEmail())
                 .name(super.getName())
                 .userType(super.getUserType().name())
-                .loginType(super.getLoginType().name())
                 .year(super.getYear())
                 .date(super.getBirthDate())
                 .tel(super.getTel())
                 .point(super.getPoint())
                 .build();
     }
-
 
 }

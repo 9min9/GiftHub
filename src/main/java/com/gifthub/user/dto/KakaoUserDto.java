@@ -1,7 +1,7 @@
 package com.gifthub.user.dto;
 
 import com.gifthub.user.entity.KakaoUser;
-import com.gifthub.user.entity.enumeration.LoginType;
+import com.gifthub.user.entity.enumeration.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,10 +25,8 @@ public class KakaoUserDto {
     private LocalDate date;
     private Long point;
 
-
-
     public KakaoUser toEntity() {
-        return (KakaoUser) KakaoUser.builder()
+        return KakaoUser.builder()
                 .kakaoAccountId(kakaoAccountId)
                 .email(email)
                 .name(name)
@@ -37,7 +35,7 @@ public class KakaoUserDto {
                 .gender(gender)
                 .year(year)
                 .birthDate(date)
-                .loginType(LoginType.KAKAO)
+                .userType(UserType.USER)
                 .build();
     }
 

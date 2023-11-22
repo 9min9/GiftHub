@@ -4,7 +4,6 @@ import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.global.BaseTimeEntity;
 import com.gifthub.user.dto.KakaoUserDto;
 import com.gifthub.user.dto.UserDto;
-import com.gifthub.user.entity.enumeration.LoginType;
 import com.gifthub.user.entity.enumeration.UserType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,7 +27,7 @@ import static jakarta.persistence.InheritanceType.JOINED;
 @AllArgsConstructor
 @NoArgsConstructor
 @Inheritance(strategy = JOINED)
-@DiscriminatorColumn(name = "user_login_type")
+@DiscriminatorColumn(name = "login_type")
 @Table(name = "users")
 @SuperBuilder
 public class User extends BaseTimeEntity implements UserDetails {
@@ -51,8 +50,9 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @Enumerated(STRING)
     private UserType userType;
-    @Enumerated(STRING)
-    private LoginType loginType;
+
+//    @Enumerated(STRING)
+//    private LoginType loginType;
 
     @OneToMany(mappedBy ="user")
     private List<Gifticon> gifticons = new ArrayList<Gifticon>();
@@ -109,7 +109,6 @@ public class User extends BaseTimeEntity implements UserDetails {
                 .email(this.email)
                 .name(this.name)
                 .userType(this.userType.name())
-                .loginType(this.loginType.name())
                 .year(this.year)
                 .date(this.birthDate)
                 .tel(this.tel)

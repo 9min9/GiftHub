@@ -3,7 +3,6 @@ package com.gifthub.user.dto;
 import com.gifthub.user.entity.KakaoUser;
 import com.gifthub.user.entity.LocalUser;
 import com.gifthub.user.entity.User;
-import com.gifthub.user.entity.enumeration.LoginType;
 import com.gifthub.user.entity.enumeration.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,7 +35,6 @@ public class UserDto {
                 .name(this.name)
                 .email(this.email)
                 .userType(UserType.ADMIN)
-                .loginType(LoginType.GIFT_HUB)
                 .birthDate(this.date)
                 .tel(this.tel)
                 .point(this.point)

@@ -20,4 +20,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 		User findUser = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 아이디 입니다."));
 		return findUser;
 	}
+
+	public UserDetails loadUserByKakaoAccountId(String kakaoAccountId) {
+		return userRepository.findByKakaoAccountId(kakaoAccountId).orElse(null);
+	}
+
+
 }
