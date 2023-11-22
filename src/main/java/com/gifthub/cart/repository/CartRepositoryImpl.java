@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.gifthub.cart.entity.QCart.*;
+import static com.gifthub.cart.entity.QCart.cart;
 
 @Repository
 @RequiredArgsConstructor
