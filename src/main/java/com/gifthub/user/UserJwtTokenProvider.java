@@ -76,7 +76,8 @@ public class UserJwtTokenProvider {
 	}
 
 	public Long getUserIdFromToken(String token) {
-		return (Long) getClaims(token).get("userId");
+		Claims claims = getClaims(token);
+		return ((Integer) claims.get("userId")).longValue();
 	}
 
 	/** */
