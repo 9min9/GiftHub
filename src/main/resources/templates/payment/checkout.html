@@ -433,7 +433,7 @@
     <!--====== End - Main App ======-->
 
     <th:block th:replace="fragments/base/script :: script"></th:block>
-    <script th:src="@{/payment.js}"></script>
+    <script th:src="@{/js/payment/payment.js}"></script>
     <script th:inline="javascript">
         window.onload = () => {
             loadItem([[${param.gifticonIds}]]);
