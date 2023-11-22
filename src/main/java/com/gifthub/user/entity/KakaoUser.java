@@ -9,7 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-@Entity @Getter
+@Entity
+@Getter
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,20 +20,19 @@ public class KakaoUser extends User {
     private String kakaoAccountId;
 
     public KakaoUserDto toKakaoUserDto() {
-      return KakaoUserDto.builder()
+        return KakaoUserDto.builder()
                 .kakaoAccountId(this.kakaoAccountId)
-                .date(super.getBirthDate())
+                .id(super.getId())
                 .email(super.getEmail())
                 .name(super.getName())
                 .nickname(super.getNickname())
                 .gender(super.getGender())
                 .year(super.getYear())
-                .date(super.getBirthDate())
-                .phoneNumber(super.getTel())
+                .birthDate(super.getBirthDate())
+                .tel(super.getTel())
                 .point(super.getPoint())
                 .build();
     }
-
 
 
 }

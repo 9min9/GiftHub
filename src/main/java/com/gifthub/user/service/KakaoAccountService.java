@@ -1,6 +1,8 @@
 package com.gifthub.user.service;
 
 import com.gifthub.user.dto.KakaoUserDto;
+import com.gifthub.user.entity.KakaoUser;
+import com.gifthub.user.repository.UserRepository;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -15,13 +17,35 @@ import java.net.URL;
 @Service
 @RequiredArgsConstructor
 public class KakaoAccountService {
+    private final UserRepository userRepository;
+
     @Value("${kakaoRestKey}")
     private String restKey;
 
-    public String getKakaoAccessToken (String authorize_code) {
+    public KakaoUserDto getKakaoUserById(Long userId) {
+        KakaoUser kakaoUser = (KakaoUser) userRepository.findById(userId).orElse(null);
+
+        if (kakaoUser != null) {
+            return kakaoUser.toKakaoUserDto();
+        }
+
+        return null;
+    }
+
+    public KakaoUserDto getKakaoUserByAccountId(String accountId) {
+        KakaoUser kakaoUser = userRepository.findByKakaoAccountId(accountId).orElse(null);
+
+        if (kakaoUser != null) {
+            return kakaoUser.toKakaoUserDto();
+        }
+
+        return null;
+    }
+
+    public String getKakaoAccessToken(String authorize_code) {
         String access_Token = "";
         String refresh_Token = "";
-        String id_token= "";
+        String id_token = "";
         String reqURL = "https://kauth.kakao.com/oauth/token";
 
         try {
@@ -34,7 +58,7 @@ public class KakaoAccountService {
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));     //POST 요청에 필요로 요구하는 파라미터 스트림을 통해 전송
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
-            sb.append("&client_id=" +restKey);
+            sb.append("&client_id=" + restKey);
             sb.append("&redirect_uri=http://localhost:8081/login");
             sb.append("&code=" + authorize_code);
             bw.write(sb.toString());
@@ -71,7 +95,7 @@ public class KakaoAccountService {
         return access_Token;
     }
 
-    public KakaoUserDto getKakaoUserInfo (String access_Token) {
+    public KakaoUserDto getKakaoUserInfo(String access_Token) {
         String reqURL = "https://kapi.kakao.com/v2/user/me";
 
         try {
@@ -83,7 +107,7 @@ public class KakaoAccountService {
             conn.setRequestProperty("Authorization", "Bearer " + access_Token);
 
             int responseCode = conn.getResponseCode();
-            System.out.println("access_token :" + access_Token );
+            System.out.println("access_token :" + access_Token);
             System.out.println("responseCode : " + responseCode);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -114,11 +138,11 @@ public class KakaoAccountService {
                     .name(name)
                     .nickname(nickname)
                     .email(email)
+//                    .year(year)
 //                    .year(LocalDate.parse(year))        //todo : LocalDate.pares() 체크하기
                     .gender(gender)
-                    .phoneNumber(phone_number)
+                    .tel(phone_number)
                     .build();
-
             return kakaoUserDto;
 
         } catch (IOException e) {
@@ -149,4 +173,5 @@ public class KakaoAccountService {
             e.printStackTrace();
         }
     }
+
 }
