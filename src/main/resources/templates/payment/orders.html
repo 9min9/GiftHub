@@ -136,19 +136,6 @@
                                         <h1 class="dash__h1 u-s-m-b-14">My Orders</h1>
 
                                         <span class="dash__text u-s-m-b-30">Here you can see all products that have been delivered.</span>
-                                        <form class="m-order u-s-m-b-30">
-                                            <div class="m-order__select-wrapper">
-
-                                                <label class="u-s-m-r-8" for="my-order-sort">Show:</label><select
-                                                    class="select-box select-box--primary-style" id="my-order-sort">
-                                                <option selected>Last 5 orders</option>
-                                                <option>Last 15 days</option>
-                                                <option>Last 30 days</option>
-                                                <option>Last 6 months</option>
-                                                <option>Orders placed in 2018</option>
-                                                <option>All Orders</option>
-                                            </select></div>
-                                        </form>
                                         <div class="m-order__list" id="order-list">
                                             <!--/* 주문 목록 */-->
                                         </div>
@@ -518,8 +505,8 @@
 <!--====== End - Main App ======-->
 
 <th:block th:replace="fragments/base/script :: script"></th:block>
-<script th:src="@{/jquery.twbsPagination.min.js}"></script>
-<script th:src="@{/orders.js}"></script>
+<script th:src="@{/js/pagination/jquery.twbsPagination.min.js}"></script>
+<script th:src="@{/js/payment/orders.js}"></script>
 <script th:inline="javascript">
     window.onload = () => {
         loadOrders([[${param.page}]], [[${param.size}]]);

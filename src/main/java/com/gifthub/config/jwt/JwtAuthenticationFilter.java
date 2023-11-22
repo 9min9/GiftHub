@@ -1,4 +1,4 @@
-package com.gifthub.config;
+package com.gifthub.config.jwt;
 
 import com.gifthub.user.UserJwtTokenProvider;
 import jakarta.servlet.FilterChain;

@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
+import java.util.List;
 
 @RestController
-@RequestMapping("/attendances")
+@RequestMapping("/api/attendances")
 @AllArgsConstructor
 public class AttendanceController {
 
@@ -29,7 +29,7 @@ public class AttendanceController {
         // TODO jwt에서 가져옴
         Long userId = 1L;
 
-        AttendanceDto searched = attendanceService.getByUserId(userId);
+        List<AttendanceDto> searched = attendanceService.getByUserId(userId);
 
         if (searched != null) {
             return ResponseEntity.ok(searched);
@@ -40,7 +40,7 @@ public class AttendanceController {
 
     @PostMapping
     public ResponseEntity<Object> attend() {
-        Integer attendCount = null;
+        Long attendId = null;
 
         try {
             Long userId = 1L;
@@ -53,22 +53,16 @@ public class AttendanceController {
                 return ResponseEntity.badRequest().body("출석체크는 하루에 한 번만 가능합니다. 내일 다시 시도해주세요");
             }
 
-            if (attendanceService.firstAttendance(userId)) {
-                attendanceService.createAttendance(userId);
-            }
+            attendId = attendanceService.attend(userId);
 
-            attendCount = attendanceService.attend(userId);
-
-            if (attendCount >= 25) {
-                attendanceService.resetAttendance(userId);
-
+            if (attendId == 25) {
                 pointService.plusPoint(attendancePoint, userId);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if (attendCount == null || attendCount == 0) {
+        if (attendId == null || attendId == 0) {
             return ResponseEntity.badRequest().body("출석체크에 실패했습니다. 다시 시도해주세요");
         }
 

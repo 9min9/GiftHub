@@ -13,5 +13,4 @@ import java.util.Optional;
 
 @Repository
 public interface AttendanceRepository extends JpaRepository<Attendance, Long>, AttendanceRepositorySupport {
-    Optional<Attendance> findByUserId(Long userId);
 }

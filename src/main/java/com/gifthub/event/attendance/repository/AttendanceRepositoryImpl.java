@@ -26,4 +26,12 @@ public class AttendanceRepositoryImpl implements AttendanceRepositorySupport{
                 .where(attendance1.modifiedDate.between(startDate, endDate), attendance1.user.id.eq(userId))
                 .fetch();
     }
+
+    @Override
+    public Long countByCreatedDate(LocalDateTime startDate, LocalDateTime endDate, Long userId) {
+        return queryFactory.select(attendance1.count())
+                .from(attendance1)
+                .where(attendance1.modifiedDate.between(startDate, endDate), attendance1.user.id.eq(userId))
+                .fetchOne();
+    }
 }

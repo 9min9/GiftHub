@@ -1,0 +1,29 @@
+* {
+    box-sizing: border-box;
+}
+
+.row {
+    width: 100%;
+    display: flex;
+}
+
+.unit-box {
+    width: calc(100% / 7);
+    height: calc(100vh / 6);
+    text-align: center;
+    font-size: 2.0rem;
+    line-height: calc(100vh / 6);
+}
+
+.unattendance {
+    background-color: orangered;
+}
+
+.attendance {
+    background-color: greenyellow;
+}
+
+.today {
+    background-color: skyblue;
+    cursor: pointer;
+}
