@@ -1,0 +1,5 @@
+@media (min-width: 1024px) {
+    .responsible-hidden {
+        display: none !important;
+    }
+}

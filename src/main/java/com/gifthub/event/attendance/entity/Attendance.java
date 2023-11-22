@@ -19,22 +19,17 @@ public class Attendance extends BaseTimeEntity {
     @Column(name = "attendance_id")
     private Long id;
 
-    @JoinColumn(name = "userId", unique = true)
-    @OneToOne
+    @JoinColumn(name = "userId")
+    @ManyToOne
     private User user;
     private Integer attendance;
-
-    public Integer updateAttendance(Integer attendance) {
-        this.attendance = attendance;
-
-        return this.attendance;
-    }
 
     public AttendanceDto toDto() {
         return AttendanceDto.builder()
                 .id(this.id)
                 .userDto(this.user.toDto())
                 .attendance(this.attendance)
+                .createDate(this.getCreateDate())
                 .build();
     }
 

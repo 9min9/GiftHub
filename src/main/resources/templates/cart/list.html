@@ -504,7 +504,7 @@
 <!--====== End - Main App ======-->
 
 <th:block th:replace="fragments/base/script :: script"></th:block>
-<script th:src="@{/cart.js}"></script>
+<script th:src="@{/js/cart/cart.js}"></script>
 <script th:inline="javascript">
     window.onload = () => {
         loadCarts([[${param.page}]], [[${param.size}]]);
