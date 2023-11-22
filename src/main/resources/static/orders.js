@@ -63,7 +63,7 @@ let loadOrders = (page, size) => {
                     <div class="description__info-wrap">
                         <div>
         
-                            <span class="manage-o__badge badge--processing">${o.saleStatus}</span>
+                            <span class="manage-o__badge badge--processing">${o.payStatus}</span>
                         </div>
                         <div>
         

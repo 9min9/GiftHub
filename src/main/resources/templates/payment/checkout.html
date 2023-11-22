@@ -435,8 +435,9 @@
     <th:block th:replace="fragments/base/script :: script"></th:block>
     <script th:src="@{/payment.js}"></script>
     <script th:inline="javascript">
-        loadItem([[${param.gifticonIds}]]);
-        payWithPointEvent(10000, "itemTest");
+        window.onload = () => {
+            loadItem([[${param.gifticonIds}]]);
+        }
     </script>
 </body>
 </html>
