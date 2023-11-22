@@ -2,7 +2,8 @@ package com.gifthub.user.entity;
 
 
 import com.gifthub.user.dto.KakaoUserDto;
-import jakarta.persistence.*;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-@DiscriminatorValue("kakao")
+@DiscriminatorValue("KAKAO")
 public class KakaoUser extends User {
 
     private String kakaoAccountId;

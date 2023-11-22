@@ -7,27 +7,21 @@
     <nav class="primary-nav primary-nav-wrapper--border">
         <div class="container">
             <!--====== Primary Nav ======-->
-            <div class="primary-nav">
+            <div id="primary-nav" class="primary-nav">
                 <!--====== Main Logo ======-->
-                <a class="main-logo" href="/">
-                    <img src="/images/logo/logo-1.png" alt=""></a>
+                <a id="main-logo" class="main-logo" href="/"><img src="/images/logo/logo-1.png" alt=""></a>
                 <!--====== End - Main Logo ======-->
 
                 <!--====== Dropdown Main plugin ======-->
                 <div class="menu-init" id="navigation">
-
-                    <button class="btn btn--icon toggle-button toggle-button--secondary fas fa-cogs"
-                            type="button"></button>
+                    <button class="btn btn--icon toggle-button toggle-button--secondary fas fa-cogs" type="button"></button>
 
                     <!--====== Menu ======-->
                     <div class="ah-lg-mode">
-
                         <span class="ah-close">✕ Close</span>
-
                         <!--====== List ======-->
-                        <ul class="ah-list ah-list--design1 ah-list--link-color-secondary">
-
-                            <li>
+                        <ul id="nav-list" class="ah-list ah-list--design1 ah-list--link-color-secondary">
+                            <li id="nav-point-li" class="u-s-m-r-6">
                                 <a href="/pay/kakao">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-wallet-fill" viewBox="0 0 16 16">
                                         <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v2h6a.5.5 0 0 1 .5.5c0 .253.08.644.306.958.207.288.557.542 1.194.542.637 0 .987-.254 1.194-.542.226-.314.306-.705.306-.958a.5.5 0 0 1 .5-.5h6v-2A1.5 1.5 0 0 0 14.5 2h-13z"/>
@@ -37,20 +31,21 @@
                                 </a>
                             </li>
 
-                            <li>
-                                <a href="/mypage"><i class="fas fa-user-circle u-s-m-r-6"></i>
+                            <li id="nav-mypage-li" class="u-s-m-r-6">
+                                <a href="/mypage"><i class="fas fa-user-circle"></i>
                                     <span>내정보</span></a>
                             </li>
 
-                            <li>
-                                <a href="/signup"><i class="fas fa-user-plus u-s-m-r-6"></i>
+                            <li id="nav-signup-li" class="u-s-m-r-6">
+                                <a href="/signup"><i class="fas fa-user-plus"></i>
                                     <span>회원가입</span></a></li>
-                            <li>
 
-                                <a href="/login"><i class="fas fa-lock u-s-m-r-6"></i>
+                            <li id="nav-login-li" class="u-s-m-r-6">
+                                <a href="/login"><i class="fas fa-lock"></i>
                                     <span>로그인</span></a></li>
-                            <li>
-                                <a href="/logout"><i class="fas fa-lock-open u-s-m-r-6"></i>
+
+                            <li id="nav-logout-li" class="u-s-m-r-6">
+                                <a href="/logout"><i class="fas fa-lock-open"></i>
                                     <span>로그아웃</span></a>
                             </li>
                         </ul>
