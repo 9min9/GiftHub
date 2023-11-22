@@ -17,4 +17,9 @@ public interface AttendanceRepositorySupport {
                                                 @Param("endDate") LocalDateTime endDate,
                                                 @Param("user") Long userId);
 
+    public Long countByCreatedDate(
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate,
+            @Param("user") Long userId);
+
 }
