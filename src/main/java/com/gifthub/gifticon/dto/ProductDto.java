@@ -4,10 +4,12 @@ import com.gifthub.gifticon.entity.Product;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Builder
 public class ProductDto {
     private Long id;
@@ -25,8 +27,6 @@ public class ProductDto {
                 .build();
     }
 
-    public ProductDto() {
-    }
 
     @QueryProjection
     public ProductDto(Long id, String name, Long price, String brandName) {

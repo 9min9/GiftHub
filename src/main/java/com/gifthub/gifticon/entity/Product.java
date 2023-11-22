@@ -20,7 +20,7 @@ public class Product extends BaseTimeEntity {
     @Id
     @SequenceGenerator(name = "seq_product", sequenceName = "seq_product", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_product")
-    @Column(name = "product_id")
+//    @Column(name = "product_id")
     private Long id;
 
     @OneToMany(mappedBy = "product")
