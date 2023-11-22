@@ -1,14 +1,17 @@
 package com.gifthub.gifticon.service;
 
-import static com.gifthub.gifticon.constant.OcrField.DUEDATE;
-import static com.gifthub.gifticon.constant.OcrField.PRODUCTNAME;
-import static com.gifthub.gifticon.constant.OcrField.brandName;
-
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.ProductDto;
-import com.gifthub.gifticon.entity.Product;
 import com.gifthub.gifticon.repository.ProductRepository;
+import com.gifthub.gifticon.repository.ProductRepositoryImpl;
 import com.gifthub.gifticon.util.OcrUtil;
+import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -18,20 +21,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.UUID;
-
-import lombok.RequiredArgsConstructor;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -44,26 +35,28 @@ public class OcrService {
     private String ocrAPIURL;
 
     private final ProductRepository productRepository;
+    private final ProductRepositoryImpl productRepositoryQdsl;
 
     public GifticonDto readOcrToGifticonDto(String barcodeurl) {
-        List<ProductDto> productList = productRepository.findAllProduct();
-
+        List<String> brandNameList = productRepositoryQdsl.findAllBrandName();
+        List<ProductDto> productListByBrand;
         String parsedBarcodeImg = readOcr(barcodeurl);
 
         String dueDate = null;
         String brandName = null;
         String productName = null;
 
-        for (ProductDto productDto : productList) {
-            if (OcrUtil.findMatchString(parsedBarcodeImg, productDto.getName())) {
-                productName = productDto.getName();
-            }
-            if (OcrUtil.findMatchString(parsedBarcodeImg, productDto.getBrandName())) {
-                brandName = productDto.getBrandName();
+        for (String s : brandNameList) {
+            if (OcrUtil.findMatchString(parsedBarcodeImg, s)) {
+                brandName = s;
+                productListByBrand = productRepositoryQdsl.findProductByBrand(s);
+                for(ProductDto product : productListByBrand) {
+                    if (OcrUtil.findMatchString(parsedBarcodeImg, product.getName())) {// 브랜드는 db에 있지만 읽어낸 상품명이 db에 없을 수 도있음!
+                        productName = product.getName();
+                    }
+                }
             }
         }
-
-//    OcrUtil.checkBrandInDb(productName);
 
         if (OcrUtil.dateParserTilde(parsedBarcodeImg) != null) {
             dueDate = OcrUtil.dateParserTilde(parsedBarcodeImg);
