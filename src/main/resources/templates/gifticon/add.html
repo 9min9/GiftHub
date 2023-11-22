@@ -190,26 +190,18 @@
 
                                     <img class="u-img-fluid" src="images/product/electronic/product1.jpg" alt=""></div>
                                 <div class="success__info-wrap">
-                                    <span class="success__name">기프티콘 이름</span>
-                                    <span class="success__quantity"></span>
-                                    <span class="success__price">사용기한</span></div>
+                                    <span class="success__price">최대 10장까지 올릴 수 있습니다~</span></div>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="s-option">
-
                                 <span class="s-option__text">추가 방법을 선택해주세요</span>
                                 <div class="s-option__link-box">
-
-                                    <a class="s-option__link btn--e-white-brand-shadow" data-dismiss="modal">
-                                        카카오톡으로 추가하기</a>
+                                    <a id="open-chat-button" class="s-option__link btn--e-white-brand-shadow" ONCLICK="openChat()" data-dismiss="modal">카카오톡으로 추가하기</a>
 
                                     <a class="s-option__link btn--e-white-brand-shadow" href="cart.html">
                                         문자로 추가하기
                                     </a>
-
-                                    <a class="s-option__link btn--e-brand-shadow" href="payment/checkout.html">
-                                        등록 완료</a>
                                 </div>
                             </div>
                         </div>
@@ -224,6 +216,7 @@
 <!--====== End - Main App ======-->
 
 <th:block th:replace="fragments/base/script :: script"></th:block>
+<script src="/js/gifticon/kakao-chatbot.js"></script>
 
 </body>
 </html>
