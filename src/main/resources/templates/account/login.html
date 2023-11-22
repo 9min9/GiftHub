@@ -65,28 +65,26 @@
                                         </div>
                                             <!--카카오 로그인 -->
                                         <div id="social-login-div" class="gl-s-api">
-                                            <div class="u-s-m-b-15">
+                                            <div class="u-s-m-b-5">
                                                 <button class="btn--icon" type="button">
-                                                    <a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=578c006810acb509f2ccc52277d13ec9&redirect_uri=http://localhost:8081/api/kakao/login&prompt=select_account">
-                                                    <img src="/images/kakaologin/kakao_signup_medium_wide.png" class="btn u-img-fluid">
+                                                    <a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=578c006810acb509f2ccc52277d13ec9&redirect_uri=http://localhost:8081/login&prompt=select_account">
+                                                    <img src="/images/kakaologin/kakao_login_medium_wide.png" class="btn u-img-fluid">
                                                     </a>
                                                 </button>
                                             </div>
 
-                                            <div class="u-s-m-b-15">
+                                            <div class="u-s-m-b-5">
                                                 <button class="btn--icon" type="button">
                                                     <img src="/images/naver-login/naver_login_medium.png" class="btn u-img-fluid">
                                                 </button>
                                             </div>
 
-
-                                            <div class="u-s-m-b-15">
-                                                <button class="gl-s-api__btn gl-s-api__btn--gplus" type="button"><i
-                                                        class="fab fa-google"></i>
-                                                    <span>구글 로그인</span></button>
-                                            </div>
+<!--                                            <div class="u-s-m-b-15">-->
+<!--                                                <button class="gl-s-api__btn gl-s-api__btn&#45;&#45;gplus" type="button"><i-->
+<!--                                                        class="fab fa-google"></i>-->
+<!--                                                    <span>구글 로그인</span></button>-->
+<!--                                            </div>-->
                                         </div>
-
                                     </form>
                                 </div>
                             </div>
@@ -107,6 +105,10 @@
 </div>
 <!--====== End - Main App ======-->
 <th:block th:replace="fragments/base/script :: script"></th:block>
+<script src="/js/account/login.js"></script>
+<!--<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>-->
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.5.0/kakao.min.js" integrity="sha384-kYPsUbBPlktXsY6/oNHSUDZoTX6+YI51f63jCPEIPFP09ttByAdxd2mEjKuhdqn4" crossOrigin="anonymous"></script>
+
 
 </body>
 </html>

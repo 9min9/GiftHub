@@ -7,10 +7,9 @@
     <nav class="primary-nav primary-nav-wrapper--border">
         <div class="container">
             <!--====== Primary Nav ======-->
-            <div class="primary-nav">
+            <div id="primary-nav" class="primary-nav">
                 <!--====== Main Logo ======-->
-                <a class="main-logo" href="/">
-                    <img src="/images/logo/logo-1.png" alt=""></a>
+                <a id="main-logo" class="main-logo" href="/"><img src="/images/logo/logo-1.png" alt=""></a>
                 <!--====== End - Main Logo ======-->
 
                 <!--====== Dropdown Main plugin ======-->
@@ -18,36 +17,35 @@
 
                     <button class="btn btn--icon toggle-button toggle-button--secondary fas fa-cogs responsible-hidden"
                             type="button"></button>
+                    <button class="btn btn--icon toggle-button toggle-button--secondary fas fa-cogs" type="button"></button>
 
                     <!--====== Menu ======-->
                     <div class="ah-lg-mode">
-
                         <span class="ah-close">✕ Close</span>
-
                         <!--====== List ======-->
-                        <ul class="ah-list ah-list--design1 ah-list--link-color-secondary">
-
-                            <li>
+                        <ul id="nav-list" class="ah-list ah-list--design1 ah-list--link-color-secondary">
+                            <li id="nav-point-li" class="u-s-m-r-6">
                                 <a href="/pay/kakao">
                                     <i class="fa-solid fa-wallet"></i>
                                     <span>포인트 충전</span>
                                 </a>
                             </li>
 
-                            <li>
-                                <a href="/mypage"><i class="fas fa-user-circle u-s-m-r-6"></i>
+                            <li id="nav-mypage-li" class="u-s-m-r-6">
+                                <a href="/mypage"><i class="fas fa-user-circle"></i>
                                     <span>내정보</span></a>
                             </li>
 
-                            <li>
-                                <a href="/signup"><i class="fas fa-user-plus u-s-m-r-6"></i>
+                            <li id="nav-signup-li" class="u-s-m-r-6">
+                                <a href="/signup"><i class="fas fa-user-plus"></i>
                                     <span>회원가입</span></a></li>
-                            <li>
 
-                                <a href="/login"><i class="fas fa-lock u-s-m-r-6"></i>
+                            <li id="nav-login-li" class="u-s-m-r-6">
+                                <a href="/login"><i class="fas fa-lock"></i>
                                     <span>로그인</span></a></li>
-                            <li>
-                                <a href="/logout"><i class="fas fa-lock-open u-s-m-r-6"></i>
+
+                            <li id="nav-logout-li" class="u-s-m-r-6">
+                                <a href="/logout"><i class="fas fa-lock-open"></i>
                                     <span>로그아웃</span></a>
                             </li>
                         </ul>
