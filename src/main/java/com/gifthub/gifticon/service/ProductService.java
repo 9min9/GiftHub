@@ -3,6 +3,8 @@ package com.gifthub.gifticon.service;
 import com.gifthub.gifticon.dto.ProductDto;
 import com.gifthub.gifticon.entity.Product;
 import com.gifthub.gifticon.repository.ProductRepository;
+import com.gifthub.gifticon.repository.ProductRepositoryImpl;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,13 +15,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
+    private final ProductRepositoryImpl productRepositoryQdsl;
+    private final EntityManager em;
 
     public Long saveProduct(ProductDto productDto) {
         Product product = productRepository.save(productDto.toProductEntity());
         return product.getId();
     }
 
-    public Long saveAll(List<ProductDto> productDtoList) {
+    public Long saveAll(List<ProductDto> productDtoList) { // 엑셀파일 받아서 한번에 추가
 
         List<Product> productList = productDtoList.stream()
                 .map(ProductDto::toProductEntity)
@@ -33,5 +37,8 @@ public class ProductService {
         return (long) savedProducts.size();
     }
 
+    public List<ProductDto> getAllProduct() {
+        return productRepositoryQdsl.findAllProduct();
+    }
 
 }
