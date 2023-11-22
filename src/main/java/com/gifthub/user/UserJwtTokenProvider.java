@@ -50,6 +50,7 @@ public class UserJwtTokenProvider {
 
 	private Map<String, Object> createClaims(UserDto userDto) {
 		Map<String, Object> claims = new HashMap<>();
+		claims.put("userId", userDto.getId());
 		claims.put("username", userDto.getEmail()); // username
 		claims.put("accountType", userDto.getLoginType());
 		claims.put("roles", userDto.getUserType());
