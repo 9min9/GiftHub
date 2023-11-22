@@ -1,7 +1,7 @@
 package com.gifthub.user.controller;
 
-import com.gifthub.config.security.KakaoAuthenticationProvider;
-import com.gifthub.config.security.KakaoAuthenticationToken;
+import com.gifthub.config.jwt.KakaoAuthenticationProvider;
+import com.gifthub.config.jwt.KakaoAuthenticationToken;
 import com.gifthub.user.UserJwtTokenProvider;
 import com.gifthub.user.dto.KakaoUserDto;
 import com.gifthub.user.dto.UserDto;
@@ -19,7 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value="/api/kakao/")
+@RequestMapping(value = "/api/kakao/")
 @RequiredArgsConstructor
 public class KakaoAccountController {
     private final KakaoAccountService kakaoAccountService;
@@ -31,21 +31,21 @@ public class KakaoAccountController {
 
     @RequestMapping(value = "/login")
     public ResponseEntity<Object> login(@RequestParam("code") String code, HttpServletRequest request, HttpServletResponse response) {
-        String access_Token = "";
-        KakaoUserDto userInfo = null;
-        String jwtToken="";
+        String kakaoAccessToken = "";
+        KakaoUserDto kakaoUserInfo = null;
+        String token = "";
 
         try {
-            access_Token = kakaoAccountService.getKakaoAccessToken(code);   //kakao 인가 토큰을 사용하여 발급한 access token
-            userInfo = kakaoAccountService.getKakaoUserInfo(access_Token);  //access token을 사용하여 kakao의 user info 발급
+            kakaoAccessToken = kakaoAccountService.getKakaoAccessToken(code);   //kakao 인가 토큰을 사용하여 발급한 access token
+            kakaoUserInfo = kakaoAccountService.getKakaoUserInfo(kakaoAccessToken);  //access token을 사용하여 kakao의 user info 발급
 
             System.out.println("loginController");
             System.out.println(code);
             System.out.println("KAT");
-            System.out.println(access_Token);
+            System.out.println(kakaoAccessToken);
 
-            if(!commonUserService.duplicateEmail(userInfo.getEmail())) {
-                userService.saveKakaoUser(userInfo);
+            if (!commonUserService.duplicateEmail(kakaoUserInfo.getEmail())) {
+                userService.saveKakaoUser(kakaoUserInfo);
             }
 
             /** 로그인 (jwt 토큰 발급)
@@ -54,22 +54,26 @@ public class KakaoAccountController {
              * 3. 인증이 완료되면 jwt 토큰을 발급
              * 4. jwt 토큰을 ResponseEntity를 통해 header로 전송*/
 
-            KakaoAuthenticationToken kakaoAuthenticationToken = new KakaoAuthenticationToken(userInfo.getKakaoAccountId()); //1
+            KakaoAuthenticationToken kakaoAuthenticationToken = new KakaoAuthenticationToken(kakaoUserInfo.getKakaoAccountId()); //1
             Authentication authentication = kakaoAuthenticationProvider.authenticate(kakaoAuthenticationToken);             //2
 
             if (authentication.isAuthenticated()) {     //3
-                jwtToken = jwtTokenProvider.generateJwtToken(
+                KakaoUserDto findKakaoUserDto = kakaoAccountService.getKakaoUserByAccountId(kakaoUserInfo.getKakaoAccountId());
+
+                token = jwtTokenProvider.generateJwtToken(
                         UserDto.builder()
-                                .email(userInfo.getEmail())
-                                .kakaoAccountId(userInfo.getKakaoAccountId())
+                                .id(findKakaoUserDto.getId())
+                                .email(kakaoUserInfo.getEmail())
+                                .kakaoAccountId(kakaoUserInfo.getKakaoAccountId())
                                 .loginType(LoginType.KAKAO.name()).build());
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok().header("Authorization", "Bearer "+jwtToken).build();     //4
+        return ResponseEntity.ok().header("Authorization", "Bearer " + token).build();     //4
     }
 
     @RequestMapping(value = "/logout")
@@ -79,4 +83,5 @@ public class KakaoAccountController {
         session.removeAttribute("userId");
         return "/";
     }
+
 }

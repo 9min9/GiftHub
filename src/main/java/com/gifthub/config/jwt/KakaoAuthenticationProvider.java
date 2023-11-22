@@ -1,4 +1,4 @@
-package com.gifthub.config.security;
+package com.gifthub.config.jwt;
 
 import com.gifthub.user.entity.User;
 import com.gifthub.user.repository.UserRepository;

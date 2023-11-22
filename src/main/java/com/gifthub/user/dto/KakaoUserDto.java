@@ -14,28 +14,30 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class KakaoUserDto {
-
+    private Long id;
     private String  kakaoAccountId;
     private String email;
     private String name;
     private String nickname;
-    private String phoneNumber;
+    private String tel;
     private String gender;
     private LocalDate year;
-    private LocalDate date;
+    private LocalDate birthDate;
     private Long point;
 
     public KakaoUser toEntity() {
         return KakaoUser.builder()
+                .id(id)
                 .kakaoAccountId(kakaoAccountId)
                 .email(email)
                 .name(name)
                 .nickname(nickname)
-                .tel(phoneNumber)
+                .tel(tel)
                 .gender(gender)
                 .year(year)
-                .birthDate(date)
+                .birthDate(birthDate)
                 .userType(UserType.USER)
+                .point(point)
                 .build();
     }
 
