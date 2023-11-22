@@ -75,6 +75,10 @@ public class UserJwtTokenProvider {
 		return (int) getClaims(token).get("roles");
 	}
 
+	public Long getUserIdFromToken(String token) {
+		return (Long) getClaims(token).get("userId");
+	}
+
 	/** */
 	public String resolveToken(HttpServletRequest request) {
 		String authorization = request.getHeader("Authorization");
