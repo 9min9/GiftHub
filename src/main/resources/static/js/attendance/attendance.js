@@ -75,8 +75,9 @@ $(function () {
                         headers: {
                             token: localStorage.getItem("token"),
                         },
-                        success: function () {
+                        success: function (result) {
                             document.querySelector(".today").classList.replace("today", "attendance");
+                            alert(result);
                         }
                     })
                 });

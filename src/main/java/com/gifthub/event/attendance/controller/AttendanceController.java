@@ -59,9 +59,7 @@ public class AttendanceController {
 
             attendId = attendanceService.attend(userId);
 
-            if (attendanceService.countAttendances(userId) == 25L) {
-                pointService.plusPoint(attendancePoint, userId);
-            }
+            pointService.plusPoint(attendancePoint, userId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -70,7 +68,7 @@ public class AttendanceController {
             return ResponseEntity.badRequest().body("출석체크에 실패했습니다. 다시 시도해주세요");
         }
 
-        return ResponseEntity.ok("출석체크 완료");
+        return ResponseEntity.ok("출석체크 완료! 100포인트를 얻었습니다.");
     }
 
 }
