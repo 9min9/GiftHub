@@ -4,7 +4,7 @@ let loadGifticon= () => {
     let size = 12;
 
     $.ajax({
-        url: "url", // FIXME url 정해지고 난 후 수정
+        url: "/gifticon/list",
         type: "get",
         data: {
             page,
