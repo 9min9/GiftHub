@@ -9,10 +9,10 @@
 
 .unit-box {
     width: calc(100% / 7);
-    height: calc(100vh / 6);
+    height: calc(70vh / 6);
     text-align: center;
     font-size: 2.0rem;
-    line-height: calc(100vh / 6);
+    line-height: calc(70vh / 6);
 }
 
 .unattendance {
@@ -25,5 +25,9 @@
 
 .today {
     background-color: skyblue;
+    cursor: pointer;
+}
+
+.cursor-pointer {
     cursor: pointer;
 }
