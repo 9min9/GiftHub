@@ -4,6 +4,7 @@ let addKakaoPayEvent = (itemName, totalAmount) => {
         let xhr = new XMLHttpRequest();
 
         xhr.open("post", "/api/kakao/pay/ready");
+        xhr.setRequestHeader("token", localStorage.getItem("token"))
 
         xhr.onload = () => {
             if (xhr.status !== 200) {
@@ -103,6 +104,7 @@ let payWithPointEvent = (point, item) => {
         xhr.open("post", "/api/points/use");
 
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.setRequestHeader("token", localStorage.getItem("token"));
 
         xhr.onload = () => {
             if (xhr.status !== 200) {

@@ -1,6 +1,5 @@
 package com.gifthub.payment.controller;
 
-import com.gifthub.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -12,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/payment")
 @RequiredArgsConstructor
 public class PaymentPageController {
-
-    private final PaymentService paymentService;
 
     @RequestMapping("/close")
     public String close() {

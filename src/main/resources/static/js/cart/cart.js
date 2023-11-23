@@ -2,6 +2,7 @@ let loadCarts = () => {
     let xhr = new XMLHttpRequest();
 
     xhr.open("get", "/api/carts");
+    xhr.setRequestHeader("token", localStorage.getItem("token"));
 
     xhr.onload = function() {
         if (xhr.status !== 200) {
@@ -154,8 +155,11 @@ let deleteEvent = function (){
             let id = $(this).attr("id").replace("delete-", "");
 
             $.ajax({
-                url: "/api/carts/" + id,
-                type: "delete",
+                url: "/api/carts/delete" + id,
+                headers: {
+                    token: localStorage.getItem("token"),
+                },
+                type: "post",
                 success: function () {
                     $("#tr-" + id).remove();
 
@@ -176,8 +180,11 @@ let removeAllEvent = () => {
             event.preventDefault();
 
             $.ajax({
-                url: "/api/carts",
-                type: "delete",
+                url: "/api/carts/delete",
+                headers: {
+                    token: localStorage.getItem("token"),
+                },
+                type: "post",
                 success: function () {
                     $("tr.m-cart__get").remove();
                 },
