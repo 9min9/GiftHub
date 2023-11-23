@@ -80,8 +80,8 @@ $(function () {
                 })
             });
         },
-        error: function (errorMessage) {
-            alert(errorMessage);
+        error: function(error) {
+            alert(error.responseText)
         }
     });
 });
