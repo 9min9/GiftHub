@@ -62,4 +62,12 @@ public class AttendanceService {
         return false;
     }
 
+    public Long countAttendances(Long userId) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime today = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 0, 0, 0);
+        LocalDateTime tomorrow = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth() + 1, 0, 0, 0);
+
+        return attendanceRepository.countByCreateDate(today, tomorrow, userId);
+    }
+
 }

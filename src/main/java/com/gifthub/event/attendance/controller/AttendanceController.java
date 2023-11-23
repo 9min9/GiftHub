@@ -59,7 +59,7 @@ public class AttendanceController {
 
             attendId = attendanceService.attend(userId);
 
-            if (attendId == 25) {
+            if (attendanceService.countAttendances(userId) == 25L) {
                 pointService.plusPoint(attendancePoint, userId);
             }
         } catch (Exception e) {

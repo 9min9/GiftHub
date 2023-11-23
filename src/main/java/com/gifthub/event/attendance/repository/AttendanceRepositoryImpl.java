@@ -23,15 +23,15 @@ public class AttendanceRepositoryImpl implements AttendanceRepositorySupport{
     @Override
     public List<Attendance> findByBetweenDateAndUserId(LocalDateTime startDate, LocalDateTime endDate, Long userId) {
         return queryFactory.selectFrom(attendance1)
-                .where(attendance1.modifiedDate.between(startDate, endDate), attendance1.user.id.eq(userId))
+                .where(attendance1.createDate.between(startDate, endDate), attendance1.user.id.eq(userId))
                 .fetch();
     }
 
     @Override
-    public Long countByCreatedDate(LocalDateTime startDate, LocalDateTime endDate, Long userId) {
+    public Long countByCreateDate(LocalDateTime startDate, LocalDateTime endDate, Long userId) {
         return queryFactory.select(attendance1.count())
                 .from(attendance1)
-                .where(attendance1.modifiedDate.between(startDate, endDate), attendance1.user.id.eq(userId))
+                .where(attendance1.createDate.between(startDate, endDate), attendance1.user.id.eq(userId))
                 .fetchOne();
     }
 }
