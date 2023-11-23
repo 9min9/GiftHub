@@ -13,10 +13,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -34,13 +31,15 @@ public class OcrService {
     @Value("${ocrAPIURL}")
     private String ocrAPIURL;
 
+    private String imgTestPath = "C:/OcrPractice/";
+
     private final ProductRepository productRepository;
     private final ProductRepositoryImpl productRepositoryQdsl;
 
-    public GifticonDto readOcrToGifticonDto(String barcodeurl) {
+    public GifticonDto readOcrUrlToGifticonDto(String barcodeurl) { // dto분리
         List<String> brandNameList = productRepositoryQdsl.findAllBrandName();
         List<ProductDto> productListByBrand;
-        String parsedBarcodeImg = readOcr(barcodeurl);
+        String parsedBarcodeImg = readOcrUrl(barcodeurl);
 
         String dueDate = null;
         String brandName = null;
@@ -50,7 +49,7 @@ public class OcrService {
             if (OcrUtil.findMatchString(parsedBarcodeImg, s)) {
                 brandName = s;
                 productListByBrand = productRepositoryQdsl.findProductByBrand(s);
-                for(ProductDto product : productListByBrand) {
+                for (ProductDto product : productListByBrand) {
                     if (OcrUtil.findMatchString(parsedBarcodeImg, product.getName())) {// 브랜드는 db에 있지만 읽어낸 상품명이 db에 없을 수 도있음!
                         productName = product.getName();
                     }
@@ -58,19 +57,40 @@ public class OcrService {
             }
         }
 
-        if (OcrUtil.dateParserTilde(parsedBarcodeImg) != null) {
-            dueDate = OcrUtil.dateParserTilde(parsedBarcodeImg);
-        } else {
-            dueDate = OcrUtil.dateParserHangul(parsedBarcodeImg);
+        LocalDate due = dateFormattingByString(parsedBarcodeImg, dueDate);
+
+        return GifticonDto.builder().due(due).productName(productName).brandName(brandName).build();
+
+    }
+
+    public GifticonDto readOcrMultipartToGifticonDto(String imgFile) { // dto분리
+        List<String> brandNameList = productRepositoryQdsl.findAllBrandName();
+        List<ProductDto> productListByBrand;
+        String parsedBarcodeImg = readOcrMultipart(imgFile);
+
+        String dueDate = null;
+        String brandName = null;
+        String productName = null;
+
+        for (String s : brandNameList) {
+            if (OcrUtil.findMatchString(parsedBarcodeImg, s)) {
+                brandName = s;
+                productListByBrand = productRepositoryQdsl.findProductByBrand(s);
+                for (ProductDto product : productListByBrand) {
+                    if (OcrUtil.findMatchString(parsedBarcodeImg, product.getName())) {// 브랜드는 db에 있지만 읽어낸 상품명이 db에 없을 수 도있음!
+                        productName = product.getName();
+                    }
+                }
+            }
         }
-        LocalDate due = OcrUtil.localDateFormatter(dueDate);
+        LocalDate due = dateFormattingByString(parsedBarcodeImg, dueDate);
 
         return GifticonDto.builder().due(due).productName(productName).brandName(brandName).build();
 
     }
 
 
-    private String readOcr(String imageUrl) {
+    private String readOcrUrl(String imageUrl) {
         try {
             URL url = new URL(ocrAPIURL);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -126,6 +146,95 @@ public class OcrService {
         return null;
     }
 
+    private String readOcrMultipart(String imageFile) {
+        try {
+            URL url = new URL(ocrAPIURL);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setUseCaches(false);
+            con.setDoInput(true);
+            con.setDoOutput(true);
+            con.setReadTimeout(30000);
+            con.setRequestMethod("POST");
+            String boundary = "----" + UUID.randomUUID().toString().replaceAll("-", "");
+            con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+            con.setRequestProperty("X-OCR-SECRET", ocrSecretKey);
+
+            JSONObject json = new JSONObject();
+            json.put("version", "V2");
+            json.put("requestId", UUID.randomUUID().toString());
+            json.put("timestamp", System.currentTimeMillis());
+            JSONObject image = new JSONObject();
+            image.put("format", "jpg");
+            image.put("name", "demo");
+            JSONArray images = new JSONArray();
+            images.add(image);
+            json.put("images", images);
+            String postParams = json.toString();
+
+            con.connect();
+            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+            long start = System.currentTimeMillis();
+            File file = new File(imgTestPath + imageFile);
+            writeMultiPart(wr, postParams, file, boundary);
+            wr.close();
+
+            int responseCode = con.getResponseCode();
+            BufferedReader br;
+            if (responseCode == 200) {
+                br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            } else {
+                br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+            }
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+            while ((inputLine = br.readLine()) != null) {
+                response.append(inputLine);
+            }
+            br.close();
+
+            return parseOcr(String.valueOf(response));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    private void writeMultiPart(OutputStream out, String jsonMessage, File file, String boundary) throws
+            IOException {
+        StringBuilder sb = new StringBuilder();
+        sb.append("--").append(boundary).append("\r\n");
+        sb.append("Content-Disposition:form-data; name=\"message\"\r\n\r\n");
+        sb.append(jsonMessage);
+        sb.append("\r\n");
+
+        out.write(sb.toString().getBytes("UTF-8"));
+        out.flush();
+
+        if (file != null && file.isFile()) {
+            out.write(("--" + boundary + "\r\n").getBytes("UTF-8"));
+            StringBuilder fileString = new StringBuilder();
+            fileString
+                    .append("Content-Disposition:form-data; name=\"file\"; filename=");
+            fileString.append("\"" + file.getName() + "\"\r\n");
+            fileString.append("Content-Type: application/octet-stream\r\n\r\n");
+            out.write(fileString.toString().getBytes("UTF-8"));
+            out.flush();
+
+            try (FileInputStream fis = new FileInputStream(file)) {
+                byte[] buffer = new byte[8192];
+                int count;
+                while ((count = fis.read(buffer)) != -1) {
+                    out.write(buffer, 0, count);
+                }
+                out.write("\r\n".getBytes());
+            }
+
+            out.write(("--" + boundary + "--\r\n").getBytes("UTF-8"));
+        }
+        out.flush();
+    }
+
+
     private String parseOcr(String response) {
         try {
             JSONParser parser = new JSONParser();
@@ -153,6 +262,17 @@ public class OcrService {
             throw new RuntimeException(e);
         }
 
+    }
+
+    private LocalDate dateFormattingByString(String parsedBarcodeImg, String dueDate) {
+        if (OcrUtil.dateParserTilde(parsedBarcodeImg) != null) {
+            dueDate = OcrUtil.dateParserTilde(parsedBarcodeImg);
+        } else {
+            dueDate = OcrUtil.dateParserHangul(parsedBarcodeImg);
+        }
+        dueDate = OcrUtil.dateReplaceFromSpotToHyphen(dueDate);
+        LocalDate due = OcrUtil.localDateFormatter(dueDate);
+        return due;
     }
 
 
