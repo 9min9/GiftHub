@@ -13,14 +13,6 @@ public class GifticonImage {
     @Column(name = "gifticon_image_id")
     private Long id;
 
-    @OneToOne // Identification RelationShip을 어떻게?
-    @JoinColumn(name = "gifticon_id")
-    private Gifticon gifticon;
-
-    @OneToOne
-    @JoinColumn(name = "gifticon_temp_storage_id")
-    private GifticonTempStorage gifticonTempStorage;
-
     private String imagePath;
     private String imageUrl;
     private String originalFileName;

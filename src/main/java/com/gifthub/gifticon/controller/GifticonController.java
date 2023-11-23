@@ -2,7 +2,11 @@ package com.gifthub.gifticon.controller;
 
 import com.gifthub.chatbot.util.JsonConverter;
 import com.gifthub.gifticon.dto.GifticonDto;
+import com.gifthub.gifticon.dto.GifticonImageDto;
+import com.gifthub.gifticon.entity.GifticonTempStorage;
+import com.gifthub.gifticon.service.GifticonImageService;
 import com.gifthub.gifticon.service.GifticonService;
+import com.gifthub.gifticon.service.GifticonTempStorageService;
 import com.gifthub.gifticon.service.OcrService;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,9 +22,12 @@ import java.util.Map;
 @AllArgsConstructor
 @RequestMapping("/api")
 public class GifticonController {
+    private final GifticonTempStorageService gifticonTempService;
+    private final GifticonImageService gifticonImageService;
 
     private final GifticonService gifticonService;
     private final OcrService ocrService;
+
 
     @PostMapping("/kakao/chatbot/add")
     public ResponseEntity<Object> addGificonByKakao(@RequestBody Map<Object, Object> gifticon) {
@@ -34,9 +41,12 @@ public class GifticonController {
 //                String resultOcr = ocrService.readOcr(barcodeUrl);
 //                System.out.println(resultOcr);
                 GifticonDto gifticonDto = ocrService.readOcrUrlToGifticonDto(barcodeUrl);
-                //todo : save DB
 
                 // TODO : 이미지 저장
+                GifticonImageDto imageDto= gifticonImageService.saveImage(barcodeUrl);
+                //todo : save DB
+                gifticonTempService.saveStorage(gifticonDto, imageDto);
+
 
             }
 
