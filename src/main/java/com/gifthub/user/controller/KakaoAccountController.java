@@ -9,14 +9,15 @@ import com.gifthub.user.entity.enumeration.LoginType;
 import com.gifthub.user.service.KakaoAccountService;
 import com.gifthub.user.service.UserAccountService;
 import com.gifthub.user.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/kakao/")
@@ -30,7 +31,7 @@ public class KakaoAccountController {
     private final KakaoAuthenticationProvider kakaoAuthenticationProvider;
 
     @RequestMapping(value = "/login")
-    public ResponseEntity<Object> login(@RequestParam("code") String code, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<Object> login(@RequestParam("code") String code, HttpSession session) {
         String kakaoAccessToken = "";
         KakaoUserDto kakaoUserInfo = null;
         String token = "";
@@ -66,6 +67,10 @@ public class KakaoAccountController {
                                 .email(kakaoUserInfo.getEmail())
                                 .kakaoAccountId(kakaoUserInfo.getKakaoAccountId())
                                 .loginType(LoginType.KAKAO.name()).build());
+
+                session.setAttribute("kakao_access_token", kakaoAccessToken);
+                System.out.println("login");
+                System.out.println(kakaoAccessToken);
             }
 
         } catch (Exception e) {
@@ -77,11 +82,21 @@ public class KakaoAccountController {
     }
 
     @RequestMapping(value = "/logout")
-    public String logout(HttpSession session) {
-        kakaoAccountService.kakaoLogout((String) session.getAttribute("access_Token"));
-        session.removeAttribute("access_Token");
-        session.removeAttribute("userId");
-        return "/";
-    }
+    public ResponseEntity<Object> logout(HttpSession session) {
 
+        try {
+            //todo : 현재 kakao_access_token을 session에 저장하여 로그인 로그아웃에 사용하였음 팀원들과 상의해야함
+            Object accessToken = session.getAttribute("kakao_access_token");
+            System.out.println("logout");
+            System.out.println((String) accessToken);
+
+            kakaoAccountService.kakaoLogout((String) session.getAttribute("kakao_access_token"));
+            session.removeAttribute("kakao_access_Token");
+
+            return ResponseEntity.ok().build();
+
+        } catch (IOException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
