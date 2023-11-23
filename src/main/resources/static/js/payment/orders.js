@@ -59,7 +59,7 @@ let loadOrders = (page, size) => {
                             <img class="u-img-fluid"
                                  src="images/product/electronic/product3.jpg" alt="">
                         </div>
-                        <div class="description-title">${o}</div>
+                        <div class="description-title">${o.price} Point</div>
                     </div>
                     <div class="description__info-wrap">
                         <div>
@@ -86,7 +86,6 @@ let loadOrders = (page, size) => {
 
             document.querySelector("#order-list").append(element);
         }
-
     }
 
     xhr.send();
