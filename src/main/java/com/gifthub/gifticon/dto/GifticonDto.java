@@ -1,7 +1,7 @@
 package com.gifthub.gifticon.dto;
 
 import com.gifthub.gifticon.entity.Gifticon;
-import com.gifthub.payment.enumeration.SaleStatus;
+import com.gifthub.gifticon.enumeration.GifticonStatus;
 import com.gifthub.user.dto.UserDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
@@ -22,7 +22,7 @@ public class GifticonDto {
     private LocalDate due;
     private String brandName;
     private String productName;
-    private SaleStatus saleStatus;
+    private GifticonStatus gifticonStatus;
     private Long price;
 
     public Gifticon toEntity() {
@@ -33,19 +33,19 @@ public class GifticonDto {
                 .due(this.due)
                 .brandName(this.brandName)
                 .productName(this.productName)
-                .saleStatus(this.saleStatus)
+                .gifticonStatus(this.gifticonStatus)
                 .price(this.price)
                 .build();
     }
     @QueryProjection
-    public GifticonDto(Long id, UserDto user, String barcode, LocalDate due, String brandName, String productName, SaleStatus saleStatus, Long price) {
+    public GifticonDto(Long id, UserDto user, String barcode, LocalDate due, String brandName, String productName, GifticonStatus gifticonStatus, Long price) {
         this.id = id;
         this.user = user;
         this.barcode = barcode;
         this.due = due;
         this.brandName = brandName;
         this.productName = productName;
-        this.saleStatus = saleStatus;
+        this.gifticonStatus = gifticonStatus;
         this.price = price;
     }
 }

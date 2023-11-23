@@ -1,6 +1,8 @@
 package com.gifthub.gifticon.controller;
 
+import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.ProductDto;
+import com.gifthub.gifticon.service.GifticonService;
 import com.gifthub.gifticon.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -8,6 +10,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +27,7 @@ import java.util.List;
 @RequestMapping("/product")
 public class ProductController {
     private final ProductService productService;
+    private final GifticonService gifticonService;
 
     private final String path = "C:/OcrPractice/";
 
@@ -78,4 +82,24 @@ public class ProductController {
         }
 
     }
+
+    @GetMapping("/test")
+    public void testProductDto(){
+        List<ProductDto> productDtoList = productService.getAllProduct();
+        for(ProductDto productDto : productDtoList){
+            System.out.println(productDto.getName());
+            System.out.println(productDto.getBrandName());
+            System.out.println(productDto.getPrice());
+            System.out.println(productDto.getId());
+        }
+    }
+
+    // TODO : 구매페이지의 해당 product 클릭시 해당 product_id를 갖는 GifticonList를 가져오기
+    @GetMapping("/get/gifticon")
+    public void getGifticonByProduct(@Param("productId") Long productId){
+        List<GifticonDto> gifticonDtoList = gifticonService.getGifticonByProduct(productId);
+        //
+    }
+
+    // TODO : 금액별, 남은 유효기간별(임박순) 정렬하기
 }

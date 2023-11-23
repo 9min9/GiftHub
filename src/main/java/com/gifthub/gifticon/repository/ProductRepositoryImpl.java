@@ -27,8 +27,7 @@ public List<ProductDto> findProductByBrand(String brand) {
     return queryFactory
             .select(new QProductDto(product.id, product.name, product.price, product.brandName))
             .from(product)
-            .where(product.brandName.eq(brand), test(1L))
-            .fetchJoin()
+            .where(product.brandName.eq(brand))
             .fetch();
 }
 
@@ -37,7 +36,6 @@ public List<ProductDto> findAllProduct() {
     return queryFactory
             .select(new QProductDto(product.id, product.brandName, product.price, product.name))
             .from(product)
-            .fetchJoin()
             .fetch();
 }
 

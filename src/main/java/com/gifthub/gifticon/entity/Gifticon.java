@@ -1,8 +1,8 @@
 package com.gifthub.gifticon.entity;
 
 import com.gifthub.gifticon.dto.GifticonDto;
+import com.gifthub.gifticon.enumeration.GifticonStatus;
 import com.gifthub.global.BaseTimeEntity;
-import com.gifthub.payment.enumeration.SaleStatus;
 import com.gifthub.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -38,7 +38,7 @@ public class Gifticon extends BaseTimeEntity {
     private String brandName;
     private String productName;
     @Enumerated(EnumType.STRING)
-    private SaleStatus saleStatus;
+    private GifticonStatus gifticonStatus;
     private Long price;
 
     public GifticonDto toDto() {
@@ -49,7 +49,7 @@ public class Gifticon extends BaseTimeEntity {
                 .due(this.due)
                 .brandName(this.brandName)
                 .productName(this.productName)
-                .saleStatus(this.saleStatus)
+                .gifticonStatus(this.gifticonStatus)
                 .price(this.price)
                 .build();
     }

@@ -3,21 +3,24 @@ package com.gifthub.gifticon.service;
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.gifticon.repository.GifticonRepository;
+import com.gifthub.user.entity.User;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URL;
-import javax.imageio.ImageIO;
 import lombok.RequiredArgsConstructor;
 import org.krysalis.barcode4j.impl.code39.Code39Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.springframework.stereotype.Service;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URL;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -76,6 +79,15 @@ public class GifticonService {
 
         Gifticon gifticon = gifticonRepository.save(gifticonDto.toEntity());
         return gifticon.getId();
+    }
+
+    public List<GifticonDto> getMyGifticon(User user){
+        return gifticonRepository.findByUser(user).stream().map(Gifticon::toDto).toList();
+    }
+
+    // TODO : 특정 product_id를 인자로 받아 GifticonList를 return
+    public List<GifticonDto> getGifticonByProduct(Long productId){
+        return null;
     }
 
 }
