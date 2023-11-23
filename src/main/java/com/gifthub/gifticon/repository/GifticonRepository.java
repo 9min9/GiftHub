@@ -11,5 +11,5 @@ public interface GifticonRepository extends JpaRepository<Gifticon, Long> {
     List<Gifticon> findByUser(User user);
     List<Gifticon> findByBrandName(String brandName);
     List<Gifticon> findByProductName(String productName);
-    List<Gifticon> findBySaleStatus(GifticonStatus gifticonStatus);
+    List<Gifticon> findByGifticonStatus(GifticonStatus gifticonStatus);
 }
