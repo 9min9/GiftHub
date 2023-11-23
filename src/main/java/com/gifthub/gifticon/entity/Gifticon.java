@@ -5,6 +5,7 @@ import com.gifthub.gifticon.enumeration.GifticonStatus;
 import com.gifthub.global.BaseTimeEntity;
 import com.gifthub.user.entity.User;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SuperBuilder
 public class Gifticon extends BaseTimeEntity {
 

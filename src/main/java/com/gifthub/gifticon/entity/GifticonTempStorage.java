@@ -1,13 +1,10 @@
 package com.gifthub.gifticon.entity;
 
 import com.gifthub.gifticon.dto.GifticonDto;
-import com.gifthub.gifticon.enumeration.GifticonStatus;
-import com.gifthub.gifticon.enumeration.GifticonStorageStatus;
 import com.gifthub.global.BaseTimeEntity;
 import com.gifthub.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -45,11 +42,16 @@ public class GifticonTempStorage extends BaseTimeEntity {
 
     @OneToOne
     @JoinColumn(name = "gifticon_image_id")
-
     private GifticonImage gifticonImage;
 
     public GifticonDto toGifticonDto() {
-        return null;
+        return GifticonDto.builder()
+                .barcode(this.barcode)
+                .due(this.due)
+                .brandName(this.brandName)
+                .productName(this.productName)
+                .price(this.price)
+                .build();
     }
 //
 //    private GifticonStorageStatus status;
