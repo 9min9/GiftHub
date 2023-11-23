@@ -4,7 +4,6 @@ import com.gifthub.gifticon.dto.ProductDto;
 import com.gifthub.gifticon.entity.Product;
 import com.gifthub.gifticon.repository.ProductRepository;
 import com.gifthub.gifticon.repository.ProductRepositoryImpl;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,6 @@ import java.util.stream.Collectors;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ProductRepositoryImpl productRepositoryQdsl;
-    private final EntityManager em;
 
     public Long saveProduct(ProductDto productDto) {
         Product product = productRepository.save(productDto.toProductEntity());

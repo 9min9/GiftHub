@@ -35,6 +35,9 @@ public class GifticonController {
 //                System.out.println(resultOcr);
                 GifticonDto gifticonDto = ocrService.readOcrUrlToGifticonDto(barcodeUrl);
                 //todo : save DB
+
+                // TODO : 이미지 저장
+
             }
 
         } catch (Exception e) {     //todo : url이 barcode가 아닌 경우 exception 처리하기
