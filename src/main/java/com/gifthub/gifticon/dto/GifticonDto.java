@@ -1,7 +1,10 @@
 package com.gifthub.gifticon.dto;
 
 import com.gifthub.gifticon.entity.Gifticon;
+import com.gifthub.gifticon.entity.GifticonImage;
+import com.gifthub.gifticon.entity.GifticonTempStorage;
 import com.gifthub.gifticon.enumeration.GifticonStatus;
+import com.gifthub.gifticon.repository.GifticonTempStorageRepository;
 import com.gifthub.user.dto.UserDto;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
@@ -47,5 +50,17 @@ public class GifticonDto {
         this.productName = productName;
         this.gifticonStatus = gifticonStatus;
         this.price = price;
+    }
+
+    public GifticonTempStorage toStorageEntity(GifticonImageDto imageDto) {
+       return GifticonTempStorage.builder()
+                .barcode(barcode)
+                .due(due)
+                .brandName(brandName)
+                .productName(productName)
+                .price(price)
+                .user(user.toEntity())
+                .gifticonImage(imageDto.toEntity())
+                .build();
     }
 }
