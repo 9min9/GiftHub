@@ -199,11 +199,17 @@
                                 <div class="s-option__link-box">
                                     <a id="open-chat-button" class="s-option__link btn--e-white-brand-shadow" ONCLICK="openChat()" data-dismiss="modal">카카오톡으로 추가하기</a>
 
-                                    <a class="s-option__link btn--e-white-brand-shadow" href="cart.html">
-                                        문자로 추가하기
-                                    </a>
+                                    <label class="s-option__link btn--e-white-brand-shadow" for="fileInput" >
+                                        파일로 추가하기
+                                    </label>
+
+                                    <input type="file" id="fileInput" style="display: none" onchange="openFile(this)" />
                                 </div>
                             </div>
+
+                            <div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -217,6 +223,7 @@
 
 <th:block th:replace="fragments/base/script :: script"></th:block>
 <script src="/js/gifticon/kakao-chatbot.js"></script>
+<script src="/js/gifticon/file-add.js"></script>
 
 </body>
 </html>

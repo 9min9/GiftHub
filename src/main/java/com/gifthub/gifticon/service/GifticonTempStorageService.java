@@ -17,9 +17,8 @@ public class GifticonTempStorageService {
     public GifticonDto saveStorage(GifticonDto gifticonDto, GifticonImageDto imageDto) {
 
         GifticonTempStorage saveStorage = gifticonTempStorageRepository.save(gifticonDto.toStorageEntity(imageDto));
+        // 임시 저장소에 기프티콘, 임시 기프티콘을 각각 저장
         return saveStorage.toGifticonDto();
-
-
 
     }
 

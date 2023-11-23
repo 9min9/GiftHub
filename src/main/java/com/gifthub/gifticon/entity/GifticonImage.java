@@ -1,10 +1,13 @@
 package com.gifthub.gifticon.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class GifticonImage {
 
     @Id
@@ -14,8 +17,7 @@ public class GifticonImage {
     private Long id;
 
     private String imagePath;
-    private String imageUrl;
     private String originalFileName;
-    private String storeFileName;
+//    private String storeFileName;
 
 }
