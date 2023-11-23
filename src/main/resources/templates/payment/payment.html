@@ -517,8 +517,10 @@
     }
 
     let reKakaoEvent = () => {
+        $("#kakao-pay").attr("disabled", true);
         $("#kakao-pay").off("click");
         let opened = addKakaoPayEvent("Point", $("#point").val());
+        $("#kakao-pay").attr("disabled", false);
     }
 </script>
 </body>
