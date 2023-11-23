@@ -52,36 +52,38 @@ let makeUnit = (num = "", checkList = [], today = new Date()) => {
 }
 
 $(function () {
-    $.ajax({
-        url: "/api/attendances",
-        type: "get",
-        headers: {
-            token: localStorage.getItem("token"),
-        },
-        success: function (attendanceList) {
-            let checkList = [];
+    if (localStorage.getItem("token")) {
+        $.ajax({
+            url: "/api/attendances",
+            type: "get",
+            headers: {
+                token: localStorage.getItem("token"),
+            },
+            success: function (attendanceList) {
+                let checkList = [];
 
-            for (let attendance of attendanceList) {
-                checkList.push(new Date(attendance.createDate).getDate());
+                for (let attendance of attendanceList) {
+                    checkList.push(new Date(attendance.createDate).getDate());
+                }
+
+                drawCalendar(checkList);
+
+                $(".today").on("click", function () {
+                    $.ajax({
+                        url: "/api/attendances",
+                        type: "post",
+                        headers: {
+                            token: localStorage.getItem("token"),
+                        },
+                        success: function () {
+                            document.querySelector(".today").classList.replace("today", "attendance");
+                        }
+                    })
+                });
+            },
+            error: function(error) {
+                alert(error.responseText)
             }
-
-            drawCalendar(checkList);
-
-            $(".today").on("click", function () {
-                $.ajax({
-                    url: "/api/attendances",
-                    type: "post",
-                    headers: {
-                        token: localStorage.getItem("token"),
-                    },
-                    success: function () {
-                        document.querySelector(".today").classList.replace("today", "attendance");
-                    }
-                })
-            });
-        },
-        error: function(error) {
-            alert(error.responseText)
-        }
-    });
+        });
+    }
 });
