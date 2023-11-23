@@ -17,15 +17,21 @@ import java.net.URL;
 public class GifticonImageService {
     private final GifticonImageRepository gifticonImageRepository;
 
-    public GifticonImageDto saveImage(String barcodeUrl){
+    public GifticonImageDto saveImage(String imageUrl){
         try{
-            URL url = new URL(barcodeUrl);
-            String extension = barcodeUrl.substring(barcodeUrl.indexOf('.') + 1);
+            URL url = new URL(imageUrl);
+            String extension = imageUrl.substring(imageUrl.indexOf('.') + 1);
 
+            // TODO : imageUrl 에서 원본파일 이름 추출
+            String fileName = "";
             BufferedImage image = ImageIO.read(url);
-            File file = new File("test.ico");
+            File file = new File("tempStorage/" + fileName + extension);
+            if(!file.exists()){
+                file.mkdir();
+            }
+            ImageIO.write(image, extension, file); // extension : 확장자명
+            System.out.println("이미지 업로드 완료");
 
-            ImageIO.write(image, extension, file);
             return null;
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -35,6 +41,28 @@ public class GifticonImageService {
 
         return null;
     }
+//
+//    public GifticonImageDto saveImageFile(String imageFileName){
+//        try{
+//            String extension = imageFileName.substring(imageFileName.indexOf('.') + 1);
+//
+////            BufferedImage image = ImageIO.read(url);
+//            File file = new File("tempStorage/" + imageFileName + extension);
+//            if(!file.exists()){
+//                file.mkdir();
+//            }
+////            ImageIO.write(image, extension, file); // extension : 확장자명
+//            System.out.println("이미지 업로드 완료");
+//
+//            return null;
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return null;
+//    }
 
 
 }

@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -37,13 +38,9 @@ public class GifticonController {
 
             for (String barcodeUrl : barcodeUrlList) {
                 String barcode = GifticonService.readBarcode(barcodeUrl);
-                //todo : ocr
-//                String resultOcr = ocrService.readOcr(barcodeUrl);
-//                System.out.println(resultOcr);
                 GifticonDto gifticonDto = ocrService.readOcrUrlToGifticonDto(barcodeUrl);
-
                 // TODO : 이미지 저장
-                GifticonImageDto imageDto= gifticonImageService.saveImage(barcodeUrl);
+                GifticonImageDto imageDto = gifticonImageService.saveImage(barcodeUrl);
                 //todo : save DB
                 gifticonTempService.saveStorage(gifticonDto, imageDto);
 
@@ -55,6 +52,25 @@ public class GifticonController {
         }
 
         return ResponseEntity.ok().build();  // 200이 날라감 0 -> ajax에 success
+    }
+
+    @PostMapping("/gifticon/add") // MultipartType으로 받는다
+    public ResponseEntity<Object> addGifticonByFile(@RequestPart MultipartFile imageFile) {
+        try {
+            System.out.println(imageFile.getOriginalFilename());
+
+
+
+            GifticonDto gifticonDto = ocrService.readOcrMultipartToGifticonDto(imageFile.getOriginalFilename()); // ? originalName?
+            System.out.println(gifticonDto.getProductName());
+            System.out.println(gifticonDto.getDue());
+            System.out.println(gifticonDto.getBrandName());
+//            GifticonImageDto imageDto = gifticonImageService.saveImage()
+        } catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok().build();
     }
 
 
@@ -71,7 +87,7 @@ public class GifticonController {
     }
 
     @GetMapping("/test/add")
-    public ResponseEntity<Object> addGifticonTest(){
+    public ResponseEntity<Object> addGifticonTest() {
         // 이미지 파일넣기
         String Filename = "KakaoTalk_20231114_101803985_02.jpg";
         GifticonDto gifticonDto1 = ocrService.readOcrMultipartToGifticonDto(Filename);
