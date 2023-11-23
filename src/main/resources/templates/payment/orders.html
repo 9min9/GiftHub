@@ -465,9 +465,7 @@
 <script th:src="@{/js/pagination/jquery.twbsPagination.min.js}"></script>
 <script th:src="@{/js/payment/orders.js}"></script>
 <script th:inline="javascript">
-    window.onload = () => {
-        loadOrders([[${param.page}]], [[${param.size}]]);
-    }
+    loadOrders([[${param.page}]], [[${param.size}]]);
 </script>
 </body>
 </html>
