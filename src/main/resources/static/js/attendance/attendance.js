@@ -87,3 +87,7 @@ $(function () {
         });
     }
 });
+
+$("#show-attendance-a").on("click", function() {
+    $("#attendance").modal("show");
+});
