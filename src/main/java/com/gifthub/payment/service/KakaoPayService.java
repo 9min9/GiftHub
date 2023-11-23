@@ -18,7 +18,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-@Getter // 테스트용
+@Getter
 public class KakaoPayService {
 
     private final ObjectMapper objectMapper;
@@ -46,7 +46,7 @@ public class KakaoPayService {
         return responseDto;
     }
 
-    public KakaoPayApproveResponseDto approve(final KakaoPayApproveRequestDto requestDto) {
+    public KakaoPayApproveResponseDto approve(final KakaoPayApproveRequestDto requestDto, Long userId) {
         MultiValueMap<String, String> convertedRequestDto = DtoToMultiValueMapConverter.convert(objectMapper, requestDto);
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(convertedRequestDto, getHeaders());
@@ -59,9 +59,6 @@ public class KakaoPayService {
 
         // 포인트 충전
         Amount amount = objectMapper.convertValue(map.get("amount"), Amount.class);
-
-        // TODO jwt에서 가져옴
-        Long userId = 1L;
 
         pointService.plusPoint(amount.getTotal().longValue(), userId);
 

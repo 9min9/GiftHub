@@ -4,11 +4,15 @@ import com.gifthub.event.attendance.dto.AttendanceDto;
 import com.gifthub.event.attendance.repository.AttendanceRepository;
 import com.gifthub.event.attendance.entity.Attendance;
 import com.gifthub.point.service.PointService;
+import com.gifthub.user.UserJwtTokenProvider;
 import com.gifthub.user.entity.User;
 import com.gifthub.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -56,19 +60,6 @@ public class AttendanceService {
         }
 
         return false;
-    }
-
-    public void createAttendance(Long userId) {
-        User u = User.builder() // TODO jwt에서 가져온 아이디로 UserService에서 유저 정보 가져옴
-                .id(userId)
-                .build();
-
-        Attendance attendance = Attendance.builder()
-                .user(u)
-                .attendance(1)
-                .build();
-
-        Attendance saved = attendanceRepository.save(attendance);
     }
 
 }

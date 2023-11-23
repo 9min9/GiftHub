@@ -3,6 +3,9 @@ let loadMiniCart = () => {
 
     $.ajax({
         url: "/api/carts",
+        headers: {
+            token: localStorage.getItem("token"),
+        },
         type: "get",
         success: function(response) {
             $(".total-item-round").each(function() {
@@ -53,8 +56,11 @@ let miniDeleteEvent = function (){
             let id = $(this).attr("id").replace("mini-delete-", "");
 
             $.ajax({
-                url: "/api/carts/" + id,
-                type: "delete",
+                url: "/api/carts/delete" + id,
+                type: "post",
+                headers: {
+                    token: localStorage.getItem("token"),
+                },
                 success: function () {
                     $("#div-mini-cart-" + id).remove();
 

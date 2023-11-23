@@ -7,6 +7,7 @@ import com.gifthub.payment.enumeration.PayStatus;
 import com.gifthub.payment.enumeration.Site;
 import com.gifthub.payment.service.KakaoPayService;
 import com.gifthub.payment.service.PaymentService;
+import com.gifthub.user.UserJwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -26,14 +27,24 @@ public class KakaoPayController {
 
     private final KakaoPayService kakaoPayService;
     private final PaymentService paymentService;
+    private final UserJwtTokenProvider userJwtTokenProvider;
+
+    private final String PARTNER_USER_ID = "Gifthub";
 
     @PostMapping("/ready")
-    public ResponseEntity<Object> ready(@RequestBody KakaoPayRequestDto dto, BindingResult bindingResult, HttpServletRequest request) {
+    public ResponseEntity<Object> ready(
+            @RequestBody KakaoPayRequestDto dto,
+            BindingResult bindingResult,
+            HttpServletRequest request,
+            @RequestHeader HttpHeaders headers
+    ) {
         KakaoPayReadyResponseDto readyResponseDto = null;
 
         try {
+            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("token").get(0));
+
             String cid = "TC0ONETIME";
-            String partnerUserId = "Test123";               // FIXME jwt에서 값 가져오게 변경
+            String partnerUserId = PARTNER_USER_ID;
             String itemName = dto.getItemName();
             Integer quantity = 1;
             Integer totalAmount = dto.getTotalAmount();
@@ -55,7 +66,7 @@ public class KakaoPayController {
 
             String baseUrl = makeBaseUrl(request);
 
-            String approvalUrl = baseUrl + "/api/kakao/pay/approve?paymentId=" + paidPaymentId;
+            String approvalUrl = baseUrl + "/api/kakao/pay/approve?paymentId=" + paidPaymentId + "&userId=" + userId;
             String cancelUrl = baseUrl + "/payment/close";
             String failUrl = baseUrl + "/payment/close";
 
@@ -93,8 +104,14 @@ public class KakaoPayController {
     }
 
     @GetMapping("/approve")
-    public ResponseEntity<?> approve(@ModelAttribute KakaoApproveRequestDto dto, HttpServletRequest request, HttpServletResponse response, BindingResult bindingResult) {
+    public ResponseEntity<?> approve(
+            @ModelAttribute KakaoApproveRequestDto dto,
+            HttpServletRequest request,
+            HttpServletResponse response,
+            BindingResult bindingResult
+        ) {
         String redirectUrl = "";
+
         HttpHeaders headers = new HttpHeaders();
 
         try {
@@ -103,7 +120,7 @@ public class KakaoPayController {
             String cid = "TC0ONETIME";
             String tid = paymentService.get(Long.parseLong(dto.getPaymentId())).getPayCode();
             String partnerOrderId = dto.getPaymentId();
-            String partnerUserId = "Test123";
+            String partnerUserId = PARTNER_USER_ID;
 
             KakaoPayApproveRequestDto requestDto = KakaoPayApproveRequestDto.builder()
                     .cid(cid)
@@ -116,7 +133,8 @@ public class KakaoPayController {
             log.info("[KakaoPay Approve Request]", requestDto);
 
             paymentService.setPaid(Long.parseLong(dto.getPaymentId()));
-            approvedResponseDto = kakaoPayService.approve(requestDto);
+
+            approvedResponseDto = kakaoPayService.approve(requestDto, dto.getUserId());
 
 
             if (request.isSecure()) {

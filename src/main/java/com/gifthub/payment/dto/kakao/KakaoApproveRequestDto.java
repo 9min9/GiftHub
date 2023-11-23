@@ -11,5 +11,6 @@ public class KakaoApproveRequestDto {
 
     private String pg_token;
     private String paymentId;
+    private Long userId;
 
 }

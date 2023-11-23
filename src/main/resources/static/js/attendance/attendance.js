@@ -55,6 +55,9 @@ $(function () {
     $.ajax({
         url: "/api/attendances",
         type: "get",
+        headers: {
+            token: localStorage.getItem("token"),
+        },
         success: function (attendanceList) {
             let checkList = [];
 
@@ -68,6 +71,9 @@ $(function () {
                 $.ajax({
                     url: "/api/attendances",
                     type: "post",
+                    headers: {
+                        token: localStorage.getItem("token"),
+                    },
                     success: function () {
                         document.querySelector(".today").classList.replace("today", "attendance");
                     }
