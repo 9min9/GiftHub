@@ -1,22 +1,28 @@
 package com.gifthub.point.controller;
 
 import com.gifthub.point.service.PointService;
+import com.gifthub.user.UserJwtTokenProvider;
 import com.gifthub.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+// TODO 테스트 필요
 @RequestMapping("/api/points")
 @RequiredArgsConstructor
 @RestController
 public class PointController {
 
     private final PointService pointService;
+    private final UserJwtTokenProvider userJwtTokenProvider;
 
     @PostMapping
-    public ResponseEntity<Object> addPoint(@RequestParam("point") Long point) {
+    public ResponseEntity<Object> addPoint(@RequestParam("point") Long point,
+                                           @RequestHeader HttpHeaders headers
+                                           ) {
         try {
-            Long userId = 1L; // TODO jwt에서 가져옴
+            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("token").get(0));
 
             UserDto userDto = pointService.plusPoint(point, userId);
 
@@ -28,9 +34,11 @@ public class PointController {
     }
 
     @PostMapping("use")
-    public ResponseEntity<Object> usePoint(@RequestParam("point") Long point) {
+    public ResponseEntity<Object> usePoint(@RequestParam("point") Long point,
+                                           @RequestHeader HttpHeaders headers
+    ) {
         try {
-            Long userId = 1L; // TODO jwt에서 가져옴
+            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("token").get(0));
 
             UserDto userDto = pointService.usePoint(point, userId);
 
