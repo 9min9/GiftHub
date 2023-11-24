@@ -5,16 +5,16 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 
-public class KakaoAuthenticationToken extends AbstractAuthenticationToken {
+public class SocialAuthenticationToken extends AbstractAuthenticationToken {
     private final Object principal;
 
-    public KakaoAuthenticationToken(Object principal) {
+    public SocialAuthenticationToken(Object principal) {
         super(null);
         this.principal = principal;
         setAuthenticated(false);
     }
 
-    public KakaoAuthenticationToken(Object principal, Collection<? extends GrantedAuthority> authorities) {
+    public SocialAuthenticationToken(Object principal, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;
         super.setAuthenticated(true);

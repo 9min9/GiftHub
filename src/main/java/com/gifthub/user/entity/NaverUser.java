@@ -9,23 +9,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-@Entity @Getter
+@Entity
+@Getter
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @DiscriminatorValue("naver")
-public class NaverUser extends User{
+public class NaverUser extends User {
 
- private String naver_id;
-public NaverUserDto toNaverDto(){
-return NaverUserDto.builder()
-        .naver_id(this.naver_id)
-        .email(super.getEmail())
-        .name(super.getName())
-        .phonenumber(super.getPhonenumber())
-        .gender(super.getGender())
-        .birthyear(super.getYear())
-        .birthday(super.getBirthDate())
-        .build();
-}
+    private String naverId;
+
+    public NaverUserDto toNaverUserDto() {
+        return NaverUserDto.builder()
+                .id(super.getId())
+                .NaverId(this.naverId)
+                .email(super.getEmail())
+                .name(super.getName())
+                .tel(super.getTel())
+                .gender(super.getGender())
+                .birthyear(super.getYear())
+                .birthday(super.getBirthDate())
+                .build();
+    }
 }

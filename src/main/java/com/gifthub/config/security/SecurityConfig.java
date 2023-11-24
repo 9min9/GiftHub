@@ -71,7 +71,7 @@ public class SecurityConfig {
                         ).permitAll()
 
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                        .requestMatchers("/", "/signup", "/error", "/login/**", "/api/kakao/**").permitAll()
+                        .requestMatchers("/", "/signup", "/error", "/login/**", "/api/kakao/**", "/api/naver/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilter(corsConfig.corsFilter())

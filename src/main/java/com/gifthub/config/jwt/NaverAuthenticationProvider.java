@@ -1,6 +1,6 @@
 package com.gifthub.config.jwt;
 
-import com.gifthub.user.entity.User;
+import com.gifthub.user.entity.NaverUser;
 import com.gifthub.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -11,14 +11,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class KakaoAuthenticationProvider implements AuthenticationProvider {
+public class NaverAuthenticationProvider implements AuthenticationProvider {
     private final UserRepository userRepository;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         Object principal = authentication.getPrincipal();
-        String kakaoAccountId = (String) principal;
-        User findUser = userRepository.findByKakaoAccountId(kakaoAccountId).orElse(null);
+        String naverAccountId = (String) principal;
+
+        NaverUser findUser = userRepository.findByNaverId(naverAccountId).orElse(null);
 
         if (findUser != null) {
             UserDetails userDetails = findUser;

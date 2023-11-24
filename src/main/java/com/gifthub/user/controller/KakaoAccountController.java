@@ -1,7 +1,7 @@
 package com.gifthub.user.controller;
 
 import com.gifthub.config.jwt.KakaoAuthenticationProvider;
-import com.gifthub.config.jwt.KakaoAuthenticationToken;
+import com.gifthub.config.jwt.SocialAuthenticationToken;
 import com.gifthub.user.UserJwtTokenProvider;
 import com.gifthub.user.dto.KakaoUserDto;
 import com.gifthub.user.dto.UserDto;
@@ -15,12 +15,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/api/kakao/")
+@RequestMapping(value = "/api/kakao")
 @RequiredArgsConstructor
 public class KakaoAccountController {
     private final KakaoAccountService kakaoAccountService;
@@ -29,7 +27,7 @@ public class KakaoAccountController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserJwtTokenProvider jwtTokenProvider;
     private final KakaoAuthenticationProvider kakaoAuthenticationProvider;
-
+    
     @RequestMapping(value = "/login")
     public ResponseEntity<Object> login(@RequestParam("code") String code, HttpSession session) {
         String kakaoAccessToken = "";
@@ -49,16 +47,11 @@ public class KakaoAccountController {
                 userService.saveKakaoUser(kakaoUserInfo);
             }
 
-            /** 로그인 (jwt 토큰 발급)
-             * 1. kakaoUserInfo의 accountId를 통해 kakaoAuthenticationToken 생성
-             * 2. kakaoAuthenticationProvider를 통해 kakaoAuthenticationToken를 검증
-             * 3. 인증이 완료되면 jwt 토큰을 발급
-             * 4. jwt 토큰을 ResponseEntity를 통해 header로 전송*/
 
-            KakaoAuthenticationToken kakaoAuthenticationToken = new KakaoAuthenticationToken(kakaoUserInfo.getKakaoAccountId()); //1
-            Authentication authentication = kakaoAuthenticationProvider.authenticate(kakaoAuthenticationToken);             //2
+            SocialAuthenticationToken kakaoAuthenticationToken = new SocialAuthenticationToken(kakaoUserInfo.getKakaoAccountId());
+            Authentication authentication = kakaoAuthenticationProvider.authenticate(kakaoAuthenticationToken);
 
-            if (authentication.isAuthenticated()) {     //3
+            if (authentication.isAuthenticated()) {
                 KakaoUserDto findKakaoUserDto = kakaoAccountService.getKakaoUserByAccountId(kakaoUserInfo.getKakaoAccountId());
 
                 token = jwtTokenProvider.generateJwtToken(
@@ -68,9 +61,7 @@ public class KakaoAccountController {
                                 .kakaoAccountId(kakaoUserInfo.getKakaoAccountId())
                                 .loginType(LoginType.KAKAO.name()).build());
 
-                session.setAttribute("kakao_access_token", kakaoAccessToken);
-                System.out.println("login");
-                System.out.println(kakaoAccessToken);
+//                session.setAttribute("kakao_access_token", kakaoAccessToken);
             }
 
         } catch (Exception e) {
@@ -78,7 +69,7 @@ public class KakaoAccountController {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok().header("Authorization", "Bearer " + token).build();     //4
+        return ResponseEntity.ok().header("Authorization", "Bearer " + token).build();
     }
 
     @RequestMapping(value = "/logout")
