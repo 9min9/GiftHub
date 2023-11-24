@@ -1,8 +1,10 @@
 package com.gifthub.user.service;
 
 import com.gifthub.user.dto.KakaoUserDto;
+import com.gifthub.user.dto.NaverUserDto;
 import com.gifthub.user.dto.UserDto;
 import com.gifthub.user.entity.KakaoUser;
+import com.gifthub.user.entity.NaverUser;
 import com.gifthub.user.entity.User;
 import com.gifthub.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,11 @@ public class UserService {
         return saveUser.toKakaoUserDto();
     }
 
+    public NaverUserDto saveNaverUser(NaverUserDto naverUserDto) {
+        NaverUser save = userRepository.save(naverUserDto.toNaverEntity());
+        return save.toNaverUserDto();
+    }
+
     public UserDto getUserById(Long userId) {
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
@@ -36,4 +43,6 @@ public class UserService {
     public void delUserById(Long userId) {
         userRepository.deleteById(userId);
     }
+
+
 }

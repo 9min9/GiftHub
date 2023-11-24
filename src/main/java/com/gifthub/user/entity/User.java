@@ -43,10 +43,9 @@ public class User extends BaseTimeEntity implements UserDetails {
     private String name;
     private String nickname;
     private String gender;
-    private String phonenumber;
+    private String tel;
     private String year;
     private String birthDate;
-    private String tel;
     private Long point;
 
     @Enumerated(STRING)
