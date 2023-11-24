@@ -64,7 +64,7 @@ public class UserJwtTokenProvider {
 
 	/** User */
 	public String getUsernameFromToken(String token) {
-		return (String) getClaims(token).get("email");
+		return (String) getClaims(token).get("username");
 	}
 
 	public String getAccountTypeFromToken(String token) {
