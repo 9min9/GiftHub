@@ -35,6 +35,12 @@ function getKakaoJwt() {
             let token = authorizationHeader.replace("Bearer ", "");
             localStorage.setItem("token", token);
 
+            let setCookie = () => {
+                document.cookie = "Authorization=" + localStorage.getItem("token");
+            }
+
+            setCookie();
+
             window.location.href = "/";
             // window.history.back();
 
