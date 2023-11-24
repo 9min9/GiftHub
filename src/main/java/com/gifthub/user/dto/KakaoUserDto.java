@@ -21,8 +21,8 @@ public class KakaoUserDto {
     private String nickname;
     private String tel;
     private String gender;
-    private LocalDate year;
-    private LocalDate birthDate;
+    private String year;
+    private String birthDate;
     private Long point;
 
     public KakaoUser toEntity() {
