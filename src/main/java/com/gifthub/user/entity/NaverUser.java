@@ -22,9 +22,10 @@ return NaverUserDto.builder()
         .naver_id(this.naver_id)
         .email(super.getEmail())
         .name(super.getName())
+        .phonenumber(super.getPhonenumber())
         .gender(super.getGender())
-        .birthdate(super.getYear())
-        .birthdate(super.getBirthDate())
+        .birthyear(super.getYear())
+        .birthday(super.getBirthDate())
         .build();
 }
 }

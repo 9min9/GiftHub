@@ -23,8 +23,8 @@ public class UserDto {
     private String email;
     private String userType;
     private String loginType;
-    private LocalDate year;
-    private LocalDate date;
+    private String  year;
+    private String date;
     private String tel;
     private Long point;
     private String kakaoAccountId;

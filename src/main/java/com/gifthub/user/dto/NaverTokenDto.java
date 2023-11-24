@@ -13,4 +13,5 @@ public class NaverTokenDto {
     private String refresh_token;
     private String token_type;
     private String expires_in;
+
 }

@@ -138,8 +138,8 @@ public class KakaoAccountService {
                     .name(name)
                     .nickname(nickname)
                     .email(email)
-//                    .year(year)
-//                    .year(LocalDate.parse(year))        //todo : LocalDate.pares() 체크하기
+                    .year(year)
+                    .birthDate(birthday)
                     .gender(gender)
                     .tel(phone_number)
                     .build();
