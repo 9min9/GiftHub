@@ -57,7 +57,7 @@ $(function () {
             url: "/api/attendances",
             type: "get",
             headers: {
-                token: localStorage.getItem("token"),
+                Authorization: localStorage.getItem("token"),
             },
             success: function (attendanceList) {
                 let checkList = [];
@@ -73,7 +73,7 @@ $(function () {
                         url: "/api/attendances",
                         type: "post",
                         headers: {
-                            token: localStorage.getItem("token"),
+                            Authorization: localStorage.getItem("token"),
                         },
                         success: function (result) {
                             document.querySelector(".today").classList.replace("today", "attendance");

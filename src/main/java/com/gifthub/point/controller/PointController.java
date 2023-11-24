@@ -22,7 +22,7 @@ public class PointController {
                                            @RequestHeader HttpHeaders headers
                                            ) {
         try {
-            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("token").get(0));
+            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
 
             UserDto userDto = pointService.plusPoint(point, userId);
 
@@ -38,7 +38,7 @@ public class PointController {
                                            @RequestHeader HttpHeaders headers
     ) {
         try {
-            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("token").get(0));
+            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
 
             UserDto userDto = pointService.usePoint(point, userId);
 

@@ -28,7 +28,7 @@ public class CartController {
     public ResponseEntity<Object> list(@RequestHeader HttpHeaders headers) {
         Long userId = null;
         try {
-            userId = userJwtTokenProvider.getUserIdFromToken(headers.get("token").get(0));
+            userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("로그인을 해주세요.");
         }
@@ -47,7 +47,7 @@ public class CartController {
             UserDto userDto = null;
 
             try {
-                userId = userJwtTokenProvider.getUserIdFromToken(headers.get("token").get(0));
+                userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
 
                 userDto = userService.getUserById(userId);
             } catch (Exception e) {
@@ -79,7 +79,7 @@ public class CartController {
             // TODO 유저의 id와 카트에 있는 기프티콘의 주인의 아이디 비교
             GifticonDto gifticonDto = gifticonService.findGifticon(gifticonId);
 
-            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("token").get(0));
+            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
 
             if (!gifticonDto.getUser().getId().equals(userId)) {
                 ResponseEntity.badRequest().build();
@@ -98,7 +98,7 @@ public class CartController {
     @PostMapping("/delete")
     public ResponseEntity<Object> removeAllFromCart(@RequestHeader HttpHeaders headers) {
         try {
-            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("token").get(0));
+            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
 
             cartService.removeAllFromCart(userId);
         } catch (Exception e) {

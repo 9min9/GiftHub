@@ -2,7 +2,7 @@ let loadCarts = () => {
     let xhr = new XMLHttpRequest();
 
     xhr.open("get", "/api/carts");
-    xhr.setRequestHeader("token", localStorage.getItem("token"));
+    xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
 
     xhr.onload = function() {
         if (xhr.status !== 200) {
@@ -157,7 +157,7 @@ let deleteEvent = function (){
             $.ajax({
                 url: "/api/carts/delete" + id,
                 headers: {
-                    token: localStorage.getItem("token"),
+                    Authorization: localStorage.getItem("token"),
                 },
                 type: "post",
                 success: function () {
@@ -182,7 +182,7 @@ let removeAllEvent = () => {
             $.ajax({
                 url: "/api/carts/delete",
                 headers: {
-                    token: localStorage.getItem("token"),
+                    Authorization: localStorage.getItem("token"),
                 },
                 type: "post",
                 success: function () {

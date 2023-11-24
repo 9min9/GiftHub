@@ -4,7 +4,7 @@ let loadMiniCart = () => {
     $.ajax({
         url: "/api/carts",
         headers: {
-            token: localStorage.getItem("token"),
+            Authorization: localStorage.getItem("token"),
         },
         type: "get",
         success: function(response) {
@@ -59,7 +59,7 @@ let miniDeleteEvent = function (){
                 url: "/api/carts/delete" + id,
                 type: "post",
                 headers: {
-                    token: localStorage.getItem("token"),
+                    Authorization: localStorage.getItem("token"),
                 },
                 success: function () {
                     $("#div-mini-cart-" + id).remove();
