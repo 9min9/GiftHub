@@ -2,8 +2,8 @@ const urlParams = new URL(location.href).searchParams;
 
 window.onload = function () {
 
-    // getKakaoJwt()
-    getNaverJwt()
+    getKakaoJwt()
+    // getNaverJwt()
 
     Kakao.init('578c006810acb509f2ccc52277d13ec9'); //발급받은 키 중 javascript키를 사용해준다.
     Kakao.isInitialized()
