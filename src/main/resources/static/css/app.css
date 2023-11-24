@@ -1658,8 +1658,9 @@ input::-ms-clear {
 .select-box {
   display: block;
   max-width: 100%;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
+  height: 40px;
   padding: 10px 12px 11px 15px;
   cursor: pointer;
   line-height: 1.2; }
