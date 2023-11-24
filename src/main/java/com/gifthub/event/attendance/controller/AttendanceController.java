@@ -28,7 +28,7 @@ public class AttendanceController {
     public ResponseEntity<Object> attendList(@RequestHeader HttpHeaders headers) {
         Long userId = null;
         try {
-            userId = userJwtTokenProvider.getUserIdFromToken(headers.get("token").get(0));
+            userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("로그인을 해주세요.");
         }
@@ -47,7 +47,7 @@ public class AttendanceController {
         Long attendId = null;
 
         try {
-            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("token").get(0));
+            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
 
             if (userId == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다. 로그인을 해주세요");

@@ -41,7 +41,7 @@ public class KakaoPayController {
         KakaoPayReadyResponseDto readyResponseDto = null;
 
         try {
-            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("token").get(0));
+            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
 
             String cid = "TC0ONETIME";
             String partnerUserId = PARTNER_USER_ID;
