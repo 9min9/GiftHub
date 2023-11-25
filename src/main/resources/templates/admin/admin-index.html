@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <th:blcok th:replace="fragments/base/head :: head"></th:blcok>
+</head>
+<body class="config">
+    <div class="preloader is-active">
+        <div class="preloader__wrap">
+
+            <img class="preloader__img" src="images/preloader.png" alt=""></div>
+    </div>
+
+    <!--====== Main App ======-->
+    <div id="app">
+
+        <!--====== Main Header ======-->
+        <header class="header--style-1 header--box-shadow">
+            <th:blcok th:replace="fragments/admin/admin-header :: header"></th:blcok>
+        </header>
+        <!--====== End - Main Header ======-->
+
+
+        <!--====== App Content ======-->
+        <div class="app-content">
+            <!--====== Section 2 ======-->
+            <div class="u-s-p-y-60">
+                <!--====== Section Content ======-->
+                <div class="section__content">
+                    <div class="dash">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-12">
+
+                                    <th:block th:replace="fragments/admin/sidebar :: sidebar"></th:block>
+
+                                    <!--====== Dashboard Features ======-->
+<!--                                    <div class="dash__box dash__box&#45;&#45;bg-white dash__box&#45;&#45;shadow u-s-m-b-30">-->
+<!--                                        <div class="dash__pad-1">-->
+
+<!--                                            <span class="dash__text u-s-m-b-16">관리자 목록</span>-->
+<!--                                            <ul class="dash__f-list">-->
+<!--                                                <li><a class="dash-active" href="admin-index.html">메인 페이지</a></li>-->
+<!--                                                <li><a href="/admin/user/config">회원 관리</a></li>-->
+<!--                                                <li>-->
+<!--                                                    <a href="dash-track-order.html">문의 사항</a></li>-->
+<!--                                                <li>-->
+
+<!--                                                    <a href="dash-my-order.html">이벤트 관리</a></li>-->
+<!--                                                <li>-->
+
+<!--                                                    <a href="dash-payment-option.html">My Payment Options</a></li>-->
+<!--                                                <li>-->
+
+<!--                                                    <a href="dash-cancellation.html">My Returns & Cancellations</a></li>-->
+<!--                                            </ul>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="dash__box dash__box&#45;&#45;bg-white dash__box&#45;&#45;shadow dash__box&#45;&#45;w">-->
+<!--                                        <div class="dash__pad-1">-->
+<!--                                            <ul class="dash__w-list">-->
+<!--                                                <li>-->
+<!--                                                    <div class="dash__w-wrap">-->
+
+<!--                                                        <span class="dash__w-icon dash__w-icon-style-1"><i class="fas fa-cart-arrow-down"></i></span>-->
+
+<!--                                                        <span class="dash__w-text">4</span>-->
+
+<!--                                                        <span class="dash__w-name">상품 등록 신청</span></div>-->
+<!--                                                </li>-->
+<!--                                                <li>-->
+<!--                                                    <div class="dash__w-wrap">-->
+
+<!--                                                        <span class="dash__w-icon dash__w-icon-style-2"><i class="fas fa-times"></i></span>-->
+
+<!--                                                        <span class="dash__w-text">0</span>-->
+
+<!--                                                        <span class="dash__w-name">문의 사항</span></div>-->
+<!--                                                </li>-->
+<!--                                                <li>-->
+<!--                                                    <div class="dash__w-wrap">-->
+
+<!--                                                        <span class="dash__w-icon dash__w-icon-style-3"><i class="far fa-heart"></i></span>-->
+
+<!--                                                        <span class="dash__w-text">0</span>-->
+
+<!--                                                        <span class="dash__w-name">Wishlist</span></div>-->
+<!--                                                </li>-->
+<!--                                            </ul>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+                                    <!--====== End - Dashboard Features ======-->
+                                </div>
+                                <div class="col-lg-9 col-md-12">
+                                    <div class="dash__box dash__box--shadow dash__box--bg-white dash__box--radius u-s-m-b-30">
+                                        <h2 class="dash__h2 u-s-p-xy-20">상품 등록 신청</h2>
+                                        <div class="dash__table-wrap gl-scroll">
+                                            <table class="dash__table">
+                                                <thead>
+                                                <tr>
+                                                    <th>기프티콘</th>
+                                                    <th>이름</th>
+                                                    <th>브랜드</th>
+                                                    <th>신청인</th>
+                                                    <th>신청일</th>
+                                                    <th></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <div class="dash__table-img-wrap">
+                                                            <img class="u-img-fluid" src="images/product/electronic/product3.jpg" alt="">
+                                                        </div>
+                                                    </td>
+                                                    <td>100만원 상품권</td>
+                                                    <td>idk</td>
+                                                    <td>구민규</td>
+                                                    <td>2023-11-25</td>
+
+                                                    <td>
+                                                        <div class="dash__table-total">
+                                                            <div class="dash__link dash__link--brand">
+                                                                <a href="dash-manage-order.html">등록</a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3054231326</td>
+                                                    <td>26/13/2016</td>
+                                                    <td>
+                                                        <div class="dash__table-img-wrap">
+
+                                                            <img class="u-img-fluid" src="images/product/electronic/product14.jpg" alt=""></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="dash__table-total">
+
+                                                            <span>$126.00</span>
+                                                            <div class="dash__link dash__link--brand">
+
+                                                                <a href="dash-manage-order.html">MANAGE</a></div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3054231326</td>
+                                                    <td>26/13/2016</td>
+                                                    <td>
+                                                        <div class="dash__table-img-wrap">
+
+                                                            <img class="u-img-fluid" src="images/product/men/product8.jpg" alt=""></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="dash__table-total">
+
+                                                            <span>$126.00</span>
+                                                            <div class="dash__link dash__link--brand">
+
+                                                                <a href="dash-manage-order.html">MANAGE</a></div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3054231326</td>
+                                                    <td>26/13/2016</td>
+                                                    <td>
+                                                        <div class="dash__table-img-wrap">
+
+                                                            <img class="u-img-fluid" src="images/product/women/product10.jpg" alt=""></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="dash__table-total">
+
+                                                            <span>$126.00</span>
+                                                            <div class="dash__link dash__link--brand">
+
+                                                                <a href="dash-manage-order.html">MANAGE</a></div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
+                                        <div class="dash__pad-2">
+                                            <h1 class="dash__h1 u-s-m-b-14">Manage My Account</h1>
+
+                                            <span class="dash__text u-s-m-b-30">From your My Account Dashboard you have the ability to view a snapshot of your recent account activity and update your account information. Select a link below to view or edit information.</span>
+                                            <div class="row">
+                                                <div class="col-lg-4 u-s-m-b-30">
+                                                    <div class="dash__box dash__box--bg-grey dash__box--shadow-2 u-h-100">
+                                                        <div class="dash__pad-3">
+                                                            <h2 class="dash__h2 u-s-m-b-8">PERSONAL PROFILE</h2>
+                                                            <div class="dash__link dash__link--secondary u-s-m-b-8">
+
+                                                                <a href="dash-edit-profile.html">Edit</a></div>
+
+                                                            <span class="dash__text">John Doe</span>
+
+                                                            <span class="dash__text">johndoe@domain.com</span>
+                                                            <div class="dash__link dash__link--secondary u-s-m-t-8">
+
+                                                                <a data-modal="modal" data-modal-id="#dash-newsletter">Subscribe Newsletter</a></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 u-s-m-b-30">
+                                                    <div class="dash__box dash__box--bg-grey dash__box--shadow-2 u-h-100">
+                                                        <div class="dash__pad-3">
+                                                            <h2 class="dash__h2 u-s-m-b-8">ADDRESS BOOK</h2>
+
+                                                            <span class="dash__text-2 u-s-m-b-8">Default Shipping Address</span>
+                                                            <div class="dash__link dash__link--secondary u-s-m-b-8">
+
+                                                                <a href="dash-address-book.html">Edit</a></div>
+
+                                                            <span class="dash__text">4247 Ashford Drive Virginia - VA-20006 - USA</span>
+
+                                                            <span class="dash__text">(+0) 900901904</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 u-s-m-b-30">
+                                                    <div class="dash__box dash__box--bg-grey dash__box--shadow-2 u-h-100">
+                                                        <div class="dash__pad-3">
+                                                            <h2 class="dash__h2 u-s-m-b-8">BILLING ADDRESS</h2>
+
+                                                            <span class="dash__text-2 u-s-m-b-8">Default Billing Address</span>
+
+                                                            <span class="dash__text">4247 Ashford Drive Virginia - VA-20006 - USA</span>
+
+                                                            <span class="dash__text">(+0) 900901904</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--====== End - Section Content ======-->
+            </div>
+            <!--====== End - Section 2 ======-->
+        </div>
+        <!--====== End - App Content ======-->
+
+
+        <!--====== Main Footer ======-->
+        <footer>
+            <th:blcok th:replace="fragments/base/footer :: footer"></th:blcok>
+        </footer>
+
+        <!--====== End - Modal Section ======-->
+    </div>
+    <!--====== End - Main App ======-->
+
+    <th:block th:replace="fragments/base/script :: script"></th:block>
+
+
+
+</body>
+</html>
