@@ -18,6 +18,7 @@ function openFile(imageFile){
 
         success : function (jsonData){
             alert("등록 성공");
+            $('#add-to-cart').modal('hide');
             location.reload();
 
         },

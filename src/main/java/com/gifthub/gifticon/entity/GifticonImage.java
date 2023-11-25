@@ -1,13 +1,17 @@
 package com.gifthub.gifticon.entity;
 
+import com.gifthub.gifticon.dto.GifticonImageDto;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.UUID;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@Table(name = "gifticon_image")
 public class GifticonImage {
 
     @Id
@@ -16,8 +20,42 @@ public class GifticonImage {
     @Column(name = "gifticon_image_id")
     private Long id;
 
-    private String imagePath;
-    private String originalFileName; // 이걸 없애고, 아래걸로
-//    private String storeFileName;
+    @OneToOne(mappedBy = "gifticonImage", fetch = FetchType.LAZY)
+    private GifticonStorage gifticonStorage;
+
+    private String accessUrl;
+    private String originalFileName; // 본래이름
+    private String storeFileName; // 서버에 저장될때 사용되는 이름
+
+    public GifticonImage(String originalFileName) {
+        this.originalFileName = originalFileName;
+        this.storeFileName = getFileName(originalFileName);
+        this.accessUrl = "";
+    }
+
+    public void setAccessUrl(String accessUrl) {
+        this.accessUrl = accessUrl;
+    }
+
+    // 이미지 파일의 확장자를 추출하는 메소드
+    public String extractExtension(String originalFileName) {
+        int index = originalFileName.lastIndexOf('.');
+
+        return originalFileName.substring(index, originalFileName.length());
+    }
+
+    // 이미지 파일의 이름을 저장하기 위한 이름으로 변환하는 메소드
+    public String getFileName(String originalFileName) {
+        return UUID.randomUUID() + "." + extractExtension(originalFileName);
+    }
+
+    public GifticonImageDto toGifticonImageDto(){
+        return GifticonImageDto.builder()
+                .id(this.id)
+                .accessUrl(this.accessUrl)
+                .originalFileName(this.originalFileName)
+                .storeFileName(this.storeFileName)
+                .build();
+    }
 
 }
