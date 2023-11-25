@@ -93,8 +93,8 @@ public class GifticonService {
         return null;
     }
 
-    public Page<GifticonQueryDto> getPurchasingGifticon(Pageable pageable) {
-        return gifticonRepository.findByGifticonStatusIsOnSale(pageable).map(Gifticon::toQueryDto);
+    public Page<GifticonQueryDto> getPurchasingGifticon(Pageable pageable, String type) {
+        return gifticonRepository.findByGifticonStatusIsOnSale(pageable, type).map(Gifticon::toQueryDto);
     }
 
 }

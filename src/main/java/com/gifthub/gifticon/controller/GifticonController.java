@@ -95,4 +95,9 @@ public class GifticonController {
 //        System.out.println(gifticonDto1.getProductName());
         return null;
     }
+
+    @GetMapping("/gifticons/{type}")
+    public ResponseEntity<Object> gifticons(Pageable pageable, @PathVariable("type") String type) {
+        return ResponseEntity.ok(gifticonService.getPurchasingGifticon(pageable, type));
+    }
 }

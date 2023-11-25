@@ -1,9 +1,9 @@
-function getPurchasingGifticon(page, size) {
+function getPurchasingGifticon(page, size, type = "") {
     page = page || 1;
     size = size || 10;
 
     $.ajax({
-        url: "/api/gifticons",
+        url: "/api/gifticons/" + type,
         type: "get",
         data: {
             page,
@@ -14,13 +14,25 @@ function getPurchasingGifticon(page, size) {
                 gifticon(result.content);
             }
         }
-    })
+    });
 }
 
 function print(jsonData) {
     for (let j of jsonData) {
         gitfticon(j);
     }
+}
+
+function setProductSelectorEvent() {
+    document.querySelectorAll(".product-selector").forEach((elem) => {
+        elem.addEventListener("click", function(event) {
+            document.querySelectorAll(".filter__item").forEach(function(elem) {
+                elem.remove();
+            });
+
+            getPurchasingGifticon(0, 10, event.target.parentNode.childNodes[2].innerText.replaceAll("/", "-"))
+        });
+    })
 }
 
 function gifticon(jsonData) {

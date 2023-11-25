@@ -6,6 +6,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface GifticonRepositorySupport {
 
-    Page<Gifticon> findByGifticonStatusIsOnSale(Pageable pageable);
+    Page<Gifticon> findByGifticonStatusIsOnSale(Pageable pageable, String type);
 
 }
