@@ -5,6 +5,7 @@ import static com.gifthub.gifticon.entity.QProduct.product;
 
 import com.gifthub.gifticon.dto.ProductDto;
 import com.gifthub.gifticon.dto.QProductDto;
+import com.gifthub.gifticon.entity.QProduct;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -25,7 +26,7 @@ public List<String> findAllBrandName(){
 @Override
 public List<ProductDto> findProductByBrand(String brand) {
     return queryFactory
-            .select(new QProductDto(product.id, product.name, product.price, product.brandName))
+            .select(new QProductDto(product.id, product.name, product.price, product.brandName, product.category))
             .from(product)
             .where(product.brandName.eq(brand))
             .fetch();
@@ -34,7 +35,7 @@ public List<ProductDto> findProductByBrand(String brand) {
 @Override
 public List<ProductDto> findAllProduct() {
     return queryFactory
-            .select(new QProductDto(product.id, product.brandName, product.price, product.name))
+            .select(new QProductDto(product.id, product.brandName, product.price, product.name, product.category))
             .from(product)
             .fetch();
 }
