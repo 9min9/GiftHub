@@ -17,7 +17,7 @@ public class GifticonImage {
     private Long id;
 
     private String imagePath;
-    private String originalFileName;
+    private String originalFileName; // 이걸 없애고, 아래걸로
 //    private String storeFileName;
 
 }
