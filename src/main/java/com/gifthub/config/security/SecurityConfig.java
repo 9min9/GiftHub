@@ -36,17 +36,46 @@ public class SecurityConfig {
 
 
     //TEST
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+                .formLogin()
+                .loginPage("/login")
+                .and()
+
+                .authorizeHttpRequests((authz) -> authz
+                        .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
+                        .anyRequest().permitAll()
+                );
+
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        //	.httpBasic();
+        return http.build();
+    }
+
+
 //    @Bean
 //    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 //        http.csrf().disable()
 //                .formLogin()
 //                .loginPage("/login")
 //                .and()
-//
 //                .authorizeHttpRequests((authz) -> authz
+//                        .requestMatchers(
+//                                new AntPathRequestMatcher("/css/**"),
+//                                new AntPathRequestMatcher("/js/**"),
+//                                new AntPathRequestMatcher("/images/**"),
+//                                new AntPathRequestMatcher("/scss/**"),
+//                                new AntPathRequestMatcher("/webfonts/**"),
+//                                new AntPathRequestMatcher("/static/**")
+//                        ).permitAll()
+//
 //                        .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-//                        .anyRequest().permitAll()
-//                );
+//                        .requestMatchers("/", "/signup", "/error", "/login/**", "/api/kakao/**", "/api/naver/**").permitAll()
+//                        .anyRequest().authenticated()
+//                )
+//                .addFilter(corsConfig.corsFilter())
+//                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 //
 //        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 //        //	.httpBasic();
@@ -54,33 +83,33 @@ public class SecurityConfig {
 //    }
 
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .formLogin()
-                .loginPage("/login")
-                .and()
-                .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers(
-                                new AntPathRequestMatcher("/css/**"),
-                                new AntPathRequestMatcher("/js/**"),
-                                new AntPathRequestMatcher("/images/**"),
-                                new AntPathRequestMatcher("/scss/**"),
-                                new AntPathRequestMatcher("/webfonts/**"),
-                                new AntPathRequestMatcher("/static/**")
-                        ).permitAll()
-
-                        .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                        .requestMatchers("/", "/signup", "/error", "/login/**", "/api/kakao/**", "/api/naver/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .addFilter(corsConfig.corsFilter())
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
-
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        //	.httpBasic();
-        return http.build();
-    }
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http.csrf().disable()
+//                .formLogin()
+//                .loginPage("/login")
+//                .and()
+//                .authorizeHttpRequests((authz) -> authz
+//                        .requestMatchers(
+//                                new AntPathRequestMatcher("/css/**"),
+//                                new AntPathRequestMatcher("/js/**"),
+//                                new AntPathRequestMatcher("/images/**"),
+//                                new AntPathRequestMatcher("/scss/**"),
+//                                new AntPathRequestMatcher("/webfonts/**"),
+//                                new AntPathRequestMatcher("/static/**")
+//                        ).permitAll()
+//
+//                        .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
+//                        .requestMatchers("/", "/signup", "/error", "/login/**", "/api/kakao/**").permitAll()
+//                        .anyRequest().authenticated()
+//                )
+//                .addFilter(corsConfig.corsFilter())
+//                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+//
+//        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//        //	.httpBasic();
+//        return http.build();
+//    }
 
 
 }
