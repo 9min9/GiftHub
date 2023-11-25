@@ -1,7 +1,24 @@
 <!DOCTYPE html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="ko">
 <head>
     <th:block th:replace="fragments/base/head :: head"></th:block>
+    <style>
+        .product-selector-container {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        .product-selector {
+            height: 80px;
+            width: 80px;
+            border-radius: 50%;
+            background-color: #a0a0a0;
+            color: white;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+    </style>
 </head>
 <body class="config">
 <div class="preloader is-active">
@@ -27,9 +44,8 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="section__text-wrap">
+                            <div class="section__text-wrap" id="product-selectors">
                                 <h1 class="section__heading u-c-secondary u-s-m-b-12">판매중인 전체 기프티콘</h1>
-                                <span class="section__span u-c-silver">전체 보기</span>
                             </div>
                         </div>
                     </div>
@@ -44,46 +60,8 @@
                     <div class="row">
                         <div class="col-lg-12">
 
-                            <div class="filter__grid-wrapper u-s-m-t-30">
+                            <div class="<!--filter__grid-wrapper--> u-s-m-t-30">
                                 <div id="row-product-div" class="row">
-                                    <div id="item-div" class="col-xl-3 col-lg-4 col-md-6 col-sm-6 u-s-m-b-30 filter__item">
-                                        <div id="product-div" class="product-o product-o--hover-on product-o--radius">
-
-                                            <div id="imageAndModal-product-div" class="product-o__wrap">
-                                                <a id="image-product-a" class="aspect aspect--bg-grey aspect--square u-d-block">
-                                                    <img class="aspect__img" src="images/product/electronic/product2.jpg" alt="">
-                                                </a>
-
-                                                <div id="action-product-div" class="product-o__action-wrap">
-                                                    <ul class="product-o__action-list">
-                                                        <li><a data-modal="modal" data-modal-id="#quick-look" data-tooltip="tooltip" data-placement="top" title="Quick View"><i class="fas fa-search-plus"></i></a></li>
-                                                        <li><a data-modal="modal" data-modal-id="#add-to-cart" data-tooltip="tooltip" data-placement="top" title="Add to Cart"><i class="fas fa-plus-circle"></i></a></li>
-                                                        <li><a href="account/login.html" data-tooltip="tooltip" data-placement="top" title="Add to Wishlist"><i class="fas fa-heart"></i></a></li>
-                                                        <li><a href="account/login.html" data-tooltip="tooltip" data-placement="top" title="Email me When the price drops"><i class="fas fa-envelope"></i></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-
-                                            <span class="product-o__category">
-                                                <a href="shop-side-version-2.html">브랜드 이름</a>
-                                            </span>
-
-                                            <span class="product-o__name">
-                                                <a href="product-detail.html">상품이름</a>
-                                            </span>
-
-                                            <div class="product-o__rating gl-rating-style">
-                                                남은 기간
-                                            </div>
-
-                                            <span class="product-o__price">
-                                                판매가격
-                                                <span class="product-o__discount">정가</span>
-                                            </span>
-
-                                        </div>
-                                    </div>
-
                                 </div>
                             </div>
                         </div>
@@ -120,6 +98,31 @@
 <script src="/js/gifticon/kakao-chatbot.js"></script>
 <script src="/js/gifticon/file-add.js"></script>
 <script src="/js/gifticon/list.js"></script>
+<script src="/js/gifticon/product-selector.js"></script>
+<script th:inline="javascript">
+    window.onload = function() {
+        createProductSpan("전체");
+        createProductSpan("카페");
+        createProductSpan("베이커리/도넛/떡");
+        createProductSpan("백화점/마트");
+        createProductSpan("아이스크림/빙수");
+        createProductSpan("편의점");
+        createProductSpan("버거/피자");
+        createProductSpan("치킨");
+        createProductSpan("한식/중식/분식");
+        createBreak();
+        createProductSpan("구이/족발");
+        createProductSpan("레스토랑/뷔페");
+        createProductSpan("외국/퓨전/기타");
+        createProductSpan("영화/음악/도서");
+        createProductSpan("kt/통신");
+        createProductSpan("뷰티/헤어/바디");
+        createProductSpan("건강/리빙/식품관");
+        createProductSpan("생활/가전/엔터");
+
+        getPurchasingGifticon([[${param.page}]], [[${param.size}]]);
+    }
+</script>
 
 
 </body>

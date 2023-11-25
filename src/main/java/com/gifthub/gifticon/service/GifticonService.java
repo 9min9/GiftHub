@@ -1,6 +1,7 @@
 package com.gifthub.gifticon.service;
 
 import com.gifthub.gifticon.dto.GifticonDto;
+import com.gifthub.gifticon.dto.GifticonQueryDto;
 import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.gifticon.repository.GifticonRepository;
 import com.gifthub.user.entity.User;
@@ -13,6 +14,8 @@ import com.google.zxing.common.HybridBinarizer;
 import lombok.RequiredArgsConstructor;
 import org.krysalis.barcode4j.impl.code39.Code39Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -88,6 +91,10 @@ public class GifticonService {
     // TODO : 특정 product_id를 인자로 받아 GifticonList를 return
     public List<GifticonDto> getGifticonByProduct(Long productId){
         return null;
+    }
+
+    public Page<GifticonQueryDto> getPurchasingGifticon(Pageable pageable) {
+        return gifticonRepository.findByGifticonStatusIsOnSale(pageable).map(Gifticon::toQueryDto);
     }
 
 }

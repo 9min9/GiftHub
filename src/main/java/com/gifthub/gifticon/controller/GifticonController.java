@@ -3,6 +3,7 @@ package com.gifthub.gifticon.controller;
 import com.gifthub.chatbot.util.JsonConverter;
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.GifticonImageDto;
+import com.gifthub.gifticon.dto.GifticonQueryDto;
 import com.gifthub.gifticon.entity.GifticonTempStorage;
 import com.gifthub.gifticon.service.GifticonImageService;
 import com.gifthub.gifticon.service.GifticonService;
@@ -11,6 +12,8 @@ import com.gifthub.gifticon.service.OcrService;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,10 +63,9 @@ public class GifticonController {
             System.out.println(imageFile.getOriginalFilename());
 
 
-
             GifticonDto gifticonDto = ocrService.readOcrMultipartToGifticonDto(imageFile.getOriginalFilename()); // ? originalName?
 //            GifticonImageDto imageDto = gifticonImageService.saveImage()
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
 
