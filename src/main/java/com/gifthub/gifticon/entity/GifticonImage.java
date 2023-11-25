@@ -1,5 +1,6 @@
 package com.gifthub.gifticon.entity;
 
+import com.gifthub.gifticon.dto.GifticonImageDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,6 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@Table(name = "gifticon_image")
 public class GifticonImage {
 
     @Id
@@ -17,6 +19,9 @@ public class GifticonImage {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_gifticon_image")
     @Column(name = "gifticon_image_id")
     private Long id;
+
+    @OneToOne(mappedBy = "gifticonImage", fetch = FetchType.LAZY)
+    private GifticonStorage gifticonStorage;
 
     private String accessUrl;
     private String originalFileName; // 본래이름
@@ -42,6 +47,15 @@ public class GifticonImage {
     // 이미지 파일의 이름을 저장하기 위한 이름으로 변환하는 메소드
     public String getFileName(String originalFileName) {
         return UUID.randomUUID() + "." + extractExtension(originalFileName);
+    }
+
+    public GifticonImageDto toGifticonImageDto(){
+        return GifticonImageDto.builder()
+                .id(this.id)
+                .accessUrl(this.accessUrl)
+                .originalFileName(this.originalFileName)
+                .storeFileName(this.storeFileName)
+                .build();
     }
 
 }
