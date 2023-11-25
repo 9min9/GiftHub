@@ -8,17 +8,18 @@ import lombok.Getter;
 @Builder
 public class GifticonImageDto {
     private Long id;
-    private String imagePath;
+    private String accessUrl;
     private String originalFileName;
-//    private String storeFileName;
+    private String storeFileName;
 
 
     public GifticonImage toEntity() {
 
         return GifticonImage.builder()
                 .id(this.id)
-                .imagePath(this.imagePath)
+                .accessUrl(this.accessUrl)
                 .originalFileName(this.originalFileName)
+                .storeFileName(this.storeFileName)
                 .build();
     }
 }
