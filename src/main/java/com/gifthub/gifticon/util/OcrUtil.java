@@ -13,8 +13,12 @@ import java.util.regex.PatternSyntaxException;
 
 public class OcrUtil {
 
-    public static String[] parseString(String s) {
+    public static String[] parseStringByNewline(String s) {
         return s.split("\n");
+    }
+
+    public static String parseStringByColon(String s){
+        return s.split(":")[1];
     }
 
     public static Map<String, String> parseArrayToMap(String[] tokens) {
@@ -38,7 +42,7 @@ public class OcrUtil {
             return Pattern.compile(pattern).matcher(parsedString).find();
 
         } catch (PatternSyntaxException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return false;
         }
         //완전히 똑같은지 아닌지 나눠야함!
@@ -51,48 +55,66 @@ public class OcrUtil {
         }
     }
 
-    public static LocalDate localDateFormatter(String input) {
-        try{
+    public static LocalDate localDateFormatterHyphen(String input) {
+//        System.out.println(input);
+        try {
             return LocalDate.parse(input, DateTimeFormatter.ofPattern("yyyy-MM-dd").withLocale(Locale.KOREA));
 
-        } catch (DateTimeParseException e){
-            e.printStackTrace();
+        } catch (DateTimeParseException e) {
+//            e.printStackTrace();
             System.out.println("yyyyMMdd 파싱에러");
             return null;
         }
     }
 
     public static String dateParserTilde(String input) {
-        try{
+        try {
             Matcher matcher = Pattern.compile("~\\s*(\\d{4}\\.\\d{2}\\.\\d{2})").matcher(input);
             return matcher.find() ? matcher.group(1) : null;
 
-        } catch (PatternSyntaxException e){
-            e.printStackTrace();
+        } catch (PatternSyntaxException e) {
+//            e.printStackTrace();
             System.out.println("~ 파싱 에러");
             return null;
         }
     }
 
     public static String dateParserHangul(String input) {
-        try{
+        try {
             Matcher matcher = Pattern.compile("(\\d{4}년\\s?\\d{2}월\\s?\\d{2}일)").matcher(input);
             return matcher.find() ? matcher.group(1) : null;
 
-        } catch (PatternSyntaxException e){
-            e.printStackTrace();
-            System.out.println("년월일 파싱 에러");
+        } catch (PatternSyntaxException e) {
+//            e.printStackTrace();
+            System.out.println("regex년월일 파싱 에러");
             return null;
         }
     }
 
-    public static String dateReplaceFromSpotToHyphen(String inputDateString){
-        String outputDateString = inputDateString.replace(".","-");
-        if(outputDateString == null){
+    public static String dateReplaceFromSpotToHyphen(String inputDateString) {
+        String outputDateString = inputDateString.replace(".", "-");
+        if (outputDateString == null) {
             System.out.println(". -> - 파싱에러");
             return null;
         }
         return outputDateString;
+    }
+
+    public static String dateReplaceFromHangulToHyphen(String inputDateHangul) {
+        String outputDateString = inputDateHangul
+                .replaceAll("년", "-")
+                .replaceAll("월", "-")
+                .replaceAll("일", "");
+        if (outputDateString == null) {
+            System.out.println("년월일 -> - 파싱에러");
+            return null;
+        }
+        return outputDateString;
+    }
+
+
+    public static void inputDateStringTrimming() {
+
     }
 
 }

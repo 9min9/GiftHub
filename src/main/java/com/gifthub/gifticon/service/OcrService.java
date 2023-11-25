@@ -31,62 +31,74 @@ public class OcrService {
     @Value("${ocrAPIURL}")
     private String ocrAPIURL;
 
-    private String imgTestPath = "C:/OcrPractice/";
+    private String imgTestPath = "C:/OcrPractice/jpg/";
+
+    private String giftishow = "giftishow";
+    private String giftishowHangul = "기프티쇼";
 
     private final ProductRepository productRepository;
     private final ProductRepositoryImpl productRepositoryQdsl;
 
-    public GifticonDto readOcrUrlToGifticonDto(String barcodeurl) { // dto분리
+    public GifticonDto readOcrUrlToGifticonDto(String barcodeurl) {
         List<String> brandNameList = productRepositoryQdsl.findAllBrandName();
-        List<ProductDto> productListByBrand;
-        String parsedBarcodeImg = readOcrUrl(barcodeurl);
+        String ocrResult = readOcrUrl(barcodeurl);
 
-        String dueDate = null;
-        String brandName = null;
-        String productName = null;
+        System.out.println("읽은 Ocr결과:" + ocrResult);
 
-        for (String s : brandNameList) {
-            if (OcrUtil.findMatchString(parsedBarcodeImg, s)) {
-                brandName = s;
-                productListByBrand = productRepositoryQdsl.findProductByBrand(s);
-                for (ProductDto product : productListByBrand) {
-                    if (OcrUtil.findMatchString(parsedBarcodeImg, product.getName())) {// 브랜드는 db에 있지만 읽어낸 상품명이 db에 없을 수 도있음!
-                        productName = product.getName();
-                    }
-                }
-            }
-        }
 
-        LocalDate due = dateFormattingByString(parsedBarcodeImg, dueDate);
+        GifticonDto gifticonDto = findProductNameByBrandInDb(ocrResult, brandNameList);
 
-        return GifticonDto.builder().due(due).productName(productName).brandName(brandName).build();
+        LocalDate due = dateFormattingByString(ocrResult);
+
+        System.out.println("읽은 유효기간:" + due);
+        return gifticonDto.builder().due(due).build();
 
     }
 
-    public GifticonDto readOcrMultipartToGifticonDto(String imgFile) { // dto분리
+    public GifticonDto readOcrMultipartToGifticonDto(String imgFile) {
         List<String> brandNameList = productRepositoryQdsl.findAllBrandName();
-        List<ProductDto> productListByBrand;
-        String parsedBarcodeImg = readOcrMultipart(imgFile);
+        String ocrResult = readOcrMultipart(imgFile);
 
-        String dueDate = null;
+        System.out.println("읽은 Ocr결과:" + ocrResult);
+
+        GifticonDto gifticonDto = findProductNameByBrandInDb(ocrResult, brandNameList);
+
+        LocalDate due = dateFormattingByString(ocrResult);
+        System.out.println("읽은 유효기간: " + due);
+
+        return gifticonDto.builder().due(due).build();
+
+    }
+
+
+    private GifticonDto findProductNameByBrandInDb(String ocrResult, List<String> brandNameList) {
         String brandName = null;
         String productName = null;
-
         for (String s : brandNameList) {
-            if (OcrUtil.findMatchString(parsedBarcodeImg, s)) {
+            if (OcrUtil.findMatchString(ocrResult, s)) {
                 brandName = s;
-                productListByBrand = productRepositoryQdsl.findProductByBrand(s);
+                List<ProductDto> productListByBrand = productRepositoryQdsl.findProductByBrand(s);
                 for (ProductDto product : productListByBrand) {
-                    if (OcrUtil.findMatchString(parsedBarcodeImg, product.getName())) {// 브랜드는 db에 있지만 읽어낸 상품명이 db에 없을 수 도있음!
-                        productName = product.getName();
+//                    System.out.println("db의 상품명: "+ product.getName());
+                    for (String splitedOcrResult : OcrUtil.parseStringByNewline(ocrResult)) {
+//                        System.out.println("개행으로 구분된 ocr결과: "+ splitedOcrResult.strip());
+                        if (OcrUtil.findMatchString(splitedOcrResult, giftishow) ||
+                                OcrUtil.findMatchString(splitedOcrResult, giftishowHangul)) { // 기프티쇼의 경우
+                            if (OcrUtil.parseStringByColon(splitedOcrResult).strip().compareTo(product.getName()) == 0) {
+                                productName = product.getName();
+                            }
+                        }
+                        if (splitedOcrResult.strip().compareTo(product.getName().strip()) == 0) { // 카카오톡 선물하기의 경우
+                            productName = product.getName();
+                        }
                     }
                 }
             }
         }
-        LocalDate due = dateFormattingByString(parsedBarcodeImg, dueDate);
+        System.out.println("읽은 브랜드명:" + brandName);
+        System.out.println("읽은 상품명:" + productName);
 
-        return GifticonDto.builder().due(due).productName(productName).brandName(brandName).build();
-
+        return GifticonDto.builder().brandName(brandName).productName(productName).build();
     }
 
 
@@ -264,14 +276,17 @@ public class OcrService {
 
     }
 
-    private LocalDate dateFormattingByString(String parsedBarcodeImg, String dueDate) {
-        if (OcrUtil.dateParserTilde(parsedBarcodeImg) != null) {
-            dueDate = OcrUtil.dateParserTilde(parsedBarcodeImg);
+    private LocalDate dateFormattingByString(String ocrResult) {
+        String capturedDueDate;
+        String dueDate;
+        if (OcrUtil.dateParserTilde(ocrResult) != null) {
+            capturedDueDate = OcrUtil.dateParserTilde(ocrResult);
+            dueDate = OcrUtil.dateReplaceFromSpotToHyphen(capturedDueDate);
         } else {
-            dueDate = OcrUtil.dateParserHangul(parsedBarcodeImg);
+            capturedDueDate = OcrUtil.dateParserHangul(ocrResult);
+            dueDate = OcrUtil.dateReplaceFromHangulToHyphen(capturedDueDate);
         }
-        dueDate = OcrUtil.dateReplaceFromSpotToHyphen(dueDate);
-        LocalDate due = OcrUtil.localDateFormatter(dueDate);
+        LocalDate due = OcrUtil.localDateFormatterHyphen(dueDate);
         return due;
     }
 
