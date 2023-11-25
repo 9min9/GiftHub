@@ -60,5 +60,14 @@ public class GifticonImageService {
         return gifticonImageDto;
     }
 
+    // TODO : url로 서버에 바로 저장하는 메서드
+    @Transactional
+    public GifticonImageDto saveImageByUrl(String imageUrl){
+        String originalName = "";
+        GifticonImage image = new GifticonImage(originalName);
+
+        return gifticonImageRepository.save(image).toGifticonImageDto();
+    }
+
 
 }
