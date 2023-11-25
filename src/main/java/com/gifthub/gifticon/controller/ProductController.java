@@ -63,17 +63,19 @@ public class ProductController {
                 Row row = worksheet.getRow(rowindx);
                 if(row != null){ // 행이 비어있지 않다면
                     ProductDto productDto = new ProductDto();
-                    productDto.setId((long) row.getCell(0).getNumericCellValue());
-                    productDto.setBrandName(row.getCell(1).getStringCellValue());
-                    productDto.setName(row.getCell(2).getStringCellValue());
-                    productDto.setPrice((long) row.getCell(4).getNumericCellValue());
+//                    productDto.setId((long) row.getCell(0).getNumericCellValue());  // id
+                    productDto.setBrandName(row.getCell(1).getStringCellValue());   // 브랜드명
+                    productDto.setName(row.getCell(2).getStringCellValue());        // 상품명
+                    productDto.setPrice((long) row.getCell(4).getNumericCellValue());   // 판매가격
+                    productDto.setCategory(row.getCell(5).getStringCellValue());        // 카테고리
 
                     productList.add(productDto);
 
                 }
 
             }
-            productService.saveAll(productList);
+            Long countLine = productService.saveAll(productList);
+            System.out.println("총 라인수 :" + countLine);
 
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -91,6 +93,7 @@ public class ProductController {
             System.out.println(productDto.getBrandName());
             System.out.println(productDto.getPrice());
             System.out.println(productDto.getId());
+            System.out.println(productDto.getCategory());
         }
     }
 

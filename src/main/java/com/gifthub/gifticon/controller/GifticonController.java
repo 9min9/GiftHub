@@ -62,9 +62,6 @@ public class GifticonController {
 
 
             GifticonDto gifticonDto = ocrService.readOcrMultipartToGifticonDto(imageFile.getOriginalFilename()); // ? originalName?
-            System.out.println(gifticonDto.getProductName());
-            System.out.println(gifticonDto.getDue());
-            System.out.println(gifticonDto.getBrandName());
 //            GifticonImageDto imageDto = gifticonImageService.saveImage()
         } catch (Exception e){
             return ResponseEntity.badRequest().build();

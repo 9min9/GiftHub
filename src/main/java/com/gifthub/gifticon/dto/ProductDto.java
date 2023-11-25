@@ -17,6 +17,8 @@ public class ProductDto {
     private Long price;
     private String brandName;
 
+    private String category;
+
 
     public Product toProductEntity() {
         return Product.builder()
@@ -24,15 +26,17 @@ public class ProductDto {
                 .name(this.name)
                 .price(this.price)
                 .brandName(this.brandName)
+                .category(this.category)
                 .build();
     }
 
 
     @QueryProjection
-    public ProductDto(Long id, String name, Long price, String brandName) {
+    public ProductDto(Long id, String name, Long price, String brandName, String category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.brandName = brandName;
+        this.category = category;
     }
 }

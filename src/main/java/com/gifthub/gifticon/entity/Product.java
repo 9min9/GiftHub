@@ -30,12 +30,15 @@ public class Product extends BaseTimeEntity {
     private Long price;
     private String brandName;
 
+    private String category;
+
     public ProductDto toProductDto() {
         return ProductDto.builder()
                 .id(this.id)
                 .name(this.name)
                 .price(this.price)
                 .brandName(this.brandName)
+                .category(this.category)
                 .build();
     }
 
