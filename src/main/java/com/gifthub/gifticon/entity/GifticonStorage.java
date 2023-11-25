@@ -4,10 +4,7 @@ import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.global.BaseTimeEntity;
 import com.gifthub.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
@@ -15,9 +12,10 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @SuperBuilder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "gifticon_storage")
+@Setter
 public class GifticonStorage extends BaseTimeEntity {
 
     @Id
@@ -42,15 +40,6 @@ public class GifticonStorage extends BaseTimeEntity {
 
 //    private GifticonStorageStatus status;
 
-    public GifticonDto toGifticonDto() {
-        return GifticonDto.builder()
-                .user(this.user.toDto())
-                .barcode(this.barcode)
-                .due(this.due)
-                .brandName(this.brandName)
-                .productName(this.productName)
-                .build();
-    }
 
 
 }

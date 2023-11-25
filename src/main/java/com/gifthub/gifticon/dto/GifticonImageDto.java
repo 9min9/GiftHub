@@ -14,7 +14,6 @@ public class GifticonImageDto {
 
 
     public GifticonImage toEntity() {
-
         return GifticonImage.builder()
                 .id(this.id)
                 .accessUrl(this.accessUrl)

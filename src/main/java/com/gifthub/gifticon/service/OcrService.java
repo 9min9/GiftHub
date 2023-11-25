@@ -36,7 +36,6 @@ public class OcrService {
     private String giftishow = "giftishow";
     private String giftishowHangul = "기프티쇼";
 
-    private final ProductRepository productRepository;
     private final ProductRepositoryImpl productRepositoryQdsl;
 
     public GifticonDto readOcrUrlToGifticonDto(String barcodeurl) {
@@ -51,7 +50,9 @@ public class OcrService {
         LocalDate due = dateFormattingByString(ocrResult);
 
         System.out.println("읽은 유효기간:" + due);
-        return gifticonDto.builder().due(due).build();
+//        return gifticonDto.builder().due(due).build();
+        gifticonDto.setDue(due);
+        return gifticonDto;
 
     }
 
@@ -66,7 +67,9 @@ public class OcrService {
         LocalDate due = dateFormattingByString(ocrResult);
         System.out.println("읽은 유효기간: " + due);
 
-        return gifticonDto.builder().due(due).build();
+//        return gifticonDto.builder().due(due).build();
+        gifticonDto.setDue(due);
+        return gifticonDto;
 
     }
 

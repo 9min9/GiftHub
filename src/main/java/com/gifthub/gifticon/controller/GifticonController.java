@@ -4,6 +4,7 @@ import com.gifthub.chatbot.util.JsonConverter;
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.GifticonImageDto;
 import com.gifthub.gifticon.dto.ImageSaveDto;
+import com.gifthub.gifticon.entity.GifticonStorage;
 import com.gifthub.gifticon.service.GifticonImageService;
 import com.gifthub.gifticon.service.GifticonService;
 import com.gifthub.gifticon.service.GifticonStorageService;
@@ -41,9 +42,12 @@ public class GifticonController {
                 String barcode = GifticonService.readBarcode(barcodeUrl);
                 GifticonDto gifticonDto = ocrService.readOcrUrlToGifticonDto(barcodeUrl);
                 // TODO : 이미지 저장
-//                GifticonImageDto imageDto = gifticonImageService.saveImage(barcodeUrl);
-                //todo : save DB
-//                gifticonTempService.saveStorage(gifticonDto, imageDto);
+                GifticonImageDto imageDto = gifticonImageService.saveImageByUrl(barcodeUrl);
+                // TODO : save DB
+                GifticonStorage gifticonStorage = gifticonTempService.saveTempStorage(gifticonDto, imageDto);
+                gifticonStorage.setBarcode(barcode);
+
+                // TODO : setUser는 현재 로그인한 사람
 
 
             }
@@ -61,25 +65,24 @@ public class GifticonController {
         try {
 //            System.out.println(imageFile.getOriginalFilename());
 
-            GifticonDto gifticonDto = ocrService.readOcrMultipartToGifticonDto(imageFile.getOriginalFilename()); // ? originalName?
-            System.out.println("controller단에서 gifticonDto:" + gifticonDto.getProductName());
+            GifticonDto gifticonDto = ocrService.readOcrMultipartToGifticonDto(imageFile.getOriginalFilename()); // 파일
+            GifticonImageDto imageDto = gifticonImageService.saveImage(imageFile); // 이미지 서버에 저장 및 db에 경로저장
 
-            GifticonImageDto imageDto = gifticonImageService.saveImage(imageFile);
-            System.out.println("Controller / imageDto: " + imageDto.getId());
+            GifticonStorage storage = gifticonTempService.saveTempStorage(gifticonDto, imageDto);
+//            System.out.println("controller단에서 tempGifticonf: "+ tempId2);
+
+            storage.setBarcode(GifticonService.readBarcode(imageDto.getAccessUrl()));
+
+            // TODO : db에 있다면 price 가져오기
+
+            // TODO : setUser 현재 로그인한 사람
 
 
 
-            // TODO : 임시 저장소에 저장
-//            Long tempId = gifticonTempService.saveStorage(gifticonDto, imageDto);
-//            System.out.println("controller단에서 tempGifticon: " + tempId);
-            //
-            Long tempId2 = gifticonTempService.saveTempStorage(gifticonDto, imageDto);
-            System.out.println("controller단에서 tempGifticonf: "+ tempId2);
 
-            GifticonDto gifticonDto1 = ocrService.readOcrUrlToGifticonDto(imageDto.getAccessUrl());
-            System.out.println("controller / url로 GifticonDto : " + gifticonDto1.getProductName());
+//            GifticonDto gifticonDto1 = ocrService.readOcrUrlToGifticonDto(imageDto.getAccessUrl()); // 직전에 서버에 저장한 url로 읽기
+//            System.out.println("controller / url로 GifticonDto : " + gifticonDto1.getProductName());
 
-            // TODO : 그 다음에는?
 
         } catch (Exception e){
             return ResponseEntity.badRequest().build(); // 임시저장소에 저장이 안됐을때 에러 분리

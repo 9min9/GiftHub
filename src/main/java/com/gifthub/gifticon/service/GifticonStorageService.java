@@ -13,19 +13,17 @@ public class GifticonStorageService {
 
     private final GifticonStorageRepository gifticonStorageRepository;
 
-    public Long saveStorage(GifticonDto gifticonDto, GifticonImageDto imageDto) {
 
-        GifticonStorage saveStorage = gifticonStorageRepository.save(gifticonDto.toStorageEntity(imageDto));
-        return saveStorage.getId();
-    }
+    public GifticonStorage saveTempStorage(GifticonDto gifticonDto, GifticonImageDto imageDto){
 
-    public Long saveTempStorage(GifticonDto gifticonDto, GifticonImageDto imageDto){
-//        GifticonStorage tempStorage = GifticonStorage.builder()
-//                .productName(gifticonDto.getProductName())
-//                .gifticonImage(imageDto.toEntity())
-//                .
-        GifticonStorage tempStorage = gifticonStorageRepository.save(gifticonDto.toStorageEntity(imageDto));
-        return tempStorage.getId();
+        GifticonStorage storage = new GifticonStorage();
+        storage.setDue(gifticonDto.getDue());
+        storage.setGifticonImage(imageDto.toEntity());
+        storage.setBrandName(gifticonDto.getBrandName());
+        storage.setProductName(gifticonDto.getProductName());
+
+        GifticonStorage tempStorage = gifticonStorageRepository.save(storage);
+        return tempStorage;
     }
 
 }
