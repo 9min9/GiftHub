@@ -349,7 +349,11 @@
 <script src="/js/gifticon/storage/list.js"></script>
 <script src="/js/gifticon/add.js"></script>
 <script src="/js/gifticon/kakao-chatbot.js"></script>
-<script src="/js/gifticon/file-add.js"></script>
+<script src="/js/gifticon/file-add.js" type="text/javascript">
+    window.onload = () => {
+        loadMyLists();
+    }
+</script>
 
 <th:block th:replace="fragments/base/script :: script"></th:block>
 
