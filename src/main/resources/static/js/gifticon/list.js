@@ -19,7 +19,7 @@ function getPurchasingGifticon(page, size, type = "전체") {
 
 function print(jsonData) {
     for (let j of jsonData) {
-        gitfticon(j);
+        gifticon(j);
     }
 }
 
