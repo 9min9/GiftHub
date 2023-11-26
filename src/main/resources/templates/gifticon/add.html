@@ -40,13 +40,13 @@
             <div class="section__content">
                 <div class="container">
                     <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div id="gifticon-list-div" class="col-lg-12 col-md-12 col-sm-12">
 
                             <div class="w-r u-s-m-b-30">
                                 <div class="w-r__container">
                                     <div class="w-r__wrap-1">
                                         <div class="w-r__img-wrap">
-                                            <img class="u-img-fluid" src="images/product/electronic/product3.jpg" alt=""></div>
+                                            <img class="u-img-fluid" src="/images/giftibot.jpeg" alt=""></div>
 
                                         <div class="w-r__info">
                                             <span class="w-r__name">
@@ -65,46 +65,40 @@
                             </div>
 
                             <!--====== Add Gifticon ======-->
-                            <div class="w-r u-s-m-b-30">
-                                <div class="w-r__container">
-                                    <div class="w-r__wrap-1">
-                                        <div class="w-r__img-wrap">
+                            <div id="row-gitfticon-div" class="w-r u-s-m-b-30">
+                                <div id="container-gitfticon-div" class="w-r__container">
+                                    <div id="wrap-gifticon-div" class="w-r__wrap-1">
 
-                                            <img class="u-img-fluid" src="images/product/electronic/product3.jpg"
-                                                 alt=""></div>
-                                        <div class="w-r__info">
+                                        <div id="wrap-image-div" class="w-r__img-wrap">
+                                            <img id="gitfticon-img-pk" class="w-r__img-wrap u-img-fluid" src="https://myawsimgbucket.s3.ap-northeast-2.amazonaws.com/5de365d9-09bf-47ce-adad-610e34797e4a..jpg" alt="기프티콘 이미지?">
+                                        </div>
 
-                                            <div class="gl-inline">
-                                                <span class="w-r__category"><a>브랜드</a></span>
-                                                <span class="u-s-m-x-10" style="color: red">!error</span>
+                                        <div id="info-div" class="w-r__info">
+                                            <div id="row-brand-div" class="gl-inline">
+                                                <span id="gifticon-brand-pk" class="w-r__category"><a>브랜드</a></span>
+                                                <span id="gifticon-brand-error-pk" class="u-s-m-x-10" style="color: red">!error</span>
                                             </div>
 
-                                            <div class="gl-inline">
-                                                <span class="w-r__name"><a>제품 이름</a></span>
-                                                <span class="u-s-m-x-10" style="color: red">!error</span>
+                                            <div id="row-product-div" class="gl-inline">
+                                                <span id="gifticon-product-pk" class="w-r__name"><a>제품 이름</a></span>
+                                                <span id="gifticon-product-error-pk" class="u-s-m-x-10" style="color: red">!error</span>
                                             </div>
 
-                                            <div class="gl-inline">
-                                                <span class="w-r__wrap-1">바코드 번호</span>
-                                                <span class="u-s-m-x-10" style="color: red">!error</span>
+                                            <div id="row-barcode-div" class="gl-inline">
+                                                <span id="gifticon-barcode-pk" class="w-r__wrap-1">바코드 번호</span>
+                                                <span id="gifticon-barcode-error-pk" class="u-s-m-x-10" style="color: red">!error</span>
                                             </div>
 
-                                            <div class="gl-inline">
-                                                <span class="w-r__price">기간</span>
-                                                <span class="u-s-m-x-10" style="color: red">!error</span>
-                                            </div>
-
-                                            <div class="gl-inline">
-                                                <span class="w-r__wrap-1">가격</span>
-                                                <span class="u-s-m-x-10" style="color: red">!error</span>
+                                            <div id="row-due-div" class="gl-inline">
+                                                <span id="gifticon-due-pk" class="w-r__price">기간</span>
+                                                <span id="gifticon-due-error-pk" class="u-s-m-x-10" style="color: red">!error</span>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="w-r__wrap-2">
-                                        <a class="w-r__link btn--e-transparent-platinum-b-2" href="#">상세 보기</a>
-                                        <a class="w-r__link btn--e-transparent-platinum-b-2" href="#">삭제</a>
-                                        <a class="w-r__link btn--e-brand-b-2" data-modal="modal" data-modal-id="#add-to-cart">등록</a>
+                                    <div id="row-btn-div" class="w-r__wrap-2">
+                                        <a id="del-btn-pk" class="w-r__link btn--e-transparent-platinum-b-2" href="#">삭제</a>
+                                        <a id="check-btn-pk" class="w-r__link btn--e-brand-b-2" data-modal="modal" data-modal-id="#newsletter-modal">등록</a>
                                     </div>
 
                                 </div>
@@ -188,7 +182,7 @@
                                     <span>기프티콘 올리기</span></div>
                                 <div class="success__img-wrap">
 
-                                    <img class="u-img-fluid" src="images/product/electronic/product1.jpg" alt=""></div>
+                                    <img class="u-img-fluid" src="/images/giftibot.jpeg" alt=""></div>
                                 <div class="success__info-wrap">
                                     <span class="success__price">최대 10장까지 올릴 수 있습니다~</span></div>
                             </div>
@@ -216,14 +210,152 @@
             </div>
         </div>
     </div>
-    <!--====== End - Add to Cart Modal ======-->
+
+
+    <div class="modal fade new-l" id="newsletter-modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal--shadow">
+
+                <button class="btn new-l__dismiss fas fa-times" type="button" data-dismiss="modal"></button>
+                <div class="modal-body">
+                    <div class="row u-s-m-x-0">
+                        <div class="col-lg-6 new-l__col-1 u-s-p-x-0">
+                            <a class="new-l__img-wrap u-d-block" href="">
+                                <img class="u-img-fluid u-d-block" src="https://myawsimgbucket.s3.ap-northeast-2.amazonaws.com/5de365d9-09bf-47ce-adad-610e34797e4a..jpg" alt="기프티콘 이미지">
+                            </a>
+                        </div>
+
+                        <div class="col-lg-6 new-l__col-2">
+                            <div class="new-l__section u-s-m-t-30">
+                                <div class="u-s-m-b-8 new-l--center">
+                                    <h3 class="new-l__h3">기프티콘 등록하기</h3>
+                                </div>
+                                <div class="u-s-m-b-30 new-l--center">
+                                    <p class="new-l__p1">기프티콘 정보를 확인해주세요</p>
+                                </div>
+                                <form id="gifticon-add-form" class="new-l__form">
+                                    <div class="u-s-m-b-5">
+                                        <label class="gl-label">상품 이름</label>
+                                        <input id="product-modal-input" name="productName" class="news-l__input" type="text" placeholder="상품 이름을 입력해주세요.">
+                                    </div>
+
+                                    <div id="error-product-div" class="u-s-m-b-10">
+                                        <label id="error-product-modal-label" class="gl-label" style="color: red">상품 이름을 입력해주세요</label>
+                                    </div>
+
+                                    <div class="u-s-m-b-5">
+                                        <label class="gl-label">브랜드 이름</label>
+                                        <input id="brand-modal-input" name="brandName" class="news-l__input" type="text" placeholder="브랜드 이름을 입력해주세요.">
+                                    </div>
+
+                                    <div id="error-brand-div" class="u-s-m-b-10">
+                                        <label id="error-brand-modal-label" class="gl-label" style="color: red">브랜드 이름을 입력해주세요</label>
+                                    </div>
+
+                                    <div class="u-s-m-b-5">
+                                        <label class="gl-label">유효 기간</label>
+                                        <input id="due-modal-input" name="due" class="news-l__input" type="text" placeholder="유효기간을 입력해주세요.">
+                                    </div>
+
+                                    <div id="error-due-div" class="u-s-m-b-10">
+                                        <label id="error-due-modal-label" class="gl-label" style="color: red">유효기간을 입력해주세요</label>
+                                    </div>
+
+                                    <div class="u-s-m-b-5">
+                                        <label class="gl-label">바코드 번호</label>
+                                        <input id="barcode-modal-input" name="barcode" class="news-l__input" type="text" placeholder="바코드 번호를 입력해주세요">
+                                    </div>
+
+                                    <div id="error-barcode-div" class="u-s-m-b-10">
+                                        <label id="error-barcode-modal-label" class="gl-label" style="color: red">바코드 번호를 입력해주세요</label>
+                                    </div>
+
+                                    <div class="u-s-m-b-15">
+                                        <button id="gifticon-add-modal-btn" class="btn btn--e-brand-b-2" type="submit">등록</button>
+                                    </div>
+                                </form>
+
+<!--                                <div class="u-s-m-b-15 new-l&#45;&#45;center">-->
+<!--                                    <p class="new-l__p2">By Signing up, you agree to receive Reshop offers,<br />promotions and other commercial messages. You may unsubscribe at any time.</p>-->
+<!--                                </div>-->
+<!--                                -->
+<!--                                <div class="u-s-m-b-15 new-l&#45;&#45;center">-->
+<!--                                    <a class="new-l__link" data-dismiss="modal">No Thanks</a>-->
+<!--                                </div>-->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<!--    <div class="modal fade new-l" id="gifticon-detail-modal">-->
+<!--        <div class="modal-dialog modal-dialog-centered">-->
+<!--            <div class="modal-content modal&#45;&#45;shadow">-->
+
+<!--                <button class="btn new-l__dismiss fas fa-times" type="button" data-dismiss="modal"></button>-->
+<!--                <div class="modal-body">-->
+<!--                    <div class="row u-s-m-x-0">-->
+<!--                        <div class="col-lg-6 new-l__col-1 u-s-p-x-0">-->
+
+<!--                            <a class="new-l__img-wrap u-d-block" href="shop-side-version-2.html">-->
+
+<!--                                <img class="u-img-fluid u-d-block" src="images/newsletter/newsletter.jpg" alt=""></a>-->
+<!--                        </div>-->
+<!--                        <div class="col-lg-6 new-l__col-2">-->
+<!--                            <div class="new-l__section u-s-m-t-30">-->
+<!--                                <div class="u-s-m-b-8 new-l&#45;&#45;center">-->
+<!--                                    <h3 class="new-l__h3">Newsletter</h3>-->
+<!--                                </div>-->
+<!--                                <div class="u-s-m-b-30 new-l&#45;&#45;center">-->
+<!--                                    <p class="new-l__p1">Sign up for emails to get the scoop on new arrivals, special-->
+<!--                                        sales and more.</p>-->
+<!--                                </div>-->
+<!--                                <form class="new-l__form">-->
+<!--                                    <div class="u-s-m-b-15">-->
+
+<!--                                        <input class="news-l__input" type="text" placeholder="E-mail Address"></div>-->
+<!--                                    <div class="u-s-m-b-15">-->
+
+<!--                                        <button class="btn btn&#45;&#45;e-brand-b-2" type="submit">Sign up!</button>-->
+<!--                                    </div>-->
+<!--                                </form>-->
+<!--                                <div class="u-s-m-b-15 new-l&#45;&#45;center">-->
+<!--                                    <p class="new-l__p2">By Signing up, you agree to receive Reshop offers,<br/>promotions-->
+<!--                                        and other commercial messages. You may unsubscribe at any time.</p>-->
+<!--                                </div>-->
+<!--                                <div class="u-s-m-b-15 new-l&#45;&#45;center">-->
+
+<!--                                    <a class="new-l__link" data-dismiss="modal">No Thanks</a></div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
     <!--====== End - Modal Section ======-->
+
 </div>
 <!--====== End - Main App ======-->
 
-<th:block th:replace="fragments/base/script :: script"></th:block>
+
+<!--====== Vendor Js ======-->
+<script src="/js/vendor.js"></script>
+<script src="/js/gifticon/storage/list.js"></script>
+<script src="/js/gifticon/add.js"></script>
 <script src="/js/gifticon/kakao-chatbot.js"></script>
-<script src="/js/gifticon/file-add.js"></script>
+<script src="/js/gifticon/file-add.js" type="text/javascript">
+    window.onload = () => {
+        loadMyLists();
+    }
+</script>
+
+<th:block th:replace="fragments/base/script :: script"></th:block>
 
 </body>
 </html>
