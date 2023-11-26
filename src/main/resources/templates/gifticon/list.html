@@ -69,12 +69,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-12">
-                            <div class="load-more">
-
-                                <button class="btn btn--e-brand" id="load-more-btn" data-page="1" type="button">Load More</button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -127,14 +121,6 @@
         getPurchasingGifticon([[${param.page}]], [[${param.size}]]);
 
         setProductSelectorEvent();
-
-        document.querySelector("#load-more-btn").addEventListener("click", function(event) {
-            let page = event.target.dataset.page;
-
-            getPurchasingGifticon(page, [[${param.size}]]);
-
-            event.target.dataset.page++;
-        });
 
         const is = new IntersectionObserver((entries, observer) => {
             let page = 0;

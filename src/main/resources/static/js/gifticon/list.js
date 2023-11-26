@@ -1,4 +1,4 @@
-function getPurchasingGifticon(page, size, type = "") {
+function getPurchasingGifticon(page, size, type = "전체") {
     page = page || 1;
     size = size || 10;
 
@@ -11,7 +11,7 @@ function getPurchasingGifticon(page, size, type = "") {
         },
         success: function(result) {
             if (result.content.length != 0) {
-                gifticon(result.content);
+                print(result.content);
             }
         }
     });
