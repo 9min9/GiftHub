@@ -10,16 +10,21 @@ import com.gifthub.gifticon.service.GifticonImageService;
 import com.gifthub.gifticon.service.GifticonService;
 import com.gifthub.gifticon.service.GifticonStorageService;
 import com.gifthub.gifticon.service.OcrService;
+import com.gifthub.gifticon.util.GifticonImageUtil;
+import com.gifthub.user.UserJwtTokenProvider;
+import com.gifthub.user.service.UserService;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +38,9 @@ public class GifticonController {
 
     private final GifticonService gifticonService;
     private final OcrService ocrService;
+    private final UserService userService;
+
+    private final UserJwtTokenProvider userJwtTokenProvider;
 
 
     @PostMapping("/kakao/chatbot/add")
@@ -63,11 +71,14 @@ public class GifticonController {
 
     @PostMapping("/gifticon/add") // MultipartType으로 받는다 (1개)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> addGifticonByFile(@RequestPart MultipartFile imageFile) {
+    public ResponseEntity<Object> addGifticonByFile(@RequestPart MultipartFile imageFile,
+                                                    @RequestHeader HttpHeaders headers) {
+        File file = null;
         try {
 //            System.out.println(imageFile.getOriginalFilename());
+            file = GifticonImageUtil.convert(imageFile);
 
-            GifticonDto gifticonDto = ocrService.readOcrMultipartToGifticonDto(imageFile.getOriginalFilename()); // 파일
+            GifticonDto gifticonDto = ocrService.readOcrMultipartToGifticonDto(file); // 파일
             GifticonImageDto imageDto = gifticonImageService.saveImage(imageFile); // 이미지 서버에 저장 및 db에 경로저장
 
             GifticonStorage storage = gifticonTempService.saveTempStorage(gifticonDto, imageDto);
@@ -75,15 +86,16 @@ public class GifticonController {
 
             storage.setBarcode(GifticonService.readBarcode(imageDto.getAccessUrl()));
 
-            // TODO : db에 있다면 price 가져오기
             // TODO : setUser 현재 로그인한 사람
+            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
+
+            storage.setUser(userService.getUserById(userId).toEntity());
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
 
-//            GifticonDto gifticonDto1 = ocrService.readOcrUrlToGifticonDto(imageDto.getAccessUrl()); // 직전에 서버에 저장한 url로 읽기
-//            System.out.println("controller / url로 GifticonDto : " + gifticonDto1.getProductName());
-
+        } finally {
+            file.delete();
         }
 
         return ResponseEntity.ok().build();
@@ -109,17 +121,6 @@ public class GifticonController {
         GifticonService.writeBarcode(barcode, outputStream);
     }
 
-
-    @GetMapping("/test/add")
-    public ResponseEntity<Object> addGifticonTest() {
-        // 이미지 파일넣기
-        String Filename = "KakaoTalk_20231114_101803985_02.jpg";
-        GifticonDto gifticonDto1 = ocrService.readOcrMultipartToGifticonDto(Filename);
-//        System.out.println(gifticonDto1.getBrandName());
-//        System.out.println(gifticonDto1.getDue());
-//        System.out.println(gifticonDto1.getProductName());
-        return null;
-    }
 
     @GetMapping("/gifticons/{type}")
     public ResponseEntity<Object> gifticons(Pageable pageable, @PathVariable("type") String type) {

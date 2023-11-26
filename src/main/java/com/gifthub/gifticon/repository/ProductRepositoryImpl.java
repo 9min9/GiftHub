@@ -16,6 +16,7 @@ public class ProductRepositoryImpl implements ProductRepositorySupport {
 
 private final JPAQueryFactory queryFactory;
 
+@Override
 public List<String> findAllBrandName(){
     return queryFactory
             .select(product.brandName)
