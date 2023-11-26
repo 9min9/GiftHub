@@ -4,6 +4,7 @@ import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.ProductDto;
 import com.gifthub.gifticon.repository.ProductRepository;
 import com.gifthub.gifticon.repository.ProductRepositoryImpl;
+import com.gifthub.gifticon.util.GifticonImageUtil;
 import com.gifthub.gifticon.util.OcrUtil;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
@@ -12,6 +13,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -30,8 +32,6 @@ public class OcrService {
 
     @Value("${ocrAPIURL}")
     private String ocrAPIURL;
-
-    private String imgTestPath = "C:/OcrPractice/jpg/";
 
     private String giftishow = "giftishow";
     private String giftishowHangul = "기프티쇼";
@@ -56,9 +56,9 @@ public class OcrService {
 
     }
 
-    public GifticonDto readOcrMultipartToGifticonDto(String imgFile) {
+    public GifticonDto readOcrMultipartToGifticonDto(File file) {
         List<String> brandNameList = productRepository.findAllBrandName();
-        String ocrResult = readOcrMultipart(imgFile);
+        String ocrResult = readOcrMultipart(file);
 
         System.out.println("읽은 Ocr결과:" + ocrResult);
 
@@ -161,7 +161,7 @@ public class OcrService {
         return null;
     }
 
-    private String readOcrMultipart(String imageFile) {
+    private String readOcrMultipart(File file) {
         try {
             URL url = new URL(ocrAPIURL);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -189,7 +189,7 @@ public class OcrService {
             con.connect();
             DataOutputStream wr = new DataOutputStream(con.getOutputStream());
             long start = System.currentTimeMillis();
-            File file = new File(imgTestPath + imageFile);
+
             writeMultiPart(wr, postParams, file, boundary);
             wr.close();
 
@@ -208,10 +208,11 @@ public class OcrService {
             br.close();
 
             return parseOcr(String.valueOf(response));
-        } catch (Exception e) {
-            System.out.println(e);
+        } catch (IOException e){
+            throw new RuntimeException();
+        } catch (NullPointerException e){
+            throw new IllegalArgumentException("파일이 존재하지 않습니다");
         }
-        return null;
     }
 
     private void writeMultiPart(OutputStream out, String jsonMessage, File file, String boundary) throws
@@ -279,6 +280,7 @@ public class OcrService {
 
     }
 
+    // TODO : 유효기간 자체가 null이거나 아예 못읽는 경우를 못잡음
     private LocalDate dateFormattingByString(String ocrResult) {
         String capturedDueDate;
         String dueDate;

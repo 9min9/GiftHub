@@ -61,7 +61,7 @@ public class OcrUtil {
             return LocalDate.parse(input, DateTimeFormatter.ofPattern("yyyy-MM-dd").withLocale(Locale.KOREA));
 
         } catch (DateTimeParseException e) {
-//            e.printStackTrace();
+            e.printStackTrace();
             System.out.println("yyyyMMdd 파싱에러");
             return null;
         }
@@ -73,7 +73,7 @@ public class OcrUtil {
             return matcher.find() ? matcher.group(1) : null;
 
         } catch (PatternSyntaxException e) {
-//            e.printStackTrace();
+            e.printStackTrace();
             System.out.println("~ 파싱 에러");
             return null;
         }
@@ -85,7 +85,7 @@ public class OcrUtil {
             return matcher.find() ? matcher.group(1) : null;
 
         } catch (PatternSyntaxException e) {
-//            e.printStackTrace();
+            e.printStackTrace();
             System.out.println("regex년월일 파싱 에러");
             return null;
         }
