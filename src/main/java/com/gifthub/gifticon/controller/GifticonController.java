@@ -3,8 +3,6 @@ package com.gifthub.gifticon.controller;
 import com.gifthub.chatbot.util.JsonConverter;
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.GifticonImageDto;
-import com.gifthub.gifticon.dto.GifticonQueryDto;
-import com.gifthub.gifticon.entity.GifticonTempStorage;
 import com.gifthub.gifticon.dto.ImageSaveDto;
 import com.gifthub.gifticon.entity.GifticonStorage;
 
@@ -15,7 +13,6 @@ import com.gifthub.gifticon.service.OcrService;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 
@@ -55,7 +52,6 @@ public class GifticonController {
 
                 // TODO : setUser는 현재 로그인한 사람
 
-
             }
 
         } catch (Exception e) {     //todo : url이 barcode가 아닌 경우 exception 처리하기
@@ -80,15 +76,8 @@ public class GifticonController {
             storage.setBarcode(GifticonService.readBarcode(imageDto.getAccessUrl()));
 
             // TODO : db에 있다면 price 가져오기
-
             // TODO : setUser 현재 로그인한 사람
 
-
-
-
-
-            GifticonDto gifticonDto = ocrService.readOcrMultipartToGifticonDto(imageFile.getOriginalFilename()); // ? originalName?
-//            GifticonImageDto imageDto = gifticonImageService.saveImage()
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
 
@@ -136,14 +125,5 @@ public class GifticonController {
     public ResponseEntity<Object> gifticons(Pageable pageable, @PathVariable("type") String type) {
         return ResponseEntity.ok(gifticonService.getPurchasingGifticon(pageable, type));
     }
-
-
-    // TODO : 서버와 DB에서 삭제
-//    @DeleteMapping("/image/delete")
-//    @ResponseStatus(HttpStatus.OK)
-//    public void deleteImage(@RequestParam("name") String fileName){
-//        gifticonImageService
-//    }
-
 
 }
