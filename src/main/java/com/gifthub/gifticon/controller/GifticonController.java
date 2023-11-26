@@ -11,7 +11,9 @@ import com.gifthub.gifticon.service.GifticonService;
 import com.gifthub.gifticon.service.GifticonStorageService;
 import com.gifthub.gifticon.service.OcrService;
 import com.gifthub.gifticon.util.GifticonImageUtil;
+import com.gifthub.gifticon.util.JsonMapper;
 import com.gifthub.user.UserJwtTokenProvider;
+import com.gifthub.user.entity.User;
 import com.gifthub.user.service.UserService;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
@@ -44,7 +46,8 @@ public class GifticonController {
 
 
     @PostMapping("/kakao/chatbot/add")
-    public ResponseEntity<Object> addGificonByKakao(@RequestBody Map<Object, Object> gifticon) {
+    public ResponseEntity<Object> addGificonByKakao(@RequestBody Map<Object, Object> gifticon,
+                                                    @RequestHeader HttpHeaders headers) {
 
         try {
             List<String> barcodeUrlList = JsonConverter.kakaoChatbotConverter(gifticon);
@@ -52,13 +55,14 @@ public class GifticonController {
             for (String barcodeUrl : barcodeUrlList) {
                 String barcode = GifticonService.readBarcode(barcodeUrl);
                 GifticonDto gifticonDto = ocrService.readOcrUrlToGifticonDto(barcodeUrl);
-                // TODO : 이미지 저장
                 GifticonImageDto imageDto = gifticonImageService.saveImageByUrl(barcodeUrl);
-                // TODO : save DB
-                GifticonStorage gifticonStorage = gifticonTempService.saveTempStorage(gifticonDto, imageDto);
-                gifticonStorage.setBarcode(barcode);
+                gifticonDto.setBarcode(barcode);
+                gifticonDto.setUser(userService.getUserById(userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0))));
 
-                // TODO : setUser는 현재 로그인한 사람
+                System.out.println(gifticonDto.getUser().getId());
+
+                GifticonStorage gifticonStorage = gifticonTempService.saveTempStorage(gifticonDto, imageDto);
+
 
             }
 
@@ -75,21 +79,18 @@ public class GifticonController {
                                                     @RequestHeader HttpHeaders headers) {
         File file = null;
         try {
-//            System.out.println(imageFile.getOriginalFilename());
             file = GifticonImageUtil.convert(imageFile);
 
             GifticonDto gifticonDto = ocrService.readOcrMultipartToGifticonDto(file); // 파일
             GifticonImageDto imageDto = gifticonImageService.saveImage(imageFile); // 이미지 서버에 저장 및 db에 경로저장
 
+            String barcode = GifticonService.readBarcode(imageDto.getAccessUrl());
+            gifticonDto.setBarcode(barcode);
+            gifticonDto.setUser(userService.getUserById(userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0))));
+
+//            System.out.println(gifticonDto.getUser().getId());
             GifticonStorage storage = gifticonTempService.saveTempStorage(gifticonDto, imageDto);
-//            System.out.println("controller단에서 tempGifticonf: "+ tempId2);
 
-            storage.setBarcode(GifticonService.readBarcode(imageDto.getAccessUrl()));
-
-            // TODO : setUser 현재 로그인한 사람
-            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
-
-            storage.setUser(userService.getUserById(userId).toEntity());
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -97,8 +98,9 @@ public class GifticonController {
         } finally {
             file.delete();
         }
-
         return ResponseEntity.ok().build();
+
+
     }
 
     @PostMapping("/gifticon/addMultiple") // MultipartType으로 받는다 (여러개)
@@ -125,6 +127,22 @@ public class GifticonController {
     @GetMapping("/gifticons/{type}")
     public ResponseEntity<Object> gifticons(Pageable pageable, @PathVariable("type") String type) {
         return ResponseEntity.ok(gifticonService.getPurchasingGifticon(pageable, type));
+    }
+
+    @PostMapping("/gifticon/storage/list")
+    public ResponseEntity<Object> getStorageList(@RequestHeader HttpHeaders headers) {
+        try{
+            User user = userService.getUserById(userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0))).toEntity();
+            List<GifticonStorage> storageList = gifticonTempService.getTempStorageList(user);
+
+            String jsonStr = JsonMapper.objectToJson(storageList);
+            return ResponseEntity.ok(jsonStr);
+
+        }catch (Exception e){
+            return ResponseEntity.badRequest().build();
+
+        }
+
     }
 
 }
