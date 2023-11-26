@@ -11,10 +11,13 @@ import com.gifthub.gifticon.service.GifticonService;
 import com.gifthub.gifticon.service.GifticonStorageService;
 import com.gifthub.gifticon.service.OcrService;
 import com.gifthub.gifticon.util.GifticonImageUtil;
+import com.gifthub.user.UserJwtTokenProvider;
+import com.gifthub.user.service.UserService;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
@@ -35,6 +38,9 @@ public class GifticonController {
 
     private final GifticonService gifticonService;
     private final OcrService ocrService;
+    private final UserService userService;
+
+    private final UserJwtTokenProvider userJwtTokenProvider;
 
 
     @PostMapping("/kakao/chatbot/add")
@@ -65,7 +71,8 @@ public class GifticonController {
 
     @PostMapping("/gifticon/add") // MultipartType으로 받는다 (1개)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> addGifticonByFile(@RequestPart MultipartFile imageFile) {
+    public ResponseEntity<Object> addGifticonByFile(@RequestPart MultipartFile imageFile,
+                                                    @RequestHeader HttpHeaders headers) {
         File file = null;
         try {
 //            System.out.println(imageFile.getOriginalFilename());
@@ -80,6 +87,9 @@ public class GifticonController {
             storage.setBarcode(GifticonService.readBarcode(imageDto.getAccessUrl()));
 
             // TODO : setUser 현재 로그인한 사람
+            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
+
+            storage.setUser(userService.getUserById(userId).toEntity());
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -110,7 +120,6 @@ public class GifticonController {
         }
         GifticonService.writeBarcode(barcode, outputStream);
     }
-
 
 
     @GetMapping("/gifticons/{type}")
