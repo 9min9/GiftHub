@@ -36,10 +36,10 @@ public class OcrService {
     private String giftishow = "giftishow";
     private String giftishowHangul = "기프티쇼";
 
-    private final ProductRepositoryImpl productRepositoryQdsl;
+    private final ProductRepository productRepository;
 
     public GifticonDto readOcrUrlToGifticonDto(String barcodeurl) {
-        List<String> brandNameList = productRepositoryQdsl.findAllBrandName();
+        List<String> brandNameList = productRepository.findAllBrandName();
         String ocrResult = readOcrUrl(barcodeurl);
 
         System.out.println("읽은 Ocr결과:" + ocrResult);
@@ -57,7 +57,7 @@ public class OcrService {
     }
 
     public GifticonDto readOcrMultipartToGifticonDto(String imgFile) {
-        List<String> brandNameList = productRepositoryQdsl.findAllBrandName();
+        List<String> brandNameList = productRepository.findAllBrandName();
         String ocrResult = readOcrMultipart(imgFile);
 
         System.out.println("읽은 Ocr결과:" + ocrResult);
@@ -80,7 +80,7 @@ public class OcrService {
         for (String s : brandNameList) {
             if (OcrUtil.findMatchString(ocrResult, s)) {
                 brandName = s;
-                List<ProductDto> productListByBrand = productRepositoryQdsl.findProductByBrand(s);
+                List<ProductDto> productListByBrand = productRepository.findProductByBrand(s);
                 for (ProductDto product : productListByBrand) {
 //                    System.out.println("db의 상품명: "+ product.getName());
                     for (String splitedOcrResult : OcrUtil.parseStringByNewline(ocrResult)) {
