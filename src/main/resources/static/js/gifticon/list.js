@@ -26,6 +26,12 @@ function print(jsonData) {
 function setProductSelectorEvent() {
     document.querySelectorAll(".product-selector").forEach((elem) => {
         elem.addEventListener("click", function(event) {
+            document.querySelectorAll(".product-selector-container").forEach(elem => {
+                elem.classList.remove("category-active");
+            });
+
+            event.target.parentNode.classList.add("category-active");
+
             document.querySelectorAll(".filter__item").forEach(function(elem) {
                 elem.remove();
             });
@@ -63,7 +69,7 @@ function createItemDiv() {
 }
 function createProductDiv() {
     let div = document.createElement('div');
-    div.setAttribute('class', 'product-o product-o--hover-on product-o--radius');
+    div.setAttribute('class', 'product-o product-o--hover-on product-o--radius gifticon-container');
     return div;
 }
 function createImageAndActionDiv() {

@@ -18,6 +18,10 @@
             cursor: pointer;
         }
 
+        .category-active .product-selector {
+            border: orangered 2px solid;
+        }
+
     </style>
 </head>
 <body class="config">
@@ -101,7 +105,7 @@
 <script src="/js/gifticon/product-selector.js"></script>
 <script th:inline="javascript">
     window.onload = function() {
-        createProductSpan("전체");
+        createProductSpan("전체", true);
         createProductSpan("카페");
         createProductSpan("베이커리/도넛/떡");
         createProductSpan("백화점/마트");
@@ -130,6 +134,18 @@
             getPurchasingGifticon(page, [[${param.size}]]);
 
             event.target.dataset.page++;
+        });
+
+        const is = new IntersectionObserver((entries, observer) => {
+            let page = 0;
+
+            if (!entry.isIntersecting) return;
+
+            let element = document.querySelector("#row-product-div:nth-last-child(6)");
+            observer.observe(element);
+            observer.unobserve(element);
+
+            getPurchasingGifticon(page++, [[${param.size}]], document.querySelector(".category-active").innerText);
         });
     }
 </script>
