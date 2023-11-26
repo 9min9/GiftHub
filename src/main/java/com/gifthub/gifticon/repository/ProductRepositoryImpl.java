@@ -23,6 +23,8 @@ public List<String> findAllBrandName(){
             .fetch();
 }
 
+// TODO : 상품명 -> 정가 ( TempStorage 임시 등록시 사용)
+
 @Override
 public List<ProductDto> findProductByBrand(String brand) {
     return queryFactory
