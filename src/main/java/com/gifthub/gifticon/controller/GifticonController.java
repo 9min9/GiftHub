@@ -3,8 +3,11 @@ package com.gifthub.gifticon.controller;
 import com.gifthub.chatbot.util.JsonConverter;
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.GifticonImageDto;
+import com.gifthub.gifticon.dto.GifticonQueryDto;
+import com.gifthub.gifticon.entity.GifticonTempStorage;
 import com.gifthub.gifticon.dto.ImageSaveDto;
 import com.gifthub.gifticon.entity.GifticonStorage;
+
 import com.gifthub.gifticon.service.GifticonImageService;
 import com.gifthub.gifticon.service.GifticonService;
 import com.gifthub.gifticon.service.GifticonStorageService;
@@ -12,7 +15,10 @@ import com.gifthub.gifticon.service.OcrService;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -80,12 +86,15 @@ public class GifticonController {
 
 
 
+
+            GifticonDto gifticonDto = ocrService.readOcrMultipartToGifticonDto(imageFile.getOriginalFilename()); // ? originalName?
+//            GifticonImageDto imageDto = gifticonImageService.saveImage()
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+
 //            GifticonDto gifticonDto1 = ocrService.readOcrUrlToGifticonDto(imageDto.getAccessUrl()); // 직전에 서버에 저장한 url로 읽기
 //            System.out.println("controller / url로 GifticonDto : " + gifticonDto1.getProductName());
 
-
-        } catch (Exception e){
-            return ResponseEntity.badRequest().build(); // 임시저장소에 저장이 안됐을때 에러 분리
         }
 
         return ResponseEntity.ok().build();
@@ -112,11 +121,29 @@ public class GifticonController {
     }
 
 
+    @GetMapping("/test/add")
+    public ResponseEntity<Object> addGifticonTest() {
+        // 이미지 파일넣기
+        String Filename = "KakaoTalk_20231114_101803985_02.jpg";
+        GifticonDto gifticonDto1 = ocrService.readOcrMultipartToGifticonDto(Filename);
+//        System.out.println(gifticonDto1.getBrandName());
+//        System.out.println(gifticonDto1.getDue());
+//        System.out.println(gifticonDto1.getProductName());
+        return null;
+    }
+
+    @GetMapping("/gifticons/{type}")
+    public ResponseEntity<Object> gifticons(Pageable pageable, @PathVariable("type") String type) {
+        return ResponseEntity.ok(gifticonService.getPurchasingGifticon(pageable, type));
+    }
+
+
     // TODO : 서버와 DB에서 삭제
 //    @DeleteMapping("/image/delete")
 //    @ResponseStatus(HttpStatus.OK)
 //    public void deleteImage(@RequestParam("name") String fileName){
 //        gifticonImageService
 //    }
+
 
 }

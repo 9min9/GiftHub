@@ -1,6 +1,7 @@
 package com.gifthub.gifticon.entity;
 
 import com.gifthub.gifticon.dto.GifticonDto;
+import com.gifthub.gifticon.dto.GifticonQueryDto;
 import com.gifthub.gifticon.enumeration.GifticonStatus;
 import com.gifthub.global.BaseTimeEntity;
 import com.gifthub.user.entity.User;
@@ -50,6 +51,19 @@ public class Gifticon extends BaseTimeEntity {
                 .due(this.due)
                 .brandName(this.brandName)
                 .productName(this.productName)
+                .gifticonStatus(this.gifticonStatus)
+                .price(this.price)
+                .build();
+    }
+
+    public GifticonQueryDto toQueryDto() {
+        return GifticonQueryDto.builder()
+                .id(this.id)
+                .user(this.user.toDto())
+                .barcode(this.barcode)
+                .due(this.due)
+                .brandName(this.brandName)
+                .productDto(this.product.toProductDto())
                 .gifticonStatus(this.gifticonStatus)
                 .price(this.price)
                 .build();

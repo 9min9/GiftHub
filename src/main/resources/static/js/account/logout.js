@@ -12,7 +12,7 @@
                 console.log(jsonData);
                 localStorage.removeItem("token");
 
-                document.cookie = "Authorization=''"
+                document.cookie = "Authorization=''";
 
                 window.location.href = "/";
             },

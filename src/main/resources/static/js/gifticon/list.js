@@ -1,22 +1,49 @@
-window.onload = function () {
-    test();
+function getPurchasingGifticon(page, size, type = "") {
+    page = page || 1;
+    size = size || 10;
+
+    $.ajax({
+        url: "/api/gifticons/" + type,
+        type: "get",
+        data: {
+            page,
+            size,
+        },
+        success: function(result) {
+            if (result.content.length != 0) {
+                gifticon(result.content);
+            }
+        }
+    });
 }
 
-function test() {
-    for (let i = 0; i < 3; i++) {
-        gitfticon(jsonData);
+function print(jsonData) {
+    for (let j of jsonData) {
+        gitfticon(j);
     }
 }
 
-function gitfticon(jsonData) {
+function setProductSelectorEvent() {
+    document.querySelectorAll(".product-selector").forEach((elem) => {
+        elem.addEventListener("click", function(event) {
+            document.querySelectorAll(".filter__item").forEach(function(elem) {
+                elem.remove();
+            });
+
+            getPurchasingGifticon(0, 10, event.target.parentNode.childNodes[2].innerText.replaceAll("/", "-"))
+        });
+    })
+}
+
+function gifticon(jsonData) {
     let gifitconRowDiv = document.getElementById('row-product-div');
     let itemDiv = createItemDiv();
     let productDiv = createProductDiv();
     let imageAndAction = createImageAndActionDiv();
-    let brand = createBrand("브랜드");
-    let productName = createProductName("상품이름");
-    let due = createDue("유효기간");
-    let price = createPrice("판매가격", "정가");
+    let brand = createBrand(jsonData.brandName);
+    let productName = createProductName(jsonData.productName);
+    let due = createDue(jsonData.due);
+    let price = createPrice(jsonData.price, "정가");
 
     productDiv.appendChild(imageAndAction);
     productDiv.appendChild(brand)
