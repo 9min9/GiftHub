@@ -37,7 +37,7 @@ public class PointController {
         }
     }
 
-    @PostMapping("buy")
+    @PostMapping("/buy")
     public ResponseEntity<Object> usePoint(@RequestParam("point") Long point,
                                            @RequestParam("gifticonId") Long[] gifticonIds,
                                            @RequestHeader HttpHeaders headers) {
