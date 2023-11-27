@@ -29,7 +29,7 @@ public class KakaoAccountController {
     private final KakaoAuthenticationProvider kakaoAuthenticationProvider;
     
     @RequestMapping(value = "/login")
-    public ResponseEntity<Object> login(@RequestParam("code") String code, HttpSession session) {
+    public ResponseEntity<Object> login(@RequestParam("code") String code) {
         String kakaoAccessToken = "";
         KakaoUserDto kakaoUserInfo = null;
         String token = "";
@@ -62,7 +62,6 @@ public class KakaoAccountController {
                                 .kakaoAccountId(kakaoUserInfo.getKakaoAccountId())
                                 .loginType(LoginType.KAKAO.name()).build());
 
-//                session.setAttribute("kakao_access_token", kakaoAccessToken);
             }
 
         } catch (Exception e) {
