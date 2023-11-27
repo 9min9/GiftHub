@@ -28,5 +28,15 @@ public class GifticonStorageService {
         return gifticonStorageRepository.findStorageByUserId(userId, pageable);
     }
 
+    public GifticonStorage getStorageById(Long storageId){
+        GifticonStorage gifticonStorage = gifticonStorageRepository.findById(storageId).orElse(null);
+        return (gifticonStorage != null) ? gifticonStorage : null;
+    }
+
+    // 삭제하기
+    public void removeFromStorageTable(){
+
+    }
+
 
 }
