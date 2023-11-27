@@ -49,8 +49,8 @@ public class GifticonStorageRepositoryImpl implements GifticonStorageRepositoryS
                 .select(new QGifticonStorageListDto(
                         gifticonStorage.id,
                         gifticonStorage.brandName,
-                        gifticonStorage.barcode,
                         gifticonStorage.productName,
+                        gifticonStorage.barcode,
                         gifticonStorage.due,
                         gifticonStorage.gifticonImage.accessUrl))
                 .from(gifticonStorage)
