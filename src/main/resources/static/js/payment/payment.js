@@ -6,7 +6,7 @@ let addKakaoPayEvent = (itemName) => {
         let xhr = new XMLHttpRequest();
 
         xhr.open("post", "/api/kakao/pay/ready");
-        xhr.setRequestHeader("Authorization", localStorage.getItem("token"))
+        xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
 
         xhr.onload = () => {
             if (xhr.status !== 200) {
