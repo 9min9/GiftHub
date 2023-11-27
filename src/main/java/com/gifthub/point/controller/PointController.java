@@ -39,22 +39,24 @@ public class PointController {
 
     @PostMapping("buy")
     public ResponseEntity<Object> usePoint(@RequestParam("point") Long point,
-                                           @RequestParam("gifticonId") Long gifticonId,
+                                           @RequestParam("gifticonId") Long[] gifticonIds,
                                            @RequestHeader HttpHeaders headers) {
         try {
-            GifticonDto gifticonDto = gifticonService.findGifticon(gifticonId);
-
             Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
 
             UserDto toUser = pointService.usePoint(point, userId);
 
-            UserDto fromUser = gifticonDto.getUser();
+            for (Long gifticonId : gifticonIds) {
+                GifticonDto gifticonDto = gifticonService.findGifticon(gifticonId);
 
-            movementService.move(fromUser, toUser, gifticonDto);
+                UserDto fromUser = gifticonDto.getUser();
 
-            gifticonDto.setUser(toUser);
+                movementService.move(fromUser, toUser, gifticonDto);
 
-            gifticonService.saveGifticon(gifticonDto);
+                gifticonDto.setUser(toUser);
+
+                gifticonService.saveGifticon(gifticonDto);
+            }
 
             if (toUser == null) {
                 return ResponseEntity.status(400).body("포인트가 부족합니다. 포인트를 충전 후 다시 시도해주세요.");
