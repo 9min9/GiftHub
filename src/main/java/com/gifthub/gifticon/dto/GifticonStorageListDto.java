@@ -18,6 +18,8 @@ public class GifticonStorageListDto {
     private String productName;
     private String imageUrl;
 
+    private boolean flagInDb;
+
     @QueryProjection
     @Builder
     public GifticonStorageListDto(Long gifticonStorageId, String brandName, String productName, String barcode, LocalDate due, String imageUrl) {
@@ -28,5 +30,6 @@ public class GifticonStorageListDto {
         this.brand = (brandName != null) ? brandName : "";
         this.productName = (productName != null) ? productName : "";
         this.imageUrl = (imageUrl != null) ? imageUrl : "";
+        this.flagInDb = false;
     }
 }

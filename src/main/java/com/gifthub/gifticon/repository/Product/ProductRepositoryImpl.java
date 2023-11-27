@@ -19,6 +19,7 @@ private final JPAQueryFactory queryFactory;
 public List<String> findAllBrandName(){
     return queryFactory
             .select(product.brandName)
+            .distinct()
             .from(product)
             .fetch();
 }
