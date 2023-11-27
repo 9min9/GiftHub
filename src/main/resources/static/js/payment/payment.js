@@ -1,4 +1,6 @@
-let addKakaoPayEvent = (itemName, totalAmount) => {
+let totalAmount = 20000;
+
+let addKakaoPayEvent = (itemName) => {
 
     document.querySelector("#kakao-pay").addEventListener("click", function() {
         let xhr = new XMLHttpRequest();
@@ -15,8 +17,6 @@ let addKakaoPayEvent = (itemName, totalAmount) => {
             let redirect_url = parsedResponse.next_redirect_pc_url;
 
             let opened = window.open(redirect_url, "_blank", "width = 450, height = 700");
-
-            checkClosing(opened, () => location.href = "/");
         }
 
         let sendDate = {
@@ -120,15 +120,4 @@ let payWithPointEvent = (point, item) => {
 
         xhr.send(sendDate);
     });
-}
-
-let checkClosing = (childWindow, callback) => {
-    setInterval(() => {
-        if (typeof childWindow == undefined || childWindow.closed) {
-
-            callback();
-
-            return;
-        }
-    }, 1000);
 }

@@ -154,31 +154,26 @@
             $("#grand-total").text();
         });
 
-        $("#point").on("change keyup", function() {
-            setPrice();
+        $("#point").on("propertychange change keyup paste input", function() {
+            totalAmount = $("#point").val();
 
-            reKakaoEvent();
+            setPrice();
         });
 
-        let opened = addKakaoPayEvent("Point", parseInt($("#point").val()));
+        let opened = addKakaoPayEvent("Point", totalAmount);
     }
 
     let setPoint = () => {
         let selectedValue = $("input[name='point']:checked").val();
         $("#point").val($("label[for='point-" + selectedValue + "']").text());
 
+        totalAmount = selectedValue;
+
         setPrice();
     }
 
     let setPrice = () => {
         $("#grand-total").text(Number($("#point").val()).toLocaleString("ko-KR"))
-    }
-
-    let reKakaoEvent = () => {
-        $("#kakao-pay").attr("disabled", true);
-        $("#kakao-pay").off("click");
-        let opened = addKakaoPayEvent("Point", $("#point").val());
-        $("#kakao-pay").attr("disabled", false);
     }
 </script>
 </body>

@@ -45,11 +45,6 @@ let loadOrders = (page, size) => {
                             <div class="manage-o__text u-c-silver">Placed on ${o.createDate}
                             </div>
                         </div>
-                        <div>
-                            <div class="dash__link dash__link--brand">
-        
-                                <a href="dash-manage-order.html">Details</a></div>
-                        </div>
                     </div>
                 </div>
                 <div class="manage-o__description">
