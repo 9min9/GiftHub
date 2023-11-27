@@ -279,8 +279,8 @@ public class OcrService {
 
     // TODO : 유효기간 자체가 null이거나 아예 못읽는 경우를 못잡음
     private LocalDate dateFormattingByString(String ocrResult) {
-        String capturedDueDate;
-        String dueDate;
+        String capturedDueDate =null;
+        String dueDate = null;
         if (OcrUtil.dateParserTilde(ocrResult) != null) {
             capturedDueDate = OcrUtil.dateParserTilde(ocrResult);
             dueDate = OcrUtil.dateReplaceFromSpotToHyphen(capturedDueDate);

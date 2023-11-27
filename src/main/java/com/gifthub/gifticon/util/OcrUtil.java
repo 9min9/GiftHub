@@ -49,11 +49,6 @@ public class OcrUtil {
 
     }
 
-    public static void checkBrandInDb(String input) {
-        if (input == null) {
-
-        }
-    }
 
     public static LocalDate localDateFormatterHyphen(String input) {
 //        System.out.println(input);
@@ -63,6 +58,9 @@ public class OcrUtil {
         } catch (DateTimeParseException e) {
             e.printStackTrace();
             System.out.println("yyyyMMdd 파싱에러");
+            return null;
+        } catch (RuntimeException e){
+            e.printStackTrace();
             return null;
         }
     }
@@ -76,6 +74,9 @@ public class OcrUtil {
             e.printStackTrace();
             System.out.println("~ 파싱 에러");
             return null;
+        } catch (RuntimeException e){
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -88,11 +89,19 @@ public class OcrUtil {
             e.printStackTrace();
             System.out.println("regex년월일 파싱 에러");
             return null;
+        } catch (RuntimeException e){
+            e.printStackTrace();
+            System.out.println("hangul");
+            return null;
         }
     }
 
     public static String dateReplaceFromSpotToHyphen(String inputDateString) {
-        String outputDateString = inputDateString.replace(".", "-");
+        String outputDateString = null;
+        if(inputDateString != null){
+            outputDateString = inputDateString.replace(".", "-");
+
+        }
         if (outputDateString == null) {
             System.out.println(". -> - 파싱에러");
             return null;
@@ -101,10 +110,13 @@ public class OcrUtil {
     }
 
     public static String dateReplaceFromHangulToHyphen(String inputDateHangul) {
-        String outputDateString = inputDateHangul
-                .replaceAll("년", "-")
-                .replaceAll("월", "-")
-                .replaceAll("일", "");
+        String outputDateString = null;
+        if(inputDateHangul != null){
+            outputDateString = inputDateHangul
+                    .replaceAll("년", "-")
+                    .replaceAll("월", "-")
+                    .replaceAll("일", "");
+        }
         if (outputDateString == null) {
             System.out.println("년월일 -> - 파싱에러");
             return null;
@@ -112,9 +124,5 @@ public class OcrUtil {
         return outputDateString;
     }
 
-
-    public static void inputDateStringTrimming() {
-
-    }
 
 }
