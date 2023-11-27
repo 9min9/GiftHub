@@ -21,6 +21,33 @@ function print(jsonData) {
     for (let j of jsonData) {
         gifticon(j);
     }
+
+    document.querySelectorAll(".add-to-cart").forEach((elem) => {
+        elem.addEventListener("click", function(event) {
+            let gifticonId = event.target.dataset.gifticonId;
+
+            let xhr = new XMLHttpRequest();
+
+            xhr.open("post", "/api/carts");
+
+            xhr.onload = () => {
+                if (xhr.status != 200) {
+                    return;
+                }
+
+                document.querySelector("#total-item-round").innerText =
+                    parseInt(document.querySelector("#total-item-round").innerText) + 1;
+
+                // TODO 미니카트에 기프트콘 넣어야함
+            };
+
+            let sendDate = {
+                gifticonId,
+            }
+
+            xhr.send();
+        });
+    });
 }
 
 function setProductSelectorEvent() {
@@ -50,7 +77,9 @@ function gifticon(jsonData) {
     let productName = createProductName(jsonData.productName);
     let due = createDue(jsonData.due);
     let price = createPrice(jsonData.price, "정가");
+    let hiddenInput = createHiddenInput(jsonData.gifticonId);
 
+    productDiv.appendChild(hiddenInput);
     productDiv.appendChild(imageAndAction);
     productDiv.appendChild(brand)
     productDiv.appendChild(productName)
@@ -59,6 +88,14 @@ function gifticon(jsonData) {
     itemDiv.appendChild(productDiv);
 
     gifitconRowDiv.appendChild(itemDiv);
+}
+
+function createHiddenInput(gifticonId) {
+    let input = document.createElement("input");
+
+    input.type = "hidden";
+    input.value = gifticonId;
+    input.name = "gifticonIds";
 }
 
 function createItemDiv() {
@@ -111,10 +148,12 @@ function createActionDiv() {
 
     return div;
 }
-function createActionLi(action) {
+function createActionLi(action, gifticonId) {
     let li = document.createElement('li');
     let a = document.createElement('a');
     let i = document.createElement('i');
+
+    a.classList.add("add-to-cart");
 
     a.setAttribute('data-modal', 'modal');
     a.setAttribute('data-tooltip', 'tooltip');
@@ -122,12 +161,14 @@ function createActionLi(action) {
 
     if (action == "quickView") {
         a.setAttribute('data-modal-id', '#quick-look');
+        a.setAttribute("data-gifticonId", gifticonId);
         a.setAttribute('title', 'Quick View');
         i.setAttribute('class', 'fas fa-search-plus');
     }
 
     if (action == "addToCart") {
         a.setAttribute('data-modal-id', '#add-to-cart');
+        a.setAttribute("data-gifticonId", gifticonId);
         a.setAttribute('title', 'Add to Cart');
         i.setAttribute('class', 'fas fa-plus-circle');
     }

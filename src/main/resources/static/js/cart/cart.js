@@ -6,7 +6,9 @@ let loadCarts = () => {
 
     xhr.onload = function() {
         if (xhr.status !== 200) {
-            alert("불러오기 에러");
+            alert(xhr.responseText);
+
+            return;
         }
 
         let carts = JSON.parse(xhr.responseText);

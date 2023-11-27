@@ -1,5 +1,6 @@
-package com.gifthub.gifticon.entity;
+package com.gifthub.movement.entity;
 
+import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.gifticon.enumeration.MovementStatus;
 import com.gifthub.global.BaseTimeEntity;
 import com.gifthub.user.entity.User;

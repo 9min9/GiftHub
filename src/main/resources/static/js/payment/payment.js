@@ -6,7 +6,7 @@ let addKakaoPayEvent = (itemName) => {
         let xhr = new XMLHttpRequest();
 
         xhr.open("post", "/api/kakao/pay/ready");
-        xhr.setRequestHeader("Authorization", localStorage.getItem("token"))
+        xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
 
         xhr.onload = () => {
             if (xhr.status !== 200) {
@@ -64,6 +64,7 @@ let loadItem = (items) => {
                     <div class="o-card__info-wrap">
                         <span class="o-card__name">
                             <a href="product-detail.html">${gifticon.productName}</a>
+                            <input type="hidden" name="gifticonIds" value="${gifticon.id}">
                         </span>
                         <span class="o-card__quantity">Quantity x 1</span>
                         <span class="o-card__price">${gifticon.price}</span></div>
@@ -101,7 +102,7 @@ let payWithPointEvent = (point, item) => {
     document.querySelector("#pay-with-point").addEventListener("click", function() {
         let xhr = new XMLHttpRequest();
 
-        xhr.open("post", "/api/points/use");
+        xhr.open("post", "/api/points/buy");
 
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
@@ -116,7 +117,11 @@ let payWithPointEvent = (point, item) => {
             window.location = "/";
         }
 
-        let sendDate = "point=" + point;
+        let sendDate = "point=" + point + "&";
+        for (let e of document.querySelectorAll("[name=gifticonIds]")) {
+            sendDate += "gifticonIds=" + e.value + "&";
+        }
+
 
         xhr.send(sendDate);
     });
