@@ -30,6 +30,6 @@ public class GifticonStorageListDto {
         this.brand = (brandName != null) ? brandName : "";
         this.productName = (productName != null) ? productName : "";
         this.imageUrl = (imageUrl != null) ? imageUrl : "";
-        this.flagInDb = false;
+        this.flagInDb = (productName != null) ? true : false;
     }
 }

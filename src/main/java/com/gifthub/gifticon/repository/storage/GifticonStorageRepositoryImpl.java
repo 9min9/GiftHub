@@ -1,9 +1,8 @@
-package com.gifthub.gifticon.repository;
+package com.gifthub.gifticon.repository.storage;
 
 import com.gifthub.gifticon.dto.GifticonStorageListDto;
 import com.gifthub.gifticon.dto.QGifticonStorageListDto;
 import com.gifthub.gifticon.entity.GifticonStorage;
-import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

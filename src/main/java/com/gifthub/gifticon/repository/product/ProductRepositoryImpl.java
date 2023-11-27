@@ -1,4 +1,4 @@
-package com.gifthub.gifticon.repository.Product;
+package com.gifthub.gifticon.repository.product;
 
 
 import static com.gifthub.gifticon.entity.QProduct.product;
