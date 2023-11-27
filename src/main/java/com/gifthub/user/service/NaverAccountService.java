@@ -90,11 +90,14 @@ public class NaverAccountService {
 
     public NaverUserDto getNaverUserInfo(String naverAccessToken) {
         String token = naverAccessToken;
+        System.out.println(naverAccessToken+"test");
+        String header = "Bearer " + token;
         System.out.println("NaverUserInfoService");
         System.out.println(token);
 
         String reqURL = "https://openapi.naver.com/v1/nid/me";
         Map<String, String> requestHeaders = new HashMap<>();
+        requestHeaders.put("Authorization",header);
         JsonParser parser = new JsonParser();
 
         String responseBody = getNaverAPi(reqURL, requestHeaders);
@@ -112,10 +115,13 @@ public class NaverAccountService {
             String name = response.getAsJsonObject().get("name").getAsString();
             String birthyear = response.getAsJsonObject().get("birthyear").getAsString();
             String birthday = response.getAsJsonObject().get("birthday").getAsString();
+            System.out.println("id:"+id);
+
 
             String decodeStr_name = "";
             decodeStr_name = URLDecoder.decode(id, "utf-8");
 //            System.out.println("decode test:" + decodeStr_name);
+
 
             NaverUserDto naverUserDto = NaverUserDto.builder()
                     .NaverId(id)
