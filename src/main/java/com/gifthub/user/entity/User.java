@@ -61,11 +61,19 @@ public class User extends BaseTimeEntity implements UserDetails {
     private List<GifticonStorage> tempStorage;
 
     public Long usePoint(Long price) {
+        if (this.point == null) {
+            this.point = 0L;
+        }
+
         this.point -= price;
         return this.point;
     }
 
     public Long plusPoint(Long price) {
+        if (this.point == null) {
+            this.point = 0L;
+        }
+
         this.point += price;
         return this.point;
     }
