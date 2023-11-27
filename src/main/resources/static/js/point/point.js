@@ -14,19 +14,21 @@ let setPoint = (point) => {
 }
 
 let getPoint = () => {
-    let xhr = new XMLHttpRequest();
+    if (localStorage.getItem("token")) {
+        let xhr = new XMLHttpRequest();
 
-    xhr.open("get", "/api/users/points");
+        xhr.open("get", "/api/users/points");
 
-    xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
+        xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
 
-    xhr.onload = () => {
-        if (xhr.status == 200) {
-            setPoint(xhr.responseText);
+        xhr.onload = () => {
+            if (xhr.status == 200) {
+                setPoint(xhr.responseText);
+            }
         }
-    }
 
-    xhr.send();
+        xhr.send();
+    }
 }
 
 getPoint();
