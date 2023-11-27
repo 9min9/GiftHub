@@ -4,7 +4,7 @@ import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.GifticonImageDto;
 import com.gifthub.gifticon.dto.GifticonStorageListDto;
 import com.gifthub.gifticon.entity.GifticonStorage;
-import com.gifthub.gifticon.repository.GifticonStorageRepository;
+import com.gifthub.gifticon.repository.storage.GifticonStorageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +34,8 @@ public class GifticonStorageService {
     }
 
     // 삭제하기
-    public void removeFromStorageTable(){
+    public void removeFromStorageTable(Long storageId){
+
 
     }
 

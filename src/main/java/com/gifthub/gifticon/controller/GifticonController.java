@@ -134,6 +134,7 @@ public class GifticonController {
 
             Page<GifticonStorageListDto> storageList = gifticonStorageService.getStorageList(user.getId(), pageable);
 
+
             return ResponseEntity.ok(storageList);
 
         } catch (Exception e) {
@@ -143,7 +144,7 @@ public class GifticonController {
         }
     }
 
-    @PostMapping("/api/gifticon/register/{id}")
+    @PostMapping("/api/gifticon/register/{id}") // db에 있는경우
     public ResponseEntity<Object> registerGifticon(@PathVariable Long storage_id,
                                                    @RequestHeader HttpHeaders headers) {
         try {
@@ -152,13 +153,8 @@ public class GifticonController {
             GifticonStorage gifticonStorage = gifticonStorageService.getStorageById(storage_id);
 
             ProductDto product = productService.getByProductName(gifticonStorage.getProductName());
-            if(product == null){
-                return ResponseEntity.badRequest().build(); // 관리자에게 문의 전송 how?
-            }
-            // 가지고 있는것 : 상품dto, storage entity -> 필요한것 gifticonDto
+
             GifticonDto gifticonDto = gifticonStorage.toGifticonDto(product);
-
-
             gifticonService.saveGifticon(gifticonDto);
 
 
