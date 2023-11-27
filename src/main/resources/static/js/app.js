@@ -634,16 +634,17 @@
 
     // Show Newsletter Modal
     RESHOP.showNewsletterModal = function() {
-        if ($('#newsletter-modal').length) {
-            setTimeout(function () {
-                // Manually opens a modal
-                $('#newsletter-modal').modal({
-                    backdrop: 'static',
-                    keyboard: false,
-                    show: true
-                });
-            }, 5000);
-        }
+        // if ($('#newsletter-modal').length) {
+        //     setTimeout(function () {
+        //         // Manually opens a modal
+        //         $('#newsletter-modal').modal({
+        //             backdrop: 'static',
+        //             keyboard: false,
+        //             show: true
+        //         });
+        //     });
+        //
+        // }
     };
 
     // Check everything including DOM elements and images loaded
