@@ -76,7 +76,6 @@ public class CartController {
                                                  @RequestHeader HttpHeaders headers
                                                  ) {
         try {
-            // TODO 유저의 id와 카트에 있는 기프티콘의 주인의 아이디 비교
             GifticonDto gifticonDto = gifticonService.findGifticon(gifticonId);
 
             Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
