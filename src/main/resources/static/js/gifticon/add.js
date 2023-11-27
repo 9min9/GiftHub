@@ -4,7 +4,6 @@
 renderGifticon();
 // setGifticonAddModal();
 
-
 function renderGifticon(jsonData) {
     let listContainer = document.getElementById('gifticon-list-div');
     let gifticonRow = document.createElement("div");
@@ -12,7 +11,7 @@ function renderGifticon(jsonData) {
 
     let gifticonContainer = document.createElement('div');
     // gifticonContainer.setAttribute('id', jsonData.id);
-    gifticonContainer.setAttribute('id', 'pk');
+    gifticonContainer.setAttribute('id', jsonData.id);
     gifticonContainer.setAttribute('class', 'w-r__container');
 
     let gifticonSection = document.createElement('div');
@@ -39,9 +38,10 @@ function renderImage(jsonData) {
     let image = document.createElement('img');
 
     div.setAttribute('class', 'w-r__img-wrap');
-    image.setAttribute('id', 'gifticon-img-');
+    image.setAttribute('id', 'gifticon-img-' +jsonData.id);
     image.setAttribute('class', 'w-r__img-wrap u-img-fluid');
-    image.setAttribute('src', 'https://myawsimgbucket.s3.ap-northeast-2.amazonaws.com/5de365d9-09bf-47ce-adad-610e34797e4a..jpg');
+    // image.setAttribute('src', 'https://myawsimgbucket.s3.ap-northeast-2.amazonaws.com/5de365d9-09bf-47ce-adad-610e34797e4a..jpg');
+    image.setAttribute('src', jsonData.imageUrl);
     image.setAttribute('alt', '이미지가 없어용');
 
     div.appendChild(image);
@@ -72,14 +72,14 @@ function renderBrand(jsonData) {
     let error = document.createElement('span');
     div.setAttribute('class', 'gl-inline');
 
-    // content.setAttribute('id', 'gifticon-brand-'+jsonData.id);
-    content.setAttribute('id', 'gifticon-brand-pk');
+    content.setAttribute('id', 'gifticon-brand-'+jsonData.id);
+    // content.setAttribute('id', 'gifticon-brand-pk');
     content.setAttribute('class', 'w-r__category')
-    // content.append(jsonData.brandName);
-    content.append("브랜드 이름");
+    content.append(jsonData.brand);
+    // content.append("브랜드 이름");
 
-    // error.setAttribute('id', 'gifticon-brand-error-' +jsonData.id);
-    error.setAttribute('id', 'gifticon-brand-error-pk');
+    error.setAttribute('id', 'gifticon-brand-error-' +jsonData.id);
+    // error.setAttribute('id', 'gifticon-brand-error-pk');
     error.setAttribute('class', 'u-s-m-x-10');
     error.setAttribute('style', 'color: red');
     error.append("testError");
@@ -96,11 +96,11 @@ function renderProduct(jsonData) {
     let error = document.createElement('span');
     div.setAttribute('class', 'gl-inline');
 
-    // content.setAttribute('id', 'gifticon-product-'+jsonData.id);
-    content.setAttribute('id', 'gifticon-product-pk');
+    content.setAttribute('id', 'gifticon-product-'+jsonData.id);
+    // content.setAttribute('id', 'gifticon-product-pk');
     content.setAttribute('class', 'w-r__category')
-    // content.append(jsonData.productName);
-    content.append("상품 이름");
+    content.append(jsonData.productName);
+    // content.append("상품 이름");
 
     // error.setAttribute('id', 'gifticon-product-error-' +jsonData.id);
     error.setAttribute('id', 'gifticon-product-error-pk');
@@ -120,14 +120,14 @@ function renderBarcode(jsonData) {
     let error = document.createElement('span');
     div.setAttribute('class', 'gl-inline');
 
-    // content.setAttribute('id', 'gifticon-barcode-'+jsonData.id);
-    content.setAttribute('id', 'gifticon-barcode-pk');
+    content.setAttribute('id', 'gifticon-barcode-'+jsonData.id);
+    // content.setAttribute('id', 'gifticon-barcode-pk');
     content.setAttribute('class', 'w-r__category')
-    // content.append(jsonData.barcode);
-    content.append("바코드 번호");
+    content.append(jsonData.barcode);
+    // content.append("바코드 번호");
 
-    // error.setAttribute('id', 'gifticon-barcode-error-' +jsonData.id);
-    error.setAttribute('id', 'gifticon-barcode-error-pk');
+    error.setAttribute('id', 'gifticon-barcode-error-' +jsonData.id);
+    // error.setAttribute('id', 'gifticon-barcode-error-pk');
     error.setAttribute('class', 'u-s-m-x-10');
     error.setAttribute('style', 'color: red');
     error.append("testError");
@@ -145,13 +145,13 @@ function renderDue(jsonData) {
     let error = document.createElement('span');
     div.setAttribute('class', 'gl-inline');
 
-    // content.setAttribute('id', 'gifticon-due-'+jsonData.id);
-    content.setAttribute('id', 'gifticon-due-pk');
+    content.setAttribute('id', 'gifticon-due-'+jsonData.id);
+    // content.setAttribute('id', 'gifticon-due-pk');
     content.setAttribute('class', 'w-r__category')
-    // content.append(jsonData.due);
-    content.append("유효 기간");
+    content.append(jsonData.due);
+    // content.append("유효 기간");
 
-    // error.setAttribute('id', 'gifticon-due-error-' +jsonData.id);
+    error.setAttribute('id', 'gifticon-due-error-' +jsonData.id);
     error.setAttribute('id', 'gifticon-due-error-pk');
     error.setAttribute('class', 'u-s-m-x-10');
     error.setAttribute('style', 'color: red');
@@ -185,8 +185,8 @@ function renderGifticonBtn() {
     return div;
 }
 
-function setGifticonAddModal(ele) {
-    let parentNode = ele.parentNode.parentNode;
+function setGifticonAddModal(element) {
+    let parentNode = element.parentNode.parentNode;
     let pk = parentNode.id;
 
     let brandValue = parentNode.querySelector('#gifticon-brand-' +pk).textContent;
