@@ -1,4 +1,6 @@
-let addKakaoPayEvent = (itemName, totalAmount) => {
+let totalAmount = 20000;
+
+let addKakaoPayEvent = (itemName) => {
 
     document.querySelector("#kakao-pay").addEventListener("click", function() {
         let xhr = new XMLHttpRequest();
