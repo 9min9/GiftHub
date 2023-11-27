@@ -9,6 +9,7 @@ function openFile(imageFile){
 
     $.ajax({
         url: "/api/gifticon/add",
+        type: "post",
         headers: {
             Authorization: localStorage.getItem("token"),
         },
@@ -24,6 +25,7 @@ function openFile(imageFile){
             location.reload();
 
         },
+
 
 
         error : function (error){
