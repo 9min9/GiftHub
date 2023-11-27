@@ -34,7 +34,7 @@ function updateNavbarOnLogin() {
     // document.getElementById("nav-login-li").style.visibility = "hidden";
 
 
-
+    document.getElementById("nav-attendance-li").style.display = "inline-block";
     document.getElementById("nav-point-li").style.display = "inline-block";
     document.getElementById("nav-mypage-li").style.display = "inline-block";
     document.getElementById("nav-logout-li").style.display = "inline-block";
@@ -47,6 +47,7 @@ function updateNavbarOnLogin() {
 }
 
 function updateNavbarOnLogout() {
+    document.getElementById("nav-attendance-li").style.display = "none";
     document.getElementById("nav-point-li").style.display = "none";
     document.getElementById("nav-mypage-li").style.display = "none";
     document.getElementById("nav-logout-li").style.display = "none";
