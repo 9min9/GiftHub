@@ -1,4 +1,4 @@
-function getPurchasingGifticon(page, size, type = "") {
+function getPurchasingGifticon(page, size, type = "전체") {
     page = page || 1;
     size = size || 10;
 
@@ -11,7 +11,7 @@ function getPurchasingGifticon(page, size, type = "") {
         },
         success: function(result) {
             if (result.content.length != 0) {
-                gifticon(result.content);
+                print(result.content);
             }
         }
     });
@@ -19,13 +19,19 @@ function getPurchasingGifticon(page, size, type = "") {
 
 function print(jsonData) {
     for (let j of jsonData) {
-        gitfticon(j);
+        gifticon(j);
     }
 }
 
 function setProductSelectorEvent() {
     document.querySelectorAll(".product-selector").forEach((elem) => {
         elem.addEventListener("click", function(event) {
+            document.querySelectorAll(".product-selector-container").forEach(elem => {
+                elem.classList.remove("category-active");
+            });
+
+            event.target.parentNode.classList.add("category-active");
+
             document.querySelectorAll(".filter__item").forEach(function(elem) {
                 elem.remove();
             });
@@ -63,7 +69,7 @@ function createItemDiv() {
 }
 function createProductDiv() {
     let div = document.createElement('div');
-    div.setAttribute('class', 'product-o product-o--hover-on product-o--radius');
+    div.setAttribute('class', 'product-o product-o--hover-on product-o--radius gifticon-container');
     return div;
 }
 function createImageAndActionDiv() {

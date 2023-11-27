@@ -1,9 +1,13 @@
-function createProductSpan(productName) {
+function createProductSpan(productName, active) {
     let productSelectors = document.querySelector("#product-selectors");
     let productSelectorContainer = createProductSelectorContainer();
     let productSelector = createProductSelector();
     let productsName = createProductNames(productName);
     let br = createBreak();
+
+    if (active) {
+        productSelectorContainer.classList.add("category-active");
+    }
 
     productSelectorContainer.appendChild(productSelector);
     productSelectorContainer.appendChild(br);
