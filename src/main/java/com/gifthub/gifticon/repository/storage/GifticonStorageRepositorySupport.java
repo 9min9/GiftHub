@@ -1,4 +1,4 @@
-package com.gifthub.gifticon.repository;
+package com.gifthub.gifticon.repository.storage;
 
 import com.gifthub.gifticon.dto.GifticonStorageListDto;
 import com.gifthub.gifticon.entity.GifticonStorage;

@@ -1,4 +1,4 @@
-package com.gifthub.gifticon.repository.Product;
+package com.gifthub.gifticon.repository.product;
 
 import com.gifthub.gifticon.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
