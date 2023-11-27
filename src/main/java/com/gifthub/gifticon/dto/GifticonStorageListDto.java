@@ -2,6 +2,7 @@ package com.gifthub.gifticon.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,20 +13,23 @@ import java.time.format.DateTimeFormatter;
 @NoArgsConstructor
 public class GifticonStorageListDto {
     private Long id;
-    private String brand;
-    private String productName;
     private String barcode;
     private String due;
+//    private LocalDate due;
+    private String brand;
+    private String productName;
     private String imageUrl;
 
     @QueryProjection
-    public GifticonStorageListDto(Long gifticonStorageId, String brand, String productName, String barcode, LocalDate due, String imageUrl) {
+    @Builder
+    public GifticonStorageListDto(Long gifticonStorageId, String brandName, String productName, String barcode, LocalDate due, String imageUrl) {
         this.id = gifticonStorageId;
-        this.brand = brand;
-        this.productName = productName;
         this.barcode = barcode;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        this.due = due.format(formatter);
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//        this.due = due.format(formatter);
+//        this.due = due;
+        this.brand = brandName;
+        this.productName = productName;
         this.imageUrl = imageUrl;
     }
 }
