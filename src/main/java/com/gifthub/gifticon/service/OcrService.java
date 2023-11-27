@@ -58,6 +58,7 @@ public class OcrService {
         String ocrResult = readOcrMultipart(file);
 
         System.out.println("읽은 Ocr결과:" + ocrResult);
+        System.out.println("브랜드 개수: "+ brandNameList.size());
 
         GifticonDto gifticonDto = findProductNameByBrandInDb(ocrResult, brandNameList);
 
