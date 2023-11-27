@@ -138,9 +138,9 @@ public class KakaoPayController {
 
 
             if (request.isSecure()) {
-                headers.set("location", makeBaseUrl(request) + "/payment/close");
+                headers.set("location", makeBaseUrl(request) + "/payment/close?redirect=true");
             } else {
-                headers.set("location", makeBaseUrl(request) + "/payment/close");
+                headers.set("location", makeBaseUrl(request) + "/payment/close?redirect=true");
             }
         } finally {
             if (!bindingResult.hasErrors()) {

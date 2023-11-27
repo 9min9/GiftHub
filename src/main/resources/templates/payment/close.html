@@ -5,7 +5,10 @@
     <title>Title</title>
 </head>
 <body>
-  <script>
+  <script th:inline="javascript">
+      if ([[${param.redirect}]]) {
+          opener.location.href = "/";
+      }
       window.close();
   </script>
 </body>
