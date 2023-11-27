@@ -48,6 +48,8 @@ public class NaverAccountConotroller {
             System.out.println(naverUserInfo);
 
             if (!commonUserservice.duplicateEmail(naverUserInfo.getEmail())) {
+                naverUserInfo.setPoint(0L);
+
                 userService.saveNaverUser(naverUserInfo);
             }
 

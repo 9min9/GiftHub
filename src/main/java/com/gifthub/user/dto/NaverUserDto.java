@@ -22,6 +22,7 @@ public class NaverUserDto {
     private String gender;
     private String birthyear;
     private String birthday;
+    private Long point;
 
     public NaverUser toNaverEntity() {
         return NaverUser.builder()
@@ -34,6 +35,7 @@ public class NaverUserDto {
                 .year(birthyear)
                 .birthDate(birthday)
                 .userType(UserType.USER)
+                .point(point)
                 .build();
     }
 }

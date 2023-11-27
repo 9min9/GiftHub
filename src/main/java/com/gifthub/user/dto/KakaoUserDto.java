@@ -2,14 +2,12 @@ package com.gifthub.user.dto;
 
 import com.gifthub.user.entity.KakaoUser;
 import com.gifthub.user.entity.enumeration.UserType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

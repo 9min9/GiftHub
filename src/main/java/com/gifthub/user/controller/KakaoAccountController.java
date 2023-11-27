@@ -44,6 +44,7 @@ public class KakaoAccountController {
             System.out.println(kakaoAccessToken);
 
             if (!commonUserService.duplicateEmail(kakaoUserInfo.getEmail())) {
+                kakaoUserInfo.setPoint(0L);
                 userService.saveKakaoUser(kakaoUserInfo);
             }
 
@@ -76,7 +77,6 @@ public class KakaoAccountController {
     public ResponseEntity<Object> logout(HttpSession session) {
 
         try {
-            //todo : 현재 kakao_access_token을 session에 저장하여 로그인 로그아웃에 사용하였음 팀원들과 상의해야함
             Object accessToken = session.getAttribute("kakao_access_token");
             System.out.println("logout");
             System.out.println((String) accessToken);
