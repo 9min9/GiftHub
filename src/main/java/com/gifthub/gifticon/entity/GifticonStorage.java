@@ -1,6 +1,7 @@
 package com.gifthub.gifticon.entity;
 
 import com.gifthub.gifticon.dto.GifticonDto;
+import com.gifthub.gifticon.dto.GifticonStorageListDto;
 import com.gifthub.gifticon.enumeration.StorageStatus;
 import com.gifthub.global.BaseTimeEntity;
 import com.gifthub.user.entity.User;
@@ -16,7 +17,7 @@ import static com.gifthub.gifticon.enumeration.StorageStatus.WAIT_REGISTRATION;
 @Entity
 @Getter
 @SuperBuilder
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "gifticon_storage")
 @Setter
@@ -30,8 +31,8 @@ public class GifticonStorage extends BaseTimeEntity {
 
     private String barcode;
     private LocalDate due;
-    private String brandName;
-    private String productName;
+    private String brandName; // 브랜드명(사용처)
+    private String productName; // 상품명
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -44,5 +45,20 @@ public class GifticonStorage extends BaseTimeEntity {
     @Builder.Default
     @Enumerated(EnumType.STRING)
     private StorageStatus storage_status = WAIT_REGISTRATION;
+
+
+//    public GifticonStorageListDto toDto() {
+//        return GifticonStorageListDto.builder()
+//                .gifticonStorageId(this.id)
+//                .barcode(this.barcode)
+//                .due(this.due)
+//                .brandName(this.brandName)
+//                .productName(this.productName)
+//                .imageUrl(this.gifticonImage.getAccessUrl())
+//                .build();
+//
+//    }
+
+//    public GifticonStorageListDto(Long id, String barcode, String due, String brandName, String productName, String )
 
 }

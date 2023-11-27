@@ -24,6 +24,9 @@ public class GifticonStorageService {
     public Page<GifticonStorageListDto> getStorageList(Long userId, Pageable pageable){
         return gifticonStorageRepository.findGifticonStorageDtoByUserId(userId, pageable);
     }
+    public Page<GifticonStorage> getStorageListTest (Long userId, Pageable pageable){
+        return gifticonStorageRepository.findStorageByUserId(userId, pageable);
+    }
 
 
 }

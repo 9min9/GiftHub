@@ -21,6 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
@@ -129,26 +130,52 @@ public class GifticonController {
         return ResponseEntity.ok(gifticonService.getPurchasingGifticon(pageable, type));
     }
 
-    @PostMapping("/gifticon/storage/list")
-    public ResponseEntity<Object> getStorageList(@RequestHeader HttpHeaders headers, Pageable pageable) {
+//    @PostMapping("/gifticon/storage/list")
+    @RequestMapping(value = "/gifticon/storage/list", method = {RequestMethod.POST, RequestMethod.GET})
+    public ResponseEntity<Object> getStorageList(@RequestHeader HttpHeaders headers, @PageableDefault(size = 6) Pageable pageable) {
         System.out.println("list api");
         System.out.println(headers.get("Authorization").get(0));
+        System.out.println(pageable);
 
         try{
             User user = userService.getUserById(userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0))).toEntity();
-            Page<GifticonStorageListDto> storageList = gifticonStorageService.getStorageList(user.getId(), pageable);
+            System.out.println(user.getId());
+            System.out.println(user.getName());
+            System.out.println(user.getAuthorities()); //ADMIN
 
-            if (storageList.isEmpty() || storageList == null) {
-                throw new Exception();
-            }
+
+            Page<GifticonStorageListDto> storageList = gifticonStorageService.getStorageList(user.getId(), pageable);
+//            Page<GifticonStorage> storageList = gifticonStorageService.getStorageListTest(user.getId(), pageable);
+
+            System.out.println("gift list");
+            System.out.println(storageList);
+
+//            if (storageList.isEmpty() || storageList == null) {
+//                throw new Exception();
+//            }
 
 
             System.out.println(storageList);
-            String jsonStr = JsonMapper.objectToJson(storageList);
+            System.out.println(storageList.getSize());
 
-            return ResponseEntity.ok(jsonStr);
+
+            System.out.println("@@@");
+
+            List<GifticonStorageListDto> content = storageList.getContent();
+
+            for (GifticonStorageListDto dto : content) {
+                dto.getBarcode();
+                dto.getImageUrl();
+                dto.getProductName();
+            }
+//            String jsonStr = JsonMapper.objectToJson(storageList);
+
+//            return ResponseEntity.ok(jsonStr);
+            return ResponseEntity.ok(storageList);
+//            return ResponseEntity.ok().body(content);
 
         }catch (Exception e){
+            e.printStackTrace();
 
             return ResponseEntity.badRequest().build();
         }
