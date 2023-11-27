@@ -21,7 +21,7 @@ function getStorageList() {
         success: function(jsonData) {
             for (let i = 0; i < jsonData.size; i++) {
                 console.log(jsonData);
-                renderGifticon(jsonData[i]);
+                renderGifticon(jsonData.content[i]);
             }
 
         },

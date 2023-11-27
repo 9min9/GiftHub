@@ -1,7 +1,7 @@
 
 
 
-renderGifticon();
+// renderGifticon();
 // setGifticonAddModal();
 
 function renderGifticon(jsonData) {
