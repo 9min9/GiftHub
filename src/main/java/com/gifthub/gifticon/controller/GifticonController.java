@@ -3,6 +3,7 @@ package com.gifthub.gifticon.controller;
 import com.gifthub.chatbot.util.JsonConverter;
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.GifticonImageDto;
+import com.gifthub.gifticon.dto.GifticonStorageListDto;
 import com.gifthub.gifticon.dto.ImageSaveDto;
 import com.gifthub.gifticon.entity.GifticonStorage;
 
@@ -18,6 +19,7 @@ import com.gifthub.user.service.UserService;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -35,13 +37,11 @@ import java.util.Map;
 @AllArgsConstructor
 @RequestMapping("/api")
 public class GifticonController {
-    private final GifticonStorageService gifticonTempService;
+    private final GifticonStorageService gifticonStorageService;
     private final GifticonImageService gifticonImageService;
-
     private final GifticonService gifticonService;
     private final OcrService ocrService;
     private final UserService userService;
-
     private final UserJwtTokenProvider userJwtTokenProvider;
 
 
@@ -61,7 +61,7 @@ public class GifticonController {
 
                 System.out.println(gifticonDto.getUser().getId());
 
-                GifticonStorage gifticonStorage = gifticonTempService.saveTempStorage(gifticonDto, imageDto);
+                GifticonStorage gifticonStorage = gifticonStorageService.saveStorage(gifticonDto, imageDto);
 
 
             }
@@ -89,7 +89,7 @@ public class GifticonController {
             gifticonDto.setUser(userService.getUserById(userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0))));
 
 //            System.out.println(gifticonDto.getUser().getId());
-            GifticonStorage storage = gifticonTempService.saveTempStorage(gifticonDto, imageDto);
+            gifticonStorageService.saveStorage(gifticonDto, imageDto);
 
 
         } catch (Exception e) {
@@ -130,19 +130,27 @@ public class GifticonController {
     }
 
     @PostMapping("/gifticon/storage/list")
-    public ResponseEntity<Object> getStorageList(@RequestHeader HttpHeaders headers) {
+    public ResponseEntity<Object> getStorageList(@RequestHeader HttpHeaders headers, Pageable pageable) {
+        System.out.println("list api");
+        System.out.println(headers.get("Authorization").get(0));
+
         try{
             User user = userService.getUserById(userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0))).toEntity();
-            List<GifticonStorage> storageList = gifticonTempService.getTempStorageList(user);
+            Page<GifticonStorageListDto> storageList = gifticonStorageService.getStorageList(user.getId(), pageable);
 
+            if (storageList.isEmpty() || storageList == null) {
+                throw new Exception();
+            }
+
+
+            System.out.println(storageList);
             String jsonStr = JsonMapper.objectToJson(storageList);
+
             return ResponseEntity.ok(jsonStr);
 
         }catch (Exception e){
+
             return ResponseEntity.badRequest().build();
-
         }
-
     }
-
 }
