@@ -1,5 +1,8 @@
 package com.gifthub.point.controller;
 
+import com.gifthub.gifticon.dto.GifticonDto;
+import com.gifthub.gifticon.service.GifticonService;
+import com.gifthub.movement.MovementService;
 import com.gifthub.point.service.PointService;
 import com.gifthub.user.UserJwtTokenProvider;
 import com.gifthub.user.dto.UserDto;
@@ -14,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 public class PointController {
 
     private final PointService pointService;
+    private final GifticonService gifticonService;
+    private final MovementService movementService;
     private final UserJwtTokenProvider userJwtTokenProvider;
 
     @PostMapping
@@ -32,20 +37,30 @@ public class PointController {
         }
     }
 
-    @PostMapping("use")
+    @PostMapping("buy")
     public ResponseEntity<Object> usePoint(@RequestParam("point") Long point,
-                                           @RequestHeader HttpHeaders headers
-    ) {
+                                           @RequestParam("gifticonId") Long gifticonId,
+                                           @RequestHeader HttpHeaders headers) {
         try {
+            GifticonDto gifticonDto = gifticonService.findGifticon(gifticonId);
+
             Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
 
-            UserDto userDto = pointService.usePoint(point, userId);
+            UserDto toUser = pointService.usePoint(point, userId);
 
-            if (userDto == null) {
+            UserDto fromUser = gifticonDto.getUser();
+
+            movementService.move(fromUser, toUser, gifticonDto);
+
+            gifticonDto.setUser(toUser);
+
+            gifticonService.saveGifticon(gifticonDto);
+
+            if (toUser == null) {
                 return ResponseEntity.status(400).body("포인트가 부족합니다. 포인트를 충전 후 다시 시도해주세요.");
             }
 
-            return ResponseEntity.ok(userDto);
+            return ResponseEntity.ok(toUser);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();

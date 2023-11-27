@@ -101,7 +101,7 @@ let payWithPointEvent = (point, item) => {
     document.querySelector("#pay-with-point").addEventListener("click", function() {
         let xhr = new XMLHttpRequest();
 
-        xhr.open("post", "/api/points/use");
+        xhr.open("post", "/api/points/buy");
 
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
