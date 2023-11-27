@@ -2,9 +2,7 @@ package com.gifthub.gifticon.service;
 
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.ProductDto;
-import com.gifthub.gifticon.repository.ProductRepository;
-import com.gifthub.gifticon.repository.ProductRepositoryImpl;
-import com.gifthub.gifticon.util.GifticonImageUtil;
+import com.gifthub.gifticon.repository.Product.ProductRepository;
 import com.gifthub.gifticon.util.OcrUtil;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
@@ -13,7 +11,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.net.HttpURLConnection;

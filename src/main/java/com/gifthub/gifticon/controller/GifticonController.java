@@ -1,16 +1,11 @@
 package com.gifthub.gifticon.controller;
 
 import com.gifthub.chatbot.util.JsonConverter;
-import com.gifthub.gifticon.dto.GifticonDto;
-import com.gifthub.gifticon.dto.GifticonImageDto;
-import com.gifthub.gifticon.dto.GifticonStorageListDto;
-import com.gifthub.gifticon.dto.ImageSaveDto;
+import com.gifthub.gifticon.dto.*;
+import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.gifticon.entity.GifticonStorage;
 
-import com.gifthub.gifticon.service.GifticonImageService;
-import com.gifthub.gifticon.service.GifticonService;
-import com.gifthub.gifticon.service.GifticonStorageService;
-import com.gifthub.gifticon.service.OcrService;
+import com.gifthub.gifticon.service.*;
 import com.gifthub.gifticon.util.GifticonImageUtil;
 import com.gifthub.gifticon.util.JsonMapper;
 import com.gifthub.user.UserJwtTokenProvider;
@@ -43,6 +38,7 @@ public class GifticonController {
     private final GifticonService gifticonService;
     private final OcrService ocrService;
     private final UserService userService;
+    private final ProductService productService;
     private final UserJwtTokenProvider userJwtTokenProvider;
 
 
@@ -60,9 +56,9 @@ public class GifticonController {
                 gifticonDto.setBarcode(barcode);
                 gifticonDto.setUser(userService.getUserById(userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0))));
 
-                System.out.println(gifticonDto.getUser().getId());
+//                System.out.println(gifticonDto.getUser().getId());
 
-                GifticonStorage gifticonStorage = gifticonStorageService.saveStorage(gifticonDto, imageDto);
+                System.out.println(gifticonStorageService.saveStorage(gifticonDto, imageDto));
 
 
             }
@@ -130,54 +126,51 @@ public class GifticonController {
         return ResponseEntity.ok(gifticonService.getPurchasingGifticon(pageable, type));
     }
 
-//    @PostMapping("/gifticon/storage/list")
     @RequestMapping(value = "/gifticon/storage/list", method = {RequestMethod.POST, RequestMethod.GET})
     public ResponseEntity<Object> getStorageList(@RequestHeader HttpHeaders headers, @PageableDefault(size = 6) Pageable pageable) {
-        System.out.println("list api");
-        System.out.println(headers.get("Authorization").get(0));
-        System.out.println(pageable);
 
-        try{
+        try {
             User user = userService.getUserById(userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0))).toEntity();
-            System.out.println(user.getId());
-            System.out.println(user.getName());
-            System.out.println(user.getAuthorities()); //ADMIN
-
 
             Page<GifticonStorageListDto> storageList = gifticonStorageService.getStorageList(user.getId(), pageable);
-//            Page<GifticonStorage> storageList = gifticonStorageService.getStorageListTest(user.getId(), pageable);
 
-            System.out.println("gift list");
-            System.out.println(storageList);
-
-//            if (storageList.isEmpty() || storageList == null) {
-//                throw new Exception();
-//            }
-
-
-            System.out.println(storageList);
-            System.out.println(storageList.getSize());
-
-
-            System.out.println("@@@");
-
-            List<GifticonStorageListDto> content = storageList.getContent();
-
-            for (GifticonStorageListDto dto : content) {
-                dto.getBarcode();
-                dto.getImageUrl();
-                dto.getProductName();
-            }
-//            String jsonStr = JsonMapper.objectToJson(storageList);
-
-//            return ResponseEntity.ok(jsonStr);
             return ResponseEntity.ok(storageList);
-//            return ResponseEntity.ok().body(content);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
 
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @PostMapping("/api/gifticon/register/{id}")
+    public ResponseEntity<Object> registerGifticon(@PathVariable Long storage_id,
+                                                   @RequestHeader HttpHeaders headers) {
+        try {
+//            User user = userService.getUserById(userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0))).toEntity();
+            // TODO : 상품명이 db에 있는지 check
+            GifticonStorage gifticonStorage = gifticonStorageService.getStorageById(storage_id);
+
+            ProductDto product = productService.getByProductName(gifticonStorage.getProductName());
+            if(product == null){
+                return ResponseEntity.badRequest().build(); // 관리자에게 문의 전송 how?
+            }
+            // 가지고 있는것 : 상품dto, storage entity -> 필요한것 gifticonDto
+            GifticonDto gifticonDto = gifticonStorage.toGifticonDto(product);
+
+
+            gifticonService.saveGifticon(gifticonDto);
+
+
+            ResponseEntity.ok();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
 }
+
+
+

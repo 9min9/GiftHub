@@ -2,8 +2,7 @@ package com.gifthub.gifticon.service;
 
 import com.gifthub.gifticon.dto.ProductDto;
 import com.gifthub.gifticon.entity.Product;
-import com.gifthub.gifticon.repository.ProductRepository;
-import com.gifthub.gifticon.repository.ProductRepositoryImpl;
+import com.gifthub.gifticon.repository.Product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +13,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-    private final ProductRepositoryImpl productRepositoryQdsl;
 
     public Long saveProduct(ProductDto productDto) {
         Product product = productRepository.save(productDto.toProductEntity());
@@ -36,7 +34,17 @@ public class ProductService {
     }
 
     public List<ProductDto> getAllProduct() {
-        return productRepositoryQdsl.findAllProduct();
+        return productRepository.findAllProduct();
     }
 
+    public ProductDto getProduct(Long productId){
+        Product product = productRepository.findById(productId).orElse(null);
+        return (product != null) ? product.toProductDto() : null;
+    }
+
+    public ProductDto getByProductName(String productName) {
+        Product product = productRepository.findProductByName(productName).orElse(null);
+        return (product != null) ? product.toProductDto() : null;
+
+    }
 }

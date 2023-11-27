@@ -1,4 +1,4 @@
-package com.gifthub.gifticon.repository;
+package com.gifthub.gifticon.repository.Product;
 
 import com.gifthub.gifticon.dto.ProductDto;
 import java.util.List;

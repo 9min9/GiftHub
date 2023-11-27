@@ -1,11 +1,10 @@
-package com.gifthub.gifticon.repository;
+package com.gifthub.gifticon.repository.Product;
 
 
 import static com.gifthub.gifticon.entity.QProduct.product;
 
 import com.gifthub.gifticon.dto.ProductDto;
 import com.gifthub.gifticon.dto.QProductDto;
-import com.gifthub.gifticon.entity.QProduct;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;

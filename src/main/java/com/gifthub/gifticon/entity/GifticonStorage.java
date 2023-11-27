@@ -2,8 +2,10 @@ package com.gifthub.gifticon.entity;
 
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.GifticonStorageListDto;
+import com.gifthub.gifticon.dto.ProductDto;
 import com.gifthub.gifticon.enumeration.StorageStatus;
 import com.gifthub.global.BaseTimeEntity;
+import com.gifthub.user.dto.UserDto;
 import com.gifthub.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -60,5 +62,17 @@ public class GifticonStorage extends BaseTimeEntity {
 //    }
 
 //    public GifticonStorageListDto(Long id, String barcode, String due, String brandName, String productName, String )
+
+    public GifticonDto toGifticonDto(ProductDto productDto){
+        return GifticonDto.builder()
+                .user(this.user.toDto())
+                .barcode(this.barcode)
+                .due(this.due)
+                .brandName(this.brandName)
+                .productName(this.productName)
+                .price(productDto.getPrice())
+                .build();
+    }
+
 
 }
