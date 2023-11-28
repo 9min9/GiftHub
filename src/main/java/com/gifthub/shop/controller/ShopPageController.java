@@ -12,7 +12,7 @@ public class ShopPageController {
 
     @GetMapping
     public String shop() {
-        return "/shop/shop";
+        return "shop/shop";
     }
 
 }
