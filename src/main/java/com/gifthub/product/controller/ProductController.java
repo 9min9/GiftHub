@@ -114,9 +114,10 @@ public class ProductController {
         ProductName productName = ProductName.ofEng(category);
 
         try {
-            List<String> gifticonBrandName = gifticonService.getGifticonBrandName(productName);
+//            List<String> gifticonBrandName = gifticonService.getGifticonBrandName(productName);
 
-            return ResponseEntity.ok(gifticonBrandName);
+//            return ResponseEntity.ok(gifticonBrandName);
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body("잘못된 요청입니다.");
