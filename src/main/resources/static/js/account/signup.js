@@ -1,5 +1,9 @@
 window.onload = function () {
-    document.getElementById("authorize-phone").style.display = "none";
+    document.getElementById("authorize-phone").style.visibility = "hidden";
+    document.getElementById("result-confirmPassword-label").style.visibility="hidden";
+    document.getElementById("result-email-label").style.visibility="hidden";
+    document.getElementById("result-nickname-label").style.visibility="hidden";
+    document.getElementById("result-tel-label").style.visibility="hidden";
 
     $("#signup-btn").click(function (e) {
         e.preventDefault();
@@ -9,15 +13,66 @@ window.onload = function () {
 
     $('#email').on('change', function () {
         emailCheck();
+        email2();
     });
 
     $('#password').on('change', function () {
         passwordCheck();
+        confirmPasswordCheck();
+
     });
 
     $('#confirm-password').on('change', function () {
-        cinfirmPasswordCheck();
+        confirmPasswordCheck();
+
     });
+
+    $('#nickname').on('change', function (){
+        nicknameCheck();
+
+    })
+    $('#tel').on('change', function (){
+        telCheck();
+    })
+}
+
+
+function passwordCheck(){
+    let password = $("#password").val();
+    let regExp = /^(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+
+    let label = document.getElementById("result-Password-label");
+
+    if(regExp.test(password)) {
+        label.innerText = '비밀번호가 유효합니다.';
+        label.style.color = 'green';
+    } else {
+        label.innerText = '비밀번호가 규칙에 맞지 않습니다. 8자 이상, 특수문자를 포함해 주세요';
+        label.style.color= 'red';
+    }
+}
+
+function  confirmPasswordCheck(){
+ let data={
+     password: $("#password").val(),
+     confirmPassword: $("#confirm-password").val()
+ };
+ $.ajax({
+     type:"post",
+     url: "/signup/confirmpassword/check",
+     data: JSON.stringify(data),
+     // data: data,
+     contentType: "application/json; charset=utf-8",
+     dataType: "json",
+     success: function (jsonData) {
+         console.log(jsonData);
+         checkResult(jsonData);
+     },
+     error: function (error) {
+         console.log(error)
+         checkResult(error.responseJSON);
+     }
+ });
 }
 
 function emailCheck() {
@@ -28,6 +83,54 @@ function emailCheck() {
     $.ajax({
         type: "post",
         url: "/signup/email/check",
+        data: JSON.stringify(data),
+        // data: data,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+
+        success: function (jsonData) {
+            console.log(jsonData);
+            checkResult(jsonData);
+        },
+        error: function (error) {
+            console.log(error)
+            checkResult(error.responseJSON);
+        }
+    });
+}
+
+function nicknameCheck() {
+    let data = {
+        nickname: $("#nickname").val()
+    };
+
+    $.ajax({
+        type: "post",
+        url: "/signup/nickname/check",
+        data: JSON.stringify(data),
+        // data: data,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+
+        success: function (jsonData) {
+            console.log(jsonData);
+            checkResult(jsonData);
+        },
+        error: function (error) {
+            console.log(error)
+            checkResult(error.responseJSON);
+        }
+    });
+}
+function telCheck() {
+    let data = {
+        tel: $("#tel").val()
+    };
+
+
+    $.ajax({
+        type: "post",
+        url: "/signup/tel/check",
         data: JSON.stringify(data),
         // data: data,
         contentType: "application/json; charset=utf-8",
@@ -59,9 +162,19 @@ function checkResult(result) {
 
     label.innerText = result.message;
 }
+function email2() {
+    let email2 = $("#email").val();
+
+    if (email2 == '') {
+        document.getElementById("result-email2-label").style.visibility = "hidden";
+
+    }
+}
+
 
 
 function signup() {
+
     let year = $("#birth-date").val().substring(0, 4);
     let birthdate = $("#birth-date").val().substring(4);
 
