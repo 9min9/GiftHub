@@ -66,5 +66,11 @@ public class GifticonImageUtil {
         return null;
     }
 
+    // TODO : 확장자가 이미지타입인지 체크
+    public static void checkInvalidFileType(String fileName){
+
+    }
+
+
 
 }

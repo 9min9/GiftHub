@@ -5,9 +5,11 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.gifthub.gifticon.dto.GifticonImageDto;
+import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.gifticon.entity.GifticonImage;
 import com.gifthub.gifticon.entity.GifticonStorage;
 import com.gifthub.gifticon.repository.GifticonImageRepository;
+import com.gifthub.gifticon.repository.storage.GifticonStorageRepository;
 import com.gifthub.gifticon.util.GifticonImageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +32,7 @@ public class GifticonImageService {
     private final AmazonS3Client amazonS3Client;
 
     private final GifticonImageRepository gifticonImageRepository;
+    private final GifticonStorageRepository storageRepository;
 
     // TODO : 파일 여러개 넣는 기능
 //    @Transactional
@@ -95,13 +98,16 @@ public class GifticonImageService {
 
 
 
-    // 삭제
+    // 연쇄 삭제( Storage 삭제 -> Image 서버에서 삭제 -> db Image entity 삭제)
     public void deleteFileByStorage(GifticonStorage storage){
         GifticonImage gifticonImage = gifticonImageRepository.findGifticonImageByGifticonStorage(storage).get();
         DeleteObjectRequest request = new DeleteObjectRequest(bucketName, gifticonImage.getStoreFileName());
         amazonS3Client.deleteObject(request); // 서버에서 삭제
-        gifticonImageRepository.deleteById(gifticonImage.getId()); // db에서 삭제
+        gifticonImageRepository.delete(gifticonImage); // db에서 Gifticon_image삭제
+        storageRepository.delete(storage);// db에서 GifticonStorage 삭제
     }
+
+    //
 
 
 

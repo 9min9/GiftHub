@@ -12,4 +12,6 @@ public interface GifticonRepositorySupport {
 
     List<String> findBrandNameByCategory(String category);
 
+    Page<Gifticon> findByProduct(Pageable pageable, Long productId);
+
 }

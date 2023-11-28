@@ -31,7 +31,7 @@ public class GifticonService {
 
     private final GifticonRepository gifticonRepository;
 
-    public static String readBarcode(String url) {
+    public static String readBarcode(String url) throws NotFoundException{
         try {
             BufferedImage image = ImageIO.read(new URL(url));
 
@@ -42,9 +42,8 @@ public class GifticonService {
             String barcodeNumber = decoded.getText();
 
             return barcodeNumber;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NotFoundException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -89,8 +88,9 @@ public class GifticonService {
     }
 
     // TODO : 특정 product_id를 인자로 받아 GifticonList를 return
-    public List<GifticonDto> getGifticonByProduct(Long productId){
-        return null;
+    public Page<GifticonDto> getGifticonByProduct(Pageable pageable, Long productId){
+
+        return gifticonRepository.findByProduct(pageable, productId).map(Gifticon::toDto);
     }
 
     public Page<GifticonQueryDto> getPurchasingGifticon(Pageable pageable, String type) {
