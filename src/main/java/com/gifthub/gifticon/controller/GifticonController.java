@@ -1,16 +1,19 @@
 package com.gifthub.gifticon.controller;
 
 import com.gifthub.chatbot.util.JsonConverter;
+import com.gifthub.exception.InvalidDueDate;
 import com.gifthub.gifticon.dto.*;
 import com.gifthub.gifticon.entity.GifticonStorage;
 
 import com.gifthub.gifticon.service.*;
 import com.gifthub.gifticon.util.GifticonImageUtil;
+import com.gifthub.gifticon.util.OcrUtil;
 import com.gifthub.product.dto.ProductDto;
 import com.gifthub.product.service.ProductService;
 import com.gifthub.user.UserJwtTokenProvider;
 import com.gifthub.user.entity.User;
 import com.gifthub.user.service.UserService;
+import com.google.zxing.NotFoundException;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -45,7 +48,7 @@ public class GifticonController {
     @PostMapping("/kakao/chatbot/add")
     public ResponseEntity<Object> addGificonByKakao(@RequestBody Map<Object, Object> gifticon,
                                                     @RequestHeader HttpHeaders headers) {
-        File file= null;
+        File file = null;
         try {
             List<String> barcodeUrlList = JsonConverter.kakaoChatbotConverter(gifticon);
 
@@ -53,6 +56,10 @@ public class GifticonController {
                 String barcode = GifticonService.readBarcode(barcodeUrl);
                 GifticonDto gifticonDto = ocrService.readOcrUrlToGifticonDto(barcodeUrl);
 
+                // TODO : 유효기간이 지났는지 check -> 사용자 예외
+                if(gifticonDto.getDue() != null){
+                    OcrUtil.checkDueDate(gifticonDto.getDue());
+                }
                 file = GifticonImageUtil.convertKakaoUrlToFile(barcodeUrl); // url -> File
 
                 GifticonImageDto imageDto = gifticonImageService.saveImageByFile(file); // File -> 서버에 저장
@@ -73,7 +80,13 @@ public class GifticonController {
 
             }
 
-        } catch (Exception e) {     //todo : url이 barcode가 아닌 경우 exception 처리하기
+        } catch (NotFoundException e){ // 바코드x
+            return ResponseEntity.badRequest().build();
+
+        } catch (InvalidDueDate e){ // 유효기간 체크
+            return ResponseEntity.badRequest().build();
+        }
+        catch (Exception e) {
             return ResponseEntity.badRequest().build(); // 400이 날라감 -> ajax에
 
         } finally {
@@ -92,6 +105,11 @@ public class GifticonController {
             file = GifticonImageUtil.convert(imageFile);
 
             GifticonDto gifticonDto = ocrService.readOcrMultipartToGifticonDto(file); // 파일
+
+            // TODO : 유효기간이 지났는지 check -> 사용자 예외
+            if(gifticonDto.getDue() != null){
+                OcrUtil.checkDueDate(gifticonDto.getDue());
+            }
             GifticonImageDto imageDto = gifticonImageService.saveImage(imageFile); // 이미지 서버에 저장 및 db에 경로저장
 
             String barcode = GifticonService.readBarcode(imageDto.getAccessUrl());
@@ -102,13 +120,18 @@ public class GifticonController {
             gifticonStorageService.saveStorage(gifticonDto, imageDto);
 
 
-        } catch (Exception e) {
+        } catch (NotFoundException e){ // 바코드x
             return ResponseEntity.badRequest().build();
 
+        } catch (InvalidDueDate e){ // 유효기간 체크
+            return ResponseEntity.badRequest().build();
         }
-//        finally {
-//            file.delete();
-//        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+
+        } finally {
+            file.delete();
+        }
         return ResponseEntity.ok().build();
 
 
@@ -159,25 +182,26 @@ public class GifticonController {
     }
 
     @PostMapping("/gifticon/register/{id}") // db에 있는경우
-    public ResponseEntity<Object> registerGifticon(@PathVariable Long storage_id,
+    public ResponseEntity<Object> registerGifticon(@PathVariable Long storageId,
                                                    @RequestHeader HttpHeaders headers) {
         try {
-//            User user = userService.getUserById(userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0))).toEntity();
-            // TODO : 상품명이 db에 있는지 check
-            GifticonStorage gifticonStorage = gifticonStorageService.getStorageById(storage_id);
+            GifticonStorage storage = gifticonStorageService.getStorageById(storageId);
+            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
 
-            ProductDto product = productService.getByProductName(gifticonStorage.getProductName());
+            if (!storage.getUser().getId().equals(userId)) {
+                ResponseEntity.badRequest().build();
+            }
+            ProductDto product = productService.getByProductName(storage.getProductName());
 
-            GifticonDto gifticonDto = gifticonStorage.toGifticonDto(product);
+            GifticonDto gifticonDto = storage.toGifticonDto(product);
             gifticonService.saveGifticon(gifticonDto);
 
 
-            ResponseEntity.ok();
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok().build();
     }
 
 }

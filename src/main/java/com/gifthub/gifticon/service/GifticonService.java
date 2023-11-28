@@ -4,7 +4,6 @@ import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.GifticonQueryDto;
 import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.gifticon.repository.GifticonRepository;
-import com.gifthub.product.enumeration.ProductName;
 import com.gifthub.user.entity.User;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.MultiFormatReader;
@@ -32,7 +31,7 @@ public class GifticonService {
 
     private final GifticonRepository gifticonRepository;
 
-    public static String readBarcode(String url) {
+    public static String readBarcode(String url) throws NotFoundException{
         try {
             BufferedImage image = ImageIO.read(new URL(url));
 
@@ -43,9 +42,8 @@ public class GifticonService {
             String barcodeNumber = decoded.getText();
 
             return barcodeNumber;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NotFoundException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -90,8 +88,9 @@ public class GifticonService {
     }
 
     // TODO : 특정 product_id를 인자로 받아 GifticonList를 return
-    public List<GifticonDto> getGifticonByProduct(Long productId){
-        return null;
+    public Page<GifticonDto> getGifticonByProduct(Pageable pageable, Long productId){
+
+        return gifticonRepository.findByProduct(pageable, productId).map(Gifticon::toDto);
     }
 
     public Page<GifticonQueryDto> getPurchasingGifticon(Pageable pageable, String type) {
