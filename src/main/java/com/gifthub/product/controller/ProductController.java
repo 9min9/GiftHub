@@ -26,7 +26,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/product")
+@RequestMapping("/api/product")
 public class ProductController {
     private final ProductService productService;
     private final GifticonService gifticonService;
@@ -114,10 +114,10 @@ public class ProductController {
         ProductName productName = ProductName.ofEng(category);
 
         try {
-//            List<String> gifticonBrandName = gifticonService.getGifticonBrandName(productName);
 
-//            return ResponseEntity.ok(gifticonBrandName);
-            return ResponseEntity.ok().build();
+            List<String> gifticonBrandName = productService.getGifticonBrandName(productName);
+            return ResponseEntity.ok(gifticonBrandName);
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body("잘못된 요청입니다.");

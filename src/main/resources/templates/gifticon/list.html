@@ -81,6 +81,29 @@
         </div>
         <!--====== End - Section 2 ======-->
 
+        <!--====== Section 3 ======-->
+        <div class="u-s-p-y-60">
+            <!--====== Section Content ======-->
+            <div class="section__content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="filter-category-container" id="filter-category-container">
+                                <div class="filter__category-wrapper">
+
+                                    <button class="btn filter__btn filter__btn--style-1 js-checked total-filter" type="button"
+                                            data-filter="*">전체
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--====== End - Section Content ======-->
+        </div>
+        <!--====== End - Section 3 ======-->
 
     </div>
     <!--====== End - App Content ======-->
@@ -104,24 +127,24 @@
 <script src="/js/gifticon/product-selector.js"></script>
 <script th:inline="javascript">
     window.onload = function() {
-        createProductSpan("전체", true);
-        createProductSpan("카페");
-        createProductSpan("베이커리/도넛/떡");
-        createProductSpan("백화점/마트");
-        createProductSpan("아이스크림/빙수");
-        createProductSpan("편의점");
-        createProductSpan("버거/피자");
-        createProductSpan("치킨");
-        createProductSpan("한식/중식/분식");
+        createProductSpan("전체", "all", true);
+        createProductSpan("카페", "cafe");
+        createProductSpan("베이커리/도넛", "bakery-donut");
+        createProductSpan("백화점/마트", "department-mart");
+        createProductSpan("아이스크림", "icecream");
+        createProductSpan("편의점", "convenient");
+        createProductSpan("버거/피자", "burger-pizza");
+        createProductSpan("치킨", "chicken");
+        createProductSpan("외식/분식/배달", "outside");
         createBreak();
-        createProductSpan("구이/족발");
-        createProductSpan("레스토랑/뷔페");
-        createProductSpan("외국/퓨전/기타");
-        createProductSpan("영화/음악/도서");
-        createProductSpan("kt/통신");
-        createProductSpan("뷰티/헤어/바디");
-        createProductSpan("건강/리빙/식품관");
-        createProductSpan("생활/가전/엔터");
+        createProductSpan("구이/족발", "roast-porkfeet");
+        createProductSpan("레스토랑/뷔페", "restaurant-buffet");
+        createProductSpan("기타", "etc");
+        createProductSpan("영화/음악/도서", "movie-music-books");
+        createProductSpan("주유권", "oil");
+        createProductSpan("뷰티/헤어/바디", "beauty-hair-body");
+        createProductSpan("건강/리빙/식품관", "health-living-foods");
+        createProductSpan("생활/가전/엔터", "life-electronic-entertain");
 
         getPurchasingGifticon([[${param.page}]], [[${param.size}]]);
 
