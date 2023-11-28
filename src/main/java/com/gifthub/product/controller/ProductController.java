@@ -26,7 +26,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/product")
+@RequestMapping("/api/product")
 public class ProductController {
     private final ProductService productService;
     private final GifticonService gifticonService;
@@ -114,7 +114,7 @@ public class ProductController {
         ProductName productName = ProductName.ofEng(category);
 
         try {
-            List<String> gifticonBrandName = gifticonService.getGifticonBrandName(productName);
+            List<String> gifticonBrandName = productService.getGifticonBrandName(productName);
 
             return ResponseEntity.ok(gifticonBrandName);
         } catch (Exception e) {
