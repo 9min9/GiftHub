@@ -147,23 +147,25 @@
 <script th:src="@{/js/payment/payment.js}"></script>
 <script th:inline="javascript">
     window.onload = () => {
-        setPoint();
+        setPoints();
         $("[name=point]").on("change", function() {
-            setPoint();
+            setPoints();
 
-            $("#grand-total").text();
+            $("#grand-total").text(totalAmount);
         });
 
         $("#point").on("propertychange change keyup paste input", function() {
             totalAmount = $("#point").val();
 
             setPrice();
+
+            $("input[name=point]").prop("checked", false);
         });
 
         let opened = addKakaoPayEvent("Point", totalAmount);
     }
 
-    let setPoint = () => {
+    let setPoints = () => {
         let selectedValue = $("input[name='point']:checked").val();
         $("#point").val($("label[for='point-" + selectedValue + "']").text());
 
