@@ -1,11 +1,9 @@
 package com.gifthub.gifticon.entity;
 
 import com.gifthub.gifticon.dto.GifticonDto;
-import com.gifthub.gifticon.dto.GifticonStorageListDto;
-import com.gifthub.gifticon.dto.ProductDto;
 import com.gifthub.gifticon.enumeration.StorageStatus;
 import com.gifthub.global.BaseTimeEntity;
-import com.gifthub.user.dto.UserDto;
+import com.gifthub.product.dto.ProductDto;
 import com.gifthub.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;

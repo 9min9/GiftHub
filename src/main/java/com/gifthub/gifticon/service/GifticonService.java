@@ -97,4 +97,8 @@ public class GifticonService {
         return gifticonRepository.findByGifticonStatusIsOnSale(pageable, type).map(Gifticon::toQueryDto);
     }
 
+    public List<String> getGifticonBrandName(String category) {
+        return gifticonRepository.findBrandNameByCategory(category);
+    }
+
 }

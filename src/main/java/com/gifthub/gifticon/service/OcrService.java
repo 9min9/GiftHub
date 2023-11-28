@@ -1,9 +1,9 @@
 package com.gifthub.gifticon.service;
 
 import com.gifthub.gifticon.dto.GifticonDto;
-import com.gifthub.gifticon.dto.ProductDto;
-import com.gifthub.gifticon.repository.product.ProductRepository;
 import com.gifthub.gifticon.util.OcrUtil;
+import com.gifthub.product.dto.ProductDto;
+import com.gifthub.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

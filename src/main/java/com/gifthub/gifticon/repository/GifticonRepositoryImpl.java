@@ -1,9 +1,6 @@
 package com.gifthub.gifticon.repository;
 
-import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.entity.Gifticon;
-import com.gifthub.gifticon.entity.QGifticon;
-import com.gifthub.gifticon.entity.QProduct;
 import com.gifthub.gifticon.enumeration.GifticonStatus;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -16,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.gifthub.gifticon.entity.QGifticon.*;
-import static com.gifthub.gifticon.entity.QProduct.*;
+import static com.gifthub.product.entity.QProduct.product;
 
 @Repository
 @RequiredArgsConstructor
@@ -43,6 +40,15 @@ public class GifticonRepositoryImpl implements GifticonRepositorySupport {
                 .fetchOne();
 
         return new PageImpl<>(gifticons, pageable, gifticonCount);
+    }
+
+    @Override
+    public List<String> findBrandNameByCategory(String category) {
+        return jpaQueryFactory.select(product.brandName).distinct()
+                .from(product)
+                .where(product.category.eq(category))
+                .limit(5)
+                .fetch();
     }
 
 }

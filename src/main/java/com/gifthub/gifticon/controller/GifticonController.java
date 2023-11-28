@@ -2,12 +2,12 @@ package com.gifthub.gifticon.controller;
 
 import com.gifthub.chatbot.util.JsonConverter;
 import com.gifthub.gifticon.dto.*;
-import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.gifticon.entity.GifticonStorage;
 
 import com.gifthub.gifticon.service.*;
 import com.gifthub.gifticon.util.GifticonImageUtil;
-import com.gifthub.gifticon.util.JsonMapper;
+import com.gifthub.product.dto.ProductDto;
+import com.gifthub.product.service.ProductService;
 import com.gifthub.user.UserJwtTokenProvider;
 import com.gifthub.user.entity.User;
 import com.gifthub.user.service.UserService;
@@ -164,6 +164,20 @@ public class GifticonController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/gifticons/{category}/brands")
+    public ResponseEntity<Object> getBrand(@PathVariable("category") String category) {
+        System.out.println(category);
+
+        try {
+            List<String> gifticonBrandName = gifticonService.getGifticonBrandName(category);
+
+            return ResponseEntity.ok(gifticonBrandName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("잘못된 요청입니다.");
+        }
     }
 
 }
