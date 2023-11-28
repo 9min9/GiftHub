@@ -1,5 +1,9 @@
 window.onload = function () {
-    document.getElementById("authorize-phone").style.display = "none";
+    document.getElementById("authorize-phone").style.visibility = "hidden";
+    document.getElementById("result-confirmPassword-label").style.visibility="hidden";
+    document.getElementById("result-email-label").style.visibility="hidden";
+    document.getElementById("result-nickname-label").style.visibility="hidden";
+    document.getElementById("result-tel-label").style.visibility="hidden";
 
     $("#signup-btn").click(function (e) {
         e.preventDefault();
@@ -13,11 +17,68 @@ window.onload = function () {
 
     $('#password').on('change', function () {
         passwordCheck();
+        confirmPasswordCheck();
+
     });
 
     $('#confirm-password').on('change', function () {
-        cinfirmPasswordCheck();
+        confirmPasswordCheck();
+
     });
+
+    $('#nickname').on('change', function (){
+        nicknameCheck();
+
+    })
+    $('#tel').on('change', function (){
+        telCheck();
+    })
+
+    $('#birth-date').on('change', function (){
+        birthcheck();
+    })
+}
+
+
+function passwordCheck(){
+    let password = $("#password").val();
+    let regExp = /^(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+
+    let label = document.getElementById("result-Password-label");
+
+    if(regExp.test(password)) {
+        label.innerText = '비밀번호가 유효합니다.';
+        label.style.color = 'green';
+    } else {
+        label.innerText = '비밀번호가 규칙에 맞지 않습니다. 8자 이상, 특수문자를 포함해 주세요';
+        label.style.color= 'red';
+    }
+    if(password==''|| password==null){
+        label.innerText="";
+    }
+}
+
+function  confirmPasswordCheck(){
+ let data={
+     password: $("#password").val(),
+     confirmPassword: $("#confirm-password").val()
+ };
+ $.ajax({
+     type:"post",
+     url: "/signup/confirmpassword/check",
+     data: JSON.stringify(data),
+     // data: data,
+     contentType: "application/json; charset=utf-8",
+     dataType: "json",
+     success: function (jsonData) {
+         console.log(jsonData);
+         checkResult(jsonData);
+     },
+     error: function (error) {
+         console.log(error)
+         checkResult(error.responseJSON);
+     }
+ });
 }
 
 function emailCheck() {
@@ -44,12 +105,61 @@ function emailCheck() {
     });
 }
 
+function nicknameCheck() {
+    let data = {
+        nickname: $("#nickname").val()
+    };
+
+    $.ajax({
+        type: "post",
+        url: "/signup/nickname/check",
+        data: JSON.stringify(data),
+        // data: data,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+
+        success: function (jsonData) {
+            console.log(jsonData);
+            checkResult(jsonData);
+        },
+        error: function (error) {
+            console.log(error)
+            checkResult(error.responseJSON);
+        }
+    });
+}
+function telCheck() {
+    let data = {
+        tel: $("#tel").val()
+    };
+
+
+    $.ajax({
+        type: "post",
+        url: "/signup/tel/check",
+        data: JSON.stringify(data),
+        // data: data,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+
+        success: function (jsonData) {
+            console.log(jsonData);
+            checkResult(jsonData);
+        },
+        error: function (error) {
+            console.log(error)
+            checkResult(error.responseJSON);
+        }
+    });
+}
+
 
 function checkResult(result) {
     let label = document.getElementById("result-" + result.target + "-label");
     if (result.status == "success") {
         label.setAttribute('style', 'color: green');
         label.innerText = result.message;
+
     }
 
     if (result.status == "error") {
@@ -59,9 +169,22 @@ function checkResult(result) {
 
     label.innerText = result.message;
 }
+function birthcheck(){
+    let birth = $("#birth-date").val();
+    let birthlabel=document.getElementById("result-birth-date-label");
+    if(birth.length==8){
+        birthlabel.innerText=" 감사합니다 ";
+        birthlabel.style.color='green';
+    }else {
+        birthlabel.innerText="8자리 데로 입력해주십시오.";
+        birthlabel.style.color='red';
+    }
+}
+
 
 
 function signup() {
+
     let year = $("#birth-date").val().substring(0, 4);
     let birthdate = $("#birth-date").val().substring(4);
 
@@ -75,6 +198,7 @@ function signup() {
         year: year,
         date: birthdate
     }
+
 
 
     $.ajax({

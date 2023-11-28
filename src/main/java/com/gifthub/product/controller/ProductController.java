@@ -3,7 +3,7 @@ package com.gifthub.product.controller;
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.product.dto.ProductDto;
 import com.gifthub.gifticon.service.GifticonService;
-import com.gifthub.product.enumeration.ProductName;
+import com.gifthub.product.enumeration.CategoryName;
 import com.gifthub.product.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -26,7 +26,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/product")
+@RequestMapping("/api/product")
 public class ProductController {
     private final ProductService productService;
     private final GifticonService gifticonService;
@@ -34,7 +34,7 @@ public class ProductController {
     private final String path = "C:/OcrPractice/";
 
     @GetMapping("/add/excel")
-    public void AddProductFromExcel(){
+    public void AddProductFromExcel() {
         List<ProductDto> productList = new ArrayList<>();
         String ExcelName = "기프티쇼 비즈_상품리스트_비즈_API.xlsx";
         try {
@@ -42,16 +42,16 @@ public class ProductController {
             Workbook workbook = null;
 
 
-            if(ExcelName.endsWith(".xlsx")){
+            if (ExcelName.endsWith(".xlsx")) {
                 workbook = new XSSFWorkbook(file);
-            } else if(ExcelName.endsWith(".xls")){
+            } else if (ExcelName.endsWith(".xls")) {
                 workbook = new HSSFWorkbook(file);
             } else {
                 throw new RuntimeException("file type not matched");
             }
 
 
-            if(workbook == null){
+            if (workbook == null) {
                 throw new RuntimeException("no data in file");
             }
 
@@ -61,9 +61,9 @@ public class ProductController {
             Sheet worksheet = workbook.getSheetAt(0);
 
             int rows = worksheet.getPhysicalNumberOfRows();
-            for (rowindx = 13; rowindx < rows; rowindx++){ // 13행부터 한 줄씩 읽는다
+            for (rowindx = 13; rowindx < rows; rowindx++) { // 13행부터 한 줄씩 읽는다
                 Row row = worksheet.getRow(rowindx);
-                if(row != null){ // 행이 비어있지 않다면
+                if (row != null) { // 행이 비어있지 않다면
                     ProductDto productDto = new ProductDto();
 //                    productDto.setId((long) row.getCell(0).getNumericCellValue());  // id
                     productDto.setBrandName(row.getCell(1).getStringCellValue());   // 브랜드명
@@ -88,9 +88,9 @@ public class ProductController {
     }
 
     @GetMapping("/test")
-    public void testProductDto(){
+    public void testProductDto() {
         List<ProductDto> productDtoList = productService.getAllProduct();
-        for(ProductDto productDto : productDtoList){
+        for (ProductDto productDto : productDtoList) {
             System.out.println(productDto.getName());
             System.out.println(productDto.getBrandName());
             System.out.println(productDto.getPrice());
@@ -101,7 +101,7 @@ public class ProductController {
 
     // TODO : 구매페이지의 해당 product 클릭시 해당 product_id를 갖는 GifticonList를 가져오기
     @GetMapping("/get/gifticon")
-    public void getGifticonByProduct(@Param("productId") Long productId){
+    public void getGifticonByProduct(@Param("productId") Long productId) {
         List<GifticonDto> gifticonDtoList = gifticonService.getGifticonByProduct(productId);
         //
     }
@@ -111,16 +111,42 @@ public class ProductController {
 
     @GetMapping("/{category}/brands")
     public ResponseEntity<Object> getBrand(@PathVariable("category") String category) {
-        ProductName productName = ProductName.ofEng(category);
+        CategoryName categoryName = CategoryName.ofEng(category);
 
         try {
-//            List<String> gifticonBrandName = gifticonService.getGifticonBrandName(productName);
+            List<String> gifticonBrandName = productService.getBrandName(categoryName);
 
-//            return ResponseEntity.ok(gifticonBrandName);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(gifticonBrandName);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body("잘못된 요청입니다.");
         }
     }
+
+    @GetMapping("/brands/{brand}")
+    public ResponseEntity<Object> getProductByBrand(@PathVariable("brand") String brand) {
+        try {
+            List<ProductDto> brands = productService.getProductByBrand(brand);
+
+            return ResponseEntity.ok(brands);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/products")
+    public ResponseEntity<Object> getAllProducts() {
+        try {
+            List<ProductDto> products = productService.getAllProduct();
+
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }

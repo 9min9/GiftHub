@@ -2,6 +2,7 @@ package com.gifthub.product.service;
 
 import com.gifthub.product.dto.ProductDto;
 import com.gifthub.product.entity.Product;
+import com.gifthub.product.enumeration.CategoryName;
 import com.gifthub.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,14 @@ public class ProductService {
     public ProductDto getByProductName(String productName) {
         Product product = productRepository.findProductByName(productName).orElse(null);
         return (product != null) ? product.toProductDto() : null;
-
     }
+
+    public List<String> getBrandName(CategoryName categoryName) {
+        return productRepository.findBrandNameByCategory(categoryName);
+    }
+
+    public List<ProductDto> getProductByBrand(String brand) {
+        return productRepository.findProductByBrand(brand);
+    }
+
 }

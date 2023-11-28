@@ -21,11 +21,28 @@ public class UserAccountService {
 
 
     public boolean validatePassword(String password, String confirmPassword) {
-        if(password.equals(confirmPassword)) {
-            return true;
+        if (password.equals(confirmPassword)) {
+            return false;
         }
-        return false;
+            return true;
+
     }
 
+    public boolean validateNickname(String nickname){
+        User findNickname = userRepository.findByNickname(nickname).orElse(null);
+        if(findNickname == null){
+            return false;
+        }
+        return  true;
 
+    }
+    public boolean validateTel(String tel){
+        User findTel = userRepository.findByTel(tel).orElse(null);
+        if(findTel == null){
+            return false;
+        }
+        return  true;
+
+    }
 }
+

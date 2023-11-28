@@ -1,17 +1,20 @@
-function createProductSpan(productName, active) {
+function createProductSpan(productName, english, active) {
     let productSelectors = document.querySelector("#product-selectors");
     let productSelectorContainer = createProductSelectorContainer();
     let productSelector = createProductSelector();
     let productsName = createProductNames(productName);
     let br = createBreak();
+    let englishProductName = createEnglishProductNames(english);
 
     if (active) {
         productSelectorContainer.classList.add("category-active");
+        productSelector.classList.add("total-category")
     }
 
     productSelectorContainer.appendChild(productSelector);
     productSelectorContainer.appendChild(br);
     productSelectorContainer.appendChild(productsName);
+    productSelectorContainer.appendChild(englishProductName);
     productSelectors.appendChild(productSelectorContainer);
 };
 
@@ -39,4 +42,12 @@ function createProductNames(productName) {
 
 function createBreak() {
     return document.createElement("br");
+}
+
+function createEnglishProductNames(englishProductName) {
+    let englishInput = document.createElement("input");
+    englishInput.type = "hidden";
+    englishInput.value = englishProductName;
+
+    return englishInput
 }
