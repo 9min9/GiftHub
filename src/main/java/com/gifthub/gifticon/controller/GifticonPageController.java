@@ -17,16 +17,14 @@ public class GifticonPageController {
         return "gifticon/my-gifticon";
     }
 
-    @GetMapping("/gifticon/list/{option}")
-    public String list(@PathVariable String option) {
-        if (option.equals("all"))
-            return "gifticon/list";
-        else if (option.equals("beverage")) {
-            return "gifticon/list-search";
-        }
-        else {
-            return "gifticon/list";
-        }
+    @GetMapping("/gifticons")
+    public String list() {
+        return "gifticon/list";
+    }
+
+    @GetMapping("/gifticons/{type}")
+    public String gifticonByType(@PathVariable("type") String type) {
+        return "/gifticon/list-search";
     }
 
 //    @GetMapping("/gifticon/list/{category}")
