@@ -1,6 +1,6 @@
-package com.gifthub.gifticon.repository.product;
+package com.gifthub.product.repository;
 
-import com.gifthub.gifticon.dto.ProductDto;
+import com.gifthub.product.dto.ProductDto;
 import java.util.List;
 
 public interface ProductRepositorySupport {

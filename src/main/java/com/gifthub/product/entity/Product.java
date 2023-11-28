@@ -1,6 +1,7 @@
-package com.gifthub.gifticon.entity;
+package com.gifthub.product.entity;
 
-import com.gifthub.gifticon.dto.ProductDto;
+import com.gifthub.product.dto.ProductDto;
+import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.global.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

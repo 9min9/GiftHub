@@ -1,9 +1,9 @@
-package com.gifthub.gifticon.controller;
+package com.gifthub.product.controller;
 
 import com.gifthub.gifticon.dto.GifticonDto;
-import com.gifthub.gifticon.dto.ProductDto;
+import com.gifthub.product.dto.ProductDto;
 import com.gifthub.gifticon.service.GifticonService;
-import com.gifthub.gifticon.service.ProductService;
+import com.gifthub.product.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
@@ -12,7 +12,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
