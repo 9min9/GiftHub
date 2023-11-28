@@ -51,4 +51,8 @@ public class GifticonRepositoryImpl implements GifticonRepositorySupport {
                 .fetch();
     }
 
+    @Override
+    public Page<Gifticon> findByProduct(Pageable pageable, Long productId) {
+        return null;
+    }
 }
