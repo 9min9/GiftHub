@@ -158,6 +158,8 @@
             totalAmount = $("#point").val();
 
             setPrice();
+
+            $("input[name=point]").prop("checked", false);
         });
 
         let opened = addKakaoPayEvent("Point", totalAmount);
