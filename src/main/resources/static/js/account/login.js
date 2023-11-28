@@ -17,7 +17,7 @@ function getKakaoJwt() {
 
     $.ajax({
         type: "post",
-        url: "http://localhost:8081/api/kakao/login" + param,      //Kakao의 권고사항에 따라 쿼리스트링으로 전송 code를 전송
+        url: "/api/kakao/login" + param,      //Kakao의 권고사항에 따라 쿼리스트링으로 전송 code를 전송
 
         success: function (jsonData, status, xhr) {
             alert("로그인 성공")

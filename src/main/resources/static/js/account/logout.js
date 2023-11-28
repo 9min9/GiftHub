@@ -5,7 +5,7 @@
     function kakaoLogout() {
         $.ajax({
             type:"post",
-            url:"http://localhost:8081/api/kakao/logout",
+            url:"/api/kakao/logout",
 
             success: function(jsonData, status, xhr){
                 alert("로그아웃 성공")

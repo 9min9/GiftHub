@@ -71,7 +71,7 @@ public class SecurityConfig {
                         ).permitAll()
 
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                        .requestMatchers("/", "/signup", "/error", "/login/**", "/api/kakao/**", "/api/naver/**", "/logout", "/local/emailcheck").permitAll()
+                        .requestMatchers("/", "/signup/**", "/error/**", "/login/**", "/api/kakao/**", "/api/naver/**", "/logout").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilter(corsConfig.corsFilter())
@@ -93,35 +93,5 @@ public class SecurityConfig {
         //	.httpBasic();
         return http.build();
     }
-
-
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http.csrf().disable()
-//                .formLogin()
-//                .loginPage("/login")
-//                .and()
-//                .authorizeHttpRequests((authz) -> authz
-//                        .requestMatchers(
-//                                new AntPathRequestMatcher("/css/**"),
-//                                new AntPathRequestMatcher("/js/**"),
-//                                new AntPathRequestMatcher("/images/**"),
-//                                new AntPathRequestMatcher("/scss/**"),
-//                                new AntPathRequestMatcher("/webfonts/**"),
-//                                new AntPathRequestMatcher("/static/**")
-//                        ).permitAll()
-//
-//                        .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-//                        .requestMatchers("/", "/signup", "/error", "/login/**", "/api/kakao/**").permitAll()
-//                        .anyRequest().authenticated()
-//                )
-//                .addFilter(corsConfig.corsFilter())
-//                .addFilterAt(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
-//
-//        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//        //	.httpBasic();
-//        return http.build();
-//    }
-
 
 }
