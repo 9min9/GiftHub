@@ -19,6 +19,7 @@ public class NaverUser extends User {
 
     private String naverId;
 
+    @Override
     public NaverUserDto toNaverUserDto() {
         return NaverUserDto.builder()
                 .id(super.getId())
