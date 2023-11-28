@@ -59,7 +59,8 @@ public class KakaoAccountService {
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
             sb.append("&client_id=" + restKey);
-            sb.append("&redirect_uri=http://localhost:8081/login");
+//            sb.append("&redirect_uri=http://localhost:8081/login");
+            sb.append("&redirect_uri=http://15.164.69.187:8080/login");
             sb.append("&code=" + authorize_code);
             bw.write(sb.toString());
             bw.flush();
