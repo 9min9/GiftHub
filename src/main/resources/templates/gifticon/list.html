@@ -61,23 +61,6 @@
                 </div>
             </div>
             <!--====== End - Section Intro ======-->
-
-
-            <!--====== Section Content ======-->
-            <div class="section__content">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-12">
-
-                            <div class="<!--filter__grid-wrapper--> u-s-m-t-30">
-                                <div id="row-product-div" class="row">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--====== End - Section Content ======-->
         </div>
         <!--====== End - Section 2 ======-->
 
@@ -92,9 +75,23 @@
                             <div class="filter-category-container" id="filter-category-container">
                                 <div class="filter__category-wrapper">
 
-                                    <button class="btn filter__btn filter__btn--style-1 js-checked total-filter" type="button"
+                                    <button class="btn filter__btn filter__btn--style-1 js-checked brand-filter total-filter" type="button"
                                             data-filter="*">전체
                                     </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--====== End - Section Content ======-->
+            <!--====== Section Content ======-->
+            <div class="section__content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="<!--filter__grid-wrapper--> u-s-m-t-30">
+                                <div id="row-product-div" class="row">
                                 </div>
                             </div>
                         </div>
@@ -149,6 +146,12 @@
         getPurchasingGifticon([[${param.page}]], [[${param.size}]]);
 
         setProductSelectorEvent();
+
+        getTotalProducts();
+
+        document.querySelector(".total-category").addEventListener("click", function(event) {
+            getTotalProducts();
+        });
 
         const is = new IntersectionObserver((entries, observer) => {
             let page = 0;
