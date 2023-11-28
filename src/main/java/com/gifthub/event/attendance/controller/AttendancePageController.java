@@ -10,7 +10,7 @@ public class AttendancePageController {
 
     @GetMapping
     public String attendances() {
-        return "/attendance/attendance";
+        return "attendance/attendance";
     }
 
 }

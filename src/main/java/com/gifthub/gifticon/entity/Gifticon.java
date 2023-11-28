@@ -4,6 +4,7 @@ import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.GifticonQueryDto;
 import com.gifthub.gifticon.enumeration.GifticonStatus;
 import com.gifthub.global.BaseTimeEntity;
+import com.gifthub.product.entity.Product;
 import com.gifthub.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

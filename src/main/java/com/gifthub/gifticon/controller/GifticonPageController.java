@@ -24,7 +24,7 @@ public class GifticonPageController {
 
     @GetMapping("/gifticons/{type}")
     public String gifticonByType(@PathVariable("type") String type) {
-        return "/gifticon/list-search";
+        return "gifticon/list-search";
     }
 
 //    @GetMapping("/gifticon/list/{category}")

@@ -2,6 +2,7 @@ package com.gifthub.gifticon.dto;
 
 import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.gifticon.enumeration.GifticonStatus;
+import com.gifthub.product.dto.ProductDto;
 import com.gifthub.user.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

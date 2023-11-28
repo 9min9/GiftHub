@@ -1,6 +1,6 @@
-package com.gifthub.gifticon.repository.product;
+package com.gifthub.product.repository;
 
-import com.gifthub.gifticon.entity.Product;
+import com.gifthub.product.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

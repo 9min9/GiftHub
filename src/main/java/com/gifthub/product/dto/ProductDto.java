@@ -1,6 +1,6 @@
-package com.gifthub.gifticon.dto;
+package com.gifthub.product.dto;
 
-import com.gifthub.gifticon.entity.Product;
+import com.gifthub.product.entity.Product;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;

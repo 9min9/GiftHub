@@ -1,8 +1,8 @@
-package com.gifthub.gifticon.service;
+package com.gifthub.product.service;
 
-import com.gifthub.gifticon.dto.ProductDto;
-import com.gifthub.gifticon.entity.Product;
-import com.gifthub.gifticon.repository.product.ProductRepository;
+import com.gifthub.product.dto.ProductDto;
+import com.gifthub.product.entity.Product;
+import com.gifthub.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
