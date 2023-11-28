@@ -11,10 +11,13 @@ import com.gifthub.gifticon.util.OcrUtil;
 import com.gifthub.product.dto.ProductDto;
 import com.gifthub.product.service.ProductService;
 import com.gifthub.user.UserJwtTokenProvider;
-import com.gifthub.user.entity.User;
+import com.gifthub.user.dto.UserDto;
 import com.gifthub.user.service.UserService;
 import com.google.zxing.NotFoundException;
 import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -85,8 +88,8 @@ public class GifticonController {
 
         } catch (InvalidDueDate e){ // 유효기간 체크
             return ResponseEntity.badRequest().build();
-        }
-        catch (Exception e) {
+
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build(); // 400이 날라감 -> ajax에
 
         } finally {
@@ -125,16 +128,14 @@ public class GifticonController {
 
         } catch (InvalidDueDate e){ // 유효기간 체크
             return ResponseEntity.badRequest().build();
-        }
-        catch (Exception e) {
+
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
 
         } finally {
             file.delete();
         }
         return ResponseEntity.ok().build();
-
-
     }
 
     @PostMapping("/gifticon/addMultiple") // MultipartType으로 받는다 (여러개)
@@ -167,10 +168,8 @@ public class GifticonController {
     public ResponseEntity<Object> getStorageList(@RequestHeader HttpHeaders headers, @PageableDefault(size = 6) Pageable pageable) {
 
         try {
-            User user = userService.getUserById(userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0))).toEntity();
-
-            Page<GifticonStorageListDto> storageList = gifticonStorageService.getStorageList(user.getId(), pageable);
-
+            UserDto userDto = userService.getUserById(userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0)));
+            Page<GifticonStorageListDto> storageList = gifticonStorageService.getStorageList(userDto.getId(), pageable);
 
             return ResponseEntity.ok(storageList);
 
