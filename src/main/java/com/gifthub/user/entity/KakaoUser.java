@@ -19,9 +19,9 @@ public class KakaoUser extends User {
 
     private String kakaoAccountId;
 
+    @Override
     public KakaoUserDto toKakaoUserDto() {
         return KakaoUserDto.builder()
-                .kakaoAccountId(this.kakaoAccountId)
                 .id(super.getId())
                 .email(super.getEmail())
                 .name(super.getName())
@@ -31,7 +31,7 @@ public class KakaoUser extends User {
                 .birthDate(super.getBirthDate())
                 .tel(super.getTel())
                 .point(super.getPoint())
-                .build();
+                .kakaoAccountId(this.kakaoAccountId).build();
     }
 
 
