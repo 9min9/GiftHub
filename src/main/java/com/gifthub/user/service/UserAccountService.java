@@ -20,4 +20,12 @@ public class UserAccountService {
     }
 
 
+    public boolean validatePassword(String password, String confirmPassword) {
+        if(password.equals(confirmPassword)) {
+            return true;
+        }
+        return false;
+    }
+
+
 }

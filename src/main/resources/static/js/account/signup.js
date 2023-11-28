@@ -1,77 +1,96 @@
-window.onload =function (){
+window.onload = function () {
+    document.getElementById("authorize-phone").style.display = "none";
 
-    document.getElementById("authorize-phone").style.display="none";
-    $("#signup-btn").click(function (e){
+    $("#signup-btn").click(function (e) {
         e.preventDefault();
         signup();
     });
 
 
-    $('#email').on('keyup',function (){
-        emailcheck();
+    $('#email').on('change', function () {
+        emailCheck();
+    });
+
+    $('#password').on('change', function () {
+        passwordCheck();
+    });
+
+    $('#confirm-password').on('change', function () {
+        cinfirmPasswordCheck();
+    });
+}
+
+function emailCheck() {
+    let data = {
+        email: $("#email").val()
+    };
+
+    $.ajax({
+        type: "post",
+        url: "/signup/email/check",
+        data: JSON.stringify(data),
+        // data: data,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+
+        success: function (jsonData) {
+            console.log(jsonData);
+            checkResult(jsonData);
+        },
+        error: function (error) {
+            console.log(error)
+            checkResult(error.responseJSON);
+        }
     });
 }
 
 
+function checkResult(result) {
+    let label = document.getElementById("result-" + result.target + "-label");
+    if (result.status == "success") {
+        label.setAttribute('style', 'color: green');
+        label.innerText = result.message;
+    }
 
+    if (result.status == "error") {
+        label.setAttribute('style', 'color: red;');
+        label.innerText = result.message;
+    }
 
-function emailcheck(){
-    let data = {email: $("#email").val()};
-    $.ajax({
-        type:"post",
-        url:"/local/emailcheck",
-        data: JSON.stringify(data),
-        // contentType: "application/json; charset=utf-8",
-        // dataType: "json",
-
-        success : function(response){
-            console.log(response)
-
-            if(response=="1" ) {
-                alert("중복되지않은 이메일");
-            }else if(response == "2"){
-                alert("중복된 이메일");
-            }
-        }
-    })
+    label.innerText = result.message;
 }
-
-
-
-
 
 
 function signup() {
-    let year= $("#birth-date").val().substring(0,4);
-    let birthdate= $("#birth-date").val().substring(4);
+    let year = $("#birth-date").val().substring(0, 4);
+    let birthdate = $("#birth-date").val().substring(4);
 
-        let data= {
-            email: $("#email").val(),
-            password: $("#password").val(),
-            name: $("#name").val(),
-            nickname: $("#nickname").val(),
-            tel: $("#tel").val(),
-            gender: $("#gender").val(),
-            year: year,
-            date: birthdate
-        }
+    let data = {
+        email: $("#email").val(),
+        password: $("#password").val(),
+        name: $("#name").val(),
+        nickname: $("#nickname").val(),
+        tel: $("#tel").val(),
+        gender: $("#gender").val(),
+        year: year,
+        date: birthdate
+    }
 
 
     $.ajax({
-        type:"post",
-        url:"http://localhost:8081/local/signup",
+        type: "post",
+        url: "http://localhost:8081/signup/submit",
         data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
-        dataType: "json"
-    }).done(function(resp){
+        dataType: "json",
 
+        success: function (jsonData) {
+            console.log(jsonData);
+        },
 
-    }).fail(function(error){
-        console.log("signup\n" + JSON.stringify(error));
+        error: function (error) {
+            console.log(error)
+        }
     });
-
-
-
-
 }
 

@@ -1,14 +1,13 @@
 package com.gifthub.user.controller;
 
 import com.gifthub.user.dto.UserDto;
-import com.gifthub.user.entity.User;
-import com.gifthub.user.service.CustomUserDetailsService;
-import com.gifthub.user.service.LocalUserService;
+import com.gifthub.user.exception.DuplicateEmailException;
+import com.gifthub.user.service.UserAccountService;
 import com.gifthub.user.service.UserService;
-import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -16,35 +15,62 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/local")
+@RequestMapping("/signup")
 public class LocalUserAccountController {
     private final UserService userService;
-    private final LocalUserService localUserService;
-    private final CustomUserDetailsService customUserDetailsService;
+    private final UserAccountService userAccountService;
+    @PostMapping("/submit")
+    public ResponseEntity<Object> signup(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) {
+        try {
+            userService.saveLocalUser(userDto);
 
-    @PostMapping(value="/emailcheck")
+        } catch (DuplicateEmailException e) {
+            bindingResult.reject(e.getCode(), e.getMessage());
 
-    public ResponseEntity<Object> emailCheck(@RequestBody String email, HttpSession session ){
+        } finally {
 
+            if(bindingResult.hasErrors()) {
+                return ResponseEntity.badRequest().body(bindingResult);
+            }
+
+            return ResponseEntity.ok("{\"status\": \"success\"}");
+        }
+    }
+
+    @PostMapping(value="/email/check")
+    public ResponseEntity<Object> emailCheck(@RequestBody Map<String, String> request){
         Map<String,String> result = new HashMap<>();
-        System.out.println(email);
 
-        if(customUserDetailsService.loadUserByUsername(email)==null){
-            result.put("key","1");
+        try {
+            String email = request.get("email");
+            result.put("target", "email");
+
+            if (userAccountService.duplicateEmail(email)) {
+                throw new DuplicateEmailException();
+            }
+
+            result.put("status", "success");
+            result.put("message", "사용 가능한 이메일 입니다");
+
             return ResponseEntity.ok().body(result);
-        }else {
-            result.put("key","2");
+
+        } catch (DuplicateEmailException e) {
+            result.put("status", "error");
+            result.put("code", e.getCode());
+            result.put("message", e.getMessage());
+
             return ResponseEntity.badRequest().body(result);
         }
     }
 
-    @PostMapping(value = "/signup")
-    public ResponseEntity<Object> signup(@RequestBody UserDto userDto, HttpSession session) {
 
-        userService.saveLocalUser(userDto);
 
-        return ResponseEntity.ok("{\"message\": \"Received\"}");
-    }
+
+
+
+
+
+
 
 
 }
