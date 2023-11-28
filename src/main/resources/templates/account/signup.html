@@ -48,7 +48,7 @@
                                         <div class="gl-s-api"></div>
                                         <div class="u-s-m-b-10">
                                             <label class="gl-label" for="email">이메일</label>
-                                            <input id="email" name="email" class="input-text input-text--primary-style" type="text" placeholder="이메일">
+                                            <input id="email" name="email" class="input-text input-text--primary-style" type="text" placeholder="이메일(아이디로 사용됩니다)">
                                         </div>
 
                                         <div id="result-email-div" class="u-s-m-b-10">
@@ -76,20 +76,32 @@
                                                 <label class="gl-label" for="name">이름</label>
                                                 <input id="name" name="name" class="input-text input-text--primary-style" type="text" placeholder="이름을 입력해주세요">
                                             </div>
+
+                                            <div class="u-s-m-b-10">
+                                                <label class="gl-label" for="name">닉네임</label>
+                                                <input id="nickname" name="nickname" class="input-text input-text--primary-style" type="text" placeholder="닉네임을 입력해주세요">
+                                            </div>
+
+                                        </div>
+                                        <div class="gl-inline u-s-m-b-10">
+                                            <div id="tel-number">
+                                                <label class="gl-label" for="tel">전화번호</label>
+                                                <input id="tel" name="tel" class="input-text input-text--primary-style" type="text" placeholder="전화번호를 입력해주세요">
+                                            </div>
+
+                                            <div id="confirmtel-div">
+                                                <label class="gl-label" >&nbsp;</label>
+                                                <button class="btn btn--e-transparent-brand-b-2" type="button">전화번호인증</button>
+                                            </div>
                                         </div>
 
-                                        <div id="result-name-div" class="u-s-m-b-20">
-                                            <label id="result-name-label" class="gl-label" style="color: #00aced">이름 검증 성공</label>
+                                        <div class="gl-dob u-s-m-b-5">
+                                            <input id="authorize-phone" name="authorize-phone" class="input-text input-text--primary-style" placeholder="인증번호를 입력해주세요" >
                                         </div>
 
-                                        <div class="u-s-m-b-10">
-                                            <label class="gl-label" for="tel">전화번호</label>
-                                            <input id="tel" name="tel" class="input-text input-text--primary-style" type="text" placeholder="전화번호를 입력해주세요">
-                                        </div>
 
-                                        <div id="result-tel-div" class="u-s-m-b-20">
-                                            <label id="result-tel-label" class="gl-label" style="color: #1e9260">전화번호 검증 성공</label>
-                                        </div>
+
+
 
                                         <div class="gl-inline">
                                             <div class="u-s-m-b-10">
@@ -117,13 +129,13 @@
                                                 </div>
 
                                                 <div id="result-gender-div" class="u-s-m-b-20">
-                                                    <label id="result-gender-label" class="gl-label" style="color: #a90707">성별 에러</label>
+                                                    <label id="result-gender-label" class="gl-label" style="color: #a90707"> &nbsp;   </label>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="u-s-m-b-15" style="display: flex; justify-content: end;">
-                                            <button class="btn btn--e-transparent-brand-b-2" type="submit">회원가입</button>
+                                            <button id="signup-btn" class="btn btn--e-transparent-brand-b-2" >회원가입</button>
                                         </div>
                                     </form>
                                 </div>
@@ -147,6 +159,8 @@
 <!--====== End - Main App ======-->
 
 <th:block th:replace="fragments/base/script :: script"></th:block>
+<script src="/js/account/signup.js">
 
+</script>
 </body>
 </html>

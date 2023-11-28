@@ -21,9 +21,11 @@ public class UserDto {
     private String password;
     private String name;
     private String email;
+    private String nickname;
     private String userType;
     private String loginType;
-    private String  year;
+    private String gender;
+    private String year;
     private String date;
     private String tel;
     private Long point;
@@ -34,8 +36,11 @@ public class UserDto {
                 .id(this.id)
                 .name(this.name)
                 .email(this.email)
-                .userType(UserType.ADMIN)
+                .nickname(this.nickname)
+                .gender(this.gender)
+                .userType(UserType.USER)
                 .birthDate(this.date)
+                .year(this.year)
                 .tel(this.tel)
                 .point(this.point)
                 .build();
