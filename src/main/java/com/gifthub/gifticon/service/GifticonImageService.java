@@ -93,28 +93,6 @@ public class GifticonImageService {
         return gifticonImageDto;
     }
 
-    // TODO : url로 서버에 바로 저장하는 메서드
-    @Transactional
-    public GifticonImageDto saveImageByUrl(String imageUrl){
-        String originalName = GifticonImageUtil.parseImgUrlToFilename(imageUrl);
-        GifticonImage image = new GifticonImage(originalName);
-        String filename = image.getStoreFileName();
-        try{
-            InputStream inputStream = new URL(imageUrl).openStream();
-            amazonS3Client.putObject(new PutObjectRequest(bucketName, filename,inputStream, null));
-
-            String accessUrl = amazonS3Client.getUrl(bucketName, filename).toString();
-            image.setAccessUrl(accessUrl);
-
-        } catch (IOException e){
-            e.printStackTrace();
-            System.out.println("서버에 이미지 저장 실패");
-        }
-
-        GifticonImageDto gifticonImageDto = gifticonImageRepository.save(image).toGifticonImageDto();
-
-        return gifticonImageDto;
-    }
 
 
     // 삭제
