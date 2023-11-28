@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-public enum ProductName {
+public enum CategoryName {
 
     ALL("전체", "all"),
     CAFFE("카페", "cafe"),
@@ -30,21 +30,21 @@ public enum ProductName {
     private String korName;
     private String engName;
 
-    ProductName(String korName, String engName) {
+    CategoryName(String korName, String engName) {
         this.korName = korName;
         this.engName = engName;
     }
 
-    public static ProductName ofKor(final String korName) {
-        List<ProductName> collect = Arrays.stream(ProductName.values()).filter(productName -> {
+    public static CategoryName ofKor(final String korName) {
+        List<CategoryName> collect = Arrays.stream(CategoryName.values()).filter(productName -> {
             return productName.korName.equals(korName);
         }).collect(Collectors.toList());
 
         return collect.get(0);
     }
 
-    public static ProductName ofEng(final String engName) {
-        List<ProductName> collect = Arrays.stream(ProductName.values()).filter(productName -> {
+    public static CategoryName ofEng(final String engName) {
+        List<CategoryName> collect = Arrays.stream(CategoryName.values()).filter(productName -> {
             return productName.engName.equals(engName);
         }).collect(Collectors.toList());
 

@@ -237,7 +237,8 @@ let getBrandButton = (product, brand) => {
 
     let filterButton = document.createElement("button");
     filterButton.classList = "btn filter__btn filter__btn--style-1";
-    filterButton.dataset.filter = "." + product
+    filterButton.classList.add("brand-filter");
+    filterButton.dataset.filter = "." + product;
     filterButton.innerText = brand;
 
     filter.appendChild(filterButton);
@@ -265,7 +266,89 @@ let setBrand = (category) => {
         for (let b of buttons) {
             container.appendChild(b);
         }
+
+        brandFilterEvent();
     }
 
     xhr.send()
+}
+
+function brandFilterEvent() {
+    document.querySelectorAll(".brand-filter").forEach(element => {
+        element.addEventListener("click", function (event) {
+            document.querySelectorAll(".product-wrapper").forEach(element => {
+                element.remove()
+            });
+
+            let brand = event.target.innerText;
+
+            let xhr = new XMLHttpRequest();
+
+            xhr.open("get", "/api/product/brands/" + brand);
+
+            xhr.onload = () => {
+                let parsed = JSON.parse(xhr.responseText);
+
+                let productDiv = document.querySelector("#row-product-div");
+
+                for (let p of parsed) {
+                    let outer = createDivWithClass("col-lg-3 col-md-6 u-s-m-b-30");
+                    outer.classList.add("product-wrapper")
+                    let productBox = createDivWithClass("product-o product-o--radius product-o--hover-off u-h-100");
+                    let product = createDivWithClass("product-o__wrap");
+                    let imgA = createAWithClass("aspect aspect--bg-grey aspect--square u-d-block");
+                    let img = createImgWithClass("aspect__img");
+                    let productBrandName = createSpanWithClass("product-o__category");
+                    productBrandName.innerText = p.brandName;
+                    let productName = createSpanWithClass("product-o__name");
+                    productName.innerText = p.name;
+
+                    imgA.appendChild(img);
+                    product.appendChild(imgA);
+
+                    productBox.appendChild(product);
+                    productBox.appendChild(productBrandName);
+                    productBox.appendChild(productName);
+
+                    outer.appendChild(productBox);
+
+                    productDiv.appendChild(outer);
+                }
+            };
+
+            xhr.send();
+        });
+    });
+}
+
+function createDivWithClass(clazz) {
+    let div = document.createElement("div");
+
+    div.classList = clazz;
+
+    return div;
+}
+
+function createAWithClass(clazz) {
+    let a = document.createElement("a");
+
+    a.classList = clazz;
+
+    return a;
+}
+
+function createImgWithClass(clazz) {
+    let img = document.createElement("img");
+
+    img.classList = clazz;
+
+    return img;
+}
+
+function createSpanWithClass(clazz) {
+    let span = document.createElement("span");
+
+    span.classList = clazz;
+
+    return span;
 }

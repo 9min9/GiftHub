@@ -5,8 +5,7 @@ import static com.gifthub.product.entity.QProduct.product;
 
 import com.gifthub.product.dto.ProductDto;
 import com.gifthub.product.dto.QProductDto;
-import com.gifthub.product.entity.QProduct;
-import com.gifthub.product.enumeration.ProductName;
+import com.gifthub.product.enumeration.CategoryName;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -50,10 +49,10 @@ public class ProductRepositoryImpl implements ProductRepositorySupport {
 
 
     @Override
-    public List<String> findBrandNameByCategory(ProductName productName) {
+    public List<String> findBrandNameByCategory(CategoryName categoryName) {
         return queryFactory.select(product.brandName).distinct()
                 .from(product)
-                .where(product.category.eq(productName.getKorName()))
+                .where(product.category.eq(categoryName.getKorName()))
                 .limit(5)
                 .fetch();
     }
