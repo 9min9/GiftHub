@@ -3,20 +3,18 @@ package com.gifthub.gifticon.dto;
 import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.gifticon.entity.GifticonStorage;
 import com.gifthub.gifticon.enumeration.GifticonStatus;
+import com.gifthub.product.dto.ProductDto;
 import com.gifthub.user.dto.UserDto;
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
 
 @NoArgsConstructor
 @Builder
-@Getter
-@Setter
+@Getter @Setter
+@AllArgsConstructor
 public class GifticonDto {
 
     private Long id;
@@ -25,6 +23,7 @@ public class GifticonDto {
     private LocalDate due;
     private String brandName;
     private String productName;
+    private ProductDto productDto;
     private GifticonStatus gifticonStatus;
     private Long price;
 
@@ -36,6 +35,7 @@ public class GifticonDto {
                 .due(this.due)
                 .brandName(this.brandName)
                 .productName(this.productName)
+                .product(productDto.toProductEntity())
                 .gifticonStatus(this.gifticonStatus)
                 .price(this.price)
                 .build();

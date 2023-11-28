@@ -3,6 +3,7 @@ package com.gifthub.gifticon.service;
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.GifticonQueryDto;
 import com.gifthub.gifticon.entity.Gifticon;
+import com.gifthub.gifticon.enumeration.GifticonStatus;
 import com.gifthub.gifticon.repository.GifticonRepository;
 import com.gifthub.user.entity.User;
 import com.google.zxing.BinaryBitmap;
@@ -78,7 +79,7 @@ public class GifticonService {
     }
 
     public Long saveGifticon(GifticonDto gifticonDto){
-
+        gifticonDto.setGifticonStatus(GifticonStatus.NONE);
         Gifticon gifticon = gifticonRepository.save(gifticonDto.toEntity());
         return gifticon.getId();
     }

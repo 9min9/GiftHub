@@ -3,6 +3,7 @@ package com.gifthub.gifticon.controller;
 import com.gifthub.chatbot.util.JsonConverter;
 import com.gifthub.exception.InvalidDueDate;
 import com.gifthub.gifticon.dto.*;
+import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
 import com.gifthub.gifticon.entity.GifticonStorage;
 
 import com.gifthub.gifticon.service.*;
@@ -32,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -180,27 +182,31 @@ public class GifticonController {
         }
     }
 
-    @PostMapping("/gifticon/register/{id}") // db에 있는경우
-    public ResponseEntity<Object> registerGifticon(@PathVariable Long storageId,
+    @PostMapping("/gifticon/register") // db에 있는경우
+    public ResponseEntity<Object> registerGifticon(@RequestBody Map<String, String> request,
                                                    @RequestHeader HttpHeaders headers) {
+        Map<String, String> result = new HashMap<>();
+
+        long storageId = Long.parseLong(request.get("id"));
+
         try {
-            GifticonStorage storage = gifticonStorageService.getStorageById(storageId);
+            GifticonStorageDto storage = gifticonStorageService.getStorageById(storageId);
             Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
+            UserDto findUser = userService.getUserById(userId);
+            storage.setUser(findUser);
 
-            if (!storage.getUser().getId().equals(userId)) {
-                ResponseEntity.badRequest().build();
-            }
             ProductDto product = productService.getByProductName(storage.getProductName());
-
             GifticonDto gifticonDto = storage.toGifticonDto(product);
             gifticonService.saveGifticon(gifticonDto);
+            gifticonStorageService.deleteStorage(storage.getId());
 
+            result.put("status", "success");
+            return ResponseEntity.ok().body(result);
 
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok().build();
     }
 
 }

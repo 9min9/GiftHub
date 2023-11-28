@@ -3,6 +3,7 @@ package com.gifthub.gifticon.service;
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.GifticonImageDto;
 import com.gifthub.gifticon.dto.GifticonStorageListDto;
+import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
 import com.gifthub.gifticon.entity.GifticonStorage;
 import com.gifthub.gifticon.repository.storage.GifticonStorageRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +29,18 @@ public class GifticonStorageService {
         return gifticonStorageRepository.findStorageByUserId(userId, pageable);
     }
 
-    public GifticonStorage getStorageById(Long storageId){
+    public GifticonStorageDto getStorageById(Long storageId){
         GifticonStorage gifticonStorage = gifticonStorageRepository.findById(storageId).orElse(null);
-        return gifticonStorage;
+
+        if (gifticonStorage == null) {
+            return null;
+        }
+
+        return gifticonStorage.toStorageDto();
+    }
+
+    public void deleteStorage(Long storageId) {
+        gifticonStorageRepository.deleteById(storageId);
     }
 
 

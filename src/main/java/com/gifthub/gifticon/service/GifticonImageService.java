@@ -3,14 +3,11 @@ package com.gifthub.gifticon.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.gifthub.gifticon.dto.GifticonImageDto;
-import com.gifthub.gifticon.entity.Gifticon;
+import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
 import com.gifthub.gifticon.entity.GifticonImage;
-import com.gifthub.gifticon.entity.GifticonStorage;
 import com.gifthub.gifticon.repository.GifticonImageRepository;
 import com.gifthub.gifticon.repository.storage.GifticonStorageRepository;
-import com.gifthub.gifticon.util.GifticonImageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,7 +18,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 
 @Service
 @RequiredArgsConstructor
@@ -96,20 +92,14 @@ public class GifticonImageService {
         return gifticonImageDto;
     }
 
-
-
     // 연쇄 삭제( Storage 삭제 -> Image 서버에서 삭제 -> db Image entity 삭제)
-    public void deleteFileByStorage(GifticonStorage storage){
-        GifticonImage gifticonImage = gifticonImageRepository.findGifticonImageByGifticonStorage(storage).get();
+    public void deleteFileByStorage(GifticonStorageDto storageDto){
+        GifticonImage gifticonImage = gifticonImageRepository.findGifticonImageByGifticonStorage(storageDto.toStorageEntity()).get();
         DeleteObjectRequest request = new DeleteObjectRequest(bucketName, gifticonImage.getStoreFileName());
         amazonS3Client.deleteObject(request); // 서버에서 삭제
         gifticonImageRepository.delete(gifticonImage); // db에서 Gifticon_image삭제
-        storageRepository.delete(storage);// db에서 GifticonStorage 삭제
+        storageRepository.delete(storageDto.toStorageEntity());// db에서 GifticonStorage 삭제
     }
-
-    //
-
-
 
 
 }
