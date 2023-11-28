@@ -45,14 +45,24 @@ public class GifticonController {
     @PostMapping("/kakao/chatbot/add")
     public ResponseEntity<Object> addGificonByKakao(@RequestBody Map<Object, Object> gifticon,
                                                     @RequestHeader HttpHeaders headers) {
-
+        File file= null;
         try {
             List<String> barcodeUrlList = JsonConverter.kakaoChatbotConverter(gifticon);
 
             for (String barcodeUrl : barcodeUrlList) {
                 String barcode = GifticonService.readBarcode(barcodeUrl);
                 GifticonDto gifticonDto = ocrService.readOcrUrlToGifticonDto(barcodeUrl);
-                GifticonImageDto imageDto = gifticonImageService.saveImageByUrl(barcodeUrl);
+
+                // TODO : barcodeUrl -> File 및 Multipartfile 타입으로 변환
+                file = GifticonImageUtil.convertKakaoUrlToFile(barcodeUrl);
+
+                // TODO : File -> Multipartfile
+                MultipartFile multipartFile = GifticonImageUtil.convertToMultipart(file);
+//                GifticonImageDto imageDto = gifticonImageService.saveImage()
+                System.out.println(multipartFile.getOriginalFilename());
+
+//                GifticonImageDto imageDto = gifticonImageService.saveImageByUrl(barcodeUrl);
+                GifticonImageDto imageDto = gifticonImageService.saveImage(multipartFile);
                 gifticonDto.setBarcode(barcode);
                 gifticonDto.setUser(userService.getUserById(userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0))));
 
@@ -92,9 +102,10 @@ public class GifticonController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
 
-        } finally {
-            file.delete();
         }
+//        finally {
+//            file.delete();
+//        }
         return ResponseEntity.ok().build();
 
 
@@ -144,7 +155,7 @@ public class GifticonController {
         }
     }
 
-    @PostMapping("/api/gifticon/register/{id}") // db에 있는경우
+    @PostMapping("/gifticon/register/{id}") // db에 있는경우
     public ResponseEntity<Object> registerGifticon(@PathVariable Long storage_id,
                                                    @RequestHeader HttpHeaders headers) {
         try {

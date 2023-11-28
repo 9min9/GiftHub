@@ -6,7 +6,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public enum GifticonStatus {
-    BEFOREINSPECTION("beforeInspection"),
+//    BEFOREINSPECTION("beforeInspection"),
     NONE("notOnSale"),
     ONSALE("onSale"),
     FINISHED("finished"),

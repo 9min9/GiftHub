@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -65,6 +67,31 @@ public class GifticonImageService {
 
         return gifticonImageDto;
     }
+    @Transactional
+    public GifticonImageDto saveImageByFile(File file) {
+        String originalName = file.getName();
+        GifticonImage image = new GifticonImage(originalName);
+        String filename = image.getStoreFileName();
+
+        try {
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentType("image/jpeg");
+            objectMetadata.setContentLength(file.length());
+
+            try(InputStream inputStream = new FileInputStream(file)){
+                amazonS3Client.putObject(bucketName, filename, inputStream, objectMetadata);
+            }
+
+            String accessUrl = amazonS3Client.getUrl(bucketName, filename).toString();
+            image.setAccessUrl(accessUrl);
+        } catch(IOException e) {
+            System.out.println("서버에 이미지 저장 실패");
+        }
+
+        GifticonImageDto gifticonImageDto = gifticonImageRepository.save(image).toGifticonImageDto();
+
+        return gifticonImageDto;
+    }
 
     // TODO : url로 서버에 바로 저장하는 메서드
     @Transactional
@@ -80,6 +107,7 @@ public class GifticonImageService {
             image.setAccessUrl(accessUrl);
 
         } catch (IOException e){
+            e.printStackTrace();
             System.out.println("서버에 이미지 저장 실패");
         }
 
