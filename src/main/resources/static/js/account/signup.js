@@ -1,21 +1,38 @@
 window.onload =function (){
 
     document.getElementById("authorize-phone").style.display="none";
+    $("#signup-btn").click(function (e){
+        e.preventDefault();
+        signup();
+    });
+
+
+    $('#email').on('keyup',function (){
+        emailcheck();
+    });
 }
 
-  $(document).ready(function(){
-      $("#signup-btn").click(function (e){
-          e.preventDefault();
-          signup();
-      });
-  })
+
+
+
 function emailcheck(){
-    let data = {email: $("#email").val}
+    let data = {email: $("#email").val()};
     $.ajax({
         type:"post",
-        url:"http://localhost:8081/local/emailcheck",
-        data:data
+        url:"/local/emailcheck",
+        data: JSON.stringify(data),
+        // contentType: "application/json; charset=utf-8",
+        // dataType: "json",
 
+        success : function(response){
+            console.log(response)
+
+            if(response=="1" ) {
+                alert("중복되지않은 이메일");
+            }else if(response == "2"){
+                alert("중복된 이메일");
+            }
+        }
     })
 }
 
