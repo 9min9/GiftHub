@@ -64,8 +64,15 @@ function setProductSelectorEvent() {
             });
 
             clearBrand();
+            clearProducts();
             setBrand(event.target.parentNode.querySelector("input[type='hidden']").value.replaceAll("/", "-"))
         });
+    })
+}
+
+function clearJsChecked() {
+    document.querySelectorAll(".brand-filter").forEach(element => {
+        element.classList.remove("js-checked");
     })
 }
 
@@ -273,12 +280,19 @@ let setBrand = (category) => {
     xhr.send()
 }
 
+function clearProducts() {
+    document.querySelectorAll(".product-wrapper").forEach(element => {
+        element.remove()
+    });
+}
+
 function brandFilterEvent() {
     document.querySelectorAll(".brand-filter").forEach(element => {
         element.addEventListener("click", function (event) {
-            document.querySelectorAll(".product-wrapper").forEach(element => {
-                element.remove()
-            });
+            clearProducts();
+            clearJsChecked();
+
+            event.target.classList.add("js-checked");
 
             let brand = event.target.innerText;
 
