@@ -53,6 +53,7 @@ function print(jsonData) {
 function setProductSelectorEvent() {
     document.querySelectorAll(".product-selector").forEach((elem) => {
         elem.addEventListener("click", function(event) {
+            setJsCheckedToTotal();
             document.querySelectorAll(".product-selector-container").forEach(elem => {
                 elem.classList.remove("category-active");
             });
@@ -74,6 +75,11 @@ function clearJsChecked() {
     document.querySelectorAll(".brand-filter").forEach(element => {
         element.classList.remove("js-checked");
     })
+}
+
+function setJsCheckedToTotal() {
+    clearJsChecked();
+    document.querySelector(".total-filter").classList.add("js-checked");
 }
 
 function clearBrand() {
@@ -286,6 +292,34 @@ function clearProducts() {
     });
 }
 
+function setProduct(parsed) {
+    let productDiv = document.querySelector("#row-product-div");
+
+    for (let p of parsed) {
+        let outer = createDivWithClass("col-lg-3 col-md-6 u-s-m-b-30");
+        outer.classList.add("product-wrapper")
+        let productBox = createDivWithClass("product-o product-o--radius product-o--hover-off u-h-100");
+        let product = createDivWithClass("product-o__wrap");
+        let imgA = createAWithClass("aspect aspect--bg-grey aspect--square u-d-block");
+        let img = createImgWithClass("aspect__img");
+        let productBrandName = createSpanWithClass("product-o__category");
+        productBrandName.innerText = p.brandName;
+        let productName = createSpanWithClass("product-o__name");
+        productName.innerText = p.name;
+
+        imgA.appendChild(img);
+        product.appendChild(imgA);
+
+        productBox.appendChild(product);
+        productBox.appendChild(productBrandName);
+        productBox.appendChild(productName);
+
+        outer.appendChild(productBox);
+
+        productDiv.appendChild(outer);
+    }
+}
+
 function brandFilterEvent() {
     document.querySelectorAll(".brand-filter").forEach(element => {
         element.addEventListener("click", function (event) {
@@ -303,31 +337,7 @@ function brandFilterEvent() {
             xhr.onload = () => {
                 let parsed = JSON.parse(xhr.responseText);
 
-                let productDiv = document.querySelector("#row-product-div");
-
-                for (let p of parsed) {
-                    let outer = createDivWithClass("col-lg-3 col-md-6 u-s-m-b-30");
-                    outer.classList.add("product-wrapper")
-                    let productBox = createDivWithClass("product-o product-o--radius product-o--hover-off u-h-100");
-                    let product = createDivWithClass("product-o__wrap");
-                    let imgA = createAWithClass("aspect aspect--bg-grey aspect--square u-d-block");
-                    let img = createImgWithClass("aspect__img");
-                    let productBrandName = createSpanWithClass("product-o__category");
-                    productBrandName.innerText = p.brandName;
-                    let productName = createSpanWithClass("product-o__name");
-                    productName.innerText = p.name;
-
-                    imgA.appendChild(img);
-                    product.appendChild(imgA);
-
-                    productBox.appendChild(product);
-                    productBox.appendChild(productBrandName);
-                    productBox.appendChild(productName);
-
-                    outer.appendChild(productBox);
-
-                    productDiv.appendChild(outer);
-                }
+                setProduct(parsed);
             };
 
             xhr.send();
@@ -365,4 +375,18 @@ function createSpanWithClass(clazz) {
     span.classList = clazz;
 
     return span;
+}
+
+function getTotalProducts() {
+    let xhr = new XMLHttpRequest();
+
+    xhr.open("get", "/api/product/products");
+
+    xhr.onload = () => {
+        const parsed = JSON.parse(xhr.responseText);
+
+        setProduct(parsed);
+    }
+
+    xhr.send();
 }

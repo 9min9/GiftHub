@@ -8,6 +8,7 @@ function createProductSpan(productName, english, active) {
 
     if (active) {
         productSelectorContainer.classList.add("category-active");
+        productSelector.classList.add("total-category")
     }
 
     productSelectorContainer.appendChild(productSelector);

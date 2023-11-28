@@ -136,4 +136,17 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/products")
+    public ResponseEntity<Object> getAllProducts() {
+        try {
+            List<ProductDto> products = productService.getAllProduct();
+
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }

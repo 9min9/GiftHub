@@ -147,6 +147,12 @@
 
         setProductSelectorEvent();
 
+        getTotalProducts();
+
+        document.querySelector(".total-category").addEventListener("click", function(event) {
+            getTotalProducts();
+        });
+
         const is = new IntersectionObserver((entries, observer) => {
             let page = 0;
 
