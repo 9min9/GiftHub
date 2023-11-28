@@ -13,7 +13,6 @@ window.onload = function () {
 
     $('#email').on('change', function () {
         emailCheck();
-        email2();
     });
 
     $('#password').on('change', function () {
@@ -34,6 +33,10 @@ window.onload = function () {
     $('#tel').on('change', function (){
         telCheck();
     })
+
+    $('#birth-date').on('change', function (){
+        birthcheck();
+    })
 }
 
 
@@ -49,6 +52,9 @@ function passwordCheck(){
     } else {
         label.innerText = '비밀번호가 규칙에 맞지 않습니다. 8자 이상, 특수문자를 포함해 주세요';
         label.style.color= 'red';
+    }
+    if(password==''|| password==null){
+        label.innerText="";
     }
 }
 
@@ -153,6 +159,7 @@ function checkResult(result) {
     if (result.status == "success") {
         label.setAttribute('style', 'color: green');
         label.innerText = result.message;
+
     }
 
     if (result.status == "error") {
@@ -162,12 +169,15 @@ function checkResult(result) {
 
     label.innerText = result.message;
 }
-function email2() {
-    let email2 = $("#email").val();
-
-    if (email2 == '') {
-        document.getElementById("result-email2-label").style.visibility = "hidden";
-
+function birthcheck(){
+    let birth = $("#birth-date").val();
+    let birthlabel=document.getElementById("result-birth-date-label");
+    if(birth.length==8){
+        birthlabel.innerText=" 감사합니다 ";
+        birthlabel.style.color='green';
+    }else {
+        birthlabel.innerText="8자리 데로 입력해주십시오.";
+        birthlabel.style.color='red';
     }
 }
 
@@ -188,6 +198,7 @@ function signup() {
         year: year,
         date: birthdate
     }
+
 
 
     $.ajax({
