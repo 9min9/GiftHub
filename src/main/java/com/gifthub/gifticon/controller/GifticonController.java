@@ -177,20 +177,6 @@ public class GifticonController {
         return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/gifticons/{category}/brands")
-    public ResponseEntity<Object> getBrand(@PathVariable("category") String category) {
-        System.out.println(category);
-
-        try {
-            List<String> gifticonBrandName = gifticonService.getGifticonBrandName(category);
-
-            return ResponseEntity.ok(gifticonBrandName);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("잘못된 요청입니다.");
-        }
-    }
-
 }
 
 

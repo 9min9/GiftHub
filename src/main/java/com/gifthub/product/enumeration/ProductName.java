@@ -1,5 +1,12 @@
 package com.gifthub.product.enumeration;
 
+import lombok.Getter;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Getter
 public enum ProductName {
 
     ALL("전체", "all"),
@@ -26,6 +33,22 @@ public enum ProductName {
     ProductName(String korName, String engName) {
         this.korName = korName;
         this.engName = engName;
+    }
+
+    public static ProductName ofKor(final String korName) {
+        List<ProductName> collect = Arrays.stream(ProductName.values()).filter(productName -> {
+            return productName.korName.equals(korName);
+        }).collect(Collectors.toList());
+
+        return collect.get(0);
+    }
+
+    public static ProductName ofEng(final String engName) {
+        List<ProductName> collect = Arrays.stream(ProductName.values()).filter(productName -> {
+            return productName.engName.equals(engName);
+        }).collect(Collectors.toList());
+
+        return collect.get(0);
     }
 
 }

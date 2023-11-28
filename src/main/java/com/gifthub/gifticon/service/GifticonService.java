@@ -4,6 +4,7 @@ import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.GifticonQueryDto;
 import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.gifticon.repository.GifticonRepository;
+import com.gifthub.product.enumeration.ProductName;
 import com.gifthub.user.entity.User;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.MultiFormatReader;
@@ -97,8 +98,8 @@ public class GifticonService {
         return gifticonRepository.findByGifticonStatusIsOnSale(pageable, type).map(Gifticon::toQueryDto);
     }
 
-    public List<String> getGifticonBrandName(String category) {
-        return gifticonRepository.findBrandNameByCategory(category);
-    }
+//    public List<String> getGifticonBrandName(ProductName productName) {
+//        return gifticonRepository.findBrandNameByCategory(category);
+//    }
 
 }

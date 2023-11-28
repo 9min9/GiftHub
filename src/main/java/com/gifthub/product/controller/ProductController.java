@@ -3,6 +3,7 @@ package com.gifthub.product.controller;
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.product.dto.ProductDto;
 import com.gifthub.gifticon.service.GifticonService;
+import com.gifthub.product.enumeration.ProductName;
 import com.gifthub.product.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -11,7 +12,9 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -104,4 +107,19 @@ public class ProductController {
     }
 
     // TODO : 금액별, 남은 유효기간별(임박순) 정렬하기
+
+
+    @GetMapping("/{category}/brands")
+    public ResponseEntity<Object> getBrand(@PathVariable("category") String category) {
+        ProductName productName = ProductName.ofEng(category);
+
+        try {
+            List<String> gifticonBrandName = gifticonService.getGifticonBrandName(productName);
+
+            return ResponseEntity.ok(gifticonBrandName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("잘못된 요청입니다.");
+        }
+    }
 }
