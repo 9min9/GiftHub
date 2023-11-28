@@ -27,5 +27,10 @@ public class PaymentPageController {
         return "/payment/orders";
     }
 
+    @GetMapping("/kakao")
+    public String payment() {
+        return "/payment/payment";
+    }
+
 
 }
