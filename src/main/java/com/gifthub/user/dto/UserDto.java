@@ -38,6 +38,7 @@ public class UserDto {
                 .email(this.email)
                 .nickname(this.nickname)
                 .gender(this.gender)
+                .password(this.password)
                 .userType(UserType.USER)
                 .birthDate(this.date)
                 .year(this.year)

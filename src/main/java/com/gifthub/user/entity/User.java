@@ -40,6 +40,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @Column(name = "email", unique = true)
     private String email;
+    private String password;
     private String name;
     private String nickname;
     private String gender;
@@ -119,6 +120,7 @@ public class User extends BaseTimeEntity implements UserDetails {
                 .id(this.id)
                 .email(this.email)
                 .name(this.name)
+                .password(this.password)
                 .userType(this.userType.name())
                 .year(this.year)
                 .date(this.birthDate)

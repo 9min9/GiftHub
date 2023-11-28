@@ -55,6 +55,10 @@ public class LocalUserAccountController {
             result.put("status", "success");
             result.put("message", "사용 가능한 이메일 입니다");
 
+            if(email.isEmpty() || email==null){
+                result.put("message","");
+            }
+
             return ResponseEntity.ok().body(result);
 
         } catch (DuplicateEmailException e) {
@@ -100,16 +104,20 @@ public class LocalUserAccountController {
 
         try {
 
-            String passwrod = request.get("password");
+            String password = request.get("password");
             String confirmPassword =request.get("confirmPassword");
             result.put("target", "confirmPassword");
 
-            if (userAccountService.validatePassword(passwrod, confirmPassword )) {
+            if (userAccountService.validatePassword(password, confirmPassword )) {
                 throw new DuplicateConfirmPasswordException();
 
             }
             result.put("status", "success");
             result.put("message", "비밀번호가 동일합니다.");
+
+            if(password.isEmpty() || password ==null){
+                result.put("message","");
+            }
 
             return ResponseEntity.ok().body(result);
 
