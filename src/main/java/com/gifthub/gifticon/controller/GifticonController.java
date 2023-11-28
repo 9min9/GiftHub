@@ -53,28 +53,31 @@ public class GifticonController {
                 String barcode = GifticonService.readBarcode(barcodeUrl);
                 GifticonDto gifticonDto = ocrService.readOcrUrlToGifticonDto(barcodeUrl);
 
-                // TODO : barcodeUrl -> File 및 Multipartfile 타입으로 변환
-                file = GifticonImageUtil.convertKakaoUrlToFile(barcodeUrl);
+                file = GifticonImageUtil.convertKakaoUrlToFile(barcodeUrl); // url -> File
 
-                // TODO : File -> Multipartfile
-                MultipartFile multipartFile = GifticonImageUtil.convertToMultipart(file);
-//                GifticonImageDto imageDto = gifticonImageService.saveImage()
-                System.out.println(multipartFile.getOriginalFilename());
-
-//                GifticonImageDto imageDto = gifticonImageService.saveImageByUrl(barcodeUrl);
-                GifticonImageDto imageDto = gifticonImageService.saveImage(multipartFile);
+                GifticonImageDto imageDto = gifticonImageService.saveImageByFile(file); // File -> 서버에 저장
                 gifticonDto.setBarcode(barcode);
+//                System.out.println("barcode : "+ barcode);
+//                System.out.println("AccessUrl: "+ imageDto.getAccessUrl());
+//                System.out.println("storedFileName: " + imageDto.getStoreFileName());
+//                System.out.println("originalFileName: " + imageDto.getOriginalFileName());
+
+                // UserId를 어떻게 가져오지?
                 gifticonDto.setUser(userService.getUserById(userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0))));
+                System.out.println(headers);
+                System.out.println(gifticonDto.getUser().getId());
 
-//                System.out.println(gifticonDto.getUser().getId());
-
-                System.out.println(gifticonStorageService.saveStorage(gifticonDto, imageDto));
+                GifticonStorage storage = gifticonStorageService.saveStorage(gifticonDto, imageDto);
+                System.out.println("sotrage_id : " + storage.getId());
 
 
             }
 
         } catch (Exception e) {     //todo : url이 barcode가 아닌 경우 exception 처리하기
             return ResponseEntity.badRequest().build(); // 400이 날라감 -> ajax에
+
+        } finally {
+            file.delete();
         }
 
         return ResponseEntity.ok().build();  // 200이 날라감 0 -> ajax에 success
