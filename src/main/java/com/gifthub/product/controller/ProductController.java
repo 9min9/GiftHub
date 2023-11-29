@@ -149,4 +149,17 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/category/{category}")
+    public ResponseEntity<Object> getAllProductsByBrands(@PathVariable("category") String category) {
+        try {
+            List<ProductDto> products = productService.getProductByCategory(category);
+
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }

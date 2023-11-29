@@ -67,6 +67,7 @@ function setProductSelectorEvent() {
             clearBrand();
             clearProducts();
             setBrand(event.target.parentNode.querySelector("input[type='hidden']").value.replaceAll("/", "-"))
+            getTotalProductByCategory(event.target.parentNode.querySelector(".product-name").innerText);
         });
     })
 }
@@ -75,6 +76,12 @@ function clearJsChecked() {
     document.querySelectorAll(".brand-filter").forEach(element => {
         element.classList.remove("js-checked");
     })
+}
+
+function totalFilterEvent() {
+    document.querySelector(".total-filter").addEventListener("click", function(event) {
+        getTotalProductByCategory(document.querySelector(".category-active").querySelector(".product-name").innerText)
+    });
 }
 
 function setJsCheckedToTotal() {
@@ -281,6 +288,7 @@ let setBrand = (category) => {
         }
 
         brandFilterEvent();
+        totalFilterEvent();
     }
 
     xhr.send()
@@ -381,6 +389,22 @@ function getTotalProducts() {
     let xhr = new XMLHttpRequest();
 
     xhr.open("get", "/api/product/products");
+
+    xhr.onload = () => {
+        const parsed = JSON.parse(xhr.responseText);
+
+        setProduct(parsed);
+    }
+
+    xhr.send();
+}
+
+function getTotalProductByCategory(category) {
+    let xhr = new XMLHttpRequest();
+
+    xhr.open("get", "/api/product/category/" + category);
+
+    xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
 
     xhr.onload = () => {
         const parsed = JSON.parse(xhr.responseText);

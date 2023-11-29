@@ -56,4 +56,8 @@ public class ProductService {
         return productRepository.findProductByBrand(brand);
     }
 
+    public List<ProductDto> getProductByCategory(String category) {
+        return productRepository.findProductByCategory(category).stream().map(Product::toProductDto).toList();
+    }
+
 }
