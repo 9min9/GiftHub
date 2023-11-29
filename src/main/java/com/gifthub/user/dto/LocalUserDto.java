@@ -24,7 +24,6 @@ public class LocalUserDto {
     private String password;
 
 
-    @NotBlank(message="비밀번호 확인 : 비밀번호 같은지 확인해주세요")
     @Pattern(regexp = "^(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,20}$" ,message = "비밀번호:  8자리 이상 20이하, 특수문자를 포함해서 작성해주세요")
     private String confirmpassword;
 
