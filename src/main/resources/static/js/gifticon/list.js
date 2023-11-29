@@ -416,3 +416,9 @@ function getTotalProductByCategory(category) {
 
     xhr.send();
 }
+
+let totalCategoryEvent = () => {
+    document.querySelector(".total-category").addEventListener("click", function() {
+        getTotalProducts();
+    });
+}
