@@ -47,6 +47,21 @@ public class GifticonStorage extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private StorageStatus storage_status = WAIT_REGISTRATION;
 
+    public void changeBrandName(String brandName) {
+        this.brandName = brandName;
+    }
+
+    public void changeProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public void changeBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
+    public void changeDue(LocalDate due) {
+        this.due = due;
+    }
 
     public void changeStatus(StorageStatus status) {
         storage_status = status;

@@ -22,7 +22,6 @@ public class GifticonStorageRepositoryImpl implements GifticonStorageRepositoryS
 
     private final JPAQueryFactory queryFactory;
 
-
     @Override
     public Page<GifticonStorage> findStorageByUserId(Long userId, Pageable pageable) {
         List<GifticonStorage> content = test(userId, pageable);
@@ -51,6 +50,7 @@ public class GifticonStorageRepositoryImpl implements GifticonStorageRepositoryS
                         gifticonStorage.productName,
                         gifticonStorage.barcode,
                         gifticonStorage.due,
+                        gifticonStorage.storage_status,
                         gifticonStorage.gifticonImage.accessUrl))
                 .from(gifticonStorage)
                 .where(gifticonStorage.user.id.eq(userId))

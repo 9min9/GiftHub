@@ -24,6 +24,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -101,5 +102,34 @@ public class GifticonService {
 //    public List<String> getGifticonBrandName(ProductName productName) {
 //        return gifticonRepository.findBrandNameByCategory(category);
 //    }
+
+
+    public boolean productNameIsNull(String productName) {
+        if (productName.isEmpty() || productName == null) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean brandNameIsNull(String brandName) {
+        if (brandName.isEmpty() || brandName == null) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean barcodeIsNull(String barcode) {
+        if(barcode.isEmpty() || barcode == null) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean dueIsNull(LocalDate due) {
+        if (due == null) {
+            return true;
+        }
+        return false;
+    }
 
 }
