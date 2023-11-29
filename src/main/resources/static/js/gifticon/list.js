@@ -409,13 +409,16 @@ function scrollEvent(element) {
                 if (entry.intersectionRatio > 0) {
                     io.unobserve(element);
 
+                    page++;
+                    if (page === 0) {
+                        return;
+                    }
+
                     getProductByCategoryAndBrand(
                         document.querySelector(".product-selector-container.category-active")
                             .querySelector(".product-name").innerText,
                         document.querySelector(".brand-filter.js-checked").innerText,
                     );
-
-                    page++;
 
                     getProductByCategoryAndBrand.onload = () => {
                         io.observe(document.querySelector(".product-wrapper:last-child"));

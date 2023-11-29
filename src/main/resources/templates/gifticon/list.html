@@ -158,17 +158,6 @@
 
         totalCategoryEvent();
 
-        const is = new IntersectionObserver((entries, observer) => {
-            let page = 0;
-
-            if (!entry.isIntersecting) return;
-
-            let element = document.querySelector("#row-product-div:nth-last-child(6)");
-            observer.observe(element);
-            observer.unobserve(element);
-
-            getPurchasingGifticon(page++, [[${param.size}]], document.querySelector(".category-active").innerText);
-        });
     }
 </script>
 
