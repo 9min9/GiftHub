@@ -3,6 +3,7 @@ package com.gifthub.movement.entity;
 import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.gifticon.enumeration.MovementStatus;
 import com.gifthub.global.BaseTimeEntity;
+import com.gifthub.movement.dto.MovementDto;
 import com.gifthub.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -36,5 +37,15 @@ public class Movement extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private MovementStatus movementStatus;
+
+    public MovementDto toMovementDto() {
+        return MovementDto.builder()
+                .id(this.id)
+                .fromUser(this.fromUser.toDto())
+                .toUser(this.toUser.toDto())
+                .gifticon(this.gifticon.toDto())
+                .movementStatus(this.movementStatus)
+                .build();
+    }
 
 }
