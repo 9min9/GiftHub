@@ -11,11 +11,10 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -159,6 +158,29 @@ public class ProductController {
         } catch (Exception e) {
             e.printStackTrace();
 
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/page/{category}/{brand}")
+    public ResponseEntity<Object> getProductByCategoryAndBrand(Pageable pageable,
+                                                               @PathVariable("category") String category,
+                                                               @PathVariable("brand") String brand) {
+        String cat = category.replaceAll("-", "/");
+
+        Page<ProductDto> products = null;
+        if (category.equals("전체")) {
+            products = productService.getAllProduct(pageable);
+        } else if (brand.equals("전체")) {
+            products = productService.getProductByCategory(pageable, cat);
+        } else {
+            products = productService.getProductByBrand(pageable, brand);
+        }
+
+
+        if (products != null) {
+            return ResponseEntity.ok(products);
+        } else {
             return ResponseEntity.badRequest().build();
         }
     }

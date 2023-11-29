@@ -10,6 +10,9 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 @RequiredArgsConstructor
 public class ProductRepositoryImpl implements ProductRepositorySupport {
@@ -41,6 +44,42 @@ public class ProductRepositoryImpl implements ProductRepositorySupport {
                 .select(new QProductDto(product.id, product.brandName, product.price, product.name, product.category))
                 .from(product)
                 .fetch();
+    }
+
+    @Override
+    public Page<ProductDto> findProductByBrand(Pageable pageable, String brand) {
+        List<ProductDto> fetch = queryFactory
+                .select(new QProductDto(product.id, product.name, product.price, product.brandName, product.category))
+                .from(product)
+                .where(product.brandName.eq(brand))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long count = queryFactory
+                .select(product.count())
+                .from(product)
+                .where(product.brandName.eq(brand))
+                .fetchOne();
+
+        return new PageImpl<>(fetch, pageable, count);
+    }
+
+    @Override
+    public Page<ProductDto> findAllProduct(Pageable pageable) {
+        List<ProductDto> fetch = queryFactory
+                .select(new QProductDto(product.id, product.brandName, product.price, product.name, product.category))
+                .from(product)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long count = queryFactory
+                .select(product.count())
+                .from(product)
+                .fetchOne();
+
+        return new PageImpl<>(fetch, pageable, count);
     }
 
     private BooleanExpression test(Long id) {
