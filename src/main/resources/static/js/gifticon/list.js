@@ -66,8 +66,11 @@ function setProductSelectorEvent() {
 
             clearBrand();
             clearProducts();
-            setBrand(event.target.parentNode.querySelector("input[type='hidden']").value.replaceAll("/", "-"))
+            setBrand(event.target.parentNode.querySelector("input[type='hidden']").value.replaceAll("/", "-"));
             getTotalProductByCategory(event.target.parentNode.querySelector(".product-name").innerText);
+
+            scrollTo({top: document.querySelector("#show-product-div").offsetTop, behavior: "smooth"});
+
         });
     })
 }
