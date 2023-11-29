@@ -406,7 +406,7 @@ function scrollEvent(element, page) {
 
                     getProductByCategoryAndBrand(
                         document.querySelector(".product-selector-container.category-active")
-                            .querySelector(".product-name").value,
+                            .querySelector(".product-name").innerText,
                         document.querySelector(".brand-filter.js-checked").innerText,
                     );
 
