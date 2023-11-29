@@ -1,19 +1,11 @@
 document.onload = function () {
 
-
-
-
-
-
     $('#product-modal-input').on('change', function () {
         validateProduct();
     });
 
 
 }
-
-
-
 
 function renderGifticon(jsonData) {
     let listContainer = document.getElementById('gifticon-list-div');
@@ -271,7 +263,7 @@ function setGifticonAddModal(element) {
 
     } else {
         productValidResult.innerText = "상품 정보가 없어 관리자의 확인이 필요합니다.";
-        addBtn.innerText = "등록 검수"
+        addBtn.innerText = "등록 요청"
         addBtn.setAttribute('onclick', "sendToAdmin("+pk+")");
     }
 }
@@ -299,11 +291,11 @@ function addGifticon(pk) {
         },
 
         success: function (jsonData) {
-            console.log(jsonData);
+            alert("기프티콘 등록이 완료되었습니다");
             // checkResult(jsonData);
         },
         error: function (error) {
-            console.log(error)
+            alert("기프티콘 등록이 실패했습니다");
             // checkResult(error.responseJSON);
         }
     });
@@ -332,36 +324,25 @@ function sendToAdmin(pk) {
         },
 
         success: function (jsonData) {
-            console.log(jsonData);
-            alert(jsonData)
+            alert("등록 요청이 완료되었습니다")
         },
 
         error: function (error) {
-            console.log(error)
             validateForm(error.responseJSON);
-            // console.log("fin")
+            alert("등록 요청에 실패했습니다.");
         }
     });
 }
-
-
 
 function validateProduct() {
     let target = document.getElementById('product-modal-input');
 
 }
 
-
 function validateForm(error) {
     let target = document.getElementById("error-" +error.field+ "-modal-label");
     target.innerText = error.message;
-
-    // error-brand-modal-label
-    //
-    // error.field;
 }
-
-
 
 function validateProduct() {
     let data = {
@@ -379,22 +360,17 @@ function validateProduct() {
         },
 
         success: function (jsonData) {
-            console.log(jsonData);
             let label = document.getElementById("result-" + result.target + "-label");
             label.innerText = "";
 
         },
         error: function (error) {
-            console.log(error)
             checkError(error.responseJSON);
         }
     });
 }
 
-
 function checkError(result) {
-    console.log(result);
-
     let label = document.getElementById("result-" + result.target + "-label");
 
     if (result.status == "error") {
@@ -409,18 +385,15 @@ function delStorage(storageId) {
     $.ajax({
         type: "post",
         url: "/api/storage/delete/"+storageId,
-        // data: JSON.stringify(data),
-        // contentType: "application/json; charset=utf-8",
-        // dataType: "json",
         headers: {
             Authorization: localStorage.getItem("token"),
         },
 
         success: function (jsonData) {
-            console.log(jsonData);
+            alert("삭제되었습니다.");
         },
         error: function (error) {
-            console.log(error)
+            alert("삭제에 실패했습니다");
         }
     });
 
