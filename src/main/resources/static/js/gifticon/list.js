@@ -1,3 +1,5 @@
+let page = 0;
+
 function getPurchasingGifticon(page, size, type = "전체") {
     page = page || 1;
     size = size || 10;
@@ -53,6 +55,7 @@ function print(jsonData) {
 function setProductSelectorEvent() {
     document.querySelectorAll(".product-selector").forEach((elem) => {
         elem.addEventListener("click", function (event) {
+            page = 0;
             setJsCheckedToTotal();
             document.querySelectorAll(".product-selector-container").forEach(elem => {
                 elem.classList.remove("category-active");
@@ -346,6 +349,8 @@ function setProduct(parsed) {
 function brandFilterEvent() {
     document.querySelectorAll(".brand-filter").forEach(element => {
         element.addEventListener("click", function (event) {
+            page = 0;
+
             clearProducts();
             clearJsChecked();
 
@@ -354,6 +359,8 @@ function brandFilterEvent() {
             let brand = event.target.innerText;
 
             getProductByCategoryAndBrand(null, brand);
+
+            scrollTo({top: document.querySelector("#show-product-div").offsetTop, behavior: "smooth"});
         });
     });
 }
@@ -398,19 +405,22 @@ let totalCategoryEvent = () => {
     });
 }
 
-function scrollEvent(element, page) {
+function scrollEvent(element) {
     const io = new IntersectionObserver(entries => {
         entries.forEach(entry => {
                 if (entry.intersectionRatio > 0) {
                     io.unobserve(element);
 
+                    page++;
+                    if (page === 0) {
+                        return;
+                    }
+
                     getProductByCategoryAndBrand(
                         document.querySelector(".product-selector-container.category-active")
-                            .querySelector(".product-name").value,
+                            .querySelector(".product-name").innerText,
                         document.querySelector(".brand-filter.js-checked").innerText,
                     );
-
-                    page++;
 
                     getProductByCategoryAndBrand.onload = () => {
                         io.observe(document.querySelector(".product-wrapper:last-child"));
@@ -423,7 +433,6 @@ function scrollEvent(element, page) {
     io.observe(element);
 }
 
-page = 0;
 function getProductByCategoryAndBrand(category = "전체", brand = "전체") {
     let xhr = new XMLHttpRequest();
 

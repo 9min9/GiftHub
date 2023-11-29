@@ -128,7 +128,7 @@ public class OcrUtil {
 
     // 유효기간 지났는지  check
     public static void checkDueDate(LocalDate inputDueDate){
-        if(inputDueDate.isAfter(LocalDate.now())){
+        if(inputDueDate.isBefore(LocalDate.now())){
             throw new InvalidDueDate("유효기간이 지났습니다");
             // 사용자 예외처리
         }
