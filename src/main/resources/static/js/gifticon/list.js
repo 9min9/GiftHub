@@ -80,7 +80,13 @@ function clearJsChecked() {
 
 function totalFilterEvent() {
     document.querySelector(".total-filter").addEventListener("click", function(event) {
-        getTotalProductByCategory(document.querySelector(".category-active").querySelector(".product-name").innerText)
+        let categoryName = document.querySelector(".category-active").querySelector(".product-name").innerText;
+
+        if (categoryName === "전체") {
+            getTotalProducts();
+        } else {
+            getTotalProductByCategory(categoryName);
+        }
     });
 }
 
