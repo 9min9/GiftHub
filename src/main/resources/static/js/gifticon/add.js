@@ -329,7 +329,6 @@ function sendToAdmin(pk) {
         dataType: "json",
         headers: {
             Authorization: localStorage.getItem("token"),
-            id: pk
         },
 
         success: function (jsonData) {
