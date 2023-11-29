@@ -94,11 +94,13 @@ public class GifticonImageService {
 
     // 연쇄 삭제( Storage 삭제 -> Image 서버에서 삭제 -> db Image entity 삭제)
     public void deleteFileByStorage(GifticonStorageDto storageDto){
-        GifticonImage gifticonImage = gifticonImageRepository.findGifticonImageByGifticonStorage(storageDto.toStorageEntity()).get();
-        DeleteObjectRequest request = new DeleteObjectRequest(bucketName, gifticonImage.getStoreFileName());
-        amazonS3Client.deleteObject(request); // 서버에서 삭제
-        gifticonImageRepository.delete(gifticonImage); // db에서 Gifticon_image삭제
-        storageRepository.delete(storageDto.toStorageEntity());// db에서 GifticonStorage 삭제
+        GifticonImage image = gifticonImageRepository.findGifticonImageByGifticonStorage(storageDto.toStorageEntity()).orElse(null);
+        if (image != null) {
+            DeleteObjectRequest request = new DeleteObjectRequest(bucketName, image.getStoreFileName());
+            amazonS3Client.deleteObject(request); // 서버에서 삭제
+            gifticonImageRepository.delete(image); // db에서 Gifticon_image삭제
+            storageRepository.delete(storageDto.toStorageEntity());// db에서 GifticonStorage 삭제
+        }
     }
 
 

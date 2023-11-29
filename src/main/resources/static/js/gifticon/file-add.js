@@ -22,16 +22,14 @@ function openFile(imageFile){
         success : function (jsonData){
             alert("등록 성공");
             $('#add-to-cart').modal('hide');
-            location.reload();
-
         },
 
-
-
         error : function (error){
-            console.log(error)
+            alert("등록에 실패했습니다.")
+        },
+
+        complete: function () {
+            window.location.href = "/gifticon/add";
         }
-
     })
-
 }

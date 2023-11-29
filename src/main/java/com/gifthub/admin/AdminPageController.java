@@ -11,13 +11,16 @@ public class AdminPageController {
     @GetMapping("/index")
     public String adminIndex() {
         return "admin/admin-index";
-//        return "admin/address-book";
+    }
+
+    @GetMapping("/product/config")
+    public String productConfig() {
+        return "admin/product-config";
     }
 
     @GetMapping("/user/config")
     public String userConfig() {
         return "admin/user-config";
     }
-
 
 }

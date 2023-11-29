@@ -18,29 +18,22 @@ public class StorageController {
     private final GifticonImageService imageService;
     private final UserJwtTokenProvider userJwtTokenProvider;
 
-
     @PostMapping("/delete/{id}")
-    public ResponseEntity<Object> removeFromStorage(@PathVariable("id") Long storageId,
-                                                    @RequestHeader HttpHeaders headers){
+    public ResponseEntity<Object> removeFromStorage(@PathVariable("id") Long storageId, @RequestHeader HttpHeaders headers){
         try{
             GifticonStorageDto storage = storageService.getStorageById(storageId);
             Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
 
             if (!storage.getUser().getId().equals(userId)) {
-
                 ResponseEntity.badRequest().build();
             }
-
             imageService.deleteFileByStorage(storage);
+            storageService.deleteStorage(storageId);
 
         } catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
-
         return ResponseEntity.ok().build();
-
     }
-
-
 }

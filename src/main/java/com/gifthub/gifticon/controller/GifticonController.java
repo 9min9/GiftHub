@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -121,9 +122,7 @@ public class GifticonController {
             gifticonDto.setBarcode(barcode);
             gifticonDto.setUser(userService.getUserById(userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0))));
 
-//            System.out.println(gifticonDto.getUser().getId());
             gifticonStorageService.saveStorage(gifticonDto, imageDto);
-
 
         } catch (NotFoundException e){ // 바코드x
             return ResponseEntity.badRequest().build();
@@ -137,7 +136,7 @@ public class GifticonController {
         } finally {
             file.delete();
         }
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(Collections.singletonMap("status", "ok"));
     }
 
     @PostMapping("/gifticon/addMultiple") // MultipartType으로 받는다 (여러개)
