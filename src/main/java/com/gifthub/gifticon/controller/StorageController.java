@@ -1,5 +1,6 @@
 package com.gifthub.gifticon.controller;
 
+import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
 import com.gifthub.gifticon.entity.GifticonStorage;
 import com.gifthub.gifticon.service.GifticonImageService;
 import com.gifthub.gifticon.service.GifticonStorageService;
@@ -22,7 +23,7 @@ public class StorageController {
     public ResponseEntity<Object> removeFromStorage(@PathVariable("id") Long storageId,
                                                     @RequestHeader HttpHeaders headers){
         try{
-            GifticonStorage storage = storageService.getStorageById(storageId);
+            GifticonStorageDto storage = storageService.getStorageById(storageId);
             Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
 
             if (!storage.getUser().getId().equals(userId)) {

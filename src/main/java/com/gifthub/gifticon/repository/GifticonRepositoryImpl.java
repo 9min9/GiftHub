@@ -2,7 +2,6 @@ package com.gifthub.gifticon.repository;
 
 import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.gifticon.enumeration.GifticonStatus;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.gifthub.gifticon.entity.QGifticon.*;
+import static com.gifthub.gifticon.entity.QGifticon.gifticon;
 import static com.gifthub.product.entity.QProduct.product;
 
 @Repository
@@ -51,8 +50,17 @@ public class GifticonRepositoryImpl implements GifticonRepositorySupport {
                 .fetch();
     }
 
+    // TODO : 검색 조건 클래스 만들기
     @Override
     public Page<Gifticon> findByProduct(Pageable pageable, Long productId) {
+
+//        List<Gifticon> content = jpaQueryFactory
+//                .selectFrom(gifticon)
+//                .join(gifticon.product, product)
+//                .where(product.id.eq(productId))
+//                .offset()
+//                .fetch()
+//                ))
         return null;
     }
 }
