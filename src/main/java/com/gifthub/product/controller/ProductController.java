@@ -11,7 +11,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -100,11 +99,11 @@ public class ProductController {
     }
 
     // TODO : 구매페이지의 해당 product 클릭시 해당 product_id를 갖는 GifticonList를 가져오기
-    @GetMapping("/get/gifticon")
-    public void getGifticonByProduct(@Param("productId") Long productId) {
-        List<GifticonDto> gifticonDtoList = gifticonService.getGifticonByProduct(productId);
-        //
-    }
+//    @GetMapping("/get/gifticon")
+//    public void getGifticonByProduct(@Param("productId") Long productId) {
+//        List<GifticonDto> gifticonDtoList = gifticonService.getGifticonByProduct(productId);
+//        //
+//    }
 
     // TODO : 금액별, 남은 유효기간별(임박순) 정렬하기
 
@@ -152,7 +151,9 @@ public class ProductController {
     @GetMapping("/category/{category}")
     public ResponseEntity<Object> getAllProductsByBrands(@PathVariable("category") String category) {
         try {
-            List<ProductDto> products = productService.getProductByCategory(category);
+            String cat = category.replaceAll("-", "/");
+
+            List<ProductDto> products = productService.getProductByCategory(cat);
 
             return ResponseEntity.ok(products);
         } catch (Exception e) {

@@ -402,7 +402,9 @@ function getTotalProducts() {
 function getTotalProductByCategory(category) {
     let xhr = new XMLHttpRequest();
 
-    xhr.open("get", "/api/product/category/" + category);
+    cat = category.replaceAll("/", "-");
+
+    xhr.open("get", "/api/product/category/" + cat);
 
     xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
 
