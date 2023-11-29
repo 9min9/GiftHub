@@ -42,7 +42,7 @@
                                     <a href="/">Home</a></li>
                                 <li class="is-marked">
 
-                                    <a href="/payment/orders">My Orders</a></li>
+                                    <a href="/movements">My Exchanges</a></li>
                             </ul>
                         </div>
                     </div>
@@ -90,9 +90,9 @@
                             <div class="col-lg-9 col-md-12">
                                 <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
                                     <div class="dash__pad-2">
-                                        <h1 class="dash__h1 u-s-m-b-14">My Orders</h1>
+                                        <h1 class="dash__h1 u-s-m-b-14">My Exchanges</h1>
 
-                                        <span class="dash__text u-s-m-b-30">Here you can see all your point charge.</span>
+                                        <span class="dash__text u-s-m-b-30">Here you can see your exchanges.</span>
                                         <div class="m-order__list" id="order-list">
                                             <!--/* 주문 목록 */-->
                                         </div>
@@ -121,9 +121,8 @@
 
 <th:block th:replace="fragments/base/script :: script"></th:block>
 <script th:src="@{/js/pagination/jquery.twbsPagination.min.js}"></script>
-<script th:src="@{/js/payment/orders.js}"></script>
 <script th:inline="javascript">
-    loadOrders([[${param.page}]], [[${param.size}]]);
+    loadMovement([[${param.page}]], [[${param.size}]]);
 </script>
 </body>
 </html>

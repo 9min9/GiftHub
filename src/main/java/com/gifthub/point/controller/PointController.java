@@ -2,7 +2,7 @@ package com.gifthub.point.controller;
 
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.service.GifticonService;
-import com.gifthub.movement.MovementService;
+import com.gifthub.movement.service.MovementService;
 import com.gifthub.point.service.PointService;
 import com.gifthub.user.UserJwtTokenProvider;
 import com.gifthub.user.dto.UserDto;

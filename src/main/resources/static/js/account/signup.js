@@ -1,9 +1,9 @@
 window.onload = function () {
-    document.getElementById("authorize-phone").style.visibility = "hidden";
-    document.getElementById("result-confirmPassword-label").style.visibility="hidden";
-    document.getElementById("result-email-label").style.visibility="hidden";
-    document.getElementById("result-nickname-label").style.visibility="hidden";
-    document.getElementById("result-tel-label").style.visibility="hidden";
+    // document.getElementById("auth-phone").style.visibility = "hidden";
+    // document.getElementById("result-tel-label").style.visibility="hidden";
+    document.getElementById("result-confirmPassword-label").style.visibility = "hidden";
+    document.getElementById("result-email-label").style.visibility = "hidden";
+    document.getElementById("result-nickname-label").style.visibility = "hidden";
 
     $("#signup-btn").click(function (e) {
         e.preventDefault();
@@ -18,67 +18,66 @@ window.onload = function () {
     $('#password').on('change', function () {
         passwordCheck();
         confirmPasswordCheck();
-
     });
 
     $('#confirm-password').on('change', function () {
         confirmPasswordCheck();
-
     });
 
-    $('#nickname').on('change', function (){
+    $('#nickname').on('change', function () {
         nicknameCheck();
-
     })
-    $('#tel').on('change', function (){
+
+    $('#tel').on('change', function () {
         telCheck();
     })
 
-    $('#birth-date').on('change', function (){
-        birthcheck();
+    $('#birth-date').on('change', function () {
+        birthCheck();
     })
 }
 
 
-function passwordCheck(){
+function passwordCheck() {
     let password = $("#password").val();
     let regExp = /^(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 
     let label = document.getElementById("result-Password-label");
 
-    if(regExp.test(password)) {
-        label.innerText = '비밀번호가 유효합니다.';
+    if (regExp.test(password)) {
+        label.innerText = '';
         label.style.color = 'green';
     } else {
-        label.innerText = '비밀번호가 규칙에 맞지 않습니다. 8자 이상, 특수문자를 포함해 주세요';
-        label.style.color= 'red';
+        label.innerText = '특수문자를 포함한 8자 이상, 공백은 제외해주세요';
+        label.style.color = 'red';
     }
-    if(password==''|| password==null){
-        label.innerText="";
+    if (password == '' || password == null) {
+        label.innerText = "";
     }
 }
 
-function  confirmPasswordCheck(){
- let data={
-     password: $("#password").val(),
-     confirmPassword: $("#confirm-password").val()
- };
- $.ajax({
-     type:"post",
-     url: "/signup/confirmpassword/check",
-     data: JSON.stringify(data),
-     // data: data,
-     contentType: "application/json; charset=utf-8",
-     dataType: "json",
-     success: function (jsonData) {
-         console.log(jsonData);
-         checkResult(jsonData);
-     },
-     error: function (error) {
-         console.log(error)
-         checkResult(error.responseJSON);
-     }
- });
+function confirmPasswordCheck() {
+    let data = {
+        password: $("#password").val(),
+        confirmPassword: $("#confirm-password").val()
+    };
+
+    $.ajax({
+        type: "post",
+        url: "/signup/confirmpassword/check",
+        data: JSON.stringify(data),
+        // data: data,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (jsonData) {
+            console.log(jsonData);
+            checkResult(jsonData);
+        },
+        error: function (error) {
+            console.log(error)
+            checkResult(error.responseJSON);
+        }
+    });
 }
 
 function emailCheck() {
@@ -128,10 +127,20 @@ function nicknameCheck() {
         }
     });
 }
+
 function telCheck() {
+    let label = document.getElementById("result-tel2-label");
+    let regExp = /^01([0|1|6|7|8|9]?)-([0-9]{4})-([0-9]{4})\S*$/;
     let data = {
         tel: $("#tel").val()
     };
+    if (regExp.test(data.tel)) {
+        label.innerText = " "
+        label.style.color = "green"
+    } else {
+        label.innerText = " 알맞은 형식을 지켜주세요 'xxx-xxxx-xxxx'"
+        label.style.color = "red"
+    }
 
 
     $.ajax({
@@ -159,7 +168,6 @@ function checkResult(result) {
     if (result.status == "success") {
         label.setAttribute('style', 'color: green');
         label.innerText = result.message;
-
     }
 
     if (result.status == "error") {
@@ -169,18 +177,38 @@ function checkResult(result) {
 
     label.innerText = result.message;
 }
-function birthcheck(){
+
+function birthCheck() {
     let birth = $("#birth-date").val();
-    let birthlabel=document.getElementById("result-birth-date-label");
-    if(birth.length==8){
-        birthlabel.innerText=" 감사합니다 ";
-        birthlabel.style.color='green';
-    }else {
-        birthlabel.innerText="8자리 데로 입력해주십시오.";
-        birthlabel.style.color='red';
+    let birthLabel = document.getElementById("result-birth-date-label");
+    let regExp = /^\S*\d{8}$/;
+
+    if (birth === "" || birth === null) { // 먼저 null 또는 빈 문자열 확인
+        document.getElementById("result-birth-date-label").style.visibility = "hidden"
+
+    } else if (regExp.test(birth)) {
+        birthLabel.innerText = "";
+        birthLabel.style.color = 'green';
+    } else {
+        birthLabel.innerText = "8자리로 입력해주세요.";
+        birthLabel.style.color = 'red';
     }
 }
 
+// function telCheck2(){
+// document.getElementById("auth-phone").style.visibility="visible"
+//     document.getElementById("result-tel2-label").style.display="none"
+//     document.getElementById("result-tel-label").style.display="none"
+//     let tel=$("#tel").val();
+//   $.ajax({
+//       type:"post",
+//       url: "/check/sendSMS",
+//       data: {tel: tel},
+//       contentType: "application/json; charset=utf-8",
+//       dataType: "json",
+//
+//   })
+// }
 
 
 function signup() {
@@ -191,14 +219,14 @@ function signup() {
     let data = {
         email: $("#email").val(),
         password: $("#password").val(),
+        confirmPassword: $("#confirm-password").val(),
         name: $("#name").val(),
         nickname: $("#nickname").val(),
         tel: $("#tel").val(),
         gender: $("#gender").val(),
         year: year,
-        date: birthdate
+        birthdate: birthdate
     }
-
 
 
     $.ajax({
@@ -210,10 +238,15 @@ function signup() {
 
         success: function (jsonData) {
             console.log(jsonData);
+            window.location.href = "/login";
         },
 
         error: function (error) {
-            console.log(error)
+            var errorMessages = error.responseJSON;
+            errorMessages.forEach(function (msg) {
+                alert(msg);
+            });
+
         }
     });
 }

@@ -42,8 +42,6 @@ let loadOrders = (page, size) => {
                             <div class="manage-o__text-2 u-c-secondary">Order
                                 #${o.id}
                             </div>
-                            <div class="manage-o__text u-c-silver">Placed on ${o.createDate}
-                            </div>
                         </div>
                     </div>
                 </div>

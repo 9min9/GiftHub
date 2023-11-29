@@ -1,6 +1,7 @@
 package com.gifthub.gifticon.controller;
 
 import com.gifthub.chatbot.util.JsonConverter;
+import com.gifthub.config.jwt.JwtContext;
 import com.gifthub.exception.InvalidDueDate;
 import com.gifthub.gifticon.dto.*;
 import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
@@ -28,6 +29,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,52 +54,61 @@ public class GifticonController {
 
 
     @PostMapping("/kakao/chatbot/add")
-    public ResponseEntity<Object> addGificonByKakao(@RequestBody Map<Object, Object> gifticon,
-                                                    @RequestHeader HttpHeaders headers) {
-        File file = null;
-        try {
-            List<String> barcodeUrlList = JsonConverter.kakaoChatbotConverter(gifticon);
+    public ResponseEntity<Object> addGificonByKakao(@RequestBody Map<Object, Object> gifticon) {
+        String jwtToken = JwtContext.getJwtToken();
+        System.out.println("@@@@ add KAKa");
+        System.out.println(jwtToken);
+        System.out.println(gifticon);
 
-            for (String barcodeUrl : barcodeUrlList) {
-                String barcode = GifticonService.readBarcode(barcodeUrl);
-                GifticonDto gifticonDto = ocrService.readOcrUrlToGifticonDto(barcodeUrl);
+        Long userIdFromToken = userJwtTokenProvider.getUserIdFromToken(jwtToken);
+        UserDto userById = userService.getUserById(userIdFromToken);
+        System.out.println(userById.getId());
+        System.out.println(userById.getName());
 
-                // TODO : 유효기간이 지났는지 check -> 사용자 예외
-                if(gifticonDto.getDue() != null){
-                    OcrUtil.checkDueDate(gifticonDto.getDue());
-                }
-                file = GifticonImageUtil.convertKakaoUrlToFile(barcodeUrl); // url -> File
-
-                GifticonImageDto imageDto = gifticonImageService.saveImageByFile(file); // File -> 서버에 저장
-                gifticonDto.setBarcode(barcode);
-//                System.out.println("barcode : "+ barcode);
-//                System.out.println("AccessUrl: "+ imageDto.getAccessUrl());
-//                System.out.println("storedFileName: " + imageDto.getStoreFileName());
-//                System.out.println("originalFileName: " + imageDto.getOriginalFileName());
-
-                // UserId를 어떻게 가져오지?
-                gifticonDto.setUser(userService.getUserById(userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0))));
-                System.out.println(headers);
-                System.out.println(gifticonDto.getUser().getId());
-
-                GifticonStorage storage = gifticonStorageService.saveStorage(gifticonDto, imageDto);
-                System.out.println("sotrage_id : " + storage.getId());
-
-
-            }
-
-        } catch (NotFoundException e){ // 바코드x
-            return ResponseEntity.badRequest().build();
-
-        } catch (InvalidDueDate e){ // 유효기간 체크
-            return ResponseEntity.badRequest().build();
-
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build(); // 400이 날라감 -> ajax에
-
-        } finally {
-            file.delete();
-        }
+//        File file = null;
+//        try {
+//            List<String> barcodeUrlList = JsonConverter.kakaoChatbotConverter(gifticon);
+//
+//            for (String barcodeUrl : barcodeUrlList) {
+//                String barcode = GifticonService.readBarcode(barcodeUrl);
+//                GifticonDto gifticonDto = ocrService.readOcrUrlToGifticonDto(barcodeUrl);
+//
+//                // TODO : 유효기간이 지났는지 check -> 사용자 예외
+//                if(gifticonDto.getDue() != null){
+//                    OcrUtil.checkDueDate(gifticonDto.getDue());
+//                }
+//                file = GifticonImageUtil.convertKakaoUrlToFile(barcodeUrl); // url -> File
+//
+//                GifticonImageDto imageDto = gifticonImageService.saveImageByFile(file); // File -> 서버에 저장
+//                gifticonDto.setBarcode(barcode);
+////                System.out.println("barcode : "+ barcode);
+////                System.out.println("AccessUrl: "+ imageDto.getAccessUrl());
+////                System.out.println("storedFileName: " + imageDto.getStoreFileName());
+////                System.out.println("originalFileName: " + imageDto.getOriginalFileName());
+//
+//                // UserId를 어떻게 가져오지?
+////                gifticonDto.setUser(userService.getUserById(userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0))));
+////                System.out.println(headers);
+//                System.out.println(gifticonDto.getUser().getId());
+//
+//                GifticonStorage storage = gifticonStorageService.saveStorage(gifticonDto, imageDto);
+//                System.out.println("sotrage_id : " + storage.getId());
+//
+//
+//            }
+//
+//        } catch (NotFoundException e){ // 바코드x
+//            return ResponseEntity.badRequest().build();
+//
+//        } catch (InvalidDueDate e){ // 유효기간 체크
+//            return ResponseEntity.badRequest().build();
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().build(); // 400이 날라감 -> ajax에
+//
+//        } finally {
+//            file.delete();
+//        }
 
         return ResponseEntity.ok().build();  // 200이 날라감 0 -> ajax에 success
     }
@@ -106,6 +117,11 @@ public class GifticonController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> addGifticonByFile(@RequestPart MultipartFile imageFile,
                                                     @RequestHeader HttpHeaders headers) {
+
+        String jwtToken = JwtContext.getJwtToken();
+        System.out.println("@@@@ addFile");
+        System.out.println(jwtToken);
+
         File file = null;
         try {
             file = GifticonImageUtil.convert(imageFile);

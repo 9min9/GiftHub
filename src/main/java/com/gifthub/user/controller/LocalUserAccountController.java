@@ -1,6 +1,6 @@
 package com.gifthub.user.controller;
 
-import com.gifthub.user.dto.UserDto;
+import com.gifthub.user.dto.LocalUserDto;
 import com.gifthub.user.exception.DuplicateConfirmPasswordException;
 import com.gifthub.user.exception.DuplicateEmailException;
 import com.gifthub.user.exception.DuplicateNicknameException;
@@ -9,29 +9,49 @@ import com.gifthub.user.service.UserAccountService;
 import com.gifthub.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import static com.gifthub.user.entity.enumeration.UserType.ADMIN;
+
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/signup")
 public class LocalUserAccountController {
+
     private final UserService userService;
     private final UserAccountService userAccountService;
-    @PostMapping("/submit")
-    public ResponseEntity<Object> signup(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) {
-        try {
 
-            userService.saveLocalUser(userDto);
+    @PostMapping("/submit")
+    public ResponseEntity<Object> signup(@Valid  @RequestBody LocalUserDto localUserDto, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getAllErrors()
+                    .stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        try {
+            if(localUserDto.getEmail().equals("admin")) {
+                localUserDto.setUserType(ADMIN);
+            }
+
+            localUserDto.setPoint(0L);
+            userService.saveLocalUser(localUserDto);
 
         } catch (DuplicateEmailException e) {
             bindingResult.reject(e.getCode(), e.getMessage());
 
         } finally {
-
             if(bindingResult.hasErrors()) {
                 return ResponseEntity.badRequest().body(bindingResult);
             }
@@ -39,6 +59,8 @@ public class LocalUserAccountController {
             return ResponseEntity.ok("{\"status\": \"success\"}");
         }
     }
+
+
 
     @PostMapping(value="/email/check")
     public ResponseEntity<Object> emailCheck(@RequestBody Map<String, String> request){
@@ -87,12 +109,18 @@ public class LocalUserAccountController {
             result.put("status", "success");
             result.put("message", "비밀번호가 동일합니다.");
 
+            if(passwrod.isEmpty() || passwrod==null){
+                result.put("message","");
+            }
+
+
             return ResponseEntity.ok().body(result);
 
         } catch (DuplicateConfirmPasswordException e) {
             result.put("status", "error");
             result.put("code", e.getCode());
             result.put("message", e.getMessage());
+
 
             return ResponseEntity.badRequest().body(result);
         }
@@ -146,6 +174,10 @@ public class LocalUserAccountController {
             result.put("status", "success");
             result.put("message", "사용해도 되는 닉네임입니다.");
 
+            if(nickname.isEmpty() || nickname==null){
+                result.put("message","");
+            }
+
             return ResponseEntity.ok().body(result);
 
         } catch (DuplicateNicknameException e) {
@@ -166,12 +198,17 @@ public class LocalUserAccountController {
             String tel = request.get("tel");
 
             result.put("target", "tel");
+            System.out.println("tel:"+tel);
 
             if (userAccountService.validateTel(tel)) {
                 throw new DuplicateTelException();
             }
             result.put("status", "success");
-            result.put("message", "사용가능한 번호입니다. 인증 버튼을 눌러주세요");
+            result.put("message", "등록되지 않은 번호입니다. ");
+
+            if(tel.isEmpty() || tel==null){
+                result.put("message","");
+            }
 
             return ResponseEntity.ok().body(result);
 
@@ -183,5 +220,8 @@ public class LocalUserAccountController {
             return ResponseEntity.badRequest().body(result);
         }
     }
+
+
+
 
 }
