@@ -1,5 +1,6 @@
 package com.gifthub.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.gifticon.entity.GifticonStorage;
 import com.gifthub.global.BaseTimeEntity;
@@ -53,9 +54,11 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Enumerated(STRING)
     private UserType userType;
 
+    @JsonIgnore
     @OneToMany(mappedBy ="user")
     private List<Gifticon> gifticons = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY)
     private List<GifticonStorage> tempStorage;
 

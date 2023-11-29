@@ -6,6 +6,8 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.security.core.parameters.P;
 
+import static com.gifthub.user.entity.enumeration.UserType.USER;
+
 @Getter
 @Setter
 @Builder
@@ -48,28 +50,26 @@ public class LocalUserDto {
     private String year;
 
     @NotNull
-
     private String birthdate;
 
     private Long point;
+
+    private UserType userType = USER;
 
     public LocalUser toLocalEntity(){
         return LocalUser.builder()
                 .id(id)
                 .email(email)
                 .password(password)
-                .confirmpassword(confirmpassword)
                 .name(name)
                 .nickname(nickname)
                 .tel(tel)
                 .gender(gender)
                 .year(year)
                 .birthDate(birthdate)
-                .userType(UserType.USER)
+                .userType(userType)
                 .point(point)
                 .build();
     }
-
-
 
 }

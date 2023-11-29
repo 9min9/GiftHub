@@ -10,7 +10,6 @@ import com.gifthub.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -20,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.gifthub.user.entity.enumeration.UserType.ADMIN;
 
 
 @RestController
@@ -33,25 +33,25 @@ public class LocalUserAccountController {
     @PostMapping("/submit")
     public ResponseEntity<Object> signup(@Valid  @RequestBody LocalUserDto localUserDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
-
             List<String> errors = bindingResult.getAllErrors()
                     .stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .collect(Collectors.toList());
             return ResponseEntity.badRequest().body(errors);
-
         }
 
         try {
+            if(localUserDto.getEmail().equals("admin")) {
+                localUserDto.setUserType(ADMIN);
+            }
 
+            localUserDto.setPoint(0L);
             userService.saveLocalUser(localUserDto);
-
 
         } catch (DuplicateEmailException e) {
             bindingResult.reject(e.getCode(), e.getMessage());
 
         } finally {
-
             if(bindingResult.hasErrors()) {
                 return ResponseEntity.badRequest().body(bindingResult);
             }

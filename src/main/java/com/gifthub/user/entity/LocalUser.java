@@ -1,7 +1,6 @@
 package com.gifthub.user.entity;
 
 import com.gifthub.user.dto.LocalUserDto;
-import com.gifthub.user.dto.UserDto;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
@@ -17,7 +16,6 @@ import lombok.experimental.SuperBuilder;
 public class LocalUser extends User {
 
     private String password;
-    private String confirmpassword;
 
     public LocalUserDto toLocalUserDto() {
         return LocalUserDto.builder()
@@ -26,7 +24,6 @@ public class LocalUser extends User {
                 .name(super.getName())
                 .nickname(super.getNickname())
                 .gender(super.getGender())
-                .confirmpassword(this.confirmpassword)
                 .password(this.password)
                 .tel(super.getTel())
                 .year(super.getYear())
