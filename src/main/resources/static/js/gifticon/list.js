@@ -359,6 +359,8 @@ function brandFilterEvent() {
             let brand = event.target.innerText;
 
             getProductByCategoryAndBrand(null, brand);
+
+            scrollTo({top: document.querySelector("#show-product-div").offsetTop, behavior: "smooth"});
         });
     });
 }

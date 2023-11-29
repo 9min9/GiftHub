@@ -31,6 +31,14 @@
             min-height: 100vh;
         }
 
+        #sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: whitesmoke;
+            transform: translate(0, -1px);
+        }
+
     </style>
 </head>
 <body class="config">
@@ -58,7 +66,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="section__text-wrap" id="product-selectors">
-                                <h1 class="section__heading u-c-secondary u-s-m-b-12">판매중인 전체 기프티콘</h1>
+                                <h1 class="section__heading u-c-secondary u-s-m-b-12">등록된 전체 상품</h1>
                             </div>
                         </div>
                     </div>
@@ -71,7 +79,7 @@
         <!--====== Section 3 ======-->
         <div class="u-s-p-y-60" id="show-product-div">
             <!--====== Section Content ======-->
-            <div class="section__content">
+            <div class="section__content" id="sticky-header">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12">
