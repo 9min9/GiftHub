@@ -17,6 +17,7 @@ import lombok.experimental.SuperBuilder;
 public class LocalUser extends User {
 
     private String password;
+    private String confirmpassword;
 
     public LocalUserDto toLocalUserDto() {
         return LocalUserDto.builder()
@@ -25,6 +26,8 @@ public class LocalUser extends User {
                 .name(super.getName())
                 .nickname(super.getNickname())
                 .gender(super.getGender())
+                .confirmpassword(this.confirmpassword)
+                .password(this.password)
                 .tel(super.getTel())
                 .year(super.getYear())
                 .birthdate(super.getBirthDate())
