@@ -62,6 +62,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     @OneToMany(fetch = FetchType.LAZY)
     private List<GifticonStorage> tempStorage;
 
+
     public void changeNickname(String nickname) {
         this.nickname = nickname;
     }
