@@ -1,3 +1,5 @@
+let page = 0;
+
 function getPurchasingGifticon(page, size, type = "전체") {
     page = page || 1;
     size = size || 10;
@@ -53,6 +55,7 @@ function print(jsonData) {
 function setProductSelectorEvent() {
     document.querySelectorAll(".product-selector").forEach((elem) => {
         elem.addEventListener("click", function (event) {
+            page = 0;
             setJsCheckedToTotal();
             document.querySelectorAll(".product-selector-container").forEach(elem => {
                 elem.classList.remove("category-active");
@@ -346,6 +349,8 @@ function setProduct(parsed) {
 function brandFilterEvent() {
     document.querySelectorAll(".brand-filter").forEach(element => {
         element.addEventListener("click", function (event) {
+            page = 0;
+
             clearProducts();
             clearJsChecked();
 
@@ -398,7 +403,7 @@ let totalCategoryEvent = () => {
     });
 }
 
-function scrollEvent(element, page) {
+function scrollEvent(element) {
     const io = new IntersectionObserver(entries => {
         entries.forEach(entry => {
                 if (entry.intersectionRatio > 0) {
@@ -423,7 +428,6 @@ function scrollEvent(element, page) {
     io.observe(element);
 }
 
-page = 0;
 function getProductByCategoryAndBrand(category = "전체", brand = "전체") {
     let xhr = new XMLHttpRequest();
 
