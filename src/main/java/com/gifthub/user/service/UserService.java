@@ -1,9 +1,11 @@
 package com.gifthub.user.service;
 
 import com.gifthub.user.dto.KakaoUserDto;
+import com.gifthub.user.dto.LocalUserDto;
 import com.gifthub.user.dto.NaverUserDto;
 import com.gifthub.user.dto.UserDto;
 import com.gifthub.user.entity.KakaoUser;
+import com.gifthub.user.entity.LocalUser;
 import com.gifthub.user.entity.NaverUser;
 import com.gifthub.user.entity.User;
 import com.gifthub.user.repository.UserRepository;
@@ -11,15 +13,17 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserDto saveLocalUser(UserDto userdto) {
-        User saveUser = userRepository.save(userdto.toEntity());
-        return saveUser.toDto();
+    public LocalUserDto saveLocalUser(LocalUserDto localUserDto){
+        LocalUser localsaveUser = userRepository.save(localUserDto.toLocalEntity());
+        return localsaveUser.toLocalUserDto();
     }
 
     public KakaoUserDto saveKakaoUser(KakaoUserDto kakaoUserDto) {
@@ -38,6 +42,10 @@ public class UserService {
             return null;
         }
         return user.toDto();
+    }
+
+    public List<UserDto> getUserByNickname(String nickname) {
+        return userRepository.findUserByNickname(nickname).stream().map(User::toDto).toList();
     }
 
     public void delUserById(Long userId) {
