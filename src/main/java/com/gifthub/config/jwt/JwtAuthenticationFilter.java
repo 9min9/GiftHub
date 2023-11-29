@@ -8,6 +8,8 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.fileupload.RequestContext;
+import org.bouncycastle.cert.ocsp.Req;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
@@ -35,6 +37,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
         // 유효한 토큰인지 확인합니다.
         if (token != null && jwtTokenProvider.validateToken(token)) {
+            JwtContext.setJwtToken(token);
             // 토큰이 유효하면 토큰으로부터 유저 정보를 받아옵니다.
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
             System.out.println("JwtAuthFilter!");
