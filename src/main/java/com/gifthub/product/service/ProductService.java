@@ -5,6 +5,8 @@ import com.gifthub.product.entity.Product;
 import com.gifthub.product.enumeration.CategoryName;
 import com.gifthub.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,6 +40,10 @@ public class ProductService {
         return productRepository.findAllProduct();
     }
 
+    public Page<ProductDto> getAllProduct(Pageable pageable) {
+        return productRepository.findAllProduct(pageable);
+    }
+
     public ProductDto getProduct(Long productId){
         Product product = productRepository.findById(productId).orElse(null);
         return (product != null) ? product.toProductDto() : null;
@@ -54,6 +60,18 @@ public class ProductService {
 
     public List<ProductDto> getProductByBrand(String brand) {
         return productRepository.findProductByBrand(brand);
+    }
+
+    public Page<ProductDto> getProductByBrand(Pageable pageable, String brand) {
+        return productRepository.findProductByBrand(pageable, brand);
+    }
+
+    public List<ProductDto> getProductByCategory(String category) {
+        return productRepository.findProductByCategory(category).stream().map(Product::toProductDto).toList();
+    }
+
+    public Page<ProductDto> getProductByCategory(Pageable pageable, String category) {
+        return productRepository.findProductByCategory(pageable, category).map(Product::toProductDto);
     }
 
 }
