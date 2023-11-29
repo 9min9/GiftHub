@@ -14,14 +14,12 @@ import java.time.LocalDate;
 
 import static com.gifthub.gifticon.enumeration.StorageStatus.WAIT_REGISTRATION;
 
-// TODO : GifticonStorage를 entity에 넣는게 맞을까?
 @Entity
 @Getter
 @SuperBuilder
-//@AllArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "gifticon_storage")
-@Setter
 public class GifticonStorage extends BaseTimeEntity {
 
     @Id

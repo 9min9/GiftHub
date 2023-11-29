@@ -1,21 +1,26 @@
 package com.gifthub.admin;
 
 
+import com.gifthub.admin.dto.StorageAdminListDto;
 import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
 import com.gifthub.gifticon.exception.NotFoundProductNameException;
 import com.gifthub.gifticon.service.GifticonService;
 import com.gifthub.gifticon.service.GifticonStorageService;
-import com.gifthub.product.service.ProductService;
 import com.gifthub.user.UserJwtTokenProvider;
-import com.gifthub.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.gifthub.gifticon.enumeration.StorageStatus.ADMIN_APPROVAL;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,60 +28,48 @@ import java.util.Map;
 public class AdminController {
     private final GifticonService gifticonService;
     private final UserJwtTokenProvider userJwtTokenProvider;
-    private final UserService userService;
-    private final ProductService productService;
     private final GifticonStorageService gifticonStorageService;
 
+    @PostMapping("/gifticon/confirm/count")
+    public ResponseEntity<Object> confirmRegisterCount(@RequestHeader HttpHeaders headers) {
+        Long count = gifticonStorageService.getStorageCountByStatus(ADMIN_APPROVAL);
+        System.out.println("####");
+        System.out.println(count);
+
+        return ResponseEntity.ok().body(Collections.singletonMap("count", count));
+
+    }
+
+    @PostMapping("/gifticon/confirm/list")
+    public ResponseEntity<Object> confirmRegisterList(@RequestHeader HttpHeaders headers, @PageableDefault(size = 10) Pageable pageable) {
+        Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
+        System.out.println("!!!");
+        System.out.println(userId);
+
+        Page<StorageAdminListDto> findPage =
+                gifticonStorageService.getStorageListByStatus(ADMIN_APPROVAL, pageable);
+
+        return ResponseEntity.ok().body(findPage);
+    }
 
     @PostMapping("/gifticon/register")
-    public ResponseEntity<Object> sendToAdmin(@RequestBody GifticonStorageDto gifticonStorageDto, @RequestHeader HttpHeaders headers) {
-        HashMap<String, String> result = new HashMap<>();
-
+    public ResponseEntity<Object> confirmRegister(@RequestBody GifticonStorageDto gifticonStorageDto, @RequestHeader HttpHeaders headers) {
         try {
-            System.out.println("@@@");
             Long storageId = gifticonStorageDto.getId();
             String productName = gifticonStorageDto.getProductName();
             String brandName = gifticonStorageDto.getBrandName();
             String barcode = gifticonStorageDto.getBarcode();
             LocalDate due = gifticonStorageDto.getDue();
 
-            System.out.println(storageId);
-            System.out.println(productName);
-            System.out.println(brandName);
-            System.out.println(barcode);
-            System.out.println(due);
-
             Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
-
-            if (gifticonService.productNameIsNull(productName)) {
-//                bindingResult.rejectValue("product", "NotNull", null);
-            }
-
-            if (gifticonService.brandNameIsNull(brandName)) {
-//                bindingResult.rejectValue("brand", "NotNull", null);
-            }
-
-            if (gifticonService.barcodeIsNull(barcode)) {
-//                bindingResult.rejectValue("barcode", "NotNull", null);
-            }
-
-            if (gifticonService.dueIsNull(due)) {
-//                bindingResult.rejectValue("due", "NotNull", null);
-            }
-
             gifticonStorageService.storageToAdmin(gifticonStorageDto);
 
-            result.put("ok", "ok");
         } catch (Exception e) {
             e.printStackTrace();
+            return ResponseEntity.badRequest().build();
         }
-//        if (bindingResult.hasErrors()) {
-//            return ResponseEntity.badRequest().body(bindingResult);
-//        }
 
-
-
-        return ResponseEntity.ok().body(result);
+        return ResponseEntity.ok().body(Collections.singletonMap("status", "ok"));
     }
 
     @PostMapping("/validate/product")

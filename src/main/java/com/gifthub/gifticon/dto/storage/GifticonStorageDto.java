@@ -26,7 +26,6 @@ public class GifticonStorageDto {
     private GifticonImageDto gifticonImage;
     private StorageStatus storage_status;
 
-
     public GifticonStorage toStorageEntity() {
         return GifticonStorage.builder()
                 .barcode(barcode)

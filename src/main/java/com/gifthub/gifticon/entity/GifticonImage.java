@@ -1,10 +1,13 @@
 package com.gifthub.gifticon.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gifthub.gifticon.dto.GifticonImageDto;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.UUID;
+
+import static jakarta.persistence.FetchType.*;
 
 @Entity
 @Getter
@@ -20,7 +23,8 @@ public class GifticonImage {
     @Column(name = "gifticon_image_id")
     private Long id;
 
-    @OneToOne(mappedBy = "gifticonImage", fetch = FetchType.LAZY)
+    @JsonIgnore
+    @OneToOne(mappedBy = "gifticonImage", fetch = LAZY)
     private GifticonStorage gifticonStorage;
 
     private String accessUrl;

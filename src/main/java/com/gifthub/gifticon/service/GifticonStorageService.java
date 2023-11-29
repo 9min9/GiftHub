@@ -1,10 +1,12 @@
 package com.gifthub.gifticon.service;
 
+import com.gifthub.admin.dto.StorageAdminListDto;
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.GifticonImageDto;
 import com.gifthub.gifticon.dto.GifticonStorageListDto;
 import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
 import com.gifthub.gifticon.entity.GifticonStorage;
+import com.gifthub.gifticon.enumeration.StorageStatus;
 import com.gifthub.gifticon.repository.storage.GifticonStorageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -58,4 +60,11 @@ public class GifticonStorageService {
         gifticonStorageRepository.deleteById(storageId);
     }
 
+    public Page<StorageAdminListDto> getStorageListByStatus(StorageStatus status, Pageable pageable) {
+        return gifticonStorageRepository.findStorageByStorageStatus(status, pageable);
+    }
+
+    public Long getStorageCountByStatus(StorageStatus storageStatus) {
+        return gifticonStorageRepository.getCountByAdminApproval();
+    }
 }
