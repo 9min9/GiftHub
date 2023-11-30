@@ -30,8 +30,10 @@ public class AttendanceService {
     public List<AttendanceDto> getByUserId(Long userId) {
         LocalDateTime now = LocalDateTime.now();
 
+        boolean notDecember = now.getMonthValue() + 1 < 12;
+
         LocalDateTime start = LocalDateTime.of(now.getYear(), now.getMonthValue(), 1, 0, 0, 0);
-        LocalDateTime end = LocalDateTime.of(now.getYear(), now.getMonthValue() + 1, 1, 0, 0, 0).minusDays(1L);
+        LocalDateTime end = LocalDateTime.of(notDecember ? now.getYear() : now.getYear() + 1, notDecember ? now.getMonthValue() : 1, 1, 0, 0, 0).minusDays(1L);
 
         return attendanceRepository.findByBetweenDateAndUserId(start, end, userId)
                 .stream().map(Attendance::toDto).toList();
