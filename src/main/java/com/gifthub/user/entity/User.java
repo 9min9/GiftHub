@@ -139,14 +139,16 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     public UserDto toDto() {
         return UserDto.builder()
-                .id(this.id)
-                .email(this.email)
-                .name(this.name)
-                .userType(this.userType.name())
-                .year(this.year)
-                .date(this.birthDate)
-                .tel(this.tel)
-                .point(this.point)
+                .id(id)
+                .email(email)
+                .name(name)
+                .nickname(nickname)
+                .userType(userType.name())
+                .year(year)
+                .date(birthDate)
+                .tel(tel)
+                .point(point)
+                .gender(gender)
                 .build();
     }
 
