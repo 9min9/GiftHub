@@ -92,4 +92,23 @@ public class GifticonRepositoryImpl implements GifticonRepositorySupport {
 
         return execute;
     }
+
+    @Override
+    public Page<Gifticon> findGifticonByProductIdOrderByProductPrice(Pageable pageable, Long productId) {
+        List<Gifticon> gifticons = jpaQueryFactory.select(gifticon)
+                .from(gifticon)
+                .where(gifticon.product.id.eq(productId), gifticon.gifticonStatus.eq(GifticonStatus.ONSALE))
+                .orderBy(gifticon.product.price.asc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long count = jpaQueryFactory.select(gifticon.count())
+                .from(gifticon)
+                .where(gifticon.product.id.eq(productId))
+                .fetchOne();
+
+        return new PageImpl<>(gifticons, pageable, count);
+    }
+
 }
