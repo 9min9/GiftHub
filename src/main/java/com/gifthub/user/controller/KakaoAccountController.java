@@ -1,5 +1,6 @@
 package com.gifthub.user.controller;
 
+import com.gifthub.config.jwt.JwtContext;
 import com.gifthub.config.jwt.KakaoAuthenticationProvider;
 import com.gifthub.config.jwt.SocialAuthenticationToken;
 import com.gifthub.user.UserJwtTokenProvider;
@@ -83,6 +84,7 @@ public class KakaoAccountController {
             kakaoAccountService.kakaoLogout((String) session.getAttribute("kakao_access_token"));
             session.removeAttribute("kakao_access_Token");
 
+            JwtContext.clear();
             return ResponseEntity.ok().build();
 
         } catch (IOException e) {
