@@ -327,7 +327,8 @@ function setProduct(parsed) {
         let productBox = createDivWithClass("product-o product-o--radius product-o--hover-off u-h-100");
         let product = createDivWithClass("product-o__wrap");
         let imgA = createAWithClass("aspect aspect--bg-grey aspect--square u-d-block");
-        let img = createImgWithClass("aspect__img")
+        let img = createImgWithClass("aspect__img");
+
         if(p.category=="생활/가전/엔터") {
             img = createImgWithClass("aspect__img", "/images/noproductimage/no-image-machine.png");
         }
@@ -407,6 +408,21 @@ function setProduct(parsed) {
         outer.appendChild(productBox);
 
         productDiv.appendChild(outer);
+
+        product.dataset.modal = "modal";
+        product.dataset.modalId = "#newsletter-modal";
+
+        product.addEventListener("click", function(event) {
+            let productName = event.target.parentNode.querySelector(".product-o__name").innerText;
+
+            getOnSaleProduct(productName);
+
+            document.querySelector("#modal-product-name").innerText = productName;
+
+            document.querySelector("#gifticon-modal-img").src = event.target.querySelector("img").src;
+
+            $(event.target.dataset.modalId).modal();
+        });
     }
 }
 

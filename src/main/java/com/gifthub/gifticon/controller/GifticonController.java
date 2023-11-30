@@ -74,7 +74,7 @@ public class GifticonController {
                 String barcode = GifticonService.readBarcode(barcodeUrl);
                 GifticonDto gifticonDto = ocrService.readOcrUrlToGifticonDto(barcodeUrl);
 
-                if(gifticonDto.getDue() != null){
+                if (gifticonDto.getDue() != null) {
                     OcrUtil.checkDueDate(gifticonDto.getDue());
                 }
                 file = GifticonImageUtil.convertKakaoUrlToFile(barcodeUrl); // url -> File
@@ -93,10 +93,10 @@ public class GifticonController {
 
             }
 
-        } catch (NotFoundException e){ // 바코드x
+        } catch (NotFoundException e) { // 바코드x
             return ResponseEntity.badRequest().build();
 
-        } catch (InvalidDueDate e){ // 유효기간 체크
+        } catch (InvalidDueDate e) { // 유효기간 체크
             return ResponseEntity.badRequest().build();
 
         } catch (Exception e) {
@@ -121,7 +121,7 @@ public class GifticonController {
             GifticonDto gifticonDto = ocrService.readOcrMultipartToGifticonDto(file); // 파일
 
             // TODO : 유효기간이 지났는지 check -> 사용자 예외
-            if(gifticonDto.getDue() != null){
+            if (gifticonDto.getDue() != null) {
                 OcrUtil.checkDueDate(gifticonDto.getDue());
             }
             GifticonImageDto imageDto = gifticonImageService.saveImage(imageFile); // 이미지 서버에 저장 및 db에 경로저장
@@ -133,10 +133,10 @@ public class GifticonController {
 
             gifticonStorageService.saveStorage(gifticonDto, imageDto);
 
-        } catch (NotFoundException e){ // 바코드x
+        } catch (NotFoundException e) { // 바코드x
             return ResponseEntity.badRequest().build();
 
-        } catch (InvalidDueDate e){ // 유효기간 체크
+        } catch (InvalidDueDate e) { // 유효기간 체크
             return ResponseEntity.badRequest().build();
 
         } catch (Exception e) {
@@ -262,6 +262,20 @@ public class GifticonController {
             return ResponseEntity.badRequest().build();
         }
 
+    }
+
+    @GetMapping("/gifticon/products/{productId}")
+    public ResponseEntity<Object> findGifticonByProudctId(Pageable pageable,
+                                                     @PathVariable("productId") Long productId) {
+        try {
+            Page<GifticonDto> gifticons = gifticonService.getGifticonByProudctId(pageable, productId);
+
+            return ResponseEntity.ok(gifticons);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }

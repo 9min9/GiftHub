@@ -153,4 +153,9 @@ public class GifticonService {
             throw new RuntimeException("수정사항이 없습니다.");
         }
     }
+
+    public Page<GifticonDto> getGifticonByProudctId(Pageable pageable, Long productId) {
+        return gifticonRepository.findGifticonByProductIdOrderByProductPrice(pageable, productId).map(Gifticon::toDto);
+    }
+
 }
