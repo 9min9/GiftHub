@@ -41,6 +41,7 @@ public class UserService {
         if (user == null) {
             return null;
         }
+
         return user.toDto();
     }
 

@@ -80,6 +80,7 @@ public class GifticonService {
         return gifticonRepository.findById(gifticonId).orElseThrow().toDto();
     }
 
+    @Transactional
     public Long saveGifticon(GifticonDto gifticonDto){
         gifticonDto.setGifticonStatus(GifticonStatus.NONE);
         Gifticon gifticon = gifticonRepository.save(gifticonDto.toEntity());

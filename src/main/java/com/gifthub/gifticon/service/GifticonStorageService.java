@@ -13,7 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import static com.gifthub.gifticon.enumeration.StorageStatus.ADMIN_APPROVAL;
+import static com.gifthub.gifticon.enumeration.StorageStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +22,9 @@ public class GifticonStorageService {
     private final GifticonStorageRepository gifticonStorageRepository;
 
     public GifticonStorage saveStorage(GifticonDto gifticonDto, GifticonImageDto imageDto) {
-        return gifticonStorageRepository.save(gifticonDto.toStorageEntity(imageDto));
+        GifticonStorage storageEntity = gifticonDto.toStorageEntity(imageDto);
+        storageEntity.changeStatus(WAIT_REGISTRATION);
+        return gifticonStorageRepository.save(storageEntity);
     }
 
     public void storageToAdmin(GifticonStorageDto storageDto) {
@@ -36,6 +38,16 @@ public class GifticonStorageService {
             gifticonStorage.changeStatus(ADMIN_APPROVAL);
 
             gifticonStorageRepository.save(gifticonStorage);
+        }
+    }
+
+    public void adminToStorage(GifticonStorageDto storageDto) {
+        GifticonStorage findStorage =
+                gifticonStorageRepository.findById(storageDto.getId()).orElse(null);
+
+        if (findStorage != null) {
+            findStorage.changeStatus(WAIT_REGISTRATION);
+            gifticonStorageRepository.save(findStorage);
         }
     }
 

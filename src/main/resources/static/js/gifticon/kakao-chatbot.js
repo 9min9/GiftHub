@@ -6,15 +6,16 @@ function addChannel() {
     });
 }
 
-Kakao.Channel.createAddChannelButton({
-    container: '#kakao-add-channel-button',
-    // channelPublicId: '_yEhsG'
-    channelPublicId: '_ATxoKG'
-});
-
+// Kakao.Channel.createAddChannelButton({
+//     container: '#kakao-add-channel-button',
+//     channelPublicId: '_yEhsG'
+//     // channelPublicId: '_ATxoKG'
+// });
 
 
 function openChat() {
+    contextInit();
+
     Kakao.Channel.chat({
         // channelPublicId: '_yEhsG'
         channelPublicId: '_ATxoKG'
@@ -22,10 +23,23 @@ function openChat() {
 }
 
 
+function contextInit() {
+    $.ajax({
+        url: "/api/jwt/context/init",
+        type: "post",
+        // contentType: "application/json; charset=utf-8",
+        dataType: "json",
 
-function responseImage() {
+        headers: {
+            Authorization: localStorage.getItem("token"),
+        },
 
-    //todo : 챗봇에서 받은 이미지를 ~~~~ controller에 넘겨줌
+        success: function (result) {
+            console.log(result);
+        }, error: function (error) {
+
+        }
+    });
 }
 
 

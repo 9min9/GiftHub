@@ -35,32 +35,8 @@
     <!--====== App Content ======-->
     <div class="app-content">
 
-        <!--====== Section 1 ======-->
-        <div class="u-s-p-y-60">
-
-            <!--====== Section Content ======-->
-            <div class="section__content">
-                <div class="container">
-                    <div class="breadcrumb">
-                        <div class="breadcrumb__wrap">
-                            <ul class="breadcrumb__list">
-                                <li class="has-separator">
-
-                                    <a href="/">Home</a></li>
-                                <li class="is-marked">
-
-                                    <a href="/pay/kakao">Payment</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--====== End - Section 1 ======-->
-
-
         <!--====== Section 3 ======-->
-        <div class="u-s-p-b-60">
+        <div class="u-s-p-y-60">
 
             <!--====== Section Content ======-->
             <div class="section__content">
@@ -68,7 +44,7 @@
                     <div class="checkout-f">
                         <div class="row">
                             <div class="col-lg">
-                                <h1 class="checkout-f__h1">ORDER SUMMARY</h1>
+                                <h1 class="checkout-f__h1">결제 금액 선택</h1>
 
                                 <!--====== Order Summary ======-->
                                 <div class="o-summary">
@@ -94,9 +70,30 @@
                                                             <label class="radio-box__label" for="point-20000">20000</label>
                                                         </div>
                                                     </div>
+
+                                                    <div class="radio-box">
+                                                        <input type="radio" id="point-30000" name="point" checked="" value="30000">
+                                                        <div class="radio-box__state radio-box__state--primary">
+                                                            <label class="radio-box__label" for="point-30000">30000</label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="radio-box">
+                                                        <input type="radio" id="point-40000" name="point" checked="" value="40000">
+                                                        <div class="radio-box__state radio-box__state--primary">
+                                                            <label class="radio-box__label" for="point-40000">40000</label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="radio-box">
+                                                        <input type="radio" id="point-50000" name="point" checked="" value="50000">
+                                                        <div class="radio-box__state radio-box__state--primary">
+                                                            <label class="radio-box__label" for="point-50000">50000</label>
+                                                        </div>
+                                                    </div>
                                                 </label>
 
-                                                <input class="input-text input-text--primary-style float-right width-50p" type="number" id="point">
+                                                <input id="point" class="input-text input-text--primary-style float-right width-50p u-s-m-y-30" type="number">
                                             </div>
                                         </div>
                                     </div>
@@ -105,8 +102,8 @@
                                             <table class="o-summary__table">
                                                 <tbody>
                                                 <tr>
-                                                    <td>GRAND TOTAL</td>
-                                                    <td id="grand-total">$379.00</td>
+                                                    <td>최종 금액</td>
+                                                    <td id="grand-total"></td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -114,9 +111,9 @@
                                     </div>
                                     <div class="o-summary__section u-s-m-b-30">
                                         <div class="o-summary__box">
-                                            <h1 class="checkout-f__h1">PAYMENT INFORMATION</h1>
+                                            <h1 class="checkout-f__h1">결제 방식</h1>
                                             <form class="checkout-f__payment">
-                                                <button class="btn btn--e-brand-b-2 kakao-pay" id="kakao-pay" type="button">카카오 페이</button></div>
+                                                <button class="btn kakao-pay" id="kakao-pay" style="background: #FFE500; color: black" type="button">카카오페이로 결제</button>
                                             </form>
                                         </div>
                                     </div>

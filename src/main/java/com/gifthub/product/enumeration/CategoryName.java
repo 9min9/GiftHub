@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 public enum CategoryName {
 
     ALL("전체", "all"),
-    CAFFE("카페", "cafe"),
+    CAFE("카페", "cafe"),
     BAKERY_DONUT_DDEOK("베이커리/도넛", "bakery-donut"),
     DEPARTMEN_MARK("백화점/마트", "department-mart"),
     ICECREAM_ICE("아이스크림", "icecream"),
