@@ -82,4 +82,14 @@ public class GifticonRepositoryImpl implements GifticonRepositorySupport {
 
         return new PageImpl<>(gifticons, pageable, count);
     }
+
+    @Override
+    public Long updateSaleByGifticonId(Long gifticonId) {
+        long execute = jpaQueryFactory.update(gifticon)
+                .set(gifticon.gifticonStatus, GifticonStatus.ONSALE)
+                .where(gifticon.id.eq(gifticonId))
+                .execute();
+
+        return execute;
+    }
 }

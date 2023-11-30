@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -108,6 +109,25 @@ public class GifticonController {
         gifticonService.deleteById(gifticonId);
 
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/gifticon/forSale/{gifticonId}")
+    public ResponseEntity<Object> setSale(@PathVariable("gifticonId") Long gifticonId,
+                                          @RequestHeader HttpHeaders headers) {
+        Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
+
+        GifticonDto gifticonDto = gifticonService.findGifticon(gifticonId);
+
+        try {
+            gifticonService.setSale(gifticonId);
+
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return ResponseEntity.badRequest().build();
+        }
+
     }
 
 }

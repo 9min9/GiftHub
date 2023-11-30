@@ -55,23 +55,24 @@ let print = (gifticons) => {
                           >
                         </div>
                       </div>
-                      <div class="w-r__wrap-2">
+                      <div class="w-r__wrap-2 gifticon-button-area" id="gifticon-button-area-${gifticon.id}">
                         <button
-                          class="w-r__link btn--e-transparent-platinum-b-2 gifticon-remove-button"
+                          class="w-r__link btn--e-transparent-platinum-b-2 gifticon-remove-button gifticon-buttons"
                           data-gifticon-id="${gifticon.id}"
                           data-modal="modal"
                           data-modal-id="#add-to-cart"
                           >제거</button
                         >
 
-                        <a
-                          class="w-r__link btn--e-transparent-platinum-b-2"
+                        <button
+                          class="w-r__link btn--e-transparent-platinum-b-2 for-sale-btn gifticon-buttons"
                           href="product-detail.html"
-                          >판매</a
+                          data-gifticon-id="${gifticon.id}"
+                          >판매</button
                         >
 
                         <a
-                          class="w-r__link btn--e-brand-b-2"
+                          class="w-r__link btn--e-brand-b-2 for-use-btn gifticon-buttons"
                           href="#"
                           >사용</a
                         >
@@ -131,7 +132,9 @@ function setEvent() {
 
             deleteGifticon(gifticonId);
         });
-    })
+    });
+
+    forSaleEvent();
 }
 
 let page = 0;
@@ -157,4 +160,31 @@ function scrollEvent(element) {
     });
 
     io.observe(element);
+}
+
+function forSaleEvent() {
+    document.querySelectorAll(".for-sale-btn").forEach(element => {
+        element.addEventListener("click", function(event) {
+            let gifticonId = event.target.dataset.gifticonId;
+
+            setForSale(gifticonId);
+        });
+    });
+}
+
+function setForSale(gifticonId) {
+    let xhr = new XMLHttpRequest();
+    xhr.open("post", "/api/gifticon/forSale/" + gifticonId);
+    xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
+
+    xhr.onload = () => {
+        document.querySelectorAll(".gifticon-button-area-" + gifticonId + " gifticon-buttons").forEach(element => {
+            console.log(element)
+            element.remove();
+        });
+
+        document.querySelector(".gifticon-button-area-" + gifticonId).innerText = "판매중";
+    }
+
+    xhr.send();
 }
