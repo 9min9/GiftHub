@@ -96,11 +96,9 @@ public class UserJwtTokenProvider {
 
 	public boolean validateToken(String token) {
 		try {
-			System.out.println("validate Token!!!");
 			Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
 			return !claims.getExpiration().before(new Date());
 		} catch (Exception e) {
-			System.out.println("validate Token Error!!!");
 			return false;
 		}
 	}
