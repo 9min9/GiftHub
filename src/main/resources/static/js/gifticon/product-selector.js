@@ -5,14 +5,14 @@ function createProductSpan(productName, english, active, img) {
     let productsName = createProductNames(productName);
     let br = createBreak();
     let englishProductName = createEnglishProductNames(english);
-    let image = createImage(img);
 
     if (active) {
         productSelectorContainer.classList.add("category-active");
         productSelector.classList.add("total-category")
     }
 
-    productSelector.appendChild(image);
+    productSelector.style.backgroundImage = "url(" + img + ")";
+
     productSelectorContainer.appendChild(productSelector);
     productSelectorContainer.appendChild(br);
     productSelectorContainer.appendChild(productsName);
@@ -52,12 +52,5 @@ function createEnglishProductNames(englishProductName) {
     englishInput.value = englishProductName;
 
     return englishInput
-}
 
-function createImage(image, alt = "") {
-    let imageTag = document.createElement("img");
-    imageTag.src = image;
-    imageTag.alt = alt;
-
-    return imageTag;
 }
