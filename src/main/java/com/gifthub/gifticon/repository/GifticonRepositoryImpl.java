@@ -1,6 +1,7 @@
 package com.gifthub.gifticon.repository;
 
 import com.gifthub.gifticon.entity.Gifticon;
+import com.gifthub.gifticon.entity.QGifticon;
 import com.gifthub.gifticon.enumeration.GifticonStatus;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -62,5 +63,33 @@ public class GifticonRepositoryImpl implements GifticonRepositorySupport {
 //                .fetch()
 //                ))
         return null;
+    }
+
+    @Override
+    public Page<Gifticon> findByUserId(Pageable pageable, Long userId) {
+        List<Gifticon> gifticons = jpaQueryFactory.select(gifticon)
+                .from(gifticon)
+                .where(gifticon.user.id.eq(userId))
+                .orderBy(gifticon.createDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long count = jpaQueryFactory.select(gifticon.count())
+                .from(gifticon)
+                .where(gifticon.user.id.eq(userId))
+                .fetchOne();
+
+        return new PageImpl<>(gifticons, pageable, count);
+    }
+
+    @Override
+    public Long updateSaleByGifticonId(Long gifticonId) {
+        long execute = jpaQueryFactory.update(gifticon)
+                .set(gifticon.gifticonStatus, GifticonStatus.ONSALE)
+                .where(gifticon.id.eq(gifticonId))
+                .execute();
+
+        return execute;
     }
 }

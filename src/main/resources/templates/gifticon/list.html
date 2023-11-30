@@ -12,8 +12,12 @@
             height: 80px;
             width: 80px;
             border-radius: 50%;
-            background-color: #a0a0a0;
+            border-style: solid;
+            border-color: black;
+            border-width: 2px;
+            /*background-color: #a0a0a0;*/
             color: white;
+            background-size: 100%;
             display: inline-block;
             cursor: pointer;
             transition: border 0.3s;
@@ -136,24 +140,25 @@
 <script src="/js/gifticon/product-selector.js"></script>
 <script th:inline="javascript">
     window.onload = function() {
-        createProductSpan("전체", "all", true);
-        createProductSpan("카페", "cafe", false);
-        createProductSpan("베이커리/도넛", "bakery-donut", false);
-        createProductSpan("백화점/마트", "department-mart", false);
-        createProductSpan("아이스크림", "icecream", false);
-        createProductSpan("편의점", "convenient", false);
-        createProductSpan("버거/피자", "burger-pizza", false);
-        createProductSpan("치킨", "chicken", false);
-        createProductSpan("외식/분식/배달", "outside", false);
+        createProductSpan("전체", "all", true,"/images/categorylogo/all2.png" );
+        createProductSpan("카페", "cafe", false,"/images/categorylogo/cafe-logo2.png");
+        createProductSpan("베이커리/도넛", "bakery-donut", false, "/images/categorylogo/bakery-logo.png");
+        createProductSpan("백화점/마트", "department-mart", false , "/images/categorylogo/departmentstore-logo.png");
+        createProductSpan("아이스크림", "icecream", false , "/images/categorylogo/icecream-logo.png");
+        createProductSpan("편의점", "convenient", false , "/images/categorylogo/drugstore-logo.png");
+        createProductSpan("버거/피자", "burger-pizza", false, "/images/categorylogo/fastfood-logo.png");
+        createProductSpan("치킨", "chicken", false , "/images/categorylogo/chicken-logo.png");
+        createProductSpan("외식/분식/배달", "outside", false, "/images/categorylogo/bunsick-logo.png" );
         createBreak();
-        createProductSpan("구이/족발", "roast-porkfeet", false);
-        createProductSpan("레스토랑/뷔페", "restaurant-buffet", false);
-        createProductSpan("기타", "etc", false);
-        createProductSpan("영화/음악/도서", "movie-music-books", false);
-        createProductSpan("주유권", "oil", false);
-        createProductSpan("뷰티/헤어/바디", "beauty-hair-body", false);
-        createProductSpan("건강/리빙/식품관", "health-living-foods", false);
-        createProductSpan("생활/가전/엔터", "life-electronic-entertain", false);
+        createProductSpan("구이/족발", "roast-porkfeet", false , "/images/categorylogo/fried-logo.png");
+        createProductSpan("레스토랑/뷔페", "restaurant-buffet", false, "/images/categorylogo/restaurant-logo.png");
+        createProductSpan("영화/음악/도서", "movie-music-books", false, "/images/categorylogo/culture-logo.png" );
+        createProductSpan("주유권", "oil", false , "/images/categorylogo/oil-logo.png");
+        createProductSpan("뷰티/헤어/바디", "beauty-hair-body", false , "/images/categorylogo/beauty-logo.png");
+        createProductSpan("건강/리빙/식품관", "health-living-foods", false, "/images/categorylogo/healthy-logo.png");
+        createProductSpan("생활/가전/엔터", "life-electronic-entertain", false , "/images/categorylogo/machine-logo.png");
+        createProductSpan("기타", "etc", false, "/images/categorylogo/etc-logo.png");
+
 
         getPurchasingGifticon([[${param.page}]], [[${param.size}]]);
 

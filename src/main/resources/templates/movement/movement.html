@@ -121,6 +121,7 @@
 
 <th:block th:replace="fragments/base/script :: script"></th:block>
 <script th:src="@{/js/pagination/jquery.twbsPagination.min.js}"></script>
+<script th:src="@{/js/movement/movement.js}"></script>
 <script th:inline="javascript">
     loadMovement([[${param.page}]], [[${param.size}]]);
 </script>
