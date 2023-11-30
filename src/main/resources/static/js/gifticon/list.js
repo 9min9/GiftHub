@@ -327,7 +327,7 @@ function setProduct(parsed) {
         let productBox = createDivWithClass("product-o product-o--radius product-o--hover-off u-h-100");
         let product = createDivWithClass("product-o__wrap");
         let imgA = createAWithClass("aspect aspect--bg-grey aspect--square u-d-block");
-        let img = createImgWithClass("aspect__img");
+        let img = createImgWithClass("aspect__img", "/images/categorylogo/bakery-logo.png");
         let productBrandName = createSpanWithClass("product-o__category");
         productBrandName.innerText = p.brandName;
         let productName = createSpanWithClass("product-o__name");
@@ -381,12 +381,14 @@ function createAWithClass(clazz) {
     return a;
 }
 
-function createImgWithClass(clazz) {
-    let img = document.createElement("img");
+function createImgWithClass(clazz, img) {
+    let imgTag = document.createElement("img");
 
-    img.classList = clazz;
+    imgTag.classList = clazz;
 
-    return img;
+    imgTag.src = img;
+
+    return imgTag;
 }
 
 function createSpanWithClass(clazz) {
