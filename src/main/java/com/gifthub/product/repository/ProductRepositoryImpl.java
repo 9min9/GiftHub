@@ -68,7 +68,7 @@ public class ProductRepositoryImpl implements ProductRepositorySupport {
     @Override
     public Page<ProductDto> findAllProduct(Pageable pageable) {
         List<ProductDto> fetch = queryFactory
-                .select(new QProductDto(product.id, product.brandName, product.price, product.name, product.category))
+                .select(new QProductDto(product.id, product.name, product.price, product.brandName, product.category))
                 .from(product)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
