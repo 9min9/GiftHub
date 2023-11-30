@@ -327,7 +327,71 @@ function setProduct(parsed) {
         let productBox = createDivWithClass("product-o product-o--radius product-o--hover-off u-h-100");
         let product = createDivWithClass("product-o__wrap");
         let imgA = createAWithClass("aspect aspect--bg-grey aspect--square u-d-block");
-        let img = createImgWithClass("aspect__img", "/images/categorylogo/bakery-logo.png");
+        let img = createImgWithClass("aspect__img")
+        if(p.category=="생활/가전/엔터") {
+            img = createImgWithClass("aspect__img", "/images/noproductimage/no-image-machine.png");
+        }
+        if(p.category=="건강/리빙/식품관") {
+            img = createImgWithClass("aspect__img", "/images/noproductimage/no-image-healthy.png");
+        }
+
+        if(p.category=="뷰티/헤어/바디") {
+            img = createImgWithClass("aspect__img", "/images/noproductimage/no-image-beauty.png");
+        }
+
+        if(p.category=="베이커리/도넛") {
+            img = createImgWithClass("aspect__img", "/images/noproductimage/no-image-bakery.png");
+        }
+
+        if(p.category=="아이스크림") {
+            img = createImgWithClass("aspect__img", "/images/noproductimage/no-image-icecream.png");
+        }
+
+        if(p.category=="버거/피자") {
+            img = createImgWithClass("aspect__img", "/images/noproductimage/no-image-fastfood.png");
+        }
+
+        if(p.category=="치킨") {
+            img = createImgWithClass("aspect__img", "/images/noproductimage/no-image-chicken.png");
+        }
+
+        if(p.category=="구이/족발") {
+            img = createImgWithClass("aspect__img", "/images/noproductimage/no-image-fried.png");
+        }
+
+        if(p.category=="편의점") {
+            img = createImgWithClass("aspect__img", "/images/noproductimage/no-image-drugstore.png");
+        }
+
+        if(p.category=="백화점/마트") {
+            img = createImgWithClass("aspect__img", "/images/noproductimage/no-image-departmentstore.png");
+        }
+        if(p.category=="레스토랑/뷔페") {
+            img = createImgWithClass("aspect__img", "/images/noproductimage/no-image-restaurant.png");
+        }
+
+        if(p.category=="주유권") {
+            img = createImgWithClass("aspect__img", "/images/noproductimage/no-image-oil.png");
+        }
+
+        if(p.category=="영화/음악/도서") {
+            img = createImgWithClass("aspect__img", "/images/noproductimage/no-image-culture.png");
+        }
+
+        if(p.category=="외식/분식/배달") {
+            img = createImgWithClass("aspect__img", "/images/noproductimage/no-image-bunsik.png");
+        }
+
+
+        if(p.category=="카페") {
+            img = createImgWithClass("aspect__img", "/images/noproductimage/no-image-cafe.png");
+        }
+
+        if(p.category=="기타") {
+            img = createImgWithClass("aspect__img", "/images/noproductimage/no-image-etc.png");
+        }
+
+
         let productBrandName = createSpanWithClass("product-o__category");
         productBrandName.innerText = p.brandName;
         let productName = createSpanWithClass("product-o__name");
