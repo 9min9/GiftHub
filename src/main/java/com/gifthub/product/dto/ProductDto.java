@@ -1,6 +1,7 @@
 package com.gifthub.product.dto;
 
 import com.gifthub.product.entity.Product;
+import com.gifthub.product.enumeration.CategoryName;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,7 +27,7 @@ public class ProductDto {
                 .name(this.name)
                 .price(this.price)
                 .brandName(this.brandName)
-                .category(this.category)
+                .category(CategoryName.valueOf(this.category).getKorName())     //이미 Category가 String으로 많이 사용되어 이렇게 처리함
                 .build();
     }
 

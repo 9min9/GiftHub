@@ -5,6 +5,7 @@ import com.gifthub.admin.dto.ProductAddRequest;
 import com.gifthub.admin.dto.StorageAdminListDto;
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
+import com.gifthub.gifticon.enumeration.GifticonStatus;
 import com.gifthub.gifticon.exception.NotFoundProductNameException;
 import com.gifthub.gifticon.service.GifticonService;
 import com.gifthub.gifticon.service.GifticonStorageService;
@@ -39,16 +40,12 @@ public class AdminController {
     @PostMapping("/gifticon/confirm/register")
     public ResponseEntity<Object> registerGifticon(@RequestBody ProductAddRequest request,
                                                    @RequestHeader HttpHeaders headers) {
-
-        System.out.println("adminController");
-
         String productName = request.getProductName();
         String brandName = request.getBrandName();
         String due = request.getDue();
         String barcode = request.getBarcode();
         long storageId = Long.parseLong(request.getStorageId());
         Boolean isConfirm = request.getIsConfirm();
-        System.out.println(isConfirm);
 
         try {
             if (isConfirm == null) {
@@ -59,17 +56,24 @@ public class AdminController {
             UserDto user = storage.getUser();
             System.out.println(user.getId());
 
-//            productService.saveProduct();
-
-            System.out.println("%%%");
-            System.out.println(isConfirm);
-
             if (isConfirm) {
-                //todo : save product
+                ProductDto productDto = request.toProductDto();
+                Long productId = productService.saveProduct(productDto);
+                productDto.setId(productId);
 
-//                productService.saveProduct(productDto);
-//            System.out.println(product.getId());
-                //todo : save gifticon
+                GifticonDto gifticonDto = GifticonDto.builder()
+                        .user(user)
+                        .barcode(barcode)
+                        .due(LocalDate.parse(due))
+                        .brandName(brandName)
+                        .productName(productName)
+                        .productDto(productDto)
+                        .gifticonStatus(GifticonStatus.NONE)
+                        .price(productDto.getPrice())
+                        .build();
+
+                gifticonService.saveGifticon(gifticonDto);
+                gifticonStorageService.deleteStorage(storageId);
             }
 
             if (!isConfirm) {

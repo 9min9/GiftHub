@@ -24,7 +24,7 @@ public class Product extends BaseTimeEntity {
 //    @Column(name = "product_id")
     private Long id;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST)
     private List<Gifticon> gifticons = new ArrayList<>();
 
     private String name;

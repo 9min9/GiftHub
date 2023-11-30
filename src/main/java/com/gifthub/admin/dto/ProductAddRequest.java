@@ -1,5 +1,6 @@
 package com.gifthub.admin.dto;
 
+import com.gifthub.product.dto.ProductDto;
 import lombok.*;
 
 @NoArgsConstructor
@@ -13,5 +14,17 @@ public class ProductAddRequest {
     private String due;
     private String barcode;
     private String storageId;
+    private Long price;
+    private String category;
     private Boolean isConfirm;
+    private String cancelReason;
+
+    public ProductDto toProductDto() {
+        return ProductDto.builder()
+                .name(productName)
+                .brandName(brandName)
+                .price(price)
+                .category(category)
+                .build();
+    }
 }
