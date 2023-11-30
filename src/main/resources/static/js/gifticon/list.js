@@ -413,13 +413,13 @@ function setProduct(parsed) {
         product.dataset.modalId = "#newsletter-modal";
 
         product.addEventListener("click", function(event) {
-            let brandName = event.target.parentNode.querySelector(".product-o__category").innerText;
-
             let productName = event.target.parentNode.querySelector(".product-o__name").innerText;
 
             getOnSaleProduct(productName);
 
             document.querySelector("#modal-product-name").innerText = productName;
+
+            document.querySelector("#gifticon-modal-img").src = event.target.querySelector("img").src;
 
             $(event.target.dataset.modalId).modal();
         });
