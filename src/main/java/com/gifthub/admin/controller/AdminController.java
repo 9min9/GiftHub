@@ -3,6 +3,7 @@ package com.gifthub.admin.controller;
 
 import com.gifthub.admin.dto.ProductAddRequest;
 import com.gifthub.admin.dto.StorageAdminListDto;
+import com.gifthub.admin.exception.NotSelectFlagException;
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
 import com.gifthub.gifticon.enumeration.GifticonStatus;
@@ -12,13 +13,13 @@ import com.gifthub.gifticon.service.GifticonStorageService;
 import com.gifthub.product.dto.ProductDto;
 import com.gifthub.product.service.ProductService;
 import com.gifthub.user.UserJwtTokenProvider;
-import com.gifthub.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -39,7 +40,7 @@ public class AdminController {
 
     @PostMapping("/gifticon/confirm/register")
     public ResponseEntity<Object> registerGifticon(@RequestBody ProductAddRequest request,
-                                                   @RequestHeader HttpHeaders headers) {
+                                                   @RequestHeader HttpHeaders headers, Errors errors) {
         String productName = request.getProductName();
         String brandName = request.getBrandName();
         String due = request.getDue();
@@ -49,12 +50,9 @@ public class AdminController {
 
         try {
             if (isConfirm == null) {
-                throw new Exception();
+                throw new NotSelectFlagException();
             }
-
             GifticonStorageDto storage = gifticonStorageService.getStorageById(storageId);
-            UserDto user = storage.getUser();
-            System.out.println(user.getId());
 
             if (isConfirm) {
                 ProductDto productDto = request.toProductDto();
@@ -62,7 +60,7 @@ public class AdminController {
                 productDto.setId(productId);
 
                 GifticonDto gifticonDto = GifticonDto.builder()
-                        .user(user)
+                        .user(storage.getUser())
                         .barcode(barcode)
                         .due(LocalDate.parse(due))
                         .brandName(brandName)
@@ -77,23 +75,26 @@ public class AdminController {
             }
 
             if (!isConfirm) {
-                //todo return storage and reject message
+                gifticonStorageService.adminToStorage(storage);
             }
 
-            return ResponseEntity.ok().body(Collections.singletonMap("status", "ok"));
-
+        } catch (NotSelectFlagException e) {
+            errors.rejectValue("isConfirm", "Not.Select", "등록 상태를 설정해주세요");
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
+
+        if (errors.hasErrors()) {
+            return ResponseEntity.badRequest().body(errors.getAllErrors());
+        }
+        return ResponseEntity.ok(Collections.singletonMap("status", "ok"));
     }
 
     @PostMapping("/get/cancel/reason")
-    public ResponseEntity<Object> getCancelReason() {
+    public ResponseEntity<Object> getRejectReason() {
         return null;
-
     }
-
 
     @PostMapping("/gifticon/register")
     public ResponseEntity<Object> confirmRegister(@RequestBody GifticonStorageDto gifticonStorageDto, @RequestHeader HttpHeaders headers) {
@@ -128,8 +129,6 @@ public class AdminController {
     @PostMapping("/gifticon/confirm/list")
     public ResponseEntity<Object> confirmRegisterList(@RequestHeader HttpHeaders headers, @PageableDefault(size = 10) Pageable pageable) {
         Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
-        System.out.println("!!!");
-        System.out.println(userId);
 
         Page<StorageAdminListDto> findPage =
                 gifticonStorageService.getStorageListByStatus(ADMIN_APPROVAL, pageable);

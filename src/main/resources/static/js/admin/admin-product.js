@@ -4,12 +4,9 @@ window.onload = function () {
     $("input[name='isConfirm']").change(function () {
         let isConfirm = $("input:radio[name='isConfirm']:checked").val();
 
-
         if(isConfirm) {
             setCategory();
         }
-
-
     });
 
 }
@@ -172,11 +169,7 @@ function setCategory() {
         }
 
     });
-
-
-
 }
-
 
 function addProductAndGifticon(pk) {
 
@@ -201,12 +194,11 @@ function addProductAndGifticon(pk) {
         },
 
         success: function (jsonData) {
-            alert("기프티콘 등록이 완료되었습니다");
-            // checkResult(jsonData);
+            alert("기프티콘 검수가 완료되었습니다");
+            window.location.href = "/admin/index";
         },
-        error: function (error) {
-            alert("기프티콘 등록이 실패했습니다");
-            // checkResult(error.responseJSON);
+        error: function (xhr, status, error) {
+            alert("기프티콘 검수에 실패했습니다");
         }
     });
 }

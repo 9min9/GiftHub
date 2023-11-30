@@ -104,10 +104,6 @@ public class ProductController {
         return ResponseEntity.ok().body(result);
     }
 
-    public void adminToStorage(GifticonStorageDto storageDto) {
-
-    }
-
     @GetMapping("/test")
     public void testProductDto() {
         List<ProductDto> productDtoList = productService.getAllProduct();
