@@ -132,4 +132,12 @@ public class GifticonService {
         return false;
     }
 
+    public Page<GifticonDto> getGifticonByUserId(Pageable pageable, Long userId) {
+        return gifticonRepository.findByUserId(pageable, userId).map(Gifticon::toDto);
+    }
+
+    public void deleteById(Long gifticonId) {
+        gifticonRepository.deleteById(gifticonId);
+    }
+
 }

@@ -1,0 +1,160 @@
+let getMyGifticons = (page = 0) => {
+    page = page || 0;
+
+    let xhr = new XMLHttpRequest();
+
+    xhr.open("get", "/api/gifticons?page=" + page + "&size=1");
+    xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
+
+
+    xhr.onload = () => {
+        let parsed = JSON.parse(xhr.responseText);
+
+        print(parsed);
+
+        scrollEvent(document.querySelector(".gifticon-div:last-child"));
+
+        setEvent();
+    }
+
+    xhr.send();
+}
+
+let print = (gifticons) => {
+    let list = document.querySelector("#gifticon-list-div");
+
+    for (let gifticon of gifticons.content) {
+        list.innerHTML += `
+                  <div class="w-r u-s-m-b-30 gifticon-div">
+                    <div class="w-r__container">
+                      <div class="w-r__wrap-1">
+                        <div class="w-r__img-wrap">
+                          <img
+                            class="u-img-fluid"
+                            src="images/product/electronic/product3.jpg"
+                            alt=""
+                          />
+                        </div>
+                        <div class="w-r__info">
+                          <span class="w-r__name">
+                            <a href="product-detail.html"
+                              >${gifticon.productName}</a
+                            ></span
+                          >
+
+                          <span class="w-r__category">
+                            <a href="shop-side-version-2.html"
+                              >${gifticon.brandName}</a
+                            ></span
+                          >
+
+                          <span class="w-r__price"
+                            >${gifticon.price}
+
+                            <span class="w-r__discount"></span></span
+                          >
+                        </div>
+                      </div>
+                      <div class="w-r__wrap-2">
+                        <button
+                          class="w-r__link btn--e-transparent-platinum-b-2 gifticon-remove-button"
+                          data-gifticon-id="${gifticon.id}"
+                          data-modal="modal"
+                          data-modal-id="#add-to-cart"
+                          >제거</button
+                        >
+
+                        <a
+                          class="w-r__link btn--e-transparent-platinum-b-2"
+                          href="product-detail.html"
+                          >판매</a
+                        >
+
+                        <a
+                          class="w-r__link btn--e-brand-b-2"
+                          href="#"
+                          >사용</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                                        
+        `;
+
+    }
+
+}
+
+let pagination = (pageableJson) => {
+    $("#pagination-place").twbsPagination({
+        totalPages: pageableJson.totalPages,
+        visiblePages: 4,
+        onPageClick: function (event, page) {
+            $(".gifticon-div").each(function () {
+                $(this).remove();
+            });
+
+            window.scrollTo({top: 0, left: 0, behavior: "smooth"});
+
+            getMyGifticons(page - 1);
+
+            setEvent();
+        },
+    });
+};
+
+function deleteGifticon(gifticonId) {
+    let xhr = new XMLHttpRequest();
+
+    xhr.open("post", "/api/gifticon/delete/" + gifticonId);
+    xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
+
+    xhr.onload = () => {
+        removeAllGifticonElement();
+
+        getMyGifticons(0);
+    }
+
+    xhr.send();
+}
+
+function removeAllGifticonElement() {
+    document.querySelectorAll(".gifticon-div").forEach(element => {
+        element.remove();
+    });
+}
+
+function setEvent() {
+    document.querySelectorAll(".gifticon-remove-button").forEach(element => {
+        element.addEventListener("click", function(event) {
+            let gifticonId = event.target.dataset.gifticonId;
+
+            deleteGifticon(gifticonId);
+        });
+    })
+}
+
+let page = 0;
+function scrollEvent(element) {
+    const io = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+                if (entry.intersectionRatio > 0) {
+                    io.unobserve(element);
+
+                    page++;
+                    if (page === 0) {
+                        return;
+                    }
+
+                    getMyGifticons(page);
+
+                    getMyGifticons.onload = () => {
+                        io.observe(document.querySelector(".gifticon-div:last-child"));
+                    }
+                }
+            }
+        )
+    });
+
+    io.observe(element);
+}
