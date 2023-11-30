@@ -57,14 +57,14 @@ public class GifticonController {
     public ResponseEntity<Object> addGificonByKakao(@RequestBody Map<Object, Object> gifticon,
                                                     @RequestHeader HttpHeaders headers) {
         String jwtToken = JwtContext.getJwtToken();
-//        System.out.println("@@@@ add KAKa");
-//        System.out.println(jwtToken);
-//        System.out.println(gifticon);
+        System.out.println("@@@@ add KAKa");
+        System.out.println(jwtToken);
+        System.out.println(gifticon);
 
         Long userIdFromToken = userJwtTokenProvider.getUserIdFromToken(jwtToken);
         UserDto userById = userService.getUserById(userIdFromToken);
-//        System.out.println(userById.getId());
-//        System.out.println(userById.getName());
+        System.out.println(userById.getId());
+        System.out.println(userById.getName());
 
         File file = null;
         try {
@@ -109,7 +109,7 @@ public class GifticonController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/gifticon/add") // MultipartType으로 받는다 (1개)
+    @PostMapping("/gifticon/file/add") // MultipartType으로 받는다 (1개)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> addGifticonByFile(@RequestPart MultipartFile imageFile,
                                                     @RequestHeader HttpHeaders headers) {
@@ -148,7 +148,7 @@ public class GifticonController {
         return ResponseEntity.ok().body(Collections.singletonMap("status", "ok"));
     }
 
-    @PostMapping("/gifticon/addMultiple") // MultipartType으로 받는다 (여러개)
+    @PostMapping("/gifticon/file/add/multiple") // MultipartType으로 받는다 (여러개)
     @ResponseStatus(HttpStatus.OK)
     public List<String> addGifticonByFiles(@ModelAttribute ImageSaveDto imageSaveDto) {
 //        return gifticonImageService.saveImages(imageSaveDto);

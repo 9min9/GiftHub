@@ -1,10 +1,7 @@
 document.onload = function () {
-
     $('#product-modal-input').on('change', function () {
         validateProduct();
     });
-
-
 }
 
 function renderGifticon(jsonData) {
@@ -259,9 +256,12 @@ function setGifticonAddModal(element) {
 
     if(flagValue == "true") {
         productValidResult.innerText = "";
+        addBtn.innerText = "등록"
         addBtn.setAttribute('onclick', "addGifticon("+pk+")");
 
     } else {
+        document.createElement('div');
+
         productValidResult.innerText = "상품 정보가 없어 관리자의 확인이 필요합니다.";
         addBtn.innerText = "등록 요청"
         addBtn.setAttribute('onclick', "sendToAdmin("+pk+")");
