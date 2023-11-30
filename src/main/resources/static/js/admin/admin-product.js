@@ -1,6 +1,17 @@
 window.onload = function () {
     getConfirmStorageList();
 
+    $("input[name='isConfirm']").change(function () {
+        let isConfirm = $("input:radio[name='isConfirm']:checked").val();
+
+
+        if(isConfirm) {
+            setCategory();
+        }
+
+
+    });
+
 }
 
 function getConfirmStorageList() {
@@ -114,14 +125,15 @@ function setGifticonAddModal(element) {
     let brand = document.getElementById("brand-modal-input");
     let due = document.getElementById("due-modal-input");
     let barcode = document.getElementById("barcode-modal-input");
-    let addBtn = document.getElementById('gifticon-add-modal-btn');
+    let addBtn = document.getElementById('gifticon-confirm-modal-btn');
+
+    addBtn.setAttribute('onclick', "addProductAndGifticon("+pk+")");
 
     image.setAttribute('src', imageUrlValue);
     productName.setAttribute("value", productValue);
     brand.setAttribute("value", brandValue);
     due.setAttribute("value", dueValue);
     barcode.setAttribute("value", barcodeValue);
-
 }
 
 function openModal(element) {
@@ -130,5 +142,71 @@ function openModal(element) {
         backdrop: 'static',
         keyboard: false,
         show: true
+    });
+}
+
+
+function setCategory() {
+    $.ajax({
+        type: "post",
+        url: "/api/product/get/category",
+        contentType: "application/json; charset=utf-8",
+        // dataType: "json",
+        headers: {
+            Authorization: localStorage.getItem("token"),
+        },
+
+        success: function (jsonData) {
+            let categorySelector = document.getElementById('category-select');
+
+            for (const [key, value] of Object.entries(jsonData)) {
+                const optionElement = document.createElement("option");
+                optionElement.value = key;
+                optionElement.textContent = value;
+                categorySelector.appendChild(optionElement);
+            }
+        },
+
+        error: function (error) {
+            alert("카테고리 정보를 불러오는데 실패했습니다.");
+        }
+
+    });
+
+
+
+}
+
+
+function addProductAndGifticon(pk) {
+
+    let form = document.getElementById("product-add-form");
+    let formData = new FormData(form);
+    let data = {};
+
+    formData.forEach(function(value, key){
+        data[key] = value;
+    });
+
+    data['storageId'] = pk;
+
+    $.ajax({
+        type: "post",
+        url: "/api/admin/gifticon/confirm/register",
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        headers: {
+            Authorization: localStorage.getItem("token"),
+        },
+
+        success: function (jsonData) {
+            alert("기프티콘 등록이 완료되었습니다");
+            // checkResult(jsonData);
+        },
+        error: function (error) {
+            alert("기프티콘 등록이 실패했습니다");
+            // checkResult(error.responseJSON);
+        }
     });
 }

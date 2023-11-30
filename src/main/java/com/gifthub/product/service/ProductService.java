@@ -74,4 +74,7 @@ public class ProductService {
         return productRepository.findProductByCategory(pageable, category).map(Product::toProductDto);
     }
 
+    public List<String> getAllCategory() {
+        return productRepository.findAllCategory();
+    }
 }

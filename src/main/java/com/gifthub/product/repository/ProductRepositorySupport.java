@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface ProductRepositorySupport {
 
+    List<String> findAllCategory();
+
     List<String> findAllBrandName();
     List<ProductDto> findProductByBrand(String brand);
     List<ProductDto> findAllProduct();

@@ -20,6 +20,13 @@ public class ProductRepositoryImpl implements ProductRepositorySupport {
     private final JPAQueryFactory queryFactory;
 
     @Override
+    public List<String> findAllCategory() {
+        return queryFactory
+                .select(product.category).distinct()
+                .from(product).fetch();
+    }
+
+    @Override
     public List<String> findAllBrandName() {
         return queryFactory
                 .select(product.brandName)
@@ -27,7 +34,6 @@ public class ProductRepositoryImpl implements ProductRepositorySupport {
                 .from(product)
                 .fetch();
     }
-
 
     @Override
     public List<ProductDto> findProductByBrand(String brand) {

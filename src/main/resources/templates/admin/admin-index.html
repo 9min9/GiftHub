@@ -129,7 +129,6 @@
     </footer>
 
 
-
     <div class="modal fade new-l" id="newsletter-modal">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal--shadow">
@@ -153,7 +152,7 @@
                                     <p id="product-valid-error" class="new-l__p1" style="color: red;"></p>
                                     <input id="status-modal-input" name="status" class="news-l__input" type="hidden">
                                 </div>
-                                <form id="gifticon-add-form" class="new-l__form">
+                                <form id="product-add-form" class="new-l__form">
                                     <div class="u-s-m-b-5">
                                         <label class="gl-label">상품 이름</label>
                                         <input id="product-modal-input" name="productName" class="news-l__input"
@@ -196,10 +195,47 @@
                                                style="color: red"></label>
                                     </div>
 
+                                    <div class="u-s-m-b-5">
+                                        <label class="gl-label">등록 여부</label>
+                                    </div>
 
-                                    <div class="gl-inline u-s-m-b-15">
-                                        <div><button id="gifticon-cancel-modal-btn" class="btn">취소</button></div>
-                                        <div><button id="gifticon-add-modal-btn" class="btn btn--e-brand-b-2">등록</button></div>
+                                    <div class="radio-box newsletter__radio">
+                                        <input id="confirm" name="isConfirm" type="radio" value="true">
+                                        <div class="radio-box__state radio-box__state--primary">
+                                            <label class="radio-box__label" for="confirm" style="color: black">등록</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="radio-box newsletter__radio">
+                                        <input id="reject" name="isConfirm" type="radio" value="false">
+                                        <div class="radio-box__state radio-box__state--primary">
+                                            <label class="radio-box__label" for="reject" style="color: black">거절</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="gl-inline u-s-m-y-15">
+                                        <div id="category-div">
+                                            <select id="category-select" name="cancelReason" class="select-box select-box--primary-style u-w-100">
+                                                <option selected="">카테고리</option>
+                                            </select>
+                                        </div>
+
+                                        <div id="cancel-reason">
+                                            <select id="cancel-reason-select" name="cancelReason"
+                                                    class="select-box select-box--primary-style u-w-100">
+                                                <option selected="">거절 사유</option>
+                                                <option value="due">유효기간이 유효하지 않음</option>
+                                                <option value="name">상품명이 올바르지 않음</option>
+                                                <option value="price">가격정책에 맞지 않음</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="u-s-m-b-15" style="display: flex; justify-content: end;">
+                                        <div class="gl-inline">
+                                            <span></span>
+                                            <button id="gifticon-confirm-modal-btn" class="btn btn--e-brand-b-2" type="submit">등록</button>
+                                        </div>
                                     </div>
 
 
@@ -216,7 +252,7 @@
 <!--====== End - Main App ======-->
 
 <th:block th:replace="fragments/base/script :: script"></th:block>
-<script src="/js/admin/admin-index.js"></script>
+<script src="/js/admin/admin-product.js"></script>
 <script src="/js/admin/sidebar.js"></script>
 
 </body>
