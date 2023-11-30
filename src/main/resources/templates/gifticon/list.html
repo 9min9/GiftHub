@@ -137,23 +137,23 @@
 <script th:inline="javascript">
     window.onload = function() {
         createProductSpan("전체", "all", true);
-        createProductSpan("카페", "cafe");
-        createProductSpan("베이커리/도넛", "bakery-donut");
-        createProductSpan("백화점/마트", "department-mart");
-        createProductSpan("아이스크림", "icecream");
-        createProductSpan("편의점", "convenient");
-        createProductSpan("버거/피자", "burger-pizza");
-        createProductSpan("치킨", "chicken");
-        createProductSpan("외식/분식/배달", "outside");
+        createProductSpan("카페", "cafe", false);
+        createProductSpan("베이커리/도넛", "bakery-donut", false);
+        createProductSpan("백화점/마트", "department-mart", false);
+        createProductSpan("아이스크림", "icecream", false);
+        createProductSpan("편의점", "convenient", false);
+        createProductSpan("버거/피자", "burger-pizza", false);
+        createProductSpan("치킨", "chicken", false);
+        createProductSpan("외식/분식/배달", "outside", false);
         createBreak();
-        createProductSpan("구이/족발", "roast-porkfeet");
-        createProductSpan("레스토랑/뷔페", "restaurant-buffet");
-        createProductSpan("기타", "etc");
-        createProductSpan("영화/음악/도서", "movie-music-books");
-        createProductSpan("주유권", "oil");
-        createProductSpan("뷰티/헤어/바디", "beauty-hair-body");
-        createProductSpan("건강/리빙/식품관", "health-living-foods");
-        createProductSpan("생활/가전/엔터", "life-electronic-entertain");
+        createProductSpan("구이/족발", "roast-porkfeet", false);
+        createProductSpan("레스토랑/뷔페", "restaurant-buffet", false);
+        createProductSpan("기타", "etc", false);
+        createProductSpan("영화/음악/도서", "movie-music-books", false);
+        createProductSpan("주유권", "oil", false);
+        createProductSpan("뷰티/헤어/바디", "beauty-hair-body", false);
+        createProductSpan("건강/리빙/식품관", "health-living-foods", false);
+        createProductSpan("생활/가전/엔터", "life-electronic-entertain", false);
 
         getPurchasingGifticon([[${param.page}]], [[${param.size}]]);
 
