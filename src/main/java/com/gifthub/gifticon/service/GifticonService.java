@@ -18,6 +18,7 @@ import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -132,4 +133,24 @@ public class GifticonService {
         return false;
     }
 
+    public Page<GifticonDto> getGifticonByUserId(Pageable pageable, Long userId) {
+        return gifticonRepository.findByUserId(pageable, userId).map(Gifticon::toDto);
+    }
+
+    public void deleteById(Long gifticonId) {
+        gifticonRepository.deleteById(gifticonId);
+    }
+
+    @Transactional
+    public Long setSale(Long gifticonId) throws RuntimeException {
+        Long updated = gifticonRepository.updateSaleByGifticonId(gifticonId);
+
+        if (updated == 1) {
+            return updated;
+        } else if (updated > 1) {
+            throw new RuntimeException("한 개 이상의 수정사항이 있습니다.");
+        } else {
+            throw new RuntimeException("수정사항이 없습니다.");
+        }
+    }
 }
