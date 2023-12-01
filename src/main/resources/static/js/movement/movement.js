@@ -9,7 +9,7 @@ function getMovementByUserIdContain(page = 0, size = 10) {
     xhr.onload = () => {
         let parsed = JSON.parse(xhr.responseText);
 
-        return parsed;
+        print(parsed);
     }
 
     xhr.send();
@@ -39,7 +39,7 @@ function print(data) {
                             <img class="u-img-fluid"
                                  src="images/product/electronic/product3.jpg" alt="">
                         </div>
-                        <div class="description-title">${m.gifticon.price} Point</div>
+                        <div class="description-title">${m.gifticon.price} Point <br> ${m.gifticon.productName}</div>
                     </div>
                     <div class="description__info-wrap">
                         <div>
@@ -48,13 +48,13 @@ function print(data) {
                         </div>
                         <div>
         
-                                <span class="manage-o__text-2 u-c-silver">From:
+                                <span class="manage-o__text-2 u-c-silver">판매:
         
                                     <span class="manage-o__text-2 u-c-secondary">${m.fromUser.nickname}</span></span>
                         </div>
                         <div>
         
-                                <span class="manage-o__text-2 u-c-silver">To: 
+                                <span class="manage-o__text-2 u-c-silver">구매: 
         
                                     <span class="manage-o__text-2 u-c-secondary">${m.toUser.nickname}</span></span>
                         </div>
