@@ -24,6 +24,7 @@ import com.google.zxing.NotFoundException;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.apache.http.entity.ContentType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -162,6 +163,8 @@ public class GifticonController {
 
         try {
             outputStream = response.getOutputStream();
+
+            response.setContentType(ContentType.IMAGE_PNG.getMimeType());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
