@@ -27,7 +27,7 @@ function print(data) {
                     <div class="dash-l-r">
                         <div>
                             <div class="manage-o__text-2 u-c-secondary">
-                                # ${m.id}
+                                Exchange # ${m.id}
                             </div>
                         </div>
                     </div>

@@ -115,9 +115,7 @@ function gifticon(jsonData) {
     let productName = createProductName(jsonData.productName);
     let due = createDue(jsonData.due);
     let price = createPrice(jsonData.price, "정가");
-    let hiddenInput = createHiddenInput(jsonData.gifticonId);
 
-    productDiv.appendChild(hiddenInput);
     productDiv.appendChild(imageAndAction);
     productDiv.appendChild(brand)
     productDiv.appendChild(productName)
@@ -133,7 +131,10 @@ function createHiddenInput(gifticonId) {
 
     input.type = "hidden";
     input.value = gifticonId;
+    input.classList.add("gifticonId")
     input.name = "gifticonIds";
+
+    return input;
 }
 
 function createItemDiv() {
@@ -328,6 +329,7 @@ function setProduct(parsed) {
         let product = createDivWithClass("product-o__wrap");
         let imgA = createAWithClass("aspect aspect--bg-grey aspect--square u-d-block");
         let img = createImgWithClass("aspect__img");
+        let input = createHiddenInput(p.id);
 
         if(p.category=="생활/가전/엔터") {
             img = createImgWithClass("aspect__img", "/images/noproductimage/no-image-machine.png");
@@ -404,6 +406,7 @@ function setProduct(parsed) {
         productBox.appendChild(product);
         productBox.appendChild(productBrandName);
         productBox.appendChild(productName);
+        productBox.appendChild(input);
 
         outer.appendChild(productBox);
 
@@ -414,8 +417,9 @@ function setProduct(parsed) {
 
         product.addEventListener("click", function(event) {
             let productName = event.target.parentNode.querySelector(".product-o__name").innerText;
+            let productId = event.target.parentNode.querySelector("input.gifticonId").value;
 
-            getOnSaleProduct(productName);
+            getOnSaleProduct(productId);
 
             document.querySelector("#modal-product-name").innerText = productName;
 
