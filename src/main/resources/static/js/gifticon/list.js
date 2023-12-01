@@ -289,7 +289,7 @@ let setBrand = (category) => {
 
     xhr.open("get", "/api/product/" + category + "/brands");
 
-    xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
+    // xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
 
     xhr.onload = () => {
         let parsed = JSON.parse(xhr.responseText);
@@ -527,7 +527,7 @@ function getProductByCategoryAndBrand(category = "전체", brand = "전체") {
 
     xhr.open("get", "/api/product/page/" + cat + "/" + brand + "?page=" + page + "&size=12");
 
-    xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
+    // xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
 
     xhr.onload = () => {
         const parsed = JSON.parse(xhr.responseText);
