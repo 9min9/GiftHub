@@ -39,7 +39,7 @@ public class PointController {
 
     @PostMapping("/buy")
     public ResponseEntity<Object> usePoint(@RequestParam("point") Long point,
-                                           @RequestParam("gifticonId") Long[] gifticonIds,
+                                           @RequestParam("gifticonIds") Long[] gifticonIds,
                                            @RequestHeader HttpHeaders headers) {
         try {
             Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
