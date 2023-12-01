@@ -83,7 +83,8 @@ let print = (gifticons) => {
 
                         <a
                           class="w-r__link btn--e-brand-b-2 for-use-btn gifticon-buttons"
-                          href="#"
+                          href="/api/barcode/${gifticon.barcode}"
+                          target="_blank"
                           >사용</a
                         >
                       </div>
