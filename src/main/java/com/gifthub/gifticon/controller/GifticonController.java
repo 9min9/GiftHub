@@ -40,6 +40,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -203,11 +204,8 @@ public class GifticonController {
         Map<String, String> result = new HashMap<>();
         Map<String, String> errorResult = new HashMap<>();
 
-
         long storageId = Long.parseLong(request.get("storageId"));
         String due = request.get("due");
-        System.out.println("%%%");
-        System.out.println(request);
 
         try {
             /** product namedl 없는 사안은 admin으로 이관됨*/
@@ -227,6 +225,7 @@ public class GifticonController {
             Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
             UserDto findUser = userService.getUserById(userId);
             storage.setUser(findUser);
+            storage.setDue(LocalDate.parse(due));
 
             ProductDto product = productService.getByProductName(storage.getProductName());
             CategoryName engCategory = CategoryName.ofKor(product.getCategory());

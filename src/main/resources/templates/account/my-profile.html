@@ -36,12 +36,10 @@
                                     <div class="dash__box dash__box--bg-white dash__box--shadow u-s-m-b-30">
                                         <div class="dash__pad-1">
 
-                                            <span class="dash__text u-s-m-b-16">OOO님</span>
+                                            <span id="sidebar-nickname" class="dash__text u-s-m-b-16"></span>
                                             <ul class="dash__f-list">
                                                 <li>
                                                     <a class="dash-active" href="/mypage">내 정보</a></li>
-                                                <li>
-                                                    <a href="/wishlist">내 즐겨찾기</a></li>
                                                 <li>
                                                     <a href="/payment/orders">결제 내역</a></li>
                                                 <li>
@@ -49,100 +47,71 @@
                                                 <li>
                                                     <a href="#">사용 내역</a></li>
                                                 <li>
-                                                    <a href="dash-cancellation.html">친구 목록</a></li>
+                                                    <a href="#">친구 목록</a></li>
                                                 <li>
                                                     <a href="#">선물 내역</a></li>
                                             </ul>
                                         </div>
                                     </div>
 
-<!--                                    <div class="dash__box dash__box&#45;&#45;bg-white dash__box&#45;&#45;shadow dash__box&#45;&#45;w">-->
-<!--                                        <div class="dash__pad-1">-->
-<!--                                            <ul class="dash__w-list">-->
-<!--                                                <li>-->
-<!--                                                    <div class="dash__w-wrap">-->
-
-<!--                                                        <span class="dash__w-icon dash__w-icon-style-1"><i class="fas fa-cart-arrow-down"></i></span>-->
-
-<!--                                                        <span class="dash__w-text">4</span>-->
-
-<!--                                                        <span class="dash__w-name">Orders Placed</span></div>-->
-<!--                                                </li>-->
-<!--                                                <li>-->
-<!--                                                    <div class="dash__w-wrap">-->
-
-<!--                                                        <span class="dash__w-icon dash__w-icon-style-2"><i class="fas fa-times"></i></span>-->
-
-<!--                                                        <span class="dash__w-text">0</span>-->
-
-<!--                                                        <span class="dash__w-name">Cancel Orders</span></div>-->
-<!--                                                </li>-->
-<!--                                                <li>-->
-<!--                                                    <div class="dash__w-wrap">-->
-
-<!--                                                        <span class="dash__w-icon dash__w-icon-style-3"><i class="far fa-heart"></i></span>-->
-
-<!--                                                        <span class="dash__w-text">0</span>-->
-
-<!--                                                        <span class="dash__w-name">Wishlist</span></div>-->
-<!--                                                </li>-->
-<!--                                            </ul>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-
-
                                     <!--====== End - Dashboard Features ======-->
                                 </div>
                                 <div class="col-lg-9 col-md-12">
                                     <div class="dash__box dash__box--shadow dash__box--radius dash__box--bg-white u-s-m-b-30">
                                         <div class="dash__pad-2">
-                                            <h1 class="dash__h1 u-s-m-b-14">My Profile</h1>
+                                            <h1 class="dash__h1 u-s-m-b-14">내 정보</h1>
+<!--                                            <span class="dash__text u-s-m-b-30">Look all your info, you could customize your profile.</span>-->
 
-                                            <span class="dash__text u-s-m-b-30">Look all your info, you could customize your profile.</span>
                                             <div class="row">
                                                 <div class="col-lg-4 u-s-m-b-30">
-                                                    <h2 class="dash__h2 u-s-m-b-8">Full Name</h2>
-
-                                                    <span class="dash__text">John Doe</span>
+                                                    <h2 class="dash__h2 u-s-m-b-8">이름</h2>
+                                                    <span id="name" class="dash__text"></span>
                                                 </div>
                                                 <div class="col-lg-4 u-s-m-b-30">
-                                                    <h2 class="dash__h2 u-s-m-b-8">E-mail</h2>
+                                                    <h2 class="dash__h2 u-s-m-b-8">이메일</h2>
+                                                    <span id="email" class="dash__text"></span>
+                                                    <div class="dash__link dash__link--secondary"></div>
+                                                </div>
 
-                                                    <span class="dash__text">johndoe@domain.com</span>
-                                                    <div class="dash__link dash__link--secondary">
+                                                <div class="col-lg-4 u-s-m-b-30">
+                                                    <h2 class="dash__h2 u-s-m-b-8">닉네임</h2>
+                                                    <span id="nickname" class="dash__text"></span>
+                                                </div>
 
-                                                        <a href="#">Change</a></div>
+                                                <div class="col-lg-4 u-s-m-b-30">
+                                                    <h2 class="dash__h2 u-s-m-b-8">전화 번호</h2>
+                                                    <span id="tel" class="dash__text"></span>
                                                 </div>
                                                 <div class="col-lg-4 u-s-m-b-30">
-                                                    <h2 class="dash__h2 u-s-m-b-8">Phone</h2>
+                                                    <h2 class="dash__h2 u-s-m-b-8">생년 월일</h2>
 
-                                                    <span class="dash__text">Please enter your mobile</span>
-                                                    <div class="dash__link dash__link--secondary">
-
-                                                        <a href="#">Add</a></div>
+                                                    <span id="birthDay" class="dash__text"></span>
                                                 </div>
                                                 <div class="col-lg-4 u-s-m-b-30">
-                                                    <h2 class="dash__h2 u-s-m-b-8">Birthday</h2>
-
-                                                    <span class="dash__text">1991-02-02</span>
+                                                    <h2 class="dash__h2 u-s-m-b-8">성별</h2>
+                                                    <span id="gender" class="dash__text"></span>
                                                 </div>
+
                                                 <div class="col-lg-4 u-s-m-b-30">
-                                                    <h2 class="dash__h2 u-s-m-b-8">Gender</h2>
-
-                                                    <span class="dash__text">Male</span>
+                                                    <h2 class="dash__h2 u-s-m-b-8">보유 포인트</h2>
+                                                    <span id="point" class="dash__text"></span>
                                                 </div>
+
+                                                <div class="col-lg-4 u-s-m-b-30">
+                                                    <h2 class="dash__h2 u-s-m-b-8">권한</h2>
+                                                    <span id="user-type" class="dash__text"></span>
+                                                </div>
+
                                             </div>
                                             <div class="row">
                                                 <div class="col-lg-12">
                                                     <div class="dash__link dash__link--secondary u-s-m-b-30">
 
-                                                        <a data-modal="modal" data-modal-id="#dash-newsletter">Subscribe Newsletter</a></div>
+<!--                                                        <a data-modal="modal" data-modal-id="#dash-newsletter">Subscribe Newsletter</a>-->
+                                                    </div>
                                                     <div class="u-s-m-b-16">
-
-                                                        <a class="dash__custom-link btn--e-transparent-brand-b-2" href="/edit/profile">Edit Profile</a></div>
-                                                    <div>
-
-                                                        <a class="dash__custom-link btn--e-brand-b-2" href="#">Change Password</a></div>
+                                                        <a class="dash__custom-link btn--e-transparent-brand-b-2" href="/edit/profile">수정 하기</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -163,37 +132,10 @@
         <footer>
             <th:block th:replace="fragments/base/footer :: footer"></th:block>
         </footer>
-
-        <!--====== Modal Section ======-->
-
-        <!--====== Unsubscribe or Subscribe Newsletter ======-->
-        <div class="modal fade" id="dash-newsletter">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content modal--shadow">
-                    <div class="modal-body">
-                        <form class="d-modal__form">
-                            <div class="u-s-m-b-15">
-                                <h1 class="gl-modal-h1">Newsletter Subscription</h1>
-
-                                <span class="gl-modal-text">I have read and understood</span>
-
-                                <a class="d_modal__link" href="my-profile.html">Ludus Privacy Policy</a>
-                            </div>
-                            <div class="gl-modal-btn-group">
-
-                                <button class="btn btn--e-brand-b-2" type="submit">SUBSCRIBE</button>
-
-                                <button class="btn btn--e-grey-b-2" type="button" data-dismiss="modal">CANCEL</button></div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!--====== End - Modal Section ======-->
     </div>
     <!--====== End - Main App ======-->
 
     <th:block th:replace="fragments/base/script :: script"></th:block>
+    <script src="/js/account/myinfo.js"></script>
 </body>
 </html>
