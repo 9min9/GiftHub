@@ -1,5 +1,4 @@
 let getMyGifticons = (page = 0) => {
-    console.log(page);
     page = page || 0;
 
     let xhr = new XMLHttpRequest();
@@ -9,6 +8,10 @@ let getMyGifticons = (page = 0) => {
 
 
     xhr.onload = () => {
+        if (xhr.status !== 200) {
+            return;
+        }
+
         let parsed = JSON.parse(xhr.responseText);
 
         print(parsed);
@@ -17,7 +20,9 @@ let getMyGifticons = (page = 0) => {
 
         let observer = scrollEventObserver(elem);
 
-        observer.observe(elem);
+        if (parsed.content.length) {
+            observer.observe(elem);
+        }
 
         setEvent();
     }
