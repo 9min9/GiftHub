@@ -278,7 +278,16 @@ function openModal(element) {
 }
 
 function addGifticon(pk) {
-    let data = {"id" : pk};
+
+    let form = document.getElementById("gifticon-add-form");
+    let formData = new FormData(form);
+    let data = {};
+
+    formData.forEach(function(value, key){
+        data[key] = value;
+    });
+
+    data['storageId'] = pk;
 
     $.ajax({
         type: "post",
@@ -292,11 +301,14 @@ function addGifticon(pk) {
 
         success: function (jsonData) {
             alert("기프티콘 등록이 완료되었습니다");
-            // checkResult(jsonData);
+
+            console.log(jsonData);
+
+            document.location.href = "/gifticon/add";
         },
         error: function (error) {
-            alert("기프티콘 등록이 실패했습니다");
-            // checkResult(error.responseJSON);
+            console.log(error.responseJSON);
+            checkError(error.responseJSON);
         }
     });
 }
@@ -371,14 +383,14 @@ function validateProduct() {
 }
 
 function checkError(result) {
-    let label = document.getElementById("result-" + result.target + "-label");
+    let label = document.getElementById("error-" + result.field + "-modal-label");
 
     if (result.status == "error") {
         label.setAttribute('style', 'color: red;');
         label.innerText = result.message;
+
     }
 
-    label.innerText = result.message;
 }
 
 function delStorage(storageId) {
