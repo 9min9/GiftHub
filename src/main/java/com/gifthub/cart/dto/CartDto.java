@@ -22,7 +22,7 @@ public class CartDto {
         return Cart.builder()
                 .id(this.id)
                 .user(this.userDto.toEntity())
-                .gifticon(this.gifticonDto.toEntity())
+                .gifticon(this.gifticonDto.toEntityExceptProduct())
                 .build();
     }
 
