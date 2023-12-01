@@ -33,8 +33,9 @@ let getMyGifticons = (page = 0) => {
 let print = (gifticons) => {
     let list = document.querySelector("#gifticon-list-div");
 
+    let html = "";
     for (let gifticon of gifticons.content) {
-        list.innerHTML += `
+        html += `
                   <div class="w-r u-s-m-b-30 gifticon-div">
                     <div class="w-r__container">
                       <div class="w-r__wrap-1">
@@ -64,37 +65,50 @@ let print = (gifticons) => {
                             <span class="w-r__discount"></span></span
                           >
                         </div>
+                      </div>`;
+
+        if (gifticon.gifticonStatus === "ONSALE") {
+            html += `
+                <div class="w-r__wrap-2 gifticon-button-area" id="gifticon-button-area-${gifticon.id}">    
+                    판매중
+                </div>
+            `;
+        } else {
+            html +=
+                    `<div class="w-r__wrap-2 gifticon-button-area" id="gifticon-button-area-${gifticon.id}">
+                            <button
+                              class="w-r__link btn--e-transparent-platinum-b-2 gifticon-remove-button gifticon-buttons"
+                              data-gifticon-id="${gifticon.id}"
+                              data-modal="modal"
+                              data-modal-id="#add-to-cart"
+                              >제거</button
+                            >
+    
+                            <button
+                              class="w-r__link btn--e-transparent-platinum-b-2 for-sale-btn gifticon-buttons"
+                              href="product-detail.html"
+                              data-gifticon-id="${gifticon.id}"
+                              >판매</button
+                            >
+    
+                            <a
+                              class="w-r__link btn--e-brand-b-2 for-use-btn gifticon-buttons"
+                              href="/api/barcode/${gifticon.barcode}"
+                              target="_blank"
+                              >사용</a
+                            >
+                          </div>
+            `;
+
+        }
+
+        html += `
+                        </div>
                       </div>
-                      <div class="w-r__wrap-2 gifticon-button-area" id="gifticon-button-area-${gifticon.id}">
-                        <button
-                          class="w-r__link btn--e-transparent-platinum-b-2 gifticon-remove-button gifticon-buttons"
-                          data-gifticon-id="${gifticon.id}"
-                          data-modal="modal"
-                          data-modal-id="#add-to-cart"
-                          >제거</button
-                        >
-
-                        <button
-                          class="w-r__link btn--e-transparent-platinum-b-2 for-sale-btn gifticon-buttons"
-                          href="product-detail.html"
-                          data-gifticon-id="${gifticon.id}"
-                          >판매</button
-                        >
-
-                        <a
-                          class="w-r__link btn--e-brand-b-2 for-use-btn gifticon-buttons"
-                          href="/api/barcode/${gifticon.barcode}"
-                          target="_blank"
-                          >사용</a
-                        >
-                      </div>
-                    </div>
-                  </div>
-                                        
-        `;
-
+            `;
     }
 
+    list.innerHTML += html;
 }
 
 let pagination = (pageableJson) => {
@@ -197,12 +211,11 @@ function setForSale(gifticonId) {
     xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
 
     xhr.onload = () => {
-        document.querySelectorAll(".gifticon-button-area-" + gifticonId + " gifticon-buttons").forEach(element => {
-            console.log(element)
+        document.querySelectorAll("#gifticon-button-area-" + gifticonId + " gifticon-buttons").forEach(element => {
             element.remove();
         });
 
-        document.querySelector(".gifticon-button-area-" + gifticonId).innerText = "판매중";
+        document.querySelector("#gifticon-button-area-" + gifticonId).innerText = "판매중";
     }
 
     xhr.send();
