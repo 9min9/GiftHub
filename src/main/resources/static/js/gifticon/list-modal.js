@@ -11,7 +11,7 @@ function getOnSaleProduct(productId) {
 
         let priceContainer = document.querySelector("#price-container");
 
-        for (let p of parsed) {
+        for (let p of parsed.content) {
             let priceUnit = document.createElement("tr");
 
             let priceTd = document.createElement("td");
