@@ -62,4 +62,17 @@ public class GifticonDto {
                 .gifticonImage(imageDto.toEntity())
                 .build();
     }
+
+    public Gifticon toEntityExceptProduct() {
+        return Gifticon.builder()
+                .id(this.id)
+                .user(this.user.toEntity())
+                .barcode(this.barcode)
+                .due(this.due)
+                .brandName(this.brandName)
+                .productName(this.productName)
+                .gifticonStatus(this.gifticonStatus)
+                .price(this.price)
+                .build();
+    }
 }
