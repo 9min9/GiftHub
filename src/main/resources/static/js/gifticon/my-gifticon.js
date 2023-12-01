@@ -3,16 +3,26 @@ let getMyGifticons = (page = 0) => {
 
     let xhr = new XMLHttpRequest();
 
-    xhr.open("get", "/api/gifticons?page=" + page + "&size=1");
+    xhr.open("get", "/api/gifticons?page=" + page + "&size=5");
     xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
 
 
     xhr.onload = () => {
+        if (xhr.status !== 200) {
+            return;
+        }
+
         let parsed = JSON.parse(xhr.responseText);
 
         print(parsed);
 
-        scrollEvent(document.querySelector(".gifticon-div:last-child"));
+        let elem = document.querySelector(".gifticon-div:last-child");
+
+        let observer = scrollEventObserver(elem);
+
+        if (parsed.content.length) {
+            observer.observe(elem);
+        }
 
         setEvent();
     }
@@ -73,7 +83,8 @@ let print = (gifticons) => {
 
                         <a
                           class="w-r__link btn--e-brand-b-2 for-use-btn gifticon-buttons"
-                          href="#"
+                          href="/api/barcode/${gifticon.barcode}"
+                          target="_blank"
                           >사용</a
                         >
                       </div>
@@ -111,9 +122,14 @@ function deleteGifticon(gifticonId) {
     xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
 
     xhr.onload = () => {
-        removeAllGifticonElement();
+        document.querySelector(".gifticon-remove-button[data-gifticon-id='" + gifticonId + "']")
+            .parentElement.parentElement.remove();
 
-        getMyGifticons(0);
+        let elem = document.querySelector(".gifticon-div:last-child");
+
+        let observer = scrollEventObserver(elem);
+
+        observer.observe(elem);
     }
 
     xhr.send();
@@ -123,6 +139,7 @@ function removeAllGifticonElement() {
     document.querySelectorAll(".gifticon-div").forEach(element => {
         element.remove();
     });
+
 }
 
 function setEvent() {
@@ -138,11 +155,11 @@ function setEvent() {
 }
 
 let page = 0;
-function scrollEvent(element) {
-    const io = new IntersectionObserver(entries => {
+function scrollEventObserver(element) {
+    const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
                 if (entry.intersectionRatio > 0) {
-                    io.unobserve(element);
+                    observer.unobserve(element);
 
                     page++;
                     if (page === 0) {
@@ -157,9 +174,11 @@ function scrollEvent(element) {
                 }
             }
         )
+
+        return observer;
     });
 
-    io.observe(element);
+    return observer;
 }
 
 function forSaleEvent() {
