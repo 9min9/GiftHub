@@ -1,13 +1,13 @@
 window.onload = function () {
-    // document.getElementById("auth-phone").style.visibility = "hidden";
-    // document.getElementById("result-tel-label").style.visibility="hidden";
+    document.getElementById("auth-phone").style.visibility = "hidden";
+    document.getElementById("result-tel-label").style.visibility="hidden";
     document.getElementById("result-confirmPassword-label").style.visibility = "hidden";
     document.getElementById("result-email-label").style.visibility = "hidden";
     document.getElementById("result-nickname-label").style.visibility = "hidden";
 
     $("#signup-btn").click(function (e) {
         e.preventDefault();
-        signup();
+
     });
 
 
@@ -31,6 +31,11 @@ window.onload = function () {
     $('#tel').on('change', function () {
         telCheck();
     })
+
+    $('#tel-check2').click( function () {
+        telCheck2();
+    })
+
 
     $('#birth-date').on('change', function () {
         birthCheck();
@@ -195,20 +200,20 @@ function birthCheck() {
     }
 }
 
-// function telCheck2(){
-// document.getElementById("auth-phone").style.visibility="visible"
-//     document.getElementById("result-tel2-label").style.display="none"
-//     document.getElementById("result-tel-label").style.display="none"
-//     let tel=$("#tel").val();
-//   $.ajax({
-//       type:"post",
-//       url: "/check/sendSMS",
-//       data: {tel: tel},
-//       contentType: "application/json; charset=utf-8",
-//       dataType: "json",
-//
-//   })
-// }
+function telCheck2(){
+document.getElementById("auth-phone").style.visibility="visible"
+    document.getElementById("result-tel2-label").style.display="none"
+    document.getElementById("result-tel-label").style.display="none"
+    let tel=$("#tel").val();
+  $.ajax({
+      type:"post",
+      url: "/check/sendSMS",
+      data: JSON.stringify({tel: tel}),
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+
+  })
+}
 
 
 function signup() {

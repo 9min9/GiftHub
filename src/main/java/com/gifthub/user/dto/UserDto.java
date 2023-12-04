@@ -5,10 +5,7 @@ import com.gifthub.user.entity.LocalUser;
 import com.gifthub.user.entity.NaverUser;
 import com.gifthub.user.entity.User;
 import com.gifthub.user.entity.enumeration.UserType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import static com.gifthub.user.entity.enumeration.UserType.USER;
 
@@ -16,6 +13,7 @@ import static com.gifthub.user.entity.enumeration.UserType.USER;
 @NoArgsConstructor
 @Builder
 @Getter
+@Setter
 public class UserDto {
 
     private Long id;
