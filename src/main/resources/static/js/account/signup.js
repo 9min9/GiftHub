@@ -236,7 +236,7 @@ function signup() {
 
     $.ajax({
         type: "post",
-        url: "http://localhost:8081/signup/submit",
+        url: "/signup/submit",
         data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
         dataType: "json",

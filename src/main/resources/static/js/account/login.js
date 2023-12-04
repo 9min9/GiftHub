@@ -90,7 +90,7 @@ function getNaverJwt() {
     let param = '?code=' + code;
     $.ajax({
         type: "post",
-        url: "http://localhost:8081/api/naver/login" + param,
+        url: "/api/naver/login" + param,
         success: function (jsonData, status, xhr) {
             alert("로그인 성공")
             console.log(jsonData);
