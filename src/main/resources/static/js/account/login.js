@@ -9,6 +9,53 @@ window.onload = function () {
     } else if (urlParams.get("code") != null){
         getKakaoJwt();
     }
+
+    $("#login-btn").click(function (){
+        getLocalJwt();
+    })
+
+    $("#")
+}
+
+
+function getLocalJwt(){
+    let email = $("#login-email").val();
+    let password = $("#login-password").val();
+
+    let data= {
+        email:email,
+        password : password
+    };
+
+    $.ajax({
+        type:"post",
+        url:"/signup/login",
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+
+
+        success: function (jsonData, status, xhr) {
+            alert("로그인 성공")
+            console.log(jsonData);
+
+            let authorizationHeader = xhr.getResponseHeader("Authorization");
+            let token = authorizationHeader.replace("Bearer ", "");
+            localStorage.setItem("token", token);
+            setCookie();
+
+            // window.location.href = "/";
+            // window.history.back();
+
+        },
+        error: function (error) {
+            console.log("로그인실패")
+
+        },
+        complete: function (xhr, status) {
+            console.log("서버 응답", xhr.responseText);
+        }
+    });
 }
 
 function getKakaoJwt() {
@@ -60,6 +107,8 @@ function getNaverJwt() {
             console.log("로그인실패")
         }
     });
+
+
 
 }
 
