@@ -47,7 +47,7 @@ public class NaverAccountConotroller {
             System.out.println(naverAccessTokenDto.getToken_type());
             System.out.println(naverUserInfo);
 
-            if (!commonUserservice.duplicateEmail(naverUserInfo.getEmail())) {
+            if (!commonUserservice.isDuplicateEmail(naverUserInfo.getEmail())) {
                 naverUserInfo.setPoint(0L);
 
                 userService.saveNaverUser(naverUserInfo);
