@@ -33,6 +33,22 @@ public class Product extends BaseTimeEntity {
 
     private String category;
 
+    public void changeName(String name) {
+        this.name = name;
+    }
+
+    public void changePrice(Long price) {
+        this.price = price;
+    }
+
+    public void changeBrand(String brandName) {
+        this.brandName = brandName;
+    }
+
+    public void changeCategory(String category) {
+        this.category = category;
+    }
+
     public ProductDto toProductDto() {
         return ProductDto.builder()
                 .id(this.id)
