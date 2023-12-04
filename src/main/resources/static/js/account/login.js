@@ -49,6 +49,7 @@ function getLocalJwt(){
 
         },
         error: function (error) {
+            console.log(error)
             console.log("로그인실패")
 
         },

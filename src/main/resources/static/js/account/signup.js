@@ -7,7 +7,7 @@ window.onload = function () {
 
     $("#signup-btn").click(function (e) {
         e.preventDefault();
-
+        signup();
     });
 
 
@@ -41,7 +41,6 @@ window.onload = function () {
         birthCheck();
     })
 }
-
 
 function passwordCheck() {
     let password = $("#password").val();
@@ -167,7 +166,6 @@ function telCheck() {
     });
 }
 
-
 function checkResult(result) {
     let label = document.getElementById("result-" + result.target + "-label");
     if (result.status == "success") {
@@ -215,7 +213,6 @@ document.getElementById("auth-phone").style.visibility="visible"
   })
 }
 
-
 function signup() {
 
     let year = $("#birth-date").val().substring(0, 4);
@@ -233,7 +230,6 @@ function signup() {
         birthdate: birthdate
     }
 
-
     $.ajax({
         type: "post",
         url: "/signup/submit",
@@ -247,11 +243,7 @@ function signup() {
         },
 
         error: function (error) {
-            var errorMessages = error.responseJSON;
-            errorMessages.forEach(function (msg) {
-                alert(msg);
-            });
-
+            console.log(error)
         }
     });
 }
