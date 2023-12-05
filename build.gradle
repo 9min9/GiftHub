@@ -79,11 +79,6 @@ dependencies {
     // Image Server : aws S3
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
-    // devtools
-//    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-
-// https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload
-    implementation 'commons-fileupload:commons-fileupload:1.4'
 
     // https://mvnrepository.com/artifact/commons-io/commons-io
     implementation group: 'commons-io', name: 'commons-io', version: '2.7'
@@ -103,4 +98,8 @@ sourceSets {
 }
 configurations {
     querydsl.extendsFrom compileClasspath
+}
+
+test {
+    useJUnitPlatform()
 }
