@@ -22,7 +22,7 @@ let getPoint = () => {
         xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
 
         xhr.onload = () => {
-            if (xhr.status !== 200) {
+            if (xhr.status !== 200 || xhr.responseText.indexOf("html") !== -1) {
                 return;
             }
 
