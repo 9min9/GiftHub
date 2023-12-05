@@ -44,7 +44,7 @@ public class KakaoAccountController {
             System.out.println("KAT");
             System.out.println(kakaoAccessToken);
 
-            if (!commonUserService.duplicateEmail(kakaoUserInfo.getEmail())) {
+            if (!commonUserService.isDuplicateEmail(kakaoUserInfo.getEmail())) {
                 kakaoUserInfo.setPoint(0L);
                 userService.saveKakaoUser(kakaoUserInfo);
             }

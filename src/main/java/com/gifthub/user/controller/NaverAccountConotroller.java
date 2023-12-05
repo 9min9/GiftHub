@@ -47,7 +47,7 @@ public class NaverAccountConotroller {
             System.out.println(naverAccessTokenDto.getToken_type());
             System.out.println(naverUserInfo);
 
-            if (!commonUserservice.duplicateEmail(naverUserInfo.getEmail())) {
+            if (!commonUserservice.isDuplicateEmail(naverUserInfo.getEmail())) {
                 naverUserInfo.setPoint(0L);
 
                 userService.saveNaverUser(naverUserInfo);
@@ -56,7 +56,8 @@ public class NaverAccountConotroller {
             SocialAuthenticationToken socialAuthenticationToken = new SocialAuthenticationToken(naverUserInfo.getNaverId());
             Authentication authentication = naverAuthenticationProvider.authenticate(socialAuthenticationToken);
 //            System.out.println("Controller auth");
-//            System.out.println(authentication);
+            System.out.println("naverauth:"+authentication);
+
 
             if (authentication.isAuthenticated()) {
                 NaverUserDto findNaverUserDto = naverAccountService.getNaverUserByNaverId(naverUserInfo.getNaverId());

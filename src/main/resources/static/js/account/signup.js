@@ -1,6 +1,6 @@
 window.onload = function () {
-    // document.getElementById("auth-phone").style.visibility = "hidden";
-    // document.getElementById("result-tel-label").style.visibility="hidden";
+    document.getElementById("auth-phone").style.visibility = "hidden";
+    document.getElementById("result-tel-label").style.visibility="hidden";
     document.getElementById("result-confirmPassword-label").style.visibility = "hidden";
     document.getElementById("result-email-label").style.visibility = "hidden";
     document.getElementById("result-nickname-label").style.visibility = "hidden";
@@ -32,11 +32,15 @@ window.onload = function () {
         telCheck();
     })
 
+    $('#tel-check2').click( function () {
+        telCheck2();
+    })
+
+
     $('#birth-date').on('change', function () {
         birthCheck();
     })
 }
-
 
 function passwordCheck() {
     let password = $("#password").val();
@@ -162,7 +166,6 @@ function telCheck() {
     });
 }
 
-
 function checkResult(result) {
     let label = document.getElementById("result-" + result.target + "-label");
     if (result.status == "success") {
@@ -195,21 +198,20 @@ function birthCheck() {
     }
 }
 
-// function telCheck2(){
-// document.getElementById("auth-phone").style.visibility="visible"
-//     document.getElementById("result-tel2-label").style.display="none"
-//     document.getElementById("result-tel-label").style.display="none"
-//     let tel=$("#tel").val();
-//   $.ajax({
-//       type:"post",
-//       url: "/check/sendSMS",
-//       data: {tel: tel},
-//       contentType: "application/json; charset=utf-8",
-//       dataType: "json",
-//
-//   })
-// }
+function telCheck2(){
+document.getElementById("auth-phone").style.visibility="visible"
+    document.getElementById("result-tel2-label").style.display="none"
+    document.getElementById("result-tel-label").style.display="none"
+    let tel=$("#tel").val();
+  $.ajax({
+      type:"post",
+      url: "/check/sendSMS",
+      data: JSON.stringify({tel: tel}),
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
 
+  })
+}
 
 function signup() {
 
@@ -228,10 +230,9 @@ function signup() {
         birthdate: birthdate
     }
 
-
     $.ajax({
         type: "post",
-        url: "http://localhost:8081/signup/submit",
+        url: "/signup/submit",
         data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -242,11 +243,7 @@ function signup() {
         },
 
         error: function (error) {
-            var errorMessages = error.responseJSON;
-            errorMessages.forEach(function (msg) {
-                alert(msg);
-            });
-
+            console.log(error)
         }
     });
 }
