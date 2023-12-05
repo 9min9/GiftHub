@@ -278,16 +278,15 @@ public class OcrService {
 
     }
 
-    // TODO : 유효기간 자체가 null이거나 아예 못읽는 경우를 못잡음
     private LocalDate dateFormattingByString(String ocrResult) {
         String capturedDueDate =null;
         String dueDate = null;
         if (OcrUtil.dateParserTilde(ocrResult) != null) {
-            capturedDueDate = OcrUtil.dateParserTilde(ocrResult);
+            capturedDueDate = OcrUtil.dateParserTilde(ocrResult); // ~2024.02.10 ->
             dueDate = OcrUtil.dateReplaceFromSpotToHyphen(capturedDueDate);
         } else {
             capturedDueDate = OcrUtil.dateParserHangul(ocrResult);
-            dueDate = OcrUtil.dateReplaceFromHangulToHyphen(capturedDueDate);
+            dueDate = OcrUtil.dateReplaceFromHangulToHyphen(OcrUtil.removeSpaces(capturedDueDate)); // 년월일 공백제거후 하이픈추가
         }
         LocalDate due = OcrUtil.localDateFormatterHyphen(dueDate);
         return due;

@@ -84,7 +84,7 @@ public class OcrUtil {
 
     public static String dateParserHangul(String input) {
         try {
-            Matcher matcher = Pattern.compile("(\\d{4}년\\s?\\d{2}월\\s?\\d{2}일)").matcher(input);
+            Matcher matcher = Pattern.compile("(\\d{4}년\\s*\\d{2}월\\s*\\d{2}일)").matcher(input);
             return matcher.find() ? matcher.group(1) : null;
 
         } catch (PatternSyntaxException e) {
@@ -133,6 +133,11 @@ public class OcrUtil {
             // 사용자 예외처리
         }
 
+    }
+
+    // 년월일 사이의 공백을 제거
+    public static String removeSpaces(String input) {
+        return input.replaceAll("\\s", "");
     }
 
 
