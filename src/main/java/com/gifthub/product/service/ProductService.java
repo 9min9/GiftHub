@@ -27,7 +27,7 @@ public class ProductService {
     public Long saveAll(List<ProductDto> productDtoList) { // 엑셀파일 받아서 한번에 추가
 
         List<Product> productList = productDtoList.stream()
-                .map(ProductDto::toProductEntity)
+                .map(ProductDto::toAddProductEntity)
                 .collect(Collectors.toList());
 
 

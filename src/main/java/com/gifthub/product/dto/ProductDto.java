@@ -31,6 +31,16 @@ public class ProductDto {
                 .build();
     }
 
+    public Product toAddProductEntity() {
+        return Product.builder()
+                .id(this.id)
+                .name(this.name)
+                .price(this.price)
+                .brandName(this.brandName)
+                .category(this.category)     //이미 Category가 String으로 많이 사용되어 이렇게 처리함
+                .build();
+    }
+
 
     @QueryProjection
     public ProductDto(Long id, String name, Long price, String brandName, String category) {
