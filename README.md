@@ -10,12 +10,21 @@
 |      구민규       |          오세훈         |       김준회         |       박재형         |                                                                                                               
 | :------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | 
 |   <img width="160px" src="" />    |                      <img width="160px" src="" />    |                   <img width="160px" src=""/>   |
-|   [@parkjiye](https://github.com/parkjiye)   |    [@ChaeyeonSeo](https://github.com/ChaeyeonSeo)  | [@hyunjeong408](https://github.com/hyunjeong408)  |
+|   [@9min9](https://github.com/9min9)   |    [@sehoh](https://github.com/sehoh)  | [@deigma](https://github.com/deigma)  | [@jaehyeongP](https://github.com/jaehyeongP)  |
+
+## 🧑‍🤝‍🧑 맴버역할
+- 팀장  : 구민규 - 
+- 팀원1 : 오세훈 - 네이버OCR, 기프티콘 등록, 발표
+- 팀원2 : 김준회- 
+- 팀원3 : 박재형 - 
 
 
 ## 프로젝트 소개
+- 기프티콘을 서비스에 등록하여 통합관리를 해주는 서비스. 바코드로 결제가 가능한 모바일 상품권을 대상으로 함. 3사(카카오톡, kt기프티쇼, sk기프티콘)로 나뉘어진 '기프티콘'들의 유효기간등을 통합관리하고자 하였음.
 
-#### .
+
+#### Service for registering and centrally managing gift certificates in an integrated manner. 
+- Targeting mobile gift cards that support barcode payments, the platform focuses on unifying the management of gift certificates from three major providers (KakaoTalk, KT Gift Show, SK Gifticon). The goal is to streamline the management of validity periods and other aspects of these 'gifticons'.
 
 
 #### .
@@ -30,21 +39,34 @@
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white)
 ![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white)             
 
+
 ### Config
 ![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)        
 
-### Development
+
+### Front-end
+![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=Bootstrap&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=Javascript&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![Strapi](https://img.shields.io/badge/Strapi-2F2E8B?style=for-the-badge&logo=Strapi&logoColor=white)
-![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=Next.js&logoColor=white)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=Bootstrap&logoColor=white)
-![Material UI](https://img.shields.io/badge/Material%20UI-007FFF?style=for-the-badge&logo=MUI&logoColor=white)
+![Thymeleaf](https://img.shields.io/badge/Thymeleaf-005E86?style=for-the-badge)
+![jQuery](https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jQuery&logoColor=white)
+
+
+### Back-end
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.3.15.RELEASE-green?style=for-the-badge&logo=Spring&logoColor=white)
+![Spring Data JPA](https://img.shields.io/badge/Spring%20Data%20JPA-2.3.15.RELEASE-green?style=for-the-badge&logo=Spring&logoColor=white)
+![Spring Security](https://img.shields.io/badge/Spring%20Security-5.3.4.RELEASE-green?style=for-the-badge&logo=Spring&logoColor=white)
+![QueryDSL](https://img.shields.io/badge/QueryDSL-5.0-green?style=for-the-badge&logo=Java&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15.3-336791?style=for-the-badge&logo=PostgreSQL&logoColor=white)
+![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=Java&logoColor=white)
+
+
 
 ### Communication
-![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=Slack&logoColor=white)
 ![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white)
-![GoogleMeet](https://img.shields.io/badge/GoogleMeet-00897B?style=for-the-badge&logo=Google%20Meet&logoColor=white)
+![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=Discord&logoColor=white)
+
 
 ---
 ## 화면 구성 📺
@@ -52,20 +74,24 @@
 | :-------------------------------------------: | :------------: |
 |  <img width="329" src=""/> |  <img width="329" src=""/>|  
 | 강좌 소개 페이지   |  강의 영상 페이지   |  
-| <img width="329" src="https://user-images.githubusercontent.com/50205887/208038737-2b32b7d2-25f4-4949-baf5-83b5c02915a3.png"/>   |  <img width="329" src="https://user-images.githubusercontent.com/50205887/208038965-43a6318a-7b05-44bb-97c8-b08b0495fba7.png"/>     |
+| <img width="329" src=""/>   |  <img width="329" src=""/>     |
 
 ---
-## 주요 기능 📦
+## 주요 기능 🎁
 
-### ⭐️ 강좌 선택 및 강의 영상 시청 기능
-- Scratch, Python 2개 강좌 및 각 강좌마다 10개 가량의 강의 영상 제공
-- 추후 지속적으로 강좌 추가 및 업로드 예정
+### 🛒 소셜 회원가입 및 Jwt토큰을 사용하여 보안강화
+- 호출한 소셜 로그인 Api를 통해 받은 토큰으로, GiftHub만의 Jwt provider를 직접 구현 
+- 매 로그인마다 소셜 로그인의 인증 토큰을 사용하지 않으므로 보안부담 감소
 
-### ⭐️ 강의 관련 및 단체에 대한 자유로운 댓글 작성 가능
-- Disqus를 이용하여 강의 관련 질문이나 단체에 대한 질문 작성 가능
+### 🛒 기프티콘 등록 및 거래, 선물
+- 카카오 챗봇, 파일로 등록시 Naver Cloud Ocr을 호출하여 db의 상품과 mapping
+- db에 존재하는 상품이면 바로 기프티콘등록. 존재하지 않는 상품이면 임시 저장소에 대기하여 관리자의 검수 대기
+- 카카오 페이를 통해 포인트 충전. 충전된 포인트로 기프티콘 구매
+- 등록완료된 기프티콘에 한해 판매 및 선물
 
-### ⭐️ 이어 학습하기 기능
-- Cookie 기능을 이용하여 이전에 학습했던 내용 이후부터 바로 학습 가능
+### 🛒 기프티콘 목록 및 사용
+- '기프티콘'으로 등록되면 입력했던 사진은 보안상 문제로 서버에서 바로 삭제
+- 사용하기 클릭시 문자로 해당 정보를 받음
 
 ---
 ## 아키텍쳐
