@@ -51,7 +51,7 @@ public class LocalUserService {
             .gender(gender)
             .nickname(nickname)
             .tel(tel)
-            .date(birthday)
+            .birthDate(birthday)
             .year(year)
             .build();
 

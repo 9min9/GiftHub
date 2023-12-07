@@ -145,7 +145,7 @@ public class User extends BaseTimeEntity implements UserDetails {
                 .nickname(nickname)
                 .userType(userType.name())
                 .year(year)
-                .date(birthDate)
+                .birthDate(birthDate)
                 .tel(tel)
                 .point(point)
                 .gender(gender)

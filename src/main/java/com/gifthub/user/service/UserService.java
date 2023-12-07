@@ -15,23 +15,42 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.gifthub.user.entity.enumeration.UserType.ADMIN;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
 
-    public LocalUserDto saveLocalUser(LocalUserDto localUserDto){
-        LocalUser localsaveUser = userRepository.save(localUserDto.toLocalEntity());
-        return localsaveUser.toLocalUserDto();
+    public LocalUserDto saveLocalUser(LocalUserDto localUserDto) {
+        User findUser = userRepository.findByEmail(localUserDto.getEmail()).orElse(null);
+        LocalUserDto resultDto;
+
+        if (findUser != null) {
+            findUser.changeNickname(localUserDto.getNickname());
+            findUser.changeTel(localUserDto.getTel());
+            resultDto = userRepository.save((LocalUser) findUser).toLocalUserDto();
+
+        } else {
+            if (localUserDto.getEmail().equals("admin")) {
+                localUserDto.setUserType(ADMIN);
+            }
+            localUserDto.setPoint(0L);
+
+            resultDto = userRepository.save(localUserDto.toLocalUserEntity()).toLocalUserDto();
+        }
+        return resultDto;
     }
 
     public KakaoUserDto saveKakaoUser(KakaoUserDto kakaoUserDto) {
+        kakaoUserDto.setPoint(0L);
         KakaoUser saveUser = userRepository.save(kakaoUserDto.toEntity());
         return saveUser.toKakaoUserDto();
     }
 
     public NaverUserDto saveNaverUser(NaverUserDto naverUserDto) {
+        naverUserDto.setPoint(0L);
         NaverUser save = userRepository.save(naverUserDto.toNaverEntity());
         return save.toNaverUserDto();
     }

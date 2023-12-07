@@ -4,28 +4,26 @@ import com.gifthub.user.entity.KakaoUser;
 import com.gifthub.user.entity.LocalUser;
 import com.gifthub.user.entity.NaverUser;
 import com.gifthub.user.entity.User;
-import com.gifthub.user.entity.enumeration.UserType;
 import lombok.*;
 
 import static com.gifthub.user.entity.enumeration.UserType.USER;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-@Getter
-@Setter
+@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDto {
 
     private Long id;
+    private String email;
     private String password;
     private String name;
-    private String email;
     private String nickname;
     private String userType;
     private String loginType;
     private String gender;
     private String year;
-    private String date;
+    private String birthDate;
     private String tel;
     private Long point;
     private String kakaoAccountId;
@@ -39,7 +37,7 @@ public class UserDto {
                 .nickname(this.nickname)
                 .gender(this.gender)
                 .userType(USER)
-                .birthDate(this.date)
+                .birthDate(this.birthDate)
                 .year(this.year)
                 .tel(this.tel)
                 .point(this.point)
@@ -55,7 +53,7 @@ public class UserDto {
                 .gender(gender)
                 .tel(tel)
                 .year(year)
-                .birthDate(date)
+                .birthDate(birthDate)
                 .point(point)
                 .userType(USER)
                 .password(password).build();
@@ -69,7 +67,7 @@ public class UserDto {
                 .gender(gender)
                 .tel(tel)
                 .year(year)
-                .birthDate(date)
+                .birthDate(birthDate)
                 .point(point)
                 .userType(USER)
                 .kakaoAccountId(kakaoAccountId).build();
@@ -83,7 +81,7 @@ public class UserDto {
                 .gender(gender)
                 .tel(tel)
                 .year(year)
-                .birthDate(date)
+                .birthDate(birthDate)
                 .point(point)
                 .userType(USER)
                 .naverId(naverId).build();

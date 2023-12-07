@@ -2,8 +2,11 @@ package com.gifthub.user.controller;
 
 import com.gifthub.config.jwt.LocalUserAuthenticationProvider;
 import com.gifthub.config.jwt.SocialAuthenticationToken;
+import com.gifthub.global.util.ErrorDetail;
+import com.gifthub.global.util.ErrorResult;
 import com.gifthub.user.UserJwtTokenProvider;
 import com.gifthub.user.dto.LocalUserDto;
+import com.gifthub.user.dto.SignupRequest;
 import com.gifthub.user.dto.UserDto;
 import com.gifthub.user.entity.enumeration.LoginType;
 import com.gifthub.user.exception.*;
@@ -12,20 +15,23 @@ import com.gifthub.user.service.UserAccountService;
 import com.gifthub.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.gifthub.user.entity.enumeration.UserType.ADMIN;
 
@@ -42,38 +48,32 @@ public class LocalUserAccountController {
     private final UserJwtTokenProvider jwtTokenProvider;
     private final LocalUserAuthenticationProvider localUserAuthenticationProvider;
     private final LocalUserService localUserService;
+    private final MessageSource messageSource;
 
     @PostMapping("/submit")
-    public ResponseEntity<Object> signup(@Valid  @RequestBody LocalUserDto localUserDto, BindingResult bindingResult) {
+    public ResponseEntity<Object> signup(@Valid  @RequestBody SignupRequest signupRequest, BindingResult bindingResult) {
         System.out.println("Submit Controller");
 
-        if(bindingResult.hasErrors()) {
-            List<String> errors = bindingResult.getAllErrors()
-                    .stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .collect(Collectors.toList());
-            return ResponseEntity.badRequest().body(errors);
-        }
-
         try {
-            if(localUserDto.getEmail().equals("admin")) {
-                localUserDto.setUserType(ADMIN);
+            userService.saveLocalUser(signupRequest.toLocalUserDto());
+
+            if(userAccountService.isDuplicateEmail(signupRequest.getEmail())) {
+                bindingResult.rejectValue("email", "Duplicate.email");
             }
 
-            localUserDto.setPoint(0L);
-            userService.saveLocalUser(localUserDto);
-
         } catch (DuplicateEmailException e) {
-            bindingResult.reject(e.getCode(), e.getMessage());
+            bindingResult.rejectValue("email", e.getCode());
 
         } finally {
             if(bindingResult.hasErrors()) {
-                for (ObjectError allError : bindingResult.getAllErrors()) {
+                ErrorResult errorResult = new ErrorResult(bindingResult, messageSource, Locale.getDefault());
 
-                    System.out.println(allError.getCode() + " | " + allError.getObjectName() + " | " + allError.getDefaultMessage());
+                List<ErrorDetail> errors = errorResult.getErrors();
+                for (ErrorDetail allError : errors) {
+                    System.out.println(allError.getCode() + " | " +allError.getField()+" | " + allError.getObjectName() + " | " + allError.getMessage());
                 }
 
-                return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+                return ResponseEntity.badRequest().body(errorResult.getErrors());
             }
 
             return ResponseEntity.ok("{\"status\": \"success\"}");
@@ -84,13 +84,27 @@ public class LocalUserAccountController {
     public ResponseEntity<Object> login(@RequestBody Map<String , String> request){
         Map<String, String> result = new HashMap<>();
         System.out.println("LoginController");
-        String password = request.get("password");
-        System.out.println("password:"+password);
-        String email = request.get("email");
-        System.out.println("email:"+email);
+
         String token="";
 
         try {
+            String email = request.get("email");
+            String password = request.get("password");
+
+            //todo : 입력 안했을 때 exception 생성
+            if (email.isEmpty() || email == null) {
+
+            }
+
+            if (password.isEmpty() || password ==null) {
+
+            }
+
+            System.out.println("password:"+password);
+            System.out.println("email:"+email);
+
+
+
             LocalUserDto localUserInfo = localUserService.getLocalUserByEmail(email);
 
             if (localUserInfo == null) {
@@ -132,7 +146,7 @@ public class LocalUserAccountController {
 
         try {
             String email = request.get("email");
-            result.put("target", "email");
+            result.put("field", "email");
 
             if (userAccountService.isDuplicateEmail(email)) {
                 throw new DuplicateEmailException();
@@ -164,7 +178,7 @@ public class LocalUserAccountController {
 
             String passwrod = request.get("password");
             String confirmPassword =request.get("confirmPassword");
-            result.put("target", "confirmPassword");
+            result.put("field", "confirmPassword");
 
 
             if (!userAccountService.isMatchPasswordAndConfirmPassword(passwrod, confirmPassword )) {
@@ -198,7 +212,7 @@ public class LocalUserAccountController {
         try {
             String password = request.get("password");
             String confirmPassword =request.get("confirmPassword");
-            result.put("target", "confirmPassword");
+            result.put("field", "confirmPassword");
 
             if (userAccountService.isMatchPasswordAndConfirmPassword(password, confirmPassword )) {
                 throw new MismatchPasswordAndConfirmPassword();
@@ -230,7 +244,7 @@ public class LocalUserAccountController {
 
             String nickname = request.get("nickname");
 
-            result.put("target", "nickname");
+            result.put("field", "nickname");
 
             if (userAccountService.isDuplicateNickname(nickname )) {
                 throw new DuplicateNicknameException();
@@ -261,7 +275,7 @@ public class LocalUserAccountController {
 
             String tel = request.get("tel");
 
-            result.put("target", "tel");
+            result.put("field", "tel");
             System.out.println("tel:"+tel);
 
             if (userAccountService.isDuplicateTel(tel)) {
