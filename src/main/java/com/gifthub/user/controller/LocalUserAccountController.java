@@ -2,39 +2,33 @@ package com.gifthub.user.controller;
 
 import com.gifthub.config.jwt.LocalUserAuthenticationProvider;
 import com.gifthub.config.jwt.SocialAuthenticationToken;
-import com.gifthub.global.util.ErrorDetail;
-import com.gifthub.global.util.ErrorResult;
+import com.gifthub.global.util.ErrorResponse;
 import com.gifthub.user.UserJwtTokenProvider;
 import com.gifthub.user.dto.LocalUserDto;
 import com.gifthub.user.dto.SignupRequest;
 import com.gifthub.user.dto.UserDto;
 import com.gifthub.user.entity.enumeration.LoginType;
 import com.gifthub.user.exception.*;
+import com.gifthub.user.exception.validator.LoginValidator;
 import com.gifthub.user.service.LocalUserService;
 import com.gifthub.user.service.UserAccountService;
 import com.gifthub.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-
-import static com.gifthub.user.entity.enumeration.UserType.ADMIN;
-
 
 @Slf4j
 @RestController
@@ -48,7 +42,7 @@ public class LocalUserAccountController {
     private final UserJwtTokenProvider jwtTokenProvider;
     private final LocalUserAuthenticationProvider localUserAuthenticationProvider;
     private final LocalUserService localUserService;
-    private final MessageSource messageSource;
+    private final ErrorResponse errorResponse;
 
     @PostMapping("/submit")
     public ResponseEntity<Object> signup(@Valid  @RequestBody SignupRequest signupRequest, BindingResult bindingResult) {
@@ -66,50 +60,33 @@ public class LocalUserAccountController {
 
         } finally {
             if(bindingResult.hasErrors()) {
-                ErrorResult errorResult = new ErrorResult(bindingResult, messageSource, Locale.getDefault());
-
-                List<ErrorDetail> errors = errorResult.getErrors();
-                for (ErrorDetail allError : errors) {
-                    System.out.println(allError.getCode() + " | " +allError.getField()+" | " + allError.getObjectName() + " | " + allError.getMessage());
-                }
-
-                return ResponseEntity.badRequest().body(errorResult.getErrors());
+                return ResponseEntity.badRequest().body(errorResponse.getErrors(bindingResult));
             }
 
-            return ResponseEntity.ok("{\"status\": \"success\"}");
+            return ResponseEntity.ok(Collections.singletonMap("status", "200"));
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody Map<String , String> request){
+    public ResponseEntity<Object> login(@RequestBody Map<String , String> request, Errors errors){
         Map<String, String> result = new HashMap<>();
         System.out.println("LoginController");
-
         String token="";
 
         try {
             String email = request.get("email");
             String password = request.get("password");
 
-            //todo : 입력 안했을 때 exception 생성
-            if (email.isEmpty() || email == null) {
-
-            }
-
-            if (password.isEmpty() || password ==null) {
-
-            }
-
-            System.out.println("password:"+password);
             System.out.println("email:"+email);
-
-
-
+            System.out.println("password:"+password);
+            LoginValidator loginValidator = new LoginValidator();
+            loginValidator.validate(request, errors);
             LocalUserDto localUserInfo = localUserService.getLocalUserByEmail(email);
 
             if (localUserInfo == null) {
                 throw new NotFoundUserException();
             }
+
             if (userAccountService.isLogin(email, password)) {
                 SocialAuthenticationToken LocalUserAuthenticationToken = new SocialAuthenticationToken(email);
                 Authentication authentication = localUserAuthenticationProvider.authenticate(LocalUserAuthenticationToken);
@@ -135,6 +112,11 @@ public class LocalUserAccountController {
         } catch(Exception e){
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
+        } finally {
+            if (errors.hasErrors()) {
+
+            }
+
         }
 
         return ResponseEntity.ok().header( "Authorization", "Bearer " + token).build();
