@@ -27,5 +27,5 @@ public interface ProductRepositorySupport {
 
     Page<ProductDto> findProductByCategoryByName(Pageable pageable, String category, String name);
 
-    Page<ProductDto> findProductByBrandByName(Pageable pageable, String brand, String name);
+    Page<ProductDto> findProductByBrandByName(Pageable pageable, String category, String brand, String name);
 }

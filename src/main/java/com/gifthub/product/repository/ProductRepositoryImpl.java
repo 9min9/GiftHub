@@ -140,11 +140,11 @@ public class ProductRepositoryImpl implements ProductRepositorySupport {
     }
 
     @Override
-    public Page<ProductDto> findProductByBrandByName(Pageable pageable, String brand, String name) {
+    public Page<ProductDto> findProductByBrandByName(Pageable pageable, String category, String brand, String name) {
         List<ProductDto> fetch = queryFactory
                 .select(new QProductDto(product.id, product.name, product.price, product.brandName, product.category))
                 .from(product)
-                .where(product.brandName.eq(brand), product.name.contains(name))
+                .where(product.category.eq(category), product.brandName.eq(brand), product.name.contains(name))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -152,7 +152,7 @@ public class ProductRepositoryImpl implements ProductRepositorySupport {
         Long count = queryFactory
                 .select(product.count())
                 .from(product)
-                .where(product.brandName.eq(brand), product.name.contains(name))
+                .where(product.category.eq(category), product.brandName.eq(brand), product.name.contains(name))
                 .fetchOne();
 
         return new PageImpl<>(fetch, pageable, count);

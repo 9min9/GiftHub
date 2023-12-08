@@ -70,7 +70,11 @@ function setProductSelectorEvent() {
             clearBrand();
             clearProducts();
             setBrand(event.target.parentNode.querySelector("input[type='hidden']").value.replaceAll("/", "-"));
-            getProductByCategoryAndBrandByName(event.target.parentNode.querySelector(".product-name").innerText);
+            getProductByCategoryAndBrandByName(
+              document.querySelector(".product-selector-container.category-active")
+                .querySelector(".product-name").innerText,
+              document.querySelector(".brand-filter.js-checked").innerText,
+            );
 
             scrollTo({top: document.querySelector("#show-product-div").offsetTop, behavior: "smooth"});
 
@@ -89,7 +93,11 @@ function totalFilterEvent() {
         let categoryName = document.querySelector(".category-active").querySelector(".product-name").innerText;
 
         clearProducts();
-        getProductByCategoryAndBrandByName(categoryName);
+        getProductByCategoryAndBrandByName(
+          document.querySelector(".product-selector-container.category-active")
+            .querySelector(".product-name").innerText,
+          document.querySelector(".brand-filter.js-checked").innerText,
+        );
     });
 }
 
@@ -442,7 +450,11 @@ function brandFilterEvent() {
 
             let brand = event.target.innerText;
 
-            getProductByCategoryAndBrandByName(null, brand);
+            getProductByCategoryAndBrandByName(
+              document.querySelector(".product-selector-container.category-active")
+                .querySelector(".product-name").innerText,
+              document.querySelector(".brand-filter.js-checked").innerText,
+            );
 
             scrollTo({top: document.querySelector("#show-product-div").offsetTop, behavior: "smooth"});
         });
@@ -487,7 +499,11 @@ let totalCategoryEvent = () => {
     document.querySelector(".total-category").addEventListener("click", function () {
         clearProducts();
 
-        getProductByCategoryAndBrandByName();
+        getProductByCategoryAndBrandByName(
+          document.querySelector(".product-selector-container.category-active")
+            .querySelector(".product-name").innerText,
+          document.querySelector(".brand-filter.js-checked").innerText,
+        );
     });
 }
 
@@ -508,7 +524,7 @@ function scrollEvent(element) {
                         document.querySelector(".brand-filter.js-checked").innerText,
                     );
 
-                    getProductByCategoryAndBrandByName().onload = () => {
+                    getProductByCategoryAndBrandByName.onload = () => {
                         io.observe(document.querySelector(".product-wrapper:last-child"));
                     }
                 }

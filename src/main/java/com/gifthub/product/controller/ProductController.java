@@ -216,7 +216,7 @@ public class ProductController {
         } else if (brand.equals("전체")) {
             products = productService.getProductByCategoryByName(pageable, cat, name);
         } else {
-            products = productService.getProductByBrandByName(pageable, brand, name);
+            products = productService.getProductByBrandByName(pageable, cat, brand, name);
         }
 
 

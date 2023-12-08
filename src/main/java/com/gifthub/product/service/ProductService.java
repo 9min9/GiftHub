@@ -88,7 +88,7 @@ public class ProductService {
         return productRepository.findProductByCategoryByName(pageable, category, name);
     }
 
-    public Page<ProductDto> getProductByBrandByName(Pageable pageable, String brand, String name) {
-        return productRepository.findProductByBrandByName(pageable, brand, name);
+    public Page<ProductDto> getProductByBrandByName(Pageable pageable, String category, String brand, String name) {
+        return productRepository.findProductByBrandByName(pageable, category, brand, name);
     }
 }
