@@ -577,9 +577,9 @@ function getProductByCategoryAndBrandByName(category = "전체", brand = "전체
     let url;
 
     if (Boolean(name)) {
-        url = "/api/product/page/search/" + cat + "/" + brand + "/" + name + "?page=" + page + "&size=12";
+        url = `/api/product/page/search/${cat}/${brand}/${name}?page=${page}&size=12`;
     } else {
-        url = "/api/product/page/" + cat + "/" + brand + "?page=" + page + "&size=12";
+        url = `/api/product/page/${cat}/${brand}?page=${page}&size=12`;
     }
 
     xhr.open("get", url);
@@ -601,16 +601,17 @@ function getProductByCategoryAndBrandByName(category = "전체", brand = "전체
 
 let setSearchEvent = () => {
     document.querySelector("#main-search").addEventListener("keyup", function(event) {
-        page = 0;
-        clearProducts();
-        getProductByCategoryAndBrandByName(
-          document.querySelector(".product-selector-container.category-active")
-            .querySelector(".product-name").innerText,
-          document.querySelector(".brand-filter.js-checked").innerText,
-        );
+        let key = event.key;
+        if (key !== "Process") {
+            page = 0;
+            clearProducts();
+            getProductByCategoryAndBrandByName(
+              document.querySelector(".product-selector-container.category-active")
+                .querySelector(".product-name").innerText,
+              document.querySelector(".brand-filter.js-checked").innerText,
+            );
+        }
     });
 
 }
-
-setSearchEvent();
 
