@@ -559,6 +559,7 @@ function getProductByCategoryAndBrandByName(category = "전체", brand = "전체
     let name = document.querySelector("#main-search").value;
 
     let url;
+
     if (Boolean(name)) {
         url = "/api/product/page/search/" + cat + "/" + brand + "/" + name + "?page=" + page + "&size=12";
     } else {
@@ -584,9 +585,13 @@ function getProductByCategoryAndBrandByName(category = "전체", brand = "전체
 
 let setSearchEvent = () => {
     document.querySelector("#main-search").addEventListener("keyup", function(event) {
-        event.preventDefault();
+        page = 0;
         clearProducts();
-        getProductByCategoryAndBrandByName();
+        getProductByCategoryAndBrandByName(
+          document.querySelector(".product-selector-container.category-active")
+            .querySelector(".product-name").innerText,
+          document.querySelector(".brand-filter.js-checked").innerText,
+        );
     });
 
 }

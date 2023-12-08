@@ -101,6 +101,7 @@ public class ProductRepositoryImpl implements ProductRepositorySupport {
         Long count = queryFactory
                 .select(product.count())
                 .from(product)
+                .where(product.name.contains(name))
                 .fetchOne();
 
         return new PageImpl<>(fetch, pageable, count);
