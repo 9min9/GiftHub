@@ -70,7 +70,7 @@ function setProductSelectorEvent() {
             clearBrand();
             clearProducts();
             setBrand(event.target.parentNode.querySelector("input[type='hidden']").value.replaceAll("/", "-"));
-            getProductByCategoryAndBrand(event.target.parentNode.querySelector(".product-name").innerText);
+            getProductByCategoryAndBrandByName(event.target.parentNode.querySelector(".product-name").innerText);
 
             scrollTo({top: document.querySelector("#show-product-div").offsetTop, behavior: "smooth"});
 
@@ -89,7 +89,7 @@ function totalFilterEvent() {
         let categoryName = document.querySelector(".category-active").querySelector(".product-name").innerText;
 
         clearProducts();
-        getProductByCategoryAndBrand(categoryName);
+        getProductByCategoryAndBrandByName(categoryName);
     });
 }
 
@@ -442,7 +442,7 @@ function brandFilterEvent() {
 
             let brand = event.target.innerText;
 
-            getProductByCategoryAndBrand(null, brand);
+            getProductByCategoryAndBrandByName(null, brand);
 
             scrollTo({top: document.querySelector("#show-product-div").offsetTop, behavior: "smooth"});
         });
@@ -487,7 +487,7 @@ let totalCategoryEvent = () => {
     document.querySelector(".total-category").addEventListener("click", function () {
         clearProducts();
 
-        getProductByCategoryAndBrand();
+        getProductByCategoryAndBrandByName();
     });
 }
 
@@ -502,13 +502,13 @@ function scrollEvent(element) {
                         return;
                     }
 
-                    getProductByCategoryAndBrand(
+                    getProductByCategoryAndBrandByName(
                         document.querySelector(".product-selector-container.category-active")
                             .querySelector(".product-name").innerText,
                         document.querySelector(".brand-filter.js-checked").innerText,
                     );
 
-                    getProductByCategoryAndBrand.onload = () => {
+                    getProductByCategoryAndBrandByName().onload = () => {
                         io.observe(document.querySelector(".product-wrapper:last-child"));
                     }
                 }
@@ -531,7 +531,7 @@ function getProductByCategoryAndBrand(category = "전체", brand = "전체") {
 
     xhr.open("get", "/api/product/page/" + cat + "/" + brand + "?page=" + page + "&size=12");
 
-    // xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
+    xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
 
     xhr.onload = () => {
         const parsed = JSON.parse(xhr.responseText);
@@ -545,3 +545,51 @@ function getProductByCategoryAndBrand(category = "전체", brand = "전체") {
 
     xhr.send();
 }
+
+function getProductByCategoryAndBrandByName(category = "전체", brand = "전체") {
+    let xhr = new XMLHttpRequest();
+
+    let cat = "";
+    if (category) {
+        cat = category.replaceAll("/", "-");
+    } else {
+        cat = "공백";
+    }
+
+    let name = document.querySelector("#main-search").value;
+
+    let url;
+    if (Boolean(name)) {
+        url = "/api/product/page/search/" + cat + "/" + brand + "/" + name + "?page=" + page + "&size=12";
+    } else {
+        url = "/api/product/page/" + cat + "/" + brand + "?page=" + page + "&size=12";
+    }
+
+    xhr.open("get", url);
+
+    xhr.setRequestHeader("Authorization", localStorage.getItem("token"));
+
+    xhr.onload = () => {
+        const parsed = JSON.parse(xhr.responseText);
+
+        setProduct(parsed.content);
+
+        if (parsed.content.length !== 0) {
+            scrollEvent(document.querySelector(".product-wrapper:last-child"), page);
+        }
+    }
+
+    xhr.send();
+}
+
+let setSearchEvent = () => {
+    document.querySelector("#main-search").addEventListener("keyup", function(event) {
+        event.preventDefault();
+        clearProducts();
+        getProductByCategoryAndBrandByName();
+    });
+
+}
+
+setSearchEvent();
+

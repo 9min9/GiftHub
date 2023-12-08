@@ -88,6 +88,24 @@ public class ProductRepositoryImpl implements ProductRepositorySupport {
         return new PageImpl<>(fetch, pageable, count);
     }
 
+    @Override
+    public Page<ProductDto> findAllProductByName(Pageable pageable, String name) {
+        List<ProductDto> fetch = queryFactory
+                .select(new QProductDto(product.id, product.name, product.price, product.brandName, product.category))
+                .from(product)
+                .where(product.name.contains(name))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long count = queryFactory
+                .select(product.count())
+                .from(product)
+                .fetchOne();
+
+        return new PageImpl<>(fetch, pageable, count);
+    }
+
     private BooleanExpression test(Long id) {
         return product.id.eq(id);
     }
@@ -100,6 +118,43 @@ public class ProductRepositoryImpl implements ProductRepositorySupport {
                 .where(product.category.eq(categoryName.getKorName()))
                 .limit(5)
                 .fetch();
+    }
+
+    @Override
+    public Page<ProductDto> findProductByCategoryByName(Pageable pageable, String category, String name) {
+        List<ProductDto> fetch = queryFactory.select(new QProductDto(product.id, product.name, product.price, product.brandName, product.category))
+                .from(product)
+                .where(product.category.eq(category), product.name.contains(name))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long count = queryFactory
+                .select(product.count())
+                .from(product)
+                .where(product.category.eq(category), product.name.contains(name))
+                .fetchOne();
+
+        return new PageImpl<>(fetch, pageable, count);
+    }
+
+    @Override
+    public Page<ProductDto> findProductByBrandByName(Pageable pageable, String brand, String name) {
+        List<ProductDto> fetch = queryFactory
+                .select(new QProductDto(product.id, product.name, product.price, product.brandName, product.category))
+                .from(product)
+                .where(product.brandName.eq(brand), product.name.contains(name))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long count = queryFactory
+                .select(product.count())
+                .from(product)
+                .where(product.brandName.eq(brand), product.name.contains(name))
+                .fetchOne();
+
+        return new PageImpl<>(fetch, pageable, count);
     }
 
 }

@@ -5,7 +5,6 @@ import com.gifthub.product.dto.ProductDto;
 import com.gifthub.product.enumeration.CategoryName;
 import com.gifthub.product.service.ProductService;
 import lombok.AllArgsConstructor;
-import oracle.jdbc.proxy.annotation.Post;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -194,6 +193,30 @@ public class ProductController {
             products = productService.getProductByCategory(pageable, cat);
         } else {
             products = productService.getProductByBrand(pageable, brand);
+        }
+
+
+        if (products != null) {
+            return ResponseEntity.ok(products);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/page/search/{category}/{brand}/{name}")
+    public ResponseEntity<Object> getProductByCategoryAndBrand(Pageable pageable,
+                                                               @PathVariable("category") String category,
+                                                               @PathVariable("brand") String brand,
+                                                               @PathVariable("name") String name) {
+        String cat = category.replaceAll("-", "/");
+
+        Page<ProductDto> products = null;
+        if (category.equals("전체")) {
+            products = productService.getAllProductByName(pageable, name);
+        } else if (brand.equals("전체")) {
+            products = productService.getProductByCategoryByName(pageable, cat, name);
+        } else {
+            products = productService.getProductByBrandByName(pageable, brand, name);
         }
 
 
