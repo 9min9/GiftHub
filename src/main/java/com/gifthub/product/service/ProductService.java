@@ -46,6 +46,10 @@ public class ProductService {
         return productRepository.findAllProduct(pageable);
     }
 
+    public Page<ProductDto> getAllProductByName(Pageable pageable, String name) {
+        return productRepository.findAllProductByName(pageable, name);
+    }
+
     public ProductDto getProduct(Long productId){
         Product product = productRepository.findById(productId).orElse(null);
         return (product != null) ? product.toProductDto() : null;
@@ -78,5 +82,13 @@ public class ProductService {
 
     public List<String> getAllCategory() {
         return productRepository.findAllCategory();
+    }
+
+    public Page<ProductDto> getProductByCategoryByName(Pageable pageable, String category, String name) {
+        return productRepository.findProductByCategoryByName(pageable, category, name);
+    }
+
+    public Page<ProductDto> getProductByBrandByName(Pageable pageable, String category, String brand, String name) {
+        return productRepository.findProductByBrandByName(pageable, category, brand, name);
     }
 }
