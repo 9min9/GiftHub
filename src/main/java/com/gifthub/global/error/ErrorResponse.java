@@ -1,4 +1,4 @@
-package com.gifthub.global.util;
+package com.gifthub.global.error;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;

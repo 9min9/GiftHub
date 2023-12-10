@@ -1,4 +1,4 @@
-package com.gifthub.global.util;
+package com.gifthub.global.error;
 
 import lombok.Builder;
 import lombok.Getter;

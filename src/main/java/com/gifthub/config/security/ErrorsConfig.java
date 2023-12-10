@@ -1,6 +1,6 @@
 package com.gifthub.config.security;
 
-import com.gifthub.global.util.ErrorResponse;
+import com.gifthub.global.error.ErrorResponse;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
