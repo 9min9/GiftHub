@@ -8,7 +8,7 @@ function openFile(imageFile){
     formData.append("imageFile", imageFile.files[0])
 
     $.ajax({
-        url: "/api/gifticon/file/add",
+        url: "/api/storage/file/add",
         type: "post",
         headers: {
             Authorization: localStorage.getItem("token"),
