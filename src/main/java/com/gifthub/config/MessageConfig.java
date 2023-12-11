@@ -1,4 +1,4 @@
-package com.gifthub.config.security;
+package com.gifthub.config;
 
 import com.gifthub.global.error.ErrorResponse;
 import com.gifthub.global.exception.ExceptionResponse;
