@@ -1,0 +1,15 @@
+package com.gifthub.global.exception;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@Getter
+public class RequiredFieldException extends BaseException {
+
+    public void setFieldException(String field, String message) {
+        super.setField(field);
+        super.setCode("Required");
+        super.setMessage(message);
+    }
+}
