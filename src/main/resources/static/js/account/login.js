@@ -10,11 +10,10 @@ window.onload = function () {
         getKakaoJwt();
     }
 
-    $("#login-btn").click(function (){
+    $("#login-btn").click(function (e){
+        e.preventDefault();
         getLocalJwt();
     })
-
-    $("#")
 }
 
 
@@ -29,7 +28,7 @@ function getLocalJwt(){
 
     $.ajax({
         type:"post",
-        url:"/signup/login",
+        url:"/api/local/login",
         data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -44,17 +43,13 @@ function getLocalJwt(){
             localStorage.setItem("token", token);
             setCookie();
 
-            // window.location.href = "/";
+            window.location.href = "/";
             // window.history.back();
 
         },
         error: function (error) {
             console.log(error)
-            console.log("로그인실패")
-
-        },
-        complete: function (xhr, status) {
-            console.log("서버 응답", xhr.responseText);
+            console.log("로그인실패");
         }
     });
 }

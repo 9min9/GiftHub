@@ -14,32 +14,32 @@ window.onload = function () {
     $('#email').on('change', function () {
         emailCheck();
     });
-
-    $('#password').on('change', function () {
-        passwordCheck();
-        confirmPasswordCheck();
-    });
-
-    $('#confirm-password').on('change', function () {
-        confirmPasswordCheck();
-    });
-
-    $('#nickname').on('change', function () {
-        nicknameCheck();
-    })
-
-    $('#tel').on('change', function () {
-        telCheck();
-    })
-
-    $('#tel-check2').click( function () {
-        telCheck2();
-    })
-
-
-    $('#birth-date').on('change', function () {
-        birthCheck();
-    })
+    //
+    // $('#password').on('change', function () {
+    //     passwordCheck();
+    //     confirmPasswordCheck();
+    // });
+    //
+    // $('#confirm-password').on('change', function () {
+    //     confirmPasswordCheck();
+    // });
+    //
+    // $('#nickname').on('change', function () {
+    //     nicknameCheck();
+    // })
+    //
+    // $('#tel').on('change', function () {
+    //     telCheck();
+    // })
+    //
+    // $('#tel-check2').click( function () {
+    //     telCheck2();
+    // })
+    //
+    //
+    // $('#birth-date').on('change', function () {
+    //     birthCheck();
+    // })
 }
 
 function passwordCheck() {
@@ -68,7 +68,7 @@ function confirmPasswordCheck() {
 
     $.ajax({
         type: "post",
-        url: "/signup/confirmpassword/check",
+        url: "/api/local/signup/confirmpassword/check",
         data: JSON.stringify(data),
         // data: data,
         contentType: "application/json; charset=utf-8",
@@ -91,7 +91,7 @@ function emailCheck() {
 
     $.ajax({
         type: "post",
-        url: "/signup/email/check",
+        url: "/api/local/signup/validate/email",
         data: JSON.stringify(data),
         // data: data,
         contentType: "application/json; charset=utf-8",
@@ -115,7 +115,7 @@ function nicknameCheck() {
 
     $.ajax({
         type: "post",
-        url: "/signup/nickname/check",
+        url: "/api/local/signup/nickname/check",
         data: JSON.stringify(data),
         // data: data,
         contentType: "application/json; charset=utf-8",
@@ -149,7 +149,7 @@ function telCheck() {
 
     $.ajax({
         type: "post",
-        url: "/signup/tel/check",
+        url: "/api/local/signup/tel/check",
         data: JSON.stringify(data),
         // data: data,
         contentType: "application/json; charset=utf-8",
@@ -205,7 +205,7 @@ document.getElementById("auth-phone").style.visibility="visible"
     let tel=$("#tel").val();
   $.ajax({
       type:"post",
-      url: "/check/sendSMS",
+      url: "/api/local/signup/sendSMS",
       data: JSON.stringify({tel: tel}),
       contentType: "application/json; charset=utf-8",
       dataType: "json",
@@ -215,8 +215,9 @@ document.getElementById("auth-phone").style.visibility="visible"
 
 function signup() {
 
-    let year = $("#birth-date").val().substring(0, 4);
-    let birthdate = $("#birth-date").val().substring(4);
+    // let year = $("#birth-date").val().substring(0, 4);
+    // let birthdate = $("#birth-date").val().substring(4);
+    console.log($('#birth-date').val());
 
     let data = {
         email: $("#email").val(),
@@ -226,19 +227,20 @@ function signup() {
         nickname: $("#nickname").val(),
         tel: $("#tel").val(),
         gender: $("#gender").val(),
-        year: year,
-        birthdate: birthdate
+        // year: year,
+        birthDate: $('#birth-date').val()
     }
 
     $.ajax({
         type: "post",
-        url: "/signup/submit",
+        url: "/api/local/signup/submit",
         data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
 
         success: function (jsonData) {
             console.log(jsonData);
+            alert("회원가입 완료");
             window.location.href = "/login";
         },
 
