@@ -9,7 +9,7 @@ public class MismatchPasswordException extends BaseException {
 
     public MismatchPasswordException() {
         super.setField("password");
-        super.setCode("MisMatch.password");
+        super.setCode("MisMatch");
         super.setMessage("비밀번호가 일치하지 않습니다");
     }
 

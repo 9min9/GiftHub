@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public class NotFoundUserException extends BaseException {
     public NotFoundUserException() {
-        super.setCode("NotFound.user");
+        super.setCode("NotFound");
         super.setMessage("존재하지 않는 회원입니다");
     }
 

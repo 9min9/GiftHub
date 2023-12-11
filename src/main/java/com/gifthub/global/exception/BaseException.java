@@ -8,8 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BaseException extends RuntimeException {
-    private String code;
     private String field;
+    private String code;
     private String message;
 
 }

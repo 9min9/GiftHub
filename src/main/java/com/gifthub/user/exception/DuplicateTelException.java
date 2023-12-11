@@ -8,7 +8,7 @@ import lombok.Getter;
 public class DuplicateTelException extends BaseException {
     public DuplicateTelException(){
         super.setField("tel");
-        super.setCode("Duplicate.tel");
+        super.setCode("Duplicate");
         super.setMessage("이미 등록된 번호입니다");
     }
 }
