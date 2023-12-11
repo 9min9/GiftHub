@@ -1,16 +1,14 @@
 package com.gifthub.user.exception;
 
+import com.gifthub.global.exception.BaseException;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-public class DuplicateTelException extends RuntimeException {
-
-    private String code;
-    private String message;
-
+public class DuplicateTelException extends BaseException {
     public DuplicateTelException(){
-        this.code="duplicate.tel";
-        this.message="이미 등록된 번호입니다.";
-
+        super.setField("tel");
+        super.setCode("Duplicate.tel");
+        super.setMessage("이미 등록된 번호입니다");
     }
 }

@@ -1,15 +1,13 @@
 package com.gifthub.user.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.gifthub.global.exception.BaseException;
+import lombok.Getter;
 
-@AllArgsConstructor
-public class NotFoundUserException extends RuntimeException{
-    private String code;
-    private String message;
-
+@Getter
+public class NotFoundUserException extends BaseException {
     public NotFoundUserException() {
-        this.code = "notFound.user";
-        this.message = "존재하지 않는 회원입니다";
+        super.setCode("NotFound.user");
+        super.setMessage("존재하지 않는 회원입니다");
     }
+
 }
