@@ -2,13 +2,14 @@ package com.gifthub.config.security;
 
 import com.gifthub.global.error.ErrorResponse;
 import com.gifthub.global.exception.ExceptionResponse;
+import com.gifthub.global.success.SuccessResponse;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
 @Configuration
-public class ErrorsConfig {
+public class MessageConfig {
     @Bean
     public ReloadableResourceBundleMessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
@@ -26,6 +27,12 @@ public class ErrorsConfig {
     public ExceptionResponse exceptionResponse() {
         ExceptionResponse exceptionResponse = new ExceptionResponse();
         return exceptionResponse;
+    }
+
+    @Bean
+    public SuccessResponse successResponse() {
+        SuccessResponse successResponse = new SuccessResponse();
+        return successResponse;
     }
 
 }
