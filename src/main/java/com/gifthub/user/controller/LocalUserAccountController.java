@@ -23,8 +23,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,13 +30,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/signup")
+@RequestMapping("/api/local")
 public class LocalUserAccountController {
 
     private final UserService userService;
@@ -51,7 +48,7 @@ public class LocalUserAccountController {
     private final ExceptionResponse exceptionResponse;
     private final SuccessResponse successResponse;
 
-    @PostMapping("/submit")
+    @PostMapping("/signup/submit")
     public ResponseEntity<Object> signup(@Valid @RequestBody SignupRequest signupRequest, BindingResult bindingResult) {
         System.out.println("Submit Controller");
 
@@ -74,33 +71,21 @@ public class LocalUserAccountController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody Map<String, String> request, Errors errors) {
-        Map<String, String> result = new HashMap<>();
-        System.out.println("LoginController");
         String token = "";
 
         try {
             String email = request.get("email");
             String password = request.get("password");
 
-            System.out.println("email:" + email);
-            System.out.println("password:" + password);
-//            LoginValidator loginValidator = new LoginValidator();
-//            loginValidator.validate(request, errors);
-
             if (email == null || email.isEmpty()) {
-//                errors.rejectValue("email","NotBlank.email");
-//                errors.reject("NotBlank");
-                throw new NotFoundUserException();
-//                errors.rejectValue("email", "NotBlank.email", "");
+                throw new RequiredFieldException("email", "이메일을 입력해주세요");
             }
 
             if (password == null || password.isEmpty()) {
-//                errors.rejectValue("password", "NotBlank.password", "");
+                throw new RequiredFieldException("password", "비밀번호를 입력해주세요");
             }
 
-            //todo : empty 일 때 reject 하고 리턴해야 함
             LocalUserDto localUserInfo = localUserService.getLocalUserByEmail(email);
-
 
             if (localUserInfo == null) {
                 throw new NotFoundUserException();
@@ -109,7 +94,6 @@ public class LocalUserAccountController {
             if (userAccountService.isLogin(email, password)) {
                 SocialAuthenticationToken LocalUserAuthenticationToken = new SocialAuthenticationToken(email);
                 Authentication authentication = localUserAuthenticationProvider.authenticate(LocalUserAuthenticationToken);
-                System.out.println("testauth:" + authentication);
 
                 if (authentication.isAuthenticated()) {
                     LocalUserDto findLocalUserDto = localUserService.getLocalUserByEmail(localUserInfo.getEmail());
@@ -120,14 +104,19 @@ public class LocalUserAccountController {
                                     .email(localUserInfo.getEmail())
                                     .id(localUserInfo.getId())
                                     .loginType(LoginType.GIFT_HUB.name()).build());
-
-                    System.out.println("testtoken:" + token);
                 }
             }
+
+        } catch (RequiredFieldException e) {
+            log.error("Login Controller | " +e);
+            return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
 
         } catch (NotFoundUserException e) {
             log.error("Login Controller | " + e);
             return ResponseEntity.badRequest().body(exceptionResponse.getException("email", e.getCode(), e.getMessage()));
+
+        } catch (MismatchPasswordException e) {
+            return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
 
         } catch (Exception e) {
             log.error("Login Controller | " + e);
@@ -135,30 +124,19 @@ public class LocalUserAccountController {
         }
 
         if (errors.hasErrors()) {
-            List<ObjectError> allErrors = errors.getAllErrors();
-            List<FieldError> fieldErrors = errors.getFieldErrors();
-
-            for (ObjectError allError : allErrors) {
-                System.out.println(allError.getClass() + " | " + allError.getObjectName() + " | " + allError.getCode() + " | ");
-            }
-
-            for (FieldError allError : fieldErrors) {
-                System.out.println(allError.getClass() + " | " + allError.getObjectName() + " | " + allError.getCode() + " | " + allError.getField());
-            }
-
             return ResponseEntity.badRequest().body(errorResponse.getErrors(errors));
         }
 
         return ResponseEntity.ok().header("Authorization", "Bearer " + token).build();
     }
 
-    @PostMapping(value = "/validate/email")
-    public ResponseEntity<Object> emailCheck(@RequestBody Map<String, String> request) {
+    @PostMapping(value = "/signup/validate/email")
+    public ResponseEntity<Object> emailValid(@RequestBody Map<String, String> request) {
         try {
             String email = request.get("email");
 
             if(email.isEmpty() || email == null) {
-                throw new RequiredFieldException();
+                throw new RequiredFieldException("email", "이메일을 입력해주세요");
             }
 
             if (userAccountService.isDuplicateEmail(email)) {
@@ -168,15 +146,16 @@ public class LocalUserAccountController {
             return ResponseEntity.ok().body(successResponse.getSuccess("email", "사용가능한 이메일 입니다"));
 
         } catch (RequiredFieldException e) {
-            return ResponseEntity.badRequest().body(exceptionResponse.getException("email", e.getCode(), e.getMessage()));
+            log.error("emailValid | " +e);
+            return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
 
         } catch (DuplicateEmailException e) {
-            return ResponseEntity.badRequest().body(exceptionResponse.getException("email", e.getCode(), e.getMessage()));
-
+            log.error("emailValid | " +e);
+            return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
         }
     }
 
-    @PostMapping(value = "/validate/password")
+    @PostMapping(value = "/signup/validate/password")
     public ResponseEntity<Object> passwordCheck(@RequestBody Map<String, String> request) {
         Map<String, String> result = new HashMap<>();
 
@@ -186,7 +165,11 @@ public class LocalUserAccountController {
 
             if (passwrod.isEmpty() || passwrod == null) {
                 //todo : 필수 에러 던지고 catch 하기
-//                throw new RequiredF
+                throw new RequiredFieldException("password", "비밀번호를 입력해주세요");
+            }
+
+            if(confirmPassword.isEmpty() || confirmPassword == null) {
+                throw new RequiredFieldException("confirmPassword", "비밀번호 확인을 입력해주세요");
             }
 
             if (!userAccountService.isMatchPasswordAndConfirmPassword(passwrod, confirmPassword)) {
@@ -195,44 +178,17 @@ public class LocalUserAccountController {
 
             return ResponseEntity.ok().body(successResponse.getSuccess("password", "비밀번호가 일치합니다"));
 
+        } catch (RequiredFieldException e) {
+            log.error("passwordValid | " + e);
+            return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
+
         } catch (MismatchPasswordAndConfirmPassword e) {
-            log.error("passwordCheck | " + e);
+            log.error("passwordValid | " + e);
             return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
         }
     }
 
-//    @PostMapping(value = "/confirmpassword/check")
-//    public ResponseEntity<Object> passwordValid(@RequestBody Map<String, String> request) {
-//        Map<String, String> result = new HashMap<>();
-//
-//        try {
-//            String password = request.get("password");
-//            String confirmPassword = request.get("confirmPassword");
-//            result.put("field", "confirmPassword");
-//
-//            if (userAccountService.isMatchPasswordAndConfirmPassword(password, confirmPassword)) {
-//                throw new MismatchPasswordAndConfirmPassword();
-//
-//            }
-//            result.put("status", "success");
-//            result.put("message", "비밀번호가 동일합니다.");
-//
-//            if (password.isEmpty() || password == null) {
-//                result.put("message", "");
-//            }
-//
-//            return ResponseEntity.ok().body(result);
-//
-//        } catch (MismatchPasswordAndConfirmPassword e) {
-//            result.put("status", "error");
-//            result.put("code", e.getCode());
-//            result.put("message", e.getMessage());
-//
-//            return ResponseEntity.badRequest().body(result);
-//        }
-//    }
-
-    @PostMapping(value = "/validate/nickname")
+    @PostMapping(value = "/signup/validate/nickname")
     public ResponseEntity<Object> nicknameValid(@RequestBody Map<String, String> request) {
         Map<String, String> result = new HashMap<>();
 
@@ -240,7 +196,7 @@ public class LocalUserAccountController {
             String nickname = request.get("nickname");
 
             if (nickname.isEmpty() || nickname == null) {
-                result.put("message", "");
+                throw new RequiredFieldException("nickname", "닉네임을 입력해주세요");
             }
 
             if (userAccountService.isDuplicateNickname(nickname)) {
@@ -249,18 +205,22 @@ public class LocalUserAccountController {
 
             return ResponseEntity.ok().body(successResponse.getSuccess("nickname", "사용가능한 닉네임 입니다"));
 
+        } catch (RequiredFieldException e) {
+            log.error("nicknameValid | " +e);
+            return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
         } catch (DuplicateNicknameException e) {
+            log.error("nicknameValid | " +e);
             return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
         }
     }
 
-    @PostMapping(value = "/validate/tel")
+    @PostMapping(value = "/signup/validate/tel")
     public ResponseEntity<Object> telValid(@RequestBody Map<String, String> request) {
         try {
             String tel = request.get("tel");
 
             if (tel.isEmpty() || tel == null) {
-                throw new RequiredFieldException();
+                throw new RequiredFieldException("tel", "전화번호를 입력해주세요");
             }
 
             if (userAccountService.isDuplicateTel(tel)) {
@@ -270,7 +230,7 @@ public class LocalUserAccountController {
             return ResponseEntity.ok().body(successResponse.getSuccess("tel", "사용 가능한 전화번호 입니다"));
 
         } catch (RequiredFieldException e) {
-            e.setFieldException("tel", "전화번호를 입력해주세요");
+            log.error("telValid | " +e);
             return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
 
         } catch (DuplicateTelException e) {
