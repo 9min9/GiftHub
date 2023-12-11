@@ -9,7 +9,7 @@ function getStorageList() {
     let size = 10;
 
     $.ajax({
-        url: "/api/gifticon/storage/list",
+        url: "/api/storage/list",
         type: "post",
         headers: {
             Authorization: localStorage.getItem("token"),
