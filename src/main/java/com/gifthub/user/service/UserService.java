@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.gifthub.user.entity.enumeration.UserType.ADMIN;
+import static com.gifthub.user.entity.enumeration.UserType.USER;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +37,8 @@ public class UserService {
             if (localUserDto.getEmail().equals("admin")) {
                 localUserDto.setUserType(ADMIN);
             }
+
+            localUserDto.setUserType(USER);
             localUserDto.setPoint(0L);
 
             resultDto = userRepository.save(localUserDto.toLocalUserEntity()).toLocalUserDto();
