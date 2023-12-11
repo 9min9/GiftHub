@@ -1,8 +1,10 @@
 package com.gifthub.movement.controller;
 
+import com.gifthub.global.exception.ExceptionResponse;
 import com.gifthub.movement.dto.MovementDto;
 import com.gifthub.movement.service.MovementService;
 import com.gifthub.user.UserJwtTokenProvider;
+import com.gifthub.user.exception.NotLoginedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +22,7 @@ public class MovementController {
 
     private final MovementService movementService;
     private final UserJwtTokenProvider userJwtTokenProvider;
+    private final ExceptionResponse exceptionResponse;
 
     @GetMapping
     public ResponseEntity<Object> getMovementListByUserId(Pageable pageable,
@@ -30,11 +33,12 @@ public class MovementController {
             Page<MovementDto> movements = movementService.getByUserIdContain(pageable, userId);
 
             return ResponseEntity.ok(movements);
-        } catch (Exception e) {
+        } catch (NotLoginedException e) {
             e.printStackTrace();
 
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
         }
+
     }
 
 }
