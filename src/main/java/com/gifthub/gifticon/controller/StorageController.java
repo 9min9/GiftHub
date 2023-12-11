@@ -2,7 +2,7 @@ package com.gifthub.gifticon.controller;
 
 import com.gifthub.chatbot.util.JsonConverter;
 import com.gifthub.config.jwt.JwtContext;
-import com.gifthub.exception.InvalidDueDate;
+import com.gifthub.gifticon.exception.NotExpiredDueException;
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.GifticonImageDto;
 import com.gifthub.gifticon.dto.GifticonStorageListDto;
@@ -18,6 +18,7 @@ import com.gifthub.gifticon.service.GifticonStorageService;
 import com.gifthub.gifticon.service.OcrService;
 import com.gifthub.gifticon.util.GifticonImageUtil;
 import com.gifthub.gifticon.util.OcrUtil;
+import com.gifthub.global.exception.ExceptionResponse;
 import com.gifthub.product.dto.ProductDto;
 import com.gifthub.product.enumeration.CategoryName;
 import com.gifthub.product.service.ProductService;
@@ -26,6 +27,7 @@ import com.gifthub.user.dto.UserDto;
 import com.gifthub.user.service.UserService;
 import com.google.zxing.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -45,6 +47,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/storage")
+@Slf4j
 public class StorageController {
     private final GifticonStorageService storageService;
     private final GifticonImageService imageService;
@@ -53,6 +56,7 @@ public class StorageController {
     private final OcrService ocrService;
     private final ProductService productService;
     private final GifticonService gifticonService;
+    private final ExceptionResponse exceptionResponse;
 
     @PostMapping("/kakao/chatbot/add")
     public ResponseEntity<Object> addGificonByKakao(@RequestBody Map<Object, Object> gifticon) {
@@ -96,8 +100,9 @@ public class StorageController {
         } catch (NotFoundException e) { // 바코드x
             return ResponseEntity.badRequest().build();
 
-        } catch (InvalidDueDate e) { // 유효기간 체크
-            return ResponseEntity.badRequest().build();
+        } catch (NotExpiredDueException e) { // 유효기간 체크
+            Map<String, String> exception = exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage());
+            return ResponseEntity.badRequest().body(exception);
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -120,7 +125,6 @@ public class StorageController {
 
             GifticonDto gifticonDto = ocrService.readOcrMultipartToGifticonDto(file); // 파일
 
-            // TODO : 유효기간이 지났는지 check -> 사용자 예외
             if (gifticonDto.getDue() != null) {
                 OcrUtil.checkDueDate(gifticonDto.getDue());
             }
@@ -134,10 +138,13 @@ public class StorageController {
             storageService.saveStorage(gifticonDto, imageDto);
 
         } catch (NotFoundException e) { // 바코드x
-            return ResponseEntity.badRequest().build();
+            log.error("바코드 없다");
+            Map<String, String> exception = exceptionResponse.getException("barcode", "NotFound.barcode", "바코드가 존재하지 않습니다");
+            return ResponseEntity.badRequest().body(exception);
 
-        } catch (InvalidDueDate e) { // 유효기간 체크
-            return ResponseEntity.badRequest().build();
+        } catch (NotExpiredDueException e) { // 유효기간 체크
+            Map<String, String> exception = exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage());
+            return ResponseEntity.badRequest().body(exception);
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
