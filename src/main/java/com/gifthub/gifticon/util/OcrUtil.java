@@ -1,7 +1,7 @@
 package com.gifthub.gifticon.util;
 
 
-import com.gifthub.exception.InvalidDueDate;
+import com.gifthub.gifticon.exception.NotExpiredDueException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
@@ -126,7 +126,7 @@ public class OcrUtil {
     // 유효기간 지났는지  check
     public static void checkDueDate(LocalDate inputDueDate){
         if(inputDueDate.isBefore(LocalDate.now())){
-            throw new InvalidDueDate("유효기간이 지났습니다");
+            throw new NotExpiredDueException();
             // 사용자 예외처리
         }
     }
