@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 @Getter
 public class RequiredFieldException extends BaseException {
 
+    public RequiredFieldException(String field, String message) {
+        super(field, "Required", message);
+    }
+
     public void setFieldException(String field, String message) {
         super.setField(field);
         super.setCode("Required");
