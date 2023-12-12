@@ -4,8 +4,10 @@ import com.gifthub.cart.dto.CartDto;
 import com.gifthub.cart.service.CartService;
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.service.GifticonService;
+import com.gifthub.global.exception.ExceptionResponse;
 import com.gifthub.user.UserJwtTokenProvider;
 import com.gifthub.user.dto.UserDto;
+import com.gifthub.user.exception.IdMismatchException;
 import com.gifthub.user.service.UserService;
 import lombok.AllArgsConstructor;
 import org.apache.tools.ant.taskdefs.condition.Http;
@@ -23,6 +25,7 @@ public class CartController {
     private final UserService userService;
     private final GifticonService gifticonService;
     private final UserJwtTokenProvider userJwtTokenProvider;
+    private final ExceptionResponse exceptionResponse;
 
     @GetMapping
     public ResponseEntity<Object> list(@RequestHeader HttpHeaders headers) {
@@ -72,23 +75,21 @@ public class CartController {
     }
 
     @PostMapping("/delete/{id}")
-    public ResponseEntity<Object> removeFromCart(@PathVariable("id") Long gifticonId,
+    public ResponseEntity<Object> removeFromCart(@PathVariable("id") Long cartId,
                                                  @RequestHeader HttpHeaders headers
                                                  ) {
         try {
-            GifticonDto gifticonDto = gifticonService.findGifticon(gifticonId);
+            CartDto searched = cartService.getById(cartId);
 
             Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
 
-            if (!gifticonDto.getUser().getId().equals(userId)) {
-                ResponseEntity.badRequest().build();
+            if (!searched.getGifticonDto().getUser().getId().equals(userId)) {
+                throw new IdMismatchException();
             }
 
-            cartService.removeFromCart(gifticonId);
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            return ResponseEntity.badRequest().build();
+            cartService.removeFromCart(cartId);
+        } catch (IdMismatchException e) {
+            return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
         }
 
         return ResponseEntity.ok().build();
