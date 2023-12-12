@@ -32,7 +32,10 @@ function getOnSaleProduct(productId) {
                 xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
                 xhr.onload = () => {
-                    // TODO 장바구니 추가
+                    document.querySelectorAll(".card-mini-product").forEach(function (element) {
+                        element.remove();
+                    });
+                    loadMiniCart();
                 }
 
                 xhr.send("gifticonId=" + event.target.dataset.gifticonId);

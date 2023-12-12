@@ -109,7 +109,8 @@ let payWithPointEvent = (point, item) => {
 
         xhr.onload = () => {
             if (xhr.status !== 200) {
-                alert(xhr.responseText);
+                let errors = JSON.parse(xhr.response);
+                alert(errors.message);
 
                 return;
             }

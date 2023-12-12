@@ -37,4 +37,8 @@ public class CartService {
         return cartRepository.findByUser(userId).stream().map(Cart::toDto).toList();
     }
 
+    public CartDto getById(Long cartId) {
+        return cartRepository.findById(cartId).map(Cart::toDto).orElseThrow();
+    }
+
 }

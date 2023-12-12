@@ -600,17 +600,14 @@ function getProductByCategoryAndBrandByName(category = "전체", brand = "전체
 }
 
 let setSearchEvent = () => {
-    document.querySelector("#main-search").addEventListener("keyup", function(event) {
-        let key = event.key;
-        if (key !== "Process") {
-            page = 0;
-            clearProducts();
-            getProductByCategoryAndBrandByName(
-              document.querySelector(".product-selector-container.category-active")
-                .querySelector(".product-name").innerText,
-              document.querySelector(".brand-filter.js-checked").innerText,
-            );
-        }
+    document.querySelector("#main-search").addEventListener("change", function(event) {
+        page = 0;
+        clearProducts();
+        getProductByCategoryAndBrandByName(
+          document.querySelector(".product-selector-container.category-active")
+            .querySelector(".product-name").innerText,
+          document.querySelector(".brand-filter.js-checked").innerText,
+        );
     });
 
 }

@@ -91,7 +91,7 @@
 
                                             <span>CLEAR CART</span></a>
 
-                                        <a class="route-box__link"><i class="fas fa-sync"></i>
+                                        <a class="route-box__link" id="update-cart"><i class="fas fa-sync"></i>
 
                                             <span>UPDATE CART</span></a></div>
                                 </div>
@@ -351,6 +351,7 @@
     window.onload = () => {
         loadCarts([[${param.page}]], [[${param.size}]]);
         removeAllEvent();
+        updateCartEvent();
     }
 </script>
 </body>

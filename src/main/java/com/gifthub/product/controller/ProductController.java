@@ -129,55 +129,32 @@ public class ProductController {
     public ResponseEntity<Object> getBrand(@PathVariable("category") String category) {
         CategoryName categoryName = CategoryName.ofEng(category);
 
-        try {
-            List<String> gifticonBrandName = productService.getBrandName(categoryName);
+        List<String> gifticonBrandName = productService.getBrandName(categoryName);
 
-            return ResponseEntity.ok(gifticonBrandName);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("잘못된 요청입니다.");
-        }
+        return ResponseEntity.ok(gifticonBrandName);
     }
 
     @GetMapping("/brands/{brand}")
     public ResponseEntity<Object> getProductByBrand(@PathVariable("brand") String brand) {
-        try {
-            List<ProductDto> brands = productService.getProductByBrand(brand);
+        List<ProductDto> brands = productService.getProductByBrand(brand);
 
-            return ResponseEntity.ok(brands);
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(brands);
     }
 
     @GetMapping("/products")
     public ResponseEntity<Object> getAllProducts() {
-        try {
-            List<ProductDto> products = productService.getAllProduct();
+        List<ProductDto> products = productService.getAllProduct();
 
-            return ResponseEntity.ok(products);
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(products);
     }
 
     @GetMapping("/category/{category}")
     public ResponseEntity<Object> getAllProductsByBrands(@PathVariable("category") String category) {
-        try {
-            String cat = category.replaceAll("-", "/");
+        String cat = category.replaceAll("-", "/");
 
-            List<ProductDto> products = productService.getProductByCategory(cat);
+        List<ProductDto> products = productService.getProductByCategory(cat);
 
-            return ResponseEntity.ok(products);
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(products);
     }
 
     @GetMapping("/page/{category}/{brand}")
@@ -196,11 +173,7 @@ public class ProductController {
         }
 
 
-        if (products != null) {
-            return ResponseEntity.ok(products);
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(products);
     }
 
     @GetMapping("/page/search/{category}/{brand}/{name}")
@@ -220,11 +193,7 @@ public class ProductController {
         }
 
 
-        if (products != null) {
-            return ResponseEntity.ok(products);
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(products);
     }
 
 }

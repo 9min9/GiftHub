@@ -6,6 +6,11 @@ import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
 import com.gifthub.gifticon.exception.NotFoundStorageException;
 import com.gifthub.gifticon.service.GifticonService;
 import com.gifthub.gifticon.service.GifticonStorageService;
+import com.gifthub.gifticon.service.OcrService;
+import com.gifthub.global.exception.ExceptionResponse;
+import com.gifthub.product.service.ProductService;
+import com.gifthub.user.UserJwtTokenProvider;
+
 import com.gifthub.global.error.ErrorResponse;
 import com.gifthub.global.exception.ExceptionResponse;
 import com.gifthub.product.dto.ProductDto;
@@ -42,8 +47,8 @@ public class GifticonController {
     private final UserJwtTokenProvider userJwtTokenProvider;
     private final UserService userService;
     private final ProductService productService;
-    private final ErrorResponse errorResponse;
     private final ExceptionResponse exceptionResponse;
+    private final ErrorResponse errorResponse;
 
     @GetMapping("/barcode/{barcode}")
     public void barcode(@PathVariable("barcode") String barcode, HttpServletResponse response) {
@@ -118,13 +123,15 @@ public class GifticonController {
         try {
             Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
 
+            if (isNull(userId)) {
+                throw new NotLoginedException();
+            }
+
             Page<GifticonDto> gifticons = gifticonService.getGifticonByUserId(pageable, userId);
 
             return ResponseEntity.ok(gifticons);
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            return ResponseEntity.badRequest().build();
+        } catch (NotLoginedException e) {
+            return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
         }
 
     }
@@ -132,45 +139,54 @@ public class GifticonController {
     @PostMapping("/gifticon/delete/{gifticonId}")
     public ResponseEntity<Object> deleteGifticon(@PathVariable("gifticonId") Long gifticonId,
                                                  @RequestHeader HttpHeaders headers) {
-        Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
+        try {
+            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
 
-        GifticonDto gifticonDto = gifticonService.findGifticon(gifticonId);
+            if (isNull(userId)) {
+                throw new NotLoginedException();
+            }
 
-        gifticonService.deleteById(gifticonId);
+            gifticonService.deleteById(gifticonId);
 
-        return ResponseEntity.ok().build();
+            return ResponseEntity.ok().build();
+        } catch (NotLoginedException e) {
+            return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
+        }
     }
 
     @PostMapping("/gifticon/forSale/{gifticonId}")
     public ResponseEntity<Object> setSale(@PathVariable("gifticonId") Long gifticonId,
                                           @RequestHeader HttpHeaders headers) {
-        Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
-
-        GifticonDto gifticonDto = gifticonService.findGifticon(gifticonId);
-
         try {
+            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
+
+            if (isNull(userId)) {
+                throw new NotLoginedException();
+            }
+
             gifticonService.setSale(gifticonId);
 
             return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            e.printStackTrace();
 
-            return ResponseEntity.badRequest().build();
+        } catch (NotLoginedException e) {
+            return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
         }
 
     }
 
     @GetMapping("/gifticon/products/{productId}")
     public ResponseEntity<Object> findGifticonByProudctId(Pageable pageable,
-                                                          @PathVariable("productId") Long productId) {
-        try {
-            Page<GifticonDto> gifticons = gifticonService.getGifticonByProudctId(pageable, productId);
+                                                     @PathVariable("productId") Long productId) {
+        Page<GifticonDto> gifticons = gifticonService.getGifticonByProudctId(pageable, productId);  
 
-            return ResponseEntity.ok(gifticons);
-        } catch (Exception e) {
-            e.printStackTrace();
+        return ResponseEntity.ok(gifticons);
+    }
 
-            return ResponseEntity.badRequest().build();
+    private static <T> boolean isNull(T t) {
+        if (t == null) {
+            return true;
+        } else {
+            return false;
         }
     }
 

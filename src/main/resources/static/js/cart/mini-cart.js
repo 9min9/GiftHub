@@ -59,17 +59,18 @@ let miniDeleteEvent = function (){
 
             if (localStorage.getItem("token")) {
                 $.ajax({
-                    url: "/api/carts/delete" + id,
+                    url: "/api/carts/delete/" + id,
                     type: "post",
                     headers: {
                         Authorization: localStorage.getItem("token"),
                     },
                     success: function () {
-                        $("#div-mini-cart-" + id).remove();
+                        $(".card-mini-product").remove();
+                        document.querySelectorAll(".card-mini-product").forEach(function(element) {
+                            element.remove();
+                        })
 
-                        $(".total-item-round").each(function () {
-                            $(this).text(parseInt($(this).text()) - 1);
-                        });
+                        loadMiniCart();
                     },
                     error: function () {
                         alert("삭제 실패! 다시 시도해주세요.")

@@ -4,6 +4,8 @@ import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.service.GifticonService;
 import com.gifthub.global.exception.ExceptionResponse;
 import com.gifthub.movement.service.MovementService;
+import com.gifthub.point.exception.NotEnoughPointException;
+import com.gifthub.point.exception.NotFoundGifticonException;
 import com.gifthub.point.service.PointService;
 import com.gifthub.user.UserJwtTokenProvider;
 import com.gifthub.user.dto.UserDto;
@@ -12,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RequestMapping("/api/points")
 @RequiredArgsConstructor
@@ -22,6 +26,7 @@ public class PointController {
     private final GifticonService gifticonService;
     private final MovementService movementService;
     private final UserJwtTokenProvider userJwtTokenProvider;
+    private final ExceptionResponse exceptionResponse;
 
     @PostMapping
     public ResponseEntity<Object> addPoint(@RequestParam("point") Long point,
@@ -48,8 +53,16 @@ public class PointController {
 
             UserDto toUser = pointService.usePoint(point, userId);
 
+            if (isNull(toUser)) {
+                throw new NotEnoughPointException();
+            }
+
             for (Long gifticonId : gifticonIds) {
                 GifticonDto gifticonDto = gifticonService.findGifticon(gifticonId);
+
+                if (isNull(gifticonDto)) {
+                    throw new NotFoundGifticonException();
+                }
 
                 UserDto fromUser = gifticonDto.getUser();
 
@@ -60,15 +73,11 @@ public class PointController {
                 gifticonService.saveGifticon(gifticonDto);
             }
 
-            if (isNull(toUser)) {
-                return ResponseEntity.status(400).body("포인트가 부족합니다. 포인트를 충전 후 다시 시도해주세요.");
-//                throw NotEnoughPointException
-            }
-
             return ResponseEntity.ok(toUser);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
+        } catch (NotEnoughPointException e) {
+            Map<String, String> exception = exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage());
+
+            return ResponseEntity.badRequest().body(exception);
         }
     }
 
