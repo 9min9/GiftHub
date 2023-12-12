@@ -157,7 +157,7 @@ let deleteEvent = function (){
             let id = $(this).attr("id").replace("delete-", "");
 
             $.ajax({
-                url: "/api/carts/delete" + id,
+                url: "/api/carts/delete/" + id,
                 headers: {
                     Authorization: localStorage.getItem("token"),
                 },
