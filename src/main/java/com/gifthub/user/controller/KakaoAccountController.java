@@ -16,7 +16,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/kakao")
@@ -28,7 +30,7 @@ public class KakaoAccountController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserJwtTokenProvider jwtTokenProvider;
     private final KakaoAuthenticationProvider kakaoAuthenticationProvider;
-    
+
     @RequestMapping(value = "/login")
     public ResponseEntity<Object> login(@RequestParam("code") String code) {
         String kakaoAccessToken = "";
@@ -36,19 +38,13 @@ public class KakaoAccountController {
         String token = "";
 
         try {
-            kakaoAccessToken = kakaoAccountService.getKakaoAccessToken(code);   //kakao 인가 토큰을 사용하여 발급한 access token
-            kakaoUserInfo = kakaoAccountService.getKakaoUserInfo(kakaoAccessToken);  //access token을 사용하여 kakao의 user info 발급
-
-            System.out.println("loginController");
-            System.out.println(code);
-            System.out.println("KAT");
-            System.out.println(kakaoAccessToken);
+            kakaoAccessToken = kakaoAccountService.getKakaoAccessToken(code);
+            kakaoUserInfo = kakaoAccountService.getKakaoUserInfo(kakaoAccessToken);
 
             if (!commonUserService.isDuplicateEmail(kakaoUserInfo.getEmail())) {
                 kakaoUserInfo.setPoint(0L);
                 userService.saveKakaoUser(kakaoUserInfo);
             }
-
 
             SocialAuthenticationToken kakaoAuthenticationToken = new SocialAuthenticationToken(kakaoUserInfo.getKakaoAccountId());
             Authentication authentication = kakaoAuthenticationProvider.authenticate(kakaoAuthenticationToken);

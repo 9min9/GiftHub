@@ -3,6 +3,7 @@ package com.gifthub.user.dto;
 
 import com.gifthub.user.entity.NaverUser;
 import com.gifthub.user.entity.enumeration.UserType;
+import com.gifthub.user.service.UserAccountService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,10 +31,10 @@ public class NaverUserDto {
                 .email(email)
                 .name(name)
                 .nickname(nickname)
-                .tel(tel)
-                .gender(gender)
+                .tel(UserAccountService.normalizePhoneNumber(tel))
+                .gender(UserAccountService.normalizeGender(gender))
                 .year(birthyear)
-                .birthDate(birthday)
+                .birthDate(UserAccountService.normalizeBirthDate(birthday))
                 .userType(UserType.USER)
                 .point(point)
                 .build();

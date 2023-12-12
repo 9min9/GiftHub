@@ -2,6 +2,7 @@ package com.gifthub.user.dto;
 
 import com.gifthub.user.entity.LocalUser;
 import com.gifthub.user.entity.enumeration.UserType;
+import com.gifthub.user.service.UserAccountService;
 import lombok.*;
 
 import static com.gifthub.user.entity.enumeration.UserType.USER;
@@ -33,10 +34,10 @@ public class LocalUserDto {
                 .password(password)
                 .name(name)
                 .nickname(nickname)
-                .tel(tel)
-                .gender(gender)
+                .tel(UserAccountService.normalizePhoneNumber(tel))
+                .gender(UserAccountService.normalizeGender(gender))
                 .year(year)
-                .birthDate(birthdate)
+                .birthDate(UserAccountService.normalizeBirthDate(birthdate))
                 .userType(userType)
                 .point(point)
                 .build();
