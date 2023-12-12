@@ -59,7 +59,7 @@ let miniDeleteEvent = function (){
 
             if (localStorage.getItem("token")) {
                 $.ajax({
-                    url: "/api/carts/delete" + id,
+                    url: "/api/carts/delete/" + id,
                     type: "post",
                     headers: {
                         Authorization: localStorage.getItem("token"),
