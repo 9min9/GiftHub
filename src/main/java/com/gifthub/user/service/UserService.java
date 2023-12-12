@@ -11,6 +11,7 @@ import com.gifthub.user.entity.User;
 import com.gifthub.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ import static com.gifthub.user.entity.enumeration.UserType.USER;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public LocalUserDto saveLocalUser(LocalUserDto localUserDto) {
         User findUser = userRepository.findByEmail(localUserDto.getEmail()).orElse(null);
@@ -38,6 +40,7 @@ public class UserService {
                 localUserDto.setUserType(ADMIN);
             }
 
+            localUserDto.setPassword(passwordEncoder.encode(localUserDto.getPassword()));
             localUserDto.setUserType(USER);
             localUserDto.setPoint(0L);
 
