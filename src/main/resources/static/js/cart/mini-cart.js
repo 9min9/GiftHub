@@ -65,11 +65,12 @@ let miniDeleteEvent = function (){
                         Authorization: localStorage.getItem("token"),
                     },
                     success: function () {
-                        $("#div-mini-cart-" + id).remove();
+                        $(".card-mini-product").remove();
+                        document.querySelectorAll(".card-mini-product").forEach(function(element) {
+                            element.remove();
+                        })
 
-                        $(".total-item-round").each(function () {
-                            $(this).text(parseInt($(this).text()) - 1);
-                        });
+                        loadMiniCart();
                     },
                     error: function () {
                         alert("삭제 실패! 다시 시도해주세요.")

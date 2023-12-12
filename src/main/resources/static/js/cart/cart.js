@@ -166,6 +166,11 @@ let deleteEvent = function (){
                     $("#tr-" + id).remove();
 
                     getTotal();
+
+                    document.querySelectorAll(".card-mini-product").forEach(function (element) {
+                        element.remove();
+                    });
+                    loadMiniCart();
                 },
                 error: function () {
                     alert("삭제 실패! 다시 시도해주세요.")
@@ -177,7 +182,7 @@ let deleteEvent = function (){
 }
 
 let removeAllEvent = () => {
-    $(".route-box__link").each(function() {
+    $(".clear-cart").each(function() {
         $(this).on("click", function(event) {
             event.preventDefault();
 
@@ -196,7 +201,10 @@ let removeAllEvent = () => {
 }
 
 let updateCartEvent = () => {
-    $("tr.m-cart__get").remove();
+    document.querySelector("#update-cart").addEventListener("click", function(event) {
+        $("tr.m-cart__get").remove();
 
-    loadCarts();
+        loadCarts();
+    })
+
 }
