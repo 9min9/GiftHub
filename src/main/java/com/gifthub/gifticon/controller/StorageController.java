@@ -80,7 +80,7 @@ public class StorageController {
                 }
                 file = GifticonImageUtil.convertKakaoUrlToFile(barcodeUrl); // url -> File
 
-                GifticonImageDto imageDto = imageService.saveImageByFile(file); // File -> 서버에 저장
+                GifticonImageDto imageDto = imageService.saveImage(file); // File -> 서버에 저장
                 gifticonDto.setBarcode(barcode);
                 gifticonDto.setUser(userById);
 

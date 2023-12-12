@@ -9,6 +9,7 @@ import com.gifthub.gifticon.entity.GifticonImage;
 import com.gifthub.gifticon.repository.GifticonImageRepository;
 import com.gifthub.gifticon.repository.storage.GifticonStorageRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import java.io.InputStream;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class GifticonImageService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
@@ -59,7 +61,7 @@ public class GifticonImageService {
             String accessUrl = amazonS3Client.getUrl(bucketName, filename).toString();
             image.setAccessUrl(accessUrl);
         } catch(IOException e) {
-            System.out.println("서버에 이미지 저장 실패");
+            log.error("서버에 저장 실패 | "+ e);
         }
 
         GifticonImageDto gifticonImageDto = gifticonImageRepository.save(image).toGifticonImageDto();
@@ -67,7 +69,7 @@ public class GifticonImageService {
         return gifticonImageDto;
     }
     @Transactional
-    public GifticonImageDto saveImageByFile(File file) {
+    public GifticonImageDto saveImage(File file) {
         String originalName = file.getName();
         GifticonImage image = new GifticonImage(originalName);
         String filename = image.getStoreFileName();
@@ -84,7 +86,7 @@ public class GifticonImageService {
             String accessUrl = amazonS3Client.getUrl(bucketName, filename).toString();
             image.setAccessUrl(accessUrl);
         } catch(IOException e) {
-            System.out.println("서버에 이미지 저장 실패");
+            log.error("서버에 저장 실패 | "+ e);
         }
 
         GifticonImageDto gifticonImageDto = gifticonImageRepository.save(image).toGifticonImageDto();
@@ -94,6 +96,7 @@ public class GifticonImageService {
 
     // 연쇄 삭제( Storage 삭제 -> Image 서버에서 삭제 -> db Image entity 삭제)
     public void deleteFileByStorage(GifticonStorageDto storageDto){
+        
         GifticonImage image = gifticonImageRepository.findGifticonImageByGifticonStorage(storageDto.toStorageEntity()).orElse(null);
         if (image != null) {
             DeleteObjectRequest request = new DeleteObjectRequest(bucketName, image.getStoreFileName());
