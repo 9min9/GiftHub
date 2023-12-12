@@ -2,6 +2,7 @@ package com.gifthub.gifticon.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gifthub.gifticon.dto.GifticonImageDto;
+import com.gifthub.gifticon.util.GifticonImageUtil;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -41,16 +42,10 @@ public class GifticonImage {
         this.accessUrl = accessUrl;
     }
 
-    // 이미지 파일의 확장자를 추출하는 메소드
-    public String extractExtension(String originalFileName) {
-        int index = originalFileName.lastIndexOf('.');
-
-        return originalFileName.substring(index, originalFileName.length());
-    }
 
     // 이미지 파일의 이름을 저장하기 위한 이름으로 변환하는 메소드
     public String getFileName(String originalFileName) {
-        return UUID.randomUUID() + "." + extractExtension(originalFileName);
+        return UUID.randomUUID() + "." + GifticonImageUtil.getFileExtension(originalFileName);
     }
 
     public GifticonImageDto toGifticonImageDto(){
