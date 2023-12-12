@@ -19,7 +19,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
@@ -40,7 +39,6 @@ public class LocalUserAccountController {
 
     private final UserService userService;
     private final UserAccountService userAccountService;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserJwtTokenProvider jwtTokenProvider;
     private final LocalUserAuthenticationProvider localUserAuthenticationProvider;
     private final LocalUserService localUserService;
@@ -53,19 +51,18 @@ public class LocalUserAccountController {
         System.out.println("Submit Controller");
 
         try {
-            if (userAccountService.validateDuplicateEmail(signupRequest.getEmail())) {
-                userService.saveLocalUser(signupRequest.toLocalUserDto());
+            userAccountService.validateDuplicateEmail(signupRequest.getEmail());
 
-            }
         } catch (DuplicateEmailException e) {
             bindingResult.rejectValue(e.getField(), e.getCode(), e.getMessage());
 
         } finally {
             if (bindingResult.hasErrors()) {
                 return ResponseEntity.badRequest().body(errorResponse.getErrors(bindingResult));
+            } else {
+                userService.saveLocalUser(signupRequest.toLocalUserDto());
+                return ResponseEntity.ok(Collections.singletonMap("status", "200"));
             }
-
-            return ResponseEntity.ok(Collections.singletonMap("status", "200"));
         }
     }
 
@@ -85,30 +82,24 @@ public class LocalUserAccountController {
                 throw new RequiredFieldException("password", "비밀번호를 입력해주세요");
             }
 
-            LocalUserDto localUserInfo = localUserService.getLocalUserByEmail(email);
-
-            if (localUserInfo == null) {
-                throw new NotFoundUserException();
-            }
-
             if (userAccountService.isLogin(email, password)) {
                 SocialAuthenticationToken LocalUserAuthenticationToken = new SocialAuthenticationToken(email);
                 Authentication authentication = localUserAuthenticationProvider.authenticate(LocalUserAuthenticationToken);
 
                 if (authentication.isAuthenticated()) {
-                    LocalUserDto findLocalUserDto = localUserService.getLocalUserByEmail(localUserInfo.getEmail());
+                    LocalUserDto findLocalUserDto = localUserService.getLocalUserByEmail(email);
 
                     token = jwtTokenProvider.generateJwtToken(
                             UserDto.builder()
                                     .id(findLocalUserDto.getId())
-                                    .email(localUserInfo.getEmail())
-                                    .id(localUserInfo.getId())
+                                    .email(findLocalUserDto.getEmail())
+                                    .id(findLocalUserDto.getId())
                                     .loginType(LoginType.GIFT_HUB.name()).build());
                 }
             }
 
         } catch (RequiredFieldException e) {
-            log.error("Login Controller | " +e);
+            log.error("Login Controller | " + e);
             return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
 
         } catch (NotFoundUserException e) {
@@ -127,7 +118,9 @@ public class LocalUserAccountController {
             return ResponseEntity.badRequest().body(errorResponse.getErrors(errors));
         }
 
-        return ResponseEntity.ok().header("Authorization", "Bearer " + token).build();
+        return ResponseEntity.ok()
+                .header("Authorization", "Bearer " + token)
+                .body(Collections.singletonMap("status", "200"));
     }
 
     @PostMapping(value = "/signup/validate/email")
@@ -135,7 +128,7 @@ public class LocalUserAccountController {
         try {
             String email = request.get("email");
 
-            if(email.isEmpty() || email == null) {
+            if (email.isEmpty() || email == null) {
                 throw new RequiredFieldException("email", "이메일을 입력해주세요");
             }
 
@@ -146,11 +139,11 @@ public class LocalUserAccountController {
             return ResponseEntity.ok().body(successResponse.getSuccess("email", "사용가능한 이메일 입니다"));
 
         } catch (RequiredFieldException e) {
-            log.error("emailValid | " +e);
+            log.error("emailValid | " + e);
             return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
 
         } catch (DuplicateEmailException e) {
-            log.error("emailValid | " +e);
+            log.error("emailValid | " + e);
             return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
         }
     }
@@ -168,7 +161,7 @@ public class LocalUserAccountController {
                 throw new RequiredFieldException("password", "비밀번호를 입력해주세요");
             }
 
-            if(confirmPassword.isEmpty() || confirmPassword == null) {
+            if (confirmPassword.isEmpty() || confirmPassword == null) {
                 throw new RequiredFieldException("confirmPassword", "비밀번호 확인을 입력해주세요");
             }
 
@@ -206,10 +199,10 @@ public class LocalUserAccountController {
             return ResponseEntity.ok().body(successResponse.getSuccess("nickname", "사용가능한 닉네임 입니다"));
 
         } catch (RequiredFieldException e) {
-            log.error("nicknameValid | " +e);
+            log.error("nicknameValid | " + e);
             return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
         } catch (DuplicateNicknameException e) {
-            log.error("nicknameValid | " +e);
+            log.error("nicknameValid | " + e);
             return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
         }
     }
@@ -230,11 +223,11 @@ public class LocalUserAccountController {
             return ResponseEntity.ok().body(successResponse.getSuccess("tel", "사용 가능한 전화번호 입니다"));
 
         } catch (RequiredFieldException e) {
-            log.error("telValid | " +e);
+            log.error("telValid | " + e);
             return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
 
         } catch (DuplicateTelException e) {
-            log.error("telValid | " +e);
+            log.error("telValid | " + e);
             return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
         }
     }

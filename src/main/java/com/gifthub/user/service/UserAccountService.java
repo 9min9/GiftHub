@@ -4,6 +4,7 @@ import com.gifthub.user.entity.User;
 import com.gifthub.user.exception.*;
 import com.gifthub.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 public class UserAccountService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public boolean isDuplicateEmail(String email) {
         User findUser = userRepository.findByEmail(email).orElse(null);
@@ -51,7 +53,7 @@ public class UserAccountService {
             throw new NotFoundUserException();      //아이디 또는 비밀번호가 일치하지 않습니다.
         }
 
-        if(!findUser.getPassword().equals(inputPassword)) {
+        if(!passwordEncoder.matches(inputPassword, findUser.getPassword())) {
             throw new MismatchPasswordException();    //아이디 또는 비밀번호가 일치하지 않습니다.
         }
 
@@ -73,8 +75,7 @@ public class UserAccountService {
         if (findUser == null) {
             throw new NotFoundUserException();
         }
-        //todo: Encoding
-        if (!findUser.getPassword().equals(password)) {
+        if (!passwordEncoder.matches(password, findUser.getPassword())) {
             throw new MismatchPasswordException();
         }
         return true;
