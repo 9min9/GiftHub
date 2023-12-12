@@ -1,26 +1,29 @@
 package com.gifthub.gifticon.util;
 
+import com.gifthub.gifticon.exception.NotValidFileExtensionException;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
-import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+@Slf4j
 public class GifticonImageUtil {
 
     @Value("${static-path-pattern}")
     private static String tempStorage;
+
+    private static String[] imageExtensions = {"jpg", "jpeg", "png", "pdf", "tiff"};
 
     public static String parseImgUrlToFilename(String imgUrl) {
         try {
@@ -29,7 +32,6 @@ public class GifticonImageUtil {
 
         } catch (PatternSyntaxException e) {
             e.printStackTrace();
-            System.out.println("imgUrl 파싱 에러");
             return null;
         }
 
@@ -66,9 +68,27 @@ public class GifticonImageUtil {
         return null;
     }
 
-    // TODO : 확장자가 이미지타입인지 체크
-    public static void checkInvalidFileType(String fileName){
+    // 확장자가 이미지타입인지 체크
+    public static boolean checkInvalidFileType(File file){
+        String extension = getFileExtension(file.getName());
 
+        for(String ext : imageExtensions){
+            if(extension.equals(ext)){
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    public static String getFileExtension(String originalFileName){
+        int index = originalFileName.lastIndexOf('.');
+
+        if(index == -1 || index == originalFileName.length() -1){
+            return "";
+        }
+
+        return originalFileName.substring(index+1);
     }
 
 
