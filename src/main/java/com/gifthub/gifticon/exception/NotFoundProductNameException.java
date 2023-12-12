@@ -1,18 +1,15 @@
 package com.gifthub.gifticon.exception;
 
-import lombok.AllArgsConstructor;
+import com.gifthub.global.exception.BaseException;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @Getter
-public class NotFoundProductNameException extends RuntimeException{
-    private String code;
-    private String message;
+public class NotFoundProductNameException extends BaseException {
 
     public NotFoundProductNameException() {
-        code = "NotFound";
-        message = "상품 이름이 존재하지 않습니다";
+        super.setField("product");
+        super.setCode("NotFound");
+        super.setMessage("존재하지 않는 상품입니다");
     }
 
 }

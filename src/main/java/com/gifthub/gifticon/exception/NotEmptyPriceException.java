@@ -1,14 +1,13 @@
 package com.gifthub.gifticon.exception;
 
-import lombok.AllArgsConstructor;
+import com.gifthub.global.exception.BaseException;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
-public class NotEmptyPriceException extends RuntimeException {
-    private String code;
-    private String message;
-    private String status = "error";
+public class NotEmptyPriceException extends BaseException {
+    public NotEmptyPriceException() {
+        super.setField("price");
+        super.setCode("NotEmpty");
+        super.setMessage("가격을 입력해주세요");
+    }
 }

@@ -1,16 +1,17 @@
 package com.gifthub.gifticon.exception;
 
 
-import lombok.AllArgsConstructor;
+import com.gifthub.global.exception.BaseException;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
-public class NotEmptyDueException extends RuntimeException {
-    private String code;
-    private String message;
-    private String status = "error";
+public class NotEmptyDueException extends BaseException {
+    public NotEmptyDueException() {
+        super.setField("due");
+        super.setCode("NotEmpty");
+        super.setMessage("유효기간을 입력해주세요");
+
+    }
+
 
 }
