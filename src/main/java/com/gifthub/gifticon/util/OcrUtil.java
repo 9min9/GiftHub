@@ -127,13 +127,15 @@ public class OcrUtil {
     public static void checkDueDate(LocalDate inputDueDate){
         if(inputDueDate.isBefore(LocalDate.now())){
             throw new NotExpiredDueException();
-            // 사용자 예외처리
         }
     }
 
     // 년월일 사이의 공백을 제거
     public static String removeSpaces(String input) {
-        return input.replaceAll("\\s", "");
+        if(input != null){
+            return input.replaceAll("\\s", "");
+        }
+        return null;
     }
 
 }
