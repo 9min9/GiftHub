@@ -2,16 +2,13 @@ package com.gifthub.gifticon.controller;
 
 import com.gifthub.chatbot.util.JsonConverter;
 import com.gifthub.config.jwt.JwtContext;
-import com.gifthub.gifticon.exception.NotExpiredDueException;
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.GifticonImageDto;
 import com.gifthub.gifticon.dto.GifticonStorageListDto;
 import com.gifthub.gifticon.dto.ImageSaveDto;
 import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
 import com.gifthub.gifticon.entity.GifticonStorage;
-import com.gifthub.gifticon.exception.NotEmptyBrandnameException;
-import com.gifthub.gifticon.exception.NotEmptyDueException;
-import com.gifthub.gifticon.exception.NotEmptyPriceException;
+import com.gifthub.gifticon.exception.*;
 import com.gifthub.gifticon.service.GifticonImageService;
 import com.gifthub.gifticon.service.GifticonService;
 import com.gifthub.gifticon.service.GifticonStorageService;
@@ -121,10 +118,16 @@ public class StorageController {
 
         File file = null;
         try {
+            log.error("hello1");
             file = GifticonImageUtil.convert(imageFile);
+            log.error("hello2");
 
+
+            if(!GifticonImageUtil.checkInvalidFileType(file)){
+                throw new NotValidFileExtensionException();
+            }
             GifticonDto gifticonDto = ocrService.readOcrMultipartToGifticonDto(file); // 파일
-
+            log.error("hello3");
             if (gifticonDto.getDue() != null) {
                 OcrUtil.checkDueDate(gifticonDto.getDue());
             }
@@ -137,8 +140,11 @@ public class StorageController {
 
             storageService.saveStorage(gifticonDto, imageDto);
 
+        } catch (NotValidFileExtensionException e){ // 확장자 체크
+            Map<String, String> exception = exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage());
+            return ResponseEntity.badRequest().body(exception);
+
         } catch (NotFoundException e) { // 바코드x
-            log.error("바코드 없다");
             Map<String, String> exception = exceptionResponse.getException("barcode", "NotFound.barcode", "바코드가 존재하지 않습니다");
             return ResponseEntity.badRequest().body(exception);
 
@@ -147,6 +153,8 @@ public class StorageController {
             return ResponseEntity.badRequest().body(exception);
 
         } catch (Exception e) {
+            log.error("설마여기?");
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
 
         } finally {
