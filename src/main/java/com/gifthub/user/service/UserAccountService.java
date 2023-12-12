@@ -144,10 +144,9 @@ public class UserAccountService {
     }
 
     public static String normalizeBirthDate(String input) {
-        String numericOnly = input.replaceAll("[^0-9]", "");
-        String trimmed = numericOnly.replaceFirst("^0+", "");
+        String result = input.replaceAll("[^0-9]", "");
 
-        return trimmed;
+        return result;
     }
 
 
