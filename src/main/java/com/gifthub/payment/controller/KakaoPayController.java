@@ -1,43 +1,51 @@
 package com.gifthub.payment.controller;
 
+import com.gifthub.global.error.ErrorResponse;
+import com.gifthub.global.exception.ExceptionResponse;
 import com.gifthub.payment.dto.PaymentDto;
 import com.gifthub.payment.dto.kakao.*;
 import com.gifthub.payment.enumeration.PayMethod;
 import com.gifthub.payment.enumeration.PayStatus;
 import com.gifthub.payment.enumeration.Site;
+import com.gifthub.payment.exception.EmptyItemNameException;
+import com.gifthub.payment.exception.EmptyPgTokenException;
+import com.gifthub.payment.exception.EmptyTotalAmountException;
+import com.gifthub.payment.exception.PaidIdMismatchException;
 import com.gifthub.payment.service.KakaoPayService;
 import com.gifthub.payment.service.PaymentService;
 import com.gifthub.user.UserJwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/api/kakao/pay")
 public class KakaoPayController {
 
     private final KakaoPayService kakaoPayService;
     private final PaymentService paymentService;
     private final UserJwtTokenProvider userJwtTokenProvider;
+    private final ErrorResponse errorResponse;
 
     private final String PARTNER_USER_ID = "Gifthub";
 
     @PostMapping("/ready")
-    public ResponseEntity<Object> ready(
-            @RequestBody KakaoPayRequestDto dto,
-            BindingResult bindingResult,
-            HttpServletRequest request,
-            @RequestHeader HttpHeaders headers
-    ) {
+    public ResponseEntity<Object> ready(@Valid @RequestBody KakaoPayRequestDto dto,
+                                        BindingResult bindingResult,
+                                        HttpServletRequest request,
+                                        @RequestHeader HttpHeaders headers) {
         KakaoPayReadyResponseDto readyResponseDto = null;
 
         try {
@@ -46,8 +54,17 @@ public class KakaoPayController {
             String cid = "TC0ONETIME";
             String partnerUserId = PARTNER_USER_ID;
             String itemName = dto.getItemName();
+
+            if (isNull(itemName)) {
+                throw new EmptyItemNameException();
+            }
+
             Integer quantity = 1;
             Integer totalAmount = dto.getTotalAmount();
+
+            if (isNull(totalAmount) || totalAmount == 0) {
+                throw new EmptyTotalAmountException();
+            }
 
             String paymentMethodType = "MONEY";
             Integer installMonth = 1;
@@ -91,12 +108,9 @@ public class KakaoPayController {
 
             paymentService.setPayCode(paidPaymentId, readyResponseDto.getTid());
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            bindingResult.reject("Error");
         } finally {
             if (bindingResult.hasErrors()) {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest().body(errorResponse.getErrors(bindingResult));
             } else {
                 return ResponseEntity.ok(readyResponseDto);
             }
@@ -104,12 +118,11 @@ public class KakaoPayController {
     }
 
     @GetMapping("/approve")
-    public ResponseEntity<?> approve(
-            @ModelAttribute KakaoApproveRequestDto dto,
-            HttpServletRequest request,
-            HttpServletResponse response,
-            BindingResult bindingResult
-        ) {
+    public ResponseEntity<?> approve(@Valid @ModelAttribute KakaoApproveRequestDto dto,
+                                    BindingResult bindingResult,
+                                    HttpServletRequest request,
+                                    HttpServletResponse response) {
+
         String redirectUrl = "";
 
         HttpHeaders headers = new HttpHeaders();
@@ -121,6 +134,10 @@ public class KakaoPayController {
             String tid = paymentService.get(Long.parseLong(dto.getPaymentId())).getPayCode();
             String partnerOrderId = dto.getPaymentId();
             String partnerUserId = PARTNER_USER_ID;
+
+            if (isNull(dto.getPg_token())) {
+                throw new EmptyPgTokenException();
+            }
 
             KakaoPayApproveRequestDto requestDto = KakaoPayApproveRequestDto.builder()
                     .cid(cid)
@@ -142,11 +159,17 @@ public class KakaoPayController {
             } else {
                 headers.set("location", makeBaseUrl(request) + "/payment/close?redirect=true");
             }
+        } catch (EmptyItemNameException e) {
+            bindingResult.rejectValue(e.getField(), e.getCode(), e.getMessage());
         } finally {
             if (!bindingResult.hasErrors()) {
                 return new ResponseEntity<String>("<html><body><script>window.close();</script></body></html>", headers, HttpStatus.TEMPORARY_REDIRECT);
             } else {
-                return ResponseEntity.badRequest().build();
+                System.out.println("KakaoPayController.approve");
+                for (ObjectError allError : bindingResult.getAllErrors()) {
+                    System.out.println(allError.getCode());
+                }
+                return ResponseEntity.badRequest().body(errorResponse.getErrors(bindingResult));
             }
         }
 
@@ -164,6 +187,14 @@ public class KakaoPayController {
         baseUrl += ":";
         baseUrl += request.getLocalPort();
         return baseUrl;
+    }
+
+    private static <T> boolean isNull(T t) {
+        if (t == null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

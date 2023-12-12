@@ -2,10 +2,12 @@ package com.gifthub.point.controller;
 
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.service.GifticonService;
+import com.gifthub.global.exception.ExceptionResponse;
 import com.gifthub.movement.service.MovementService;
 import com.gifthub.point.service.PointService;
 import com.gifthub.user.UserJwtTokenProvider;
 import com.gifthub.user.dto.UserDto;
+import com.gifthub.user.exception.NotLoginedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -31,9 +33,9 @@ public class PointController {
             UserDto userDto = pointService.plusPoint(point, userId);
 
             return ResponseEntity.ok(userDto);
-        } catch (Exception e) {
+        } catch (NotLoginedException e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
@@ -58,14 +60,23 @@ public class PointController {
                 gifticonService.saveGifticon(gifticonDto);
             }
 
-            if (toUser == null) {
+            if (isNull(toUser)) {
                 return ResponseEntity.status(400).body("포인트가 부족합니다. 포인트를 충전 후 다시 시도해주세요.");
+//                throw NotEnoughPointException
             }
 
             return ResponseEntity.ok(toUser);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+    private static <T> boolean isNull(T t) {
+        if (t == null) {
+            return true;
+        } else {
+            return false;
         }
     }
 
