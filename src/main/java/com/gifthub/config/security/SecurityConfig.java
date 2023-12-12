@@ -36,62 +36,62 @@ public class SecurityConfig {
 
 
     //TEST
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .formLogin()
-                .loginPage("/login")
-                .and()
-
-                .authorizeHttpRequests((authz) -> authz
-                        .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                        .anyRequest().permitAll()
-                );
-
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        //	.httpBasic();
-        return http.build();
-    }
-
-
 //    @Bean
 //    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 //        http.csrf().disable()
 //                .formLogin()
 //                .loginPage("/login")
 //                .and()
-//                .authorizeHttpRequests((authz) -> authz
-//                        .requestMatchers(
-//                                new AntPathRequestMatcher("/css/**"),
-//                                new AntPathRequestMatcher("/js/**"),
-//                                new AntPathRequestMatcher("/images/**"),
-//                                new AntPathRequestMatcher("/scss/**"),
-//                                new AntPathRequestMatcher("/webfonts/**"),
-//                                new AntPathRequestMatcher("/static/**")
-//                        ).permitAll()
 //
+//                .authorizeHttpRequests((authz) -> authz
 //                        .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-//                        .requestMatchers("/", "/signup/**", "/error/**", "/login/**", "/api/kakao/**", "/api/naver/**", "/logout", "/api/product/**", "/gifticons").permitAll()
-//                        .anyRequest().authenticated()
-//                )
-//                .addFilter(corsConfig.corsFilter())
-//                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+//                        .anyRequest().permitAll()
+//                );
 //
 //        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//
-//        http.logout()
-//                .logoutUrl("/logout")   // 로그아웃 처리 URL (= form action url)
-//                .logoutSuccessUrl("/") // 로그아웃 성공 후 targetUrl,
-//                .addLogoutHandler((request, response, authentication) -> {
-//                    // 사실 굳이 내가 세션 무효화하지 않아도 됨.
-//                    // LogoutFilter가 내부적으로 해줌.
-//                })  // 로그아웃 핸들러 추가
-//                .logoutSuccessHandler((request, response, authentication) -> {
-//                    response.sendRedirect("/login");
-//                }) // 로그아웃 성공 핸들러
-//                .deleteCookies("Authorization"); // 로그아웃
 //        //	.httpBasic();
 //        return http.build();
 //    }
+
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+                .formLogin()
+                .loginPage("/login")
+                .and()
+                .authorizeHttpRequests((authz) -> authz
+                        .requestMatchers(
+                                new AntPathRequestMatcher("/css/**"),
+                                new AntPathRequestMatcher("/js/**"),
+                                new AntPathRequestMatcher("/images/**"),
+                                new AntPathRequestMatcher("/scss/**"),
+                                new AntPathRequestMatcher("/webfonts/**"),
+                                new AntPathRequestMatcher("/static/**")
+                        ).permitAll()
+
+                        .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
+                        .requestMatchers("/", "/signup/**", "/error/**", "/login/**", "/api/local/login**", "api/local/signup/**", "/api/kakao/**", "/api/naver/**", "/logout", "/api/product/**", "/gifticons").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .addFilter(corsConfig.corsFilter())
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http.logout()
+                .logoutUrl("/logout")   // 로그아웃 처리 URL (= form action url)
+                .logoutSuccessUrl("/") // 로그아웃 성공 후 targetUrl,
+                .addLogoutHandler((request, response, authentication) -> {
+                    // 사실 굳이 내가 세션 무효화하지 않아도 됨.
+                    // LogoutFilter가 내부적으로 해줌.
+                })  // 로그아웃 핸들러 추가
+                .logoutSuccessHandler((request, response, authentication) -> {
+                    response.sendRedirect("/login");
+                }) // 로그아웃 성공 핸들러
+                .deleteCookies("Authorization"); // 로그아웃
+        //	.httpBasic();
+        return http.build();
+    }
 
 }
