@@ -1,5 +1,6 @@
 package com.gifthub.product.service;
 
+import com.gifthub.gifticon.exception.NotFoundProductNameException;
 import com.gifthub.product.dto.ProductDto;
 import com.gifthub.product.entity.Product;
 import com.gifthub.product.enumeration.CategoryName;
@@ -55,9 +56,13 @@ public class ProductService {
         return (product != null) ? product.toProductDto() : null;
     }
 
-    public ProductDto getByProductName(String productName) {
+    public ProductDto getByProductName(String productName) throws NotFoundProductNameException{
         Product product = productRepository.findProductByName(productName).orElse(null);
-        return (product != null) ? product.toProductDto() : null;
+
+        if (product == null) {
+            throw new NotFoundProductNameException();
+        }
+        return product.toProductDto();
     }
 
     public List<String> getBrandName(CategoryName categoryName) {

@@ -8,7 +8,8 @@ import com.gifthub.gifticon.dto.GifticonStorageListDto;
 import com.gifthub.gifticon.dto.ImageSaveDto;
 import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
 import com.gifthub.gifticon.entity.GifticonStorage;
-import com.gifthub.gifticon.exception.*;
+import com.gifthub.gifticon.exception.NotExpiredDueException;
+import com.gifthub.gifticon.exception.NotValidFileExtensionException;
 import com.gifthub.gifticon.service.GifticonImageService;
 import com.gifthub.gifticon.service.GifticonService;
 import com.gifthub.gifticon.service.GifticonStorageService;
@@ -16,8 +17,6 @@ import com.gifthub.gifticon.service.OcrService;
 import com.gifthub.gifticon.util.GifticonImageUtil;
 import com.gifthub.gifticon.util.OcrUtil;
 import com.gifthub.global.exception.ExceptionResponse;
-import com.gifthub.product.dto.ProductDto;
-import com.gifthub.product.enumeration.CategoryName;
 import com.gifthub.product.service.ProductService;
 import com.gifthub.user.UserJwtTokenProvider;
 import com.gifthub.user.dto.UserDto;
@@ -35,9 +34,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.time.LocalDate;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -186,73 +183,6 @@ public class StorageController {
         }
     }
 
-    @PostMapping("/gifticon/register") // db에 있는경우
-    public ResponseEntity<Object> registerGifticon(@RequestBody Map<String, String> request,
-                                                   @RequestHeader HttpHeaders headers) {
-        Map<String, String> result = new HashMap<>();
-        Map<String, String> errorResult = new HashMap<>();
-
-        long storageId = Long.parseLong(request.get("storageId"));
-        String due = request.get("due");
-
-        try {
-            /** product namedl 없는 사안은 admin으로 이관됨*/
-            if (request.get("due") == null || request.get("due").isEmpty()) {
-                throw new NotEmptyDueException();
-            }
-
-            if (request.get("brandName") == null || request.get("brandName").isEmpty()) {
-                throw new NotEmptyBrandnameException();
-            }
-
-            if (request.get("price") == null || request.get("price").isEmpty()) {
-                throw new NotEmptyPriceException();
-            }
-
-            GifticonStorageDto storage = storageService.getStorageById(storageId);
-            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
-            UserDto findUser = userService.getUserById(userId);
-            storage.setUser(findUser);
-            storage.setDue(LocalDate.parse(due));
-
-            ProductDto product = productService.getByProductName(storage.getProductName());
-            CategoryName engCategory = CategoryName.ofKor(product.getCategory());
-            product.setCategory(engCategory.name());
-
-            GifticonDto gifticonDto = storage.toGifticonDto(product);
-
-            gifticonService.saveGifticon(gifticonDto);
-            storageService.deleteStorage(storage.getId());
-
-            result.put("status", "success");
-
-        } catch (NotEmptyDueException e) {
-            errorResult.put("status", e.getStatus());
-            errorResult.put("code", "not.empty");
-            errorResult.put("field", "due");
-            errorResult.put("message", "유효기간을 입력해주세요.");
-            return ResponseEntity.badRequest().body(errorResult);
-        } catch (NotEmptyBrandnameException e) {
-            errorResult.put("status", e.getStatus());
-            errorResult.put("code", "not.empty");
-            errorResult.put("field", "brandName");
-            errorResult.put("message", "브랜드 이름을 입력해주세요.");
-            return ResponseEntity.badRequest().body(errorResult);
-        } catch (NotEmptyPriceException e) {
-            errorResult.put("status", e.getStatus());
-            errorResult.put("code", "not.empty");
-            errorResult.put("field", "price");
-            errorResult.put("message", "가격을 입력해주세요.");
-            return ResponseEntity.badRequest().body(errorResult);
-        } catch (Exception e) {
-            errorResult.put("status", "error");
-            errorResult.put("message", e.getMessage());
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(errorResult);
-        }
-
-        return ResponseEntity.ok().body(result);
-    }
 
     @PostMapping("/delete/{id}")
     public ResponseEntity<Object> removeFromStorage(@PathVariable("id") Long storageId, @RequestHeader HttpHeaders headers) {
