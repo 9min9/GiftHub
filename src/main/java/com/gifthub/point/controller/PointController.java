@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+import static java.util.Objects.isNull;
+
 @RequestMapping("/api/points")
 @RequiredArgsConstructor
 @RestController
@@ -70,7 +72,7 @@ public class PointController {
 
                 gifticonDto.setUser(toUser);
 
-                gifticonService.saveGifticon(gifticonDto);
+                gifticonService.saveGifticonExceptProduct(gifticonDto);
             }
 
             return ResponseEntity.ok(toUser);
@@ -78,14 +80,6 @@ public class PointController {
             Map<String, String> exception = exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage());
 
             return ResponseEntity.badRequest().body(exception);
-        }
-    }
-
-    private static <T> boolean isNull(T t) {
-        if (t == null) {
-            return true;
-        } else {
-            return false;
         }
     }
 
