@@ -100,7 +100,6 @@ public class GifticonController {
             log.error("registerGifticon | " + e);
             return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
         } catch (Exception e) {
-            e.printStackTrace();
             log.error("registerGifticon | " + e);
             return ResponseEntity.badRequest().body(exceptionResponse.getException(null, "Exception", e.getMessage()));
         }
