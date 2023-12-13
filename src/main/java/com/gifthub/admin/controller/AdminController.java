@@ -49,7 +49,7 @@ public class AdminController {
 
     @PostMapping("/gifticon/confirm/register")
     public ResponseEntity<Object> registerGifticon(@Valid @RequestBody ProductAddRequest request, BindingResult bindingResult,
-                                                   @RequestHeader HttpHeaders headers, Errors errors) {
+                                                   @RequestHeader HttpHeaders headers) {
         String productName = request.getProductName();
         String brandName = request.getBrandName();
         String due = request.getDue();
@@ -101,7 +101,7 @@ public class AdminController {
 
         } catch (NotSelectConfirmFlagException e) {
             log.error("AdminController | registerGifticon | " + e);
-            errors.rejectValue("isConfirm", e.getCode(), e.getMessage());
+            bindingResult.rejectValue("isConfirm", e.getCode(), e.getMessage());
         } catch (NotFoundStorageException e) {
             log.error("AdminController | registerGifticon | " + e);
             return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
