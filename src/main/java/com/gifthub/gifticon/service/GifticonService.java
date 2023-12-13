@@ -77,7 +77,7 @@ public class GifticonService {
     }
 
     public GifticonDto findGifticon(Long gifticonId) {
-        return gifticonRepository.findById(gifticonId).orElseThrow().toDto();
+        return gifticonRepository.findById(gifticonId).orElseThrow().toDtoWithProduct();
     }
 
     @Transactional
@@ -142,7 +142,7 @@ public class GifticonService {
     }
 
     public Page<GifticonDto> getGifticonByUserId(Pageable pageable, Long userId) {
-        return gifticonRepository.findByUserId(pageable, userId).map(Gifticon::toDto);
+        return gifticonRepository.findByUserId(pageable, userId).map(Gifticon::toDtoWithProduct);
     }
 
     public void deleteById(Long gifticonId) {
@@ -163,7 +163,7 @@ public class GifticonService {
     }
 
     public Page<GifticonDto> getGifticonByProudctId(Pageable pageable, Long productId) {
-        return gifticonRepository.findGifticonByProductIdOrderByProductPrice(pageable, productId).map(Gifticon::toDto);
+        return gifticonRepository.findGifticonByProductIdOrderByProductPrice(pageable, productId).map(Gifticon::toDtoWithProduct);
     }
 
 }

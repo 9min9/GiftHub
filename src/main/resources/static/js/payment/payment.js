@@ -48,10 +48,7 @@ let loadItem = (items) => {
 
         let mainGifticon = document.querySelector("#main-gifticon");
 
-        let totalPrice = 0;
-        for (let gifticon of parsedResponse) {
-            totalPrice += gifticon.price;
-
+        for (let gifticon of parsedResponse.list) {
             let created = document.createElement("div");
 
             created.classList.add("o-card")
@@ -64,7 +61,7 @@ let loadItem = (items) => {
                     <div class="o-card__info-wrap">
                         <span class="o-card__name">
                             <a href="product-detail.html">${gifticon.productName}</a>
-                            <input type="hidden" name="gifticonIds" value="${gifticon.id}">
+                            <input type="hidden" name="gifticonIds" class="real-gifticonIds" value="${gifticon.id}">
                         </span>
                         <span class="o-card__quantity">Quantity x 1</span>
                         <span class="o-card__price">${gifticon.price}</span></div>
@@ -76,14 +73,15 @@ let loadItem = (items) => {
             mainGifticon.appendChild(created);
         }
 
-        let discountPrice = 0;
-        let finalPrice = totalPrice - discountPrice;
+        let originalPrice = parsedResponse.originalPrice;
+        let price = parsedResponse.price;
+        let discountPrice = originalPrice - price;
 
-        document.querySelector("#total-price").innerText = totalPrice + " 원";
+        document.querySelector("#total-price").innerText = originalPrice + " 원";
         document.querySelector("#discount-price").innerText = discountPrice;
-        document.querySelector("#final-price").innerHTML = finalPrice;
+        document.querySelector("#final-price").innerHTML = price;
 
-        payWithPointEvent(finalPrice, "기프티콘"); // TODO 아이템 이름 변경 필요
+        payWithPointEvent(price, "기프티콘");
 
         document.querySelectorAll(".trash").forEach((element) => {
             element.addEventListener("click", function() {
@@ -98,7 +96,7 @@ let loadItem = (items) => {
 
 }
 
-let payWithPointEvent = (point, item) => {
+let payWithPointEvent = (point) => {
     document.querySelector("#pay-with-point").addEventListener("click", function() {
         let xhr = new XMLHttpRequest();
 
@@ -119,7 +117,7 @@ let payWithPointEvent = (point, item) => {
         }
 
         let sendDate = "point=" + point + "&";
-        for (let e of document.querySelectorAll("[name=gifticonIds]")) {
+        for (let e of document.querySelectorAll(".real-gifticonIds")) {
             sendDate += "gifticonIds=" + e.value + "&";
         }
 

@@ -57,6 +57,20 @@ public class Gifticon extends BaseTimeEntity {
                 .build();
     }
 
+    public GifticonDto toDtoWithProduct() {
+        return GifticonDto.builder()
+                .id(this.id)
+                .user(this.user.toDto())
+                .productDto(this.product.toProductDto())
+                .barcode(this.barcode)
+                .due(this.due)
+                .brandName(this.brandName)
+                .productName(this.productName)
+                .gifticonStatus(this.gifticonStatus)
+                .price(this.price)
+                .build();
+    }
+
     public GifticonQueryDto toQueryDto() {
         return GifticonQueryDto.builder()
                 .id(this.id)
