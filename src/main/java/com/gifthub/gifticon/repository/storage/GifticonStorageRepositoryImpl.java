@@ -52,8 +52,6 @@ public class GifticonStorageRepositoryImpl implements GifticonStorageRepositoryS
 
     }
 
-
-
     private List<StorageAdminListDto> getStorageListByStatus(StorageStatus status, Pageable pageable) {
         return queryFactory
                 .select(new QStorageAdminListDto(
@@ -65,6 +63,7 @@ public class GifticonStorageRepositoryImpl implements GifticonStorageRepositoryS
                         gifticonStorage.user.name,
                         gifticonStorage.gifticonImage.accessUrl,
                         gifticonStorage.storage_status,
+                        gifticonStorage.price,
                         gifticonStorage.modifiedDate))
                 .from(gifticonStorage)
                 .where(gifticonStorage.storage_status.eq(status))
@@ -84,9 +83,6 @@ public class GifticonStorageRepositoryImpl implements GifticonStorageRepositoryS
                 .fetchOne();
     }
 
-
-
-
     @Override
     public Page<GifticonStorageListDto> findGifticonStorageDtoByUserId(Long userId, Pageable pageable) {
         System.out.println("repo!");
@@ -105,6 +101,7 @@ public class GifticonStorageRepositoryImpl implements GifticonStorageRepositoryS
                         gifticonStorage.productName,
                         gifticonStorage.barcode,
                         gifticonStorage.due,
+                        gifticonStorage.price,
                         gifticonStorage.storage_status,
                         gifticonStorage.gifticonImage.accessUrl))
                 .from(gifticonStorage)
@@ -126,7 +123,6 @@ public class GifticonStorageRepositoryImpl implements GifticonStorageRepositoryS
     }
 
     private Long getGifticonStorageListCount(Long userId) {
-        System.out.println("count!");
         return queryFactory
                 .select(gifticonStorage.count())
                 .from(gifticonStorage)
