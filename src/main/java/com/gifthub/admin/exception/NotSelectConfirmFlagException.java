@@ -5,8 +5,6 @@ import lombok.Getter;
 
 @Getter
 public class NotSelectConfirmFlagException extends BaseException {
-    private String code;
-    private String message;
 
     public NotSelectConfirmFlagException() {
         super.setField("isConfirm");
