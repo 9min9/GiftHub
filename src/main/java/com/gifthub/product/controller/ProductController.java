@@ -124,10 +124,16 @@ public class ProductController {
 
     // TODO : 금액별, 남은 유효기간별(임박순) 정렬하기
 
-
     @GetMapping("/{category}/brands")
     public ResponseEntity<Object> getBrand(@PathVariable("category") String category) {
-        CategoryName categoryName = CategoryName.ofEng(category);
+        boolean isEng = category.matches("[a-zA-Z]*");
+
+        CategoryName categoryName = null;
+        if (isEng) {
+            categoryName = CategoryName.ofEng(category);
+        } else {
+            categoryName = CategoryName.ofKor(category);
+        }
 
         List<String> gifticonBrandName = productService.getBrandName(categoryName);
 
