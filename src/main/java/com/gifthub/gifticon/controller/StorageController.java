@@ -76,14 +76,7 @@ public class StorageController {
                 gifticonDto.setBarcode(barcode);
                 gifticonDto.setUser(userById);
 
-
-//                gifticonDto.setUser(userService.getUserById(userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0))));
-                System.out.println(gifticonDto.getUser().getId());
-
-                GifticonStorage storage = storageService.saveStorage(gifticonDto, imageDto);
-                System.out.println("sotrage_id : " + storage.getId());
-
-
+                storageService.saveStorage(gifticonDto, imageDto);
             }
 
         } catch (NotFoundException e) { // 바코드x
@@ -112,7 +105,7 @@ public class StorageController {
         try {
             file = GifticonImageUtil.convert(imageFile);
 
-            if(!GifticonImageUtil.checkInvalidFileType(file)){
+            if (!GifticonImageUtil.checkInvalidFileType(file)) {
                 throw new NotValidFileExtensionException();
             }
             GifticonDto gifticonDto = ocrService.readOcrMultipartToGifticonDto(file); // 파일
@@ -128,23 +121,23 @@ public class StorageController {
             gifticonDto.setUser(userService.getUserById(userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0))));
             storageService.saveStorage(gifticonDto, imageDto);
 
-        } catch (NotValidFileExtensionException e){ // 확장자 체크
-            log.error("addGifticonByFile | " +e);
+        } catch (NotValidFileExtensionException e) { // 확장자 체크
+            log.error("addGifticonByFile | " + e);
             Map<String, String> exception = exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage());
             return ResponseEntity.badRequest().body(exception);
 
         } catch (NotFoundException e) { // 바코드x
-            log.error("addGifticonByFile | " +e);
+            log.error("addGifticonByFile | " + e);
             Map<String, String> exception = exceptionResponse.getException("barcode", "NotFound.barcode", "바코드가 존재하지 않습니다");
             return ResponseEntity.badRequest().body(exception);
 
         } catch (NotExpiredDueException e) { // 유효기간 체크
-            log.error("addGifticonByFile | " +e);
+            log.error("addGifticonByFile | " + e);
             Map<String, String> exception = exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage());
             return ResponseEntity.badRequest().body(exception);
 
         } catch (Exception e) {
-            log.error("addGifticonByFile | " +e);
+            log.error("addGifticonByFile | " + e);
             return ResponseEntity.badRequest().body(exceptionResponse.getException(null, "Exception", e.getMessage()));
 
         } finally {
@@ -189,7 +182,7 @@ public class StorageController {
             storageService.deleteStorage(storageId);
 
         } catch (Exception e) {
-            log.error("removeFromStorage | " +e);
+            log.error("removeFromStorage | " + e);
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok().build();

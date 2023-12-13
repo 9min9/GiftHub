@@ -56,6 +56,8 @@ public class AdminController {
 
             if (isConfirm) {
                 ProductDto productDto = request.toProductDto();
+                ProductDto findProduct = productService.getByProductName(productName);
+                productDto.setId(findProduct.getId());
                 Long productId = productService.saveProduct(productDto);
                 productDto.setId(productId);
 
@@ -104,6 +106,7 @@ public class AdminController {
             String brandName = gifticonStorageDto.getBrandName();
             String barcode = gifticonStorageDto.getBarcode();
             LocalDate due = gifticonStorageDto.getDue();
+            Long price = gifticonStorageDto.getPrice();
 
             Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
             gifticonStorageService.storageToAdmin(gifticonStorageDto);
@@ -119,8 +122,6 @@ public class AdminController {
     @PostMapping("/gifticon/confirm/count")
     public ResponseEntity<Object> confirmRegisterCount(@RequestHeader HttpHeaders headers) {
         Long count = gifticonStorageService.getStorageCountByStatus(ADMIN_APPROVAL);
-        System.out.println("####");
-        System.out.println(count);
 
         return ResponseEntity.ok().body(Collections.singletonMap("count", count));
 
