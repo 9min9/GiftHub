@@ -41,6 +41,9 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/storage")
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
+//@CrossOrigin(originPatterns = "*")
+//@CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
 public class StorageController {
     private final GifticonStorageService storageService;
@@ -150,7 +153,6 @@ public class StorageController {
             return ResponseEntity.badRequest().body(exception);
 
         } catch (Exception e) {
-            log.error("설마여기?");
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
 
@@ -189,6 +191,8 @@ public class StorageController {
         try {
             GifticonStorageDto storage = storageService.getStorageById(storageId);
             Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
+            log.error("storageId: "+ storage.getId());
+            log.error("storageUser: "+ storage.getUser());
 
             if (!storage.getUser().getId().equals(userId)) {
                 ResponseEntity.badRequest().build();

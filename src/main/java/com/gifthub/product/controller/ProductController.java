@@ -123,7 +123,8 @@ public class ProductController {
 //    }
 
     // TODO : 금액별, 남은 유효기간별(임박순) 정렬하기
-
+//    @GetMapping("/category/list")
+//    public ResponseEntity
 
     @GetMapping("/{category}/brands")
     public ResponseEntity<Object> getBrand(@PathVariable("category") String category) {
