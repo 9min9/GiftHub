@@ -13,11 +13,11 @@ import com.gifthub.user.exception.NotFoundUserException;
 import com.gifthub.user.exception.NotLoginedException;
 import com.gifthub.user.service.UserService;
 import lombok.AllArgsConstructor;
-import org.apache.tools.ant.taskdefs.condition.Http;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static java.util.Objects.isNull;
 
 @RestController
 @AllArgsConstructor
@@ -120,14 +120,6 @@ public class CartController {
         }
 
         return ResponseEntity.ok().build();
-    }
-
-    private static <T> boolean isNull(T t) {
-        if (t == null) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
 }

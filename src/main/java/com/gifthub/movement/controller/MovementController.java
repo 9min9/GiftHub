@@ -30,6 +30,10 @@ public class MovementController {
         try {
             Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
 
+            if (userId == null) {
+                throw new NotLoginedException();
+            }
+
             Page<MovementDto> movements = movementService.getByUserIdContain(pageable, userId);
 
             return ResponseEntity.ok(movements);

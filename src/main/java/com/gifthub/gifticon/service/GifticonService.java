@@ -87,6 +87,13 @@ public class GifticonService {
         return gifticon.getId();
     }
 
+    @Transactional
+    public Long saveGifticonWithKorCategoryName(GifticonDto gifticonDto){
+        gifticonDto.setGifticonStatus(GifticonStatus.NONE);
+        Gifticon gifticon = gifticonRepository.save(gifticonDto.toEntityWithKorCategoryName());
+        return gifticon.getId();
+    }
+
     public List<GifticonDto> getMyGifticon(User user){
         return gifticonRepository.findByUser(user).stream().map(Gifticon::toDto).toList();
     }
