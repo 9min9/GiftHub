@@ -32,6 +32,7 @@ public class GifticonStorage extends BaseTimeEntity {
     private LocalDate due;
     private String brandName; // 브랜드명(사용처)
     private String productName; // 상품명
+    private Long price;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -41,7 +42,7 @@ public class GifticonStorage extends BaseTimeEntity {
     @JoinColumn(name = "gifticon_image_id")
     private GifticonImage gifticonImage;
 
-    @Builder.Default
+
     @Enumerated(EnumType.STRING)
     private StorageStatus storage_status = WAIT_REGISTRATION;
 
@@ -63,6 +64,10 @@ public class GifticonStorage extends BaseTimeEntity {
 
     public void changeStatus(StorageStatus status) {
         storage_status = status;
+    }
+
+    public void changePrice(Long price) {
+        this.price = price;
     }
 
 

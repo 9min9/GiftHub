@@ -55,14 +55,9 @@ public class StorageController {
     @PostMapping("/kakao/chatbot/add")
     public ResponseEntity<Object> addGificonByKakao(@RequestBody Map<Object, Object> gifticon) {
         String jwtToken = JwtContext.getJwtToken();
-        System.out.println("@@@@ add KAKa");
-        System.out.println(jwtToken);
-        System.out.println(gifticon);
 
         Long userIdFromToken = userJwtTokenProvider.getUserIdFromToken(jwtToken);
         UserDto userById = userService.getUserById(userIdFromToken);
-        System.out.println(userById.getId());
-        System.out.println(userById.getName());
 
         File file = null;
         try {
@@ -115,16 +110,13 @@ public class StorageController {
 
         File file = null;
         try {
-            log.error("hello1");
             file = GifticonImageUtil.convert(imageFile);
-            log.error("hello2");
-
 
             if(!GifticonImageUtil.checkInvalidFileType(file)){
                 throw new NotValidFileExtensionException();
             }
             GifticonDto gifticonDto = ocrService.readOcrMultipartToGifticonDto(file); // 파일
-            log.error("hello3");
+
             if (gifticonDto.getDue() != null) {
                 OcrUtil.checkDueDate(gifticonDto.getDue());
             }
@@ -134,30 +126,31 @@ public class StorageController {
             gifticonDto.setBarcode(barcode);
             // 받은 헤더의 jwt토큰으로부터 유저식별
             gifticonDto.setUser(userService.getUserById(userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0))));
-
             storageService.saveStorage(gifticonDto, imageDto);
 
         } catch (NotValidFileExtensionException e){ // 확장자 체크
+            log.error("addGifticonByFile | " +e);
             Map<String, String> exception = exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage());
             return ResponseEntity.badRequest().body(exception);
 
         } catch (NotFoundException e) { // 바코드x
+            log.error("addGifticonByFile | " +e);
             Map<String, String> exception = exceptionResponse.getException("barcode", "NotFound.barcode", "바코드가 존재하지 않습니다");
             return ResponseEntity.badRequest().body(exception);
 
         } catch (NotExpiredDueException e) { // 유효기간 체크
+            log.error("addGifticonByFile | " +e);
             Map<String, String> exception = exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage());
             return ResponseEntity.badRequest().body(exception);
 
         } catch (Exception e) {
-            log.error("설마여기?");
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            log.error("addGifticonByFile | " +e);
+            return ResponseEntity.badRequest().body(exceptionResponse.getException(null, "Exception", e.getMessage()));
 
         } finally {
             file.delete();
         }
-        return ResponseEntity.ok().body(Collections.singletonMap("status", "ok"));
+        return ResponseEntity.ok().body(Collections.singletonMap("status", "200"));
     }
 
     @PostMapping("/file/add/multiple") // MultipartType으로 받는다 (여러개)
@@ -177,8 +170,7 @@ public class StorageController {
             return ResponseEntity.ok(storageList);
 
         } catch (Exception e) {
-            e.printStackTrace();
-
+            log.error("getStorageList | " + e);
             return ResponseEntity.badRequest().build();
         }
     }
@@ -197,7 +189,7 @@ public class StorageController {
             storageService.deleteStorage(storageId);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("removeFromStorage | " +e);
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok().build();
