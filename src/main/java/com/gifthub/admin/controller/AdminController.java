@@ -46,9 +46,10 @@ public class AdminController {
     private final ProductService productService;
     private final ErrorResponse errorResponse;
     private final ExceptionResponse exceptionResponse;
+    private final GifticonAppovalValidator gifticonConfirmRegister;
 
     @PostMapping("/gifticon/confirm/register")
-    public ResponseEntity<Object> registerGifticon(@Valid @RequestBody ProductAddRequest request, BindingResult bindingResult,
+    public ResponseEntity<Object> registerGifticon(@RequestBody GifticonAppovalRequest request, BindingResult bindingResult,
                                                    @RequestHeader HttpHeaders headers) {
         String productName = request.getProductName();
         String brandName = request.getBrandName();
@@ -65,6 +66,8 @@ public class AdminController {
             GifticonStorageDto storage = gifticonStorageService.getStorageById(storageId);
 
             if (isConfirm) {
+                gifticonConfirmRegister.validate(request, bindingResult);
+
                 if (!request.getCategory().isBlank() && request.getCategory() != null) {
                     ProductDto productDto = request.toProductDto();
                     ProductDto findProduct = productService.getByProductName(productName);
@@ -89,9 +92,6 @@ public class AdminController {
 
                     gifticonService.saveGifticon(gifticonDto);
                     gifticonStorageService.deleteStorage(storageId);
-
-                } else {
-                    bindingResult.rejectValue("category", "NotSelect", null);
                 }
             }
 
