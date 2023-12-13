@@ -21,7 +21,7 @@ public class MovementService {
         Movement movement = Movement.builder()
                 .fromUser(from.toEntity())
                 .toUser(to.toEntity())
-                .gifticon(gifticonDto.toEntityExceptProduct())
+                .gifticon(gifticonDto.toEntityWithKorCategoryName())
                 .movementStatus(MovementStatus.SUCCESS)
                 .build();
 

@@ -40,6 +40,20 @@ public class GifticonDto {
                 .price(this.price)
                 .build();
     }
+
+    public Gifticon toEntityWithKorCategoryName() {
+        return Gifticon.builder()
+                .id(this.id)
+                .user(this.user.toEntity())
+                .barcode(this.barcode)
+                .due(this.due)
+                .brandName(this.brandName)
+                .productName(this.productName)
+                .product(productDto.toProductEntityWithKorCategoryName())
+                .gifticonStatus(this.gifticonStatus)
+                .price(this.price)
+                .build();
+    }
     @QueryProjection
     public GifticonDto(Long id, UserDto user, String barcode, LocalDate due, String brandName, String productName, GifticonStatus gifticonStatus, Long price) {
         this.id = id;
