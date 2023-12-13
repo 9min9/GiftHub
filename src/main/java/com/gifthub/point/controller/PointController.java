@@ -67,6 +67,7 @@ public class PointController {
                 }
 
                 UserDto fromUser = gifticonDto.getUser();
+                pointService.plusPoint(point, fromUser.getId());
 
                 movementService.move(fromUser, toUser, gifticonDto);
 
