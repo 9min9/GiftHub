@@ -6,11 +6,6 @@ import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
 import com.gifthub.gifticon.exception.NotFoundStorageException;
 import com.gifthub.gifticon.service.GifticonService;
 import com.gifthub.gifticon.service.GifticonStorageService;
-import com.gifthub.gifticon.service.OcrService;
-import com.gifthub.global.exception.ExceptionResponse;
-import com.gifthub.product.service.ProductService;
-import com.gifthub.user.UserJwtTokenProvider;
-
 import com.gifthub.global.error.ErrorResponse;
 import com.gifthub.global.exception.ExceptionResponse;
 import com.gifthub.product.dto.ProductDto;
@@ -36,6 +31,8 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collections;
+
+import static java.util.Objects.isNull;
 
 @Slf4j
 @RestController
@@ -182,13 +179,7 @@ public class GifticonController {
         return ResponseEntity.ok(gifticons);
     }
 
-    private static <T> boolean isNull(T t) {
-        if (t == null) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+
 
 }
 

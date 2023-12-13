@@ -77,7 +77,14 @@ $(function () {
                         },
                         success: function (result) {
                             document.querySelector(".today").classList.replace("today", "attendance");
-                            alert(result);
+
+                            let pointSpan = document.querySelector("#show-point-span");
+
+                            const point = result.point;
+
+                            pointSpan.innerText = point;
+
+                            alert(result.message);
                         }
                     })
                 });

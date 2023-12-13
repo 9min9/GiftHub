@@ -46,6 +46,7 @@ function createTableBody(jsonData) {
 }
 
 function createTable(content) {
+    console.log(content);
     let tr = document.createElement('tr');
     let product = document.createElement('td');
     let brandName = document.createElement('td');
@@ -57,6 +58,7 @@ function createTable(content) {
     let url = document.createElement('span');
     let barcode = document.createElement('span');
     let due = document.createElement('span');
+    let price = document.createElement('span');
 
     url.setAttribute('value', content.imageUrl);
     url.setAttribute('id', "imageUrl-" +content.id);
@@ -66,6 +68,10 @@ function createTable(content) {
 
     due.setAttribute('id', "due-" +content.id);
     due.setAttribute('value', content.due);
+
+    price.setAttribute('id', "price-" + content.id);
+    price.setAttribute('value', content.price);
+    price.setAttribute('hidden', 'true');
 
     tr.setAttribute('id', content.id);
 
@@ -98,6 +104,7 @@ function createTable(content) {
     div.append(url)
     div.append(barcode)
     div.append(due)
+    div.append(price);
     tr.append(product)
     tr.append(brandName)
     tr.append(userName)
@@ -116,12 +123,14 @@ function setGifticonAddModal(element) {
     let productValue = parentNode.querySelector('#productName-' + pk).textContent;
     let barcodeValue = parentNode.querySelector('#barcode-' + pk).getAttribute('value');
     let dueValue = parentNode.querySelector('#due-' + pk).getAttribute('value');
+    let priceValue = parentNode.querySelector('#price-' + pk).getAttribute('value');
 
     let image = document.getElementById("gifticon-modal-img");
     let productName = document.getElementById("product-modal-input");
     let brand = document.getElementById("brand-modal-input");
     let due = document.getElementById("due-modal-input");
     let barcode = document.getElementById("barcode-modal-input");
+    let price = document.getElementById("price-modal-input");
     let addBtn = document.getElementById('gifticon-confirm-modal-btn');
 
     addBtn.setAttribute('onclick', "addProductAndGifticon("+pk+")");
@@ -131,6 +140,8 @@ function setGifticonAddModal(element) {
     brand.setAttribute("value", brandValue);
     due.setAttribute("value", dueValue);
     barcode.setAttribute("value", barcodeValue);
+    productName.setAttribute('value', productValue)
+    price.setAttribute('value', priceValue);
 }
 
 function openModal(element) {

@@ -33,7 +33,7 @@ public class Cart extends BaseTimeEntity {
         return CartDto.builder()
                 .id(this.id)
                 .userDto(this.user.toDto())
-                .gifticonDto(this.gifticon.toDto())
+                .gifticonDto(this.gifticon.toDtoWithProduct())
                 .build();
     }
 

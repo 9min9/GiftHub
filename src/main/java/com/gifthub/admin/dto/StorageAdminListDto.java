@@ -19,11 +19,12 @@ public class StorageAdminListDto {
     private String productName; // 상품명
     private String userName;
     private String imageUrl;
+    private Long price;
     private StorageStatus storageStatus;
     private LocalDate modifiedDate;
 
     @QueryProjection
-    public StorageAdminListDto(Long id, String barcode, LocalDate due, String brandName, String productName, String userName, String imageUrl, StorageStatus storageStatus, LocalDateTime modifiedDate) {
+    public StorageAdminListDto(Long id, String barcode, LocalDate due, String brandName, String productName, String userName, String imageUrl, StorageStatus storageStatus, Long price, LocalDateTime modifiedDate) {
         this.id = id;
         this.barcode = barcode;
         this.due = due;
@@ -32,6 +33,7 @@ public class StorageAdminListDto {
         this.userName = userName;
         this.imageUrl = imageUrl;
         this.storageStatus = storageStatus;
+        this.price = price;
         this.modifiedDate = modifiedDate.toLocalDate();
     }
 }

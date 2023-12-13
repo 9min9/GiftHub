@@ -96,4 +96,10 @@ public class ProductService {
     public Page<ProductDto> getProductByBrandByName(Pageable pageable, String category, String brand, String name) {
         return productRepository.findProductByBrandByName(pageable, category, brand, name);
     }
+
+    public ProductDto getProductByGifticonId(Long gifticonId) {
+        ProductDto productDto = productRepository.findProductByGifticonId(gifticonId);
+        return productDto;
+    }
+
 }

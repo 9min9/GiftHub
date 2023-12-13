@@ -35,6 +35,10 @@ public enum CategoryName {
         this.engName = engName;
     }
 
+    public static CategoryName valueOfKorName(String korName) {
+        return Arrays.stream(values()).filter((categoryName -> categoryName.korName.equals(korName))).findFirst().orElseThrow();
+    }
+
     public static CategoryName ofKor(final String korName) {
         List<CategoryName> collect = Arrays.stream(CategoryName.values()).filter(productName -> {
             return productName.korName.equals(korName);

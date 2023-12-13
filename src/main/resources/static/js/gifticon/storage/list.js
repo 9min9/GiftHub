@@ -17,13 +17,15 @@ function getStorageList() {
         data: {page, size},
 
         success: function(jsonData) {
+            console.log(jsonData)
+
             for (let i = 0; i < jsonData.content.length; i++) {
                 renderGifticon(jsonData.content[i]);
             }
 
         },
         error: function (error) {
-            console.log("error");
+            console.log(error);
         }
     });
 

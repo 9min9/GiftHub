@@ -27,12 +27,12 @@ function openFile(imageFile){
         error : function (error){
             console.log(error);
 
-            // alert("등록에 실패했습니다.")
+            alert("등록에 실패했습니다.")
             alert(error.responseJSON.message);
         },
 
         complete: function () {
-            // window.location.href = "/gifticon/add";
+            window.location.href = "/gifticon/add";
         }
     })
 }

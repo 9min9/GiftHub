@@ -5,6 +5,7 @@ import com.gifthub.event.attendance.exception.DuplicateAttendanceException;
 import com.gifthub.event.attendance.exception.FailedAttendanceException;
 import com.gifthub.event.attendance.service.AttendanceService;
 import com.gifthub.global.exception.ExceptionResponse;
+import com.gifthub.user.dto.UserDto;
 import com.gifthub.user.exception.NotLoginedException;
 import com.gifthub.point.service.PointService;
 import com.gifthub.user.UserJwtTokenProvider;
@@ -13,7 +14,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/attendances")
@@ -44,6 +47,8 @@ public class AttendanceController {
 
     @PostMapping
     public ResponseEntity<Object> attend(@RequestHeader HttpHeaders headers) {
+        Map map = new HashMap<>();
+
         Long attendId = null;
 
         try {
@@ -59,7 +64,10 @@ public class AttendanceController {
 
             attendId = attendanceService.attend(userId);
 
-            pointService.plusPoint(attendancePoint, userId);
+            UserDto userDto = pointService.plusPoint(attendancePoint, userId);
+
+            map.put("point", userDto.getPoint());
+            map.put("message", "출석체크 완료! " + attendancePoint + "포인트를 얻었습니다.");
 
             if (attendId == null || attendId == 0) {
                 throw new FailedAttendanceException();
@@ -68,7 +76,7 @@ public class AttendanceController {
             return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
         }
 
-        return ResponseEntity.ok("출석체크 완료! 100포인트를 얻었습니다.");
+        return ResponseEntity.ok(map);
     }
 
 }

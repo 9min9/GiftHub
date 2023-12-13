@@ -23,6 +23,7 @@ public class GifticonStorageDto {
     private String brandName; // 브랜드명(사용처)
     private String productName; // 상품명
     private UserDto user;
+    private Long price;
     private GifticonImageDto gifticonImage;
     private StorageStatus storage_status;
 

@@ -43,7 +43,7 @@ public class Movement extends BaseTimeEntity {
                 .id(this.id)
                 .fromUser(this.fromUser.toDto())
                 .toUser(this.toUser.toDto())
-                .gifticon(this.gifticon.toDto())
+                .gifticon(this.gifticon.toDtoWithProduct())
                 .movementStatus(this.movementStatus)
                 .build();
     }

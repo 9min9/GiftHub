@@ -3,10 +3,7 @@ package com.gifthub.product.dto;
 import com.gifthub.product.entity.Product;
 import com.gifthub.product.enumeration.CategoryName;
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
@@ -28,6 +25,16 @@ public class ProductDto {
                 .price(this.price)
                 .brandName(this.brandName)
                 .category(CategoryName.valueOf(this.category).getKorName())     //이미 Category가 String으로 많이 사용되어 이렇게 처리함
+                .build();
+    }
+
+    public Product toProductEntityWithKorCategoryName() {
+        return Product.builder()
+                .id(this.id)
+                .name(this.name)
+                .price(this.price)
+                .brandName(this.brandName)
+                .category(CategoryName.valueOfKorName(this.category).getKorName())     //이미 Category가 String으로 많이 사용되어 이렇게 처리함
                 .build();
     }
 

@@ -1,11 +1,9 @@
 package com.gifthub.product.repository;
 
 import com.gifthub.product.dto.ProductDto;
-import com.gifthub.product.entity.Product;
 import com.gifthub.product.enumeration.CategoryName;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Range;
 
 import java.util.List;
 
@@ -28,4 +26,6 @@ public interface ProductRepositorySupport {
     Page<ProductDto> findProductByCategoryByName(Pageable pageable, String category, String name);
 
     Page<ProductDto> findProductByBrandByName(Pageable pageable, String category, String brand, String name);
+
+    ProductDto findProductByGifticonId(Long gifticonId);
 }

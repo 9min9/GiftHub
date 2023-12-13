@@ -1,18 +1,20 @@
 package com.gifthub.product.repository;
 
 
-import static com.gifthub.product.entity.QProduct.product;
-
+import com.gifthub.gifticon.entity.QGifticon;
 import com.gifthub.product.dto.ProductDto;
 import com.gifthub.product.dto.QProductDto;
 import com.gifthub.product.enumeration.CategoryName;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+
+import static com.gifthub.product.entity.QProduct.product;
 
 @RequiredArgsConstructor
 public class ProductRepositoryImpl implements ProductRepositorySupport {
@@ -156,6 +158,14 @@ public class ProductRepositoryImpl implements ProductRepositorySupport {
                 .fetchOne();
 
         return new PageImpl<>(fetch, pageable, count);
+    }
+
+    @Override
+    public ProductDto findProductByGifticonId(Long gifticonId) {
+        return queryFactory.select(new QProductDto(product.id, product.name, product.price, product.brandName, product.category))
+                .from(QGifticon.gifticon)
+                .where(QGifticon.gifticon.id.eq(gifticonId))
+                .fetchOne();
     }
 
 }

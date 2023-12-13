@@ -77,13 +77,20 @@ public class GifticonService {
     }
 
     public GifticonDto findGifticon(Long gifticonId) {
-        return gifticonRepository.findById(gifticonId).orElseThrow().toDto();
+        return gifticonRepository.findById(gifticonId).orElseThrow().toDtoWithProduct();
     }
 
     @Transactional
     public Long saveGifticon(GifticonDto gifticonDto){
         gifticonDto.setGifticonStatus(GifticonStatus.NONE);
         Gifticon gifticon = gifticonRepository.save(gifticonDto.toEntity());
+        return gifticon.getId();
+    }
+
+    @Transactional
+    public Long saveGifticonWithKorCategoryName(GifticonDto gifticonDto){
+        gifticonDto.setGifticonStatus(GifticonStatus.NONE);
+        Gifticon gifticon = gifticonRepository.save(gifticonDto.toEntityWithKorCategoryName());
         return gifticon.getId();
     }
 
@@ -135,7 +142,7 @@ public class GifticonService {
     }
 
     public Page<GifticonDto> getGifticonByUserId(Pageable pageable, Long userId) {
-        return gifticonRepository.findByUserId(pageable, userId).map(Gifticon::toDto);
+        return gifticonRepository.findByUserId(pageable, userId).map(Gifticon::toDtoWithProduct);
     }
 
     public void deleteById(Long gifticonId) {
@@ -156,7 +163,7 @@ public class GifticonService {
     }
 
     public Page<GifticonDto> getGifticonByProudctId(Pageable pageable, Long productId) {
-        return gifticonRepository.findGifticonByProductIdOrderByProductPrice(pageable, productId).map(Gifticon::toDto);
+        return gifticonRepository.findGifticonByProductIdOrderByProductPrice(pageable, productId).map(Gifticon::toDtoWithProduct);
     }
 
 }

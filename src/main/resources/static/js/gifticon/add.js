@@ -30,7 +30,6 @@ function renderGifticon(jsonData) {
     listContainer.appendChild(gifticonRow);
 }
 
-
 function renderImage(jsonData) {
     let div = document.createElement('div');
     let image = document.createElement('img');
@@ -128,7 +127,7 @@ function renderBarcode(jsonData) {
     content.setAttribute('id', 'gifticon-barcode-' + jsonData.gifticonStorageId);
     content.setAttribute('class', 'w-r__category')
 
-    if(jsonData.barcode == null || jsonData.barcode == "") {
+    if (jsonData.barcode == null || jsonData.barcode == "") {
         jsonData.barcode = "바코드 번호가 존재하지 않습니다.";
 
         error.setAttribute('id', 'gifticon-barcode-error-' + jsonData.gifticonStorageId);
@@ -143,7 +142,6 @@ function renderBarcode(jsonData) {
 
     return div;
 }
-
 
 function renderDue(jsonData) {
     let div = document.createElement('div');
@@ -188,12 +186,51 @@ function renderStatus(jsonData) {
     return div
 }
 
-
 function renderGifticonBtn(jsonData) {
     let div = document.createElement('div');
-    let delBtn = document.createElement('a');
-
     div.setAttribute('class', 'w-r-__wrap-2');
+
+    let checkBtn = createCheckBtn();
+    let delBtn = createDelBtn(jsonData);
+    let span = document.createElement('span');
+
+    if (jsonData.status == "ADMIN_APPROVAL") {
+        span.innerText = "등록 신청중 입니다."
+
+        div.appendChild(span);
+        div.appendChild(delBtn);
+    } else if (jsonData.status == "FAIL_REGISTRATION") {
+        span.innerText = "등록 신청이 취소되었습니다."
+        div.appendChild(span);
+        div.appendChild(delBtn);
+        div.appendChild(checkBtn);
+
+    } else {
+        div.appendChild(delBtn);
+        div.appendChild(checkBtn);
+    }
+    return div;
+}
+
+function createCheckBtn() {
+    let checkBtn = document.createElement('a');
+
+    checkBtn.setAttribute('class', 'w-r__link btn--e-brand-b-2');
+    checkBtn.setAttribute('data-modal', 'modal');
+    checkBtn.setAttribute('data-modal-id', '#newsletter-modal');
+
+    checkBtn.addEventListener('click', function () {
+        setGifticonAddModal(this);
+        openModal(this);
+    });
+
+    checkBtn.append("등록 하기");
+
+    return checkBtn;
+}
+
+function createDelBtn(jsonData) {
+    let delBtn = document.createElement('a');
     delBtn.setAttribute('class', 'w-r__link btn--e-transparent-platinum-b-2');
     delBtn.append("삭제");
 
@@ -202,41 +239,20 @@ function renderGifticonBtn(jsonData) {
         window.location.reload();
     });
 
-    if (jsonData.status == "ADMIN_APPROVAL") {
-        let span = document.createElement('span');
-        span.innerText = "등록 신청중 입니다."
-
-        div.appendChild(span);
-        div.appendChild(delBtn);
-    } else {
-        div.appendChild(delBtn);
-
-        let checkBtn = document.createElement('a');
-
-        checkBtn.setAttribute('class', 'w-r__link btn--e-brand-b-2');
-        checkBtn.setAttribute('data-modal', 'modal');
-        checkBtn.setAttribute('data-modal-id', '#newsletter-modal');
-
-        checkBtn.addEventListener('click', function () {
-            setGifticonAddModal(this);
-            openModal(this);
-        });
-        checkBtn.append("등록 하기");
-        div.appendChild(checkBtn);
-    }
-    return div;
+    return delBtn;
 }
 
 function setGifticonAddModal(element) {
     let parentNode = element.parentNode.parentNode;
     let pk = parentNode.id;
 
-    let flagValue = parentNode.querySelector('#gifticon-flag-' + pk).getAttribute('value');
+    let inDbFlag = parentNode.querySelector('#gifticon-flag-' + pk).getAttribute('value');
     let imageUrlValue = parentNode.querySelector('#gifticon-img-' + pk).getAttribute('src');
     let brandValue = parentNode.querySelector('#gifticon-brand-' + pk).textContent;
     let productValue = parentNode.querySelector('#gifticon-product-' + pk).textContent;
     let barcodeValue = parentNode.querySelector('#gifticon-barcode-' + pk).textContent;
     let dueValue = parentNode.querySelector('#gifticon-due-' + pk).textContent;
+    let storageStatus = parentNode.querySelector('#gifticon-status-' + pk).getAttribute('value');
 
     let status = document.getElementById('product-valid');
     let productValidResult = document.getElementById('product-valid-error');
@@ -247,25 +263,31 @@ function setGifticonAddModal(element) {
     let barcode = document.getElementById("barcode-modal-input");
     let addBtn = document.getElementById('gifticon-add-modal-btn');
 
-    status.setAttribute('value', flagValue);
+    status.setAttribute('value', inDbFlag);
     image.setAttribute('src', imageUrlValue);
     productName.setAttribute("value", productValue);
     brand.setAttribute("value", brandValue);
     due.setAttribute("value", dueValue);
     barcode.setAttribute("value", barcodeValue);
 
-    if(flagValue == "true") {
+    if (inDbFlag == "true" && storageStatus == "WAIT_REGISTRATION") {
         productValidResult.innerText = "";
         addBtn.innerText = "등록"
-        addBtn.setAttribute('onclick', "addGifticon("+pk+")");
+        addBtn.setAttribute('onclick', "addGifticon(" + pk + ")");
+
+    // } else if (storageStatus == "WAIT_REGISTRATION") {
+    //     document.createElement('div');
+    //     productValidResult.innerText = "상품 정보가 없어 관리자의 확인이 필요합니다.";
+    //     addBtn.innerText = "등록 요청"
+    //     addBtn.setAttribute('onclick', "sendToAdmin(" + pk + ")");
 
     } else {
         document.createElement('div');
-
         productValidResult.innerText = "상품 정보가 없어 관리자의 확인이 필요합니다.";
         addBtn.innerText = "등록 요청"
-        addBtn.setAttribute('onclick', "sendToAdmin("+pk+")");
+        addBtn.setAttribute('onclick', "sendToAdmin(" + pk + ")");
     }
+
 }
 
 function openModal(element) {
@@ -283,7 +305,7 @@ function addGifticon(pk) {
     let formData = new FormData(form);
     let data = {};
 
-    formData.forEach(function(value, key){
+    formData.forEach(function (value, key) {
         data[key] = value;
     });
 
@@ -303,12 +325,12 @@ function addGifticon(pk) {
             alert("기프티콘 등록이 완료되었습니다");
 
             console.log(jsonData);
-
             document.location.href = "/gifticon/add";
         },
         error: function (error) {
-            console.log(error.responseJSON);
-            checkError(error.responseJSON);
+            console.log(error)
+            // console.log(error.responseJSON);
+            // checkError(error.responseJSON);
         }
     });
 }
@@ -320,7 +342,7 @@ function sendToAdmin(pk) {
     let formData = new FormData(form);
     let data = {};
 
-    formData.forEach(function(value, key){
+    formData.forEach(function (value, key) {
         data[key] = value;
     });
     data['id'] = pk;
@@ -337,6 +359,7 @@ function sendToAdmin(pk) {
 
         success: function (jsonData) {
             alert("등록 요청이 완료되었습니다")
+            window.location.href = "/gifticon/add";
         },
 
         error: function (error) {
@@ -352,7 +375,7 @@ function validateProduct() {
 }
 
 function validateForm(error) {
-    let target = document.getElementById("error-" +error.field+ "-modal-label");
+    let target = document.getElementById("error-" + error.field + "-modal-label");
     target.innerText = error.message;
 }
 
@@ -396,7 +419,7 @@ function checkError(result) {
 function delStorage(storageId) {
     $.ajax({
         type: "post",
-        url: "/api/storage/delete/"+storageId,
+        url: "/api/storage/delete/" + storageId,
         headers: {
             Authorization: localStorage.getItem("token"),
         },
