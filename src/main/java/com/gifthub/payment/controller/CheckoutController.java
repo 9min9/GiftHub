@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -24,11 +26,25 @@ public class CheckoutController {
     public ResponseEntity<Object> checkout(Long[] gifticonIds) {
         List<GifticonDto> gifticons = new ArrayList<>();
 
+        Long originalPrice = 0L;
+        Long price = 0L;
         for (Long gifticonId : gifticonIds) {
-            gifticons.add(gifticonService.findGifticon(gifticonId));
+            GifticonDto gifticon = gifticonService.findGifticon(gifticonId);
+
+            originalPrice += gifticon.getProductDto().getPrice();
+            price += gifticon.getPrice();
+
+            gifticons.add(gifticon);
         }
 
-        return ResponseEntity.ok(gifticons);
+
+
+        Map map = new HashMap();
+        map.put("list", gifticons);
+        map.put("originalPrice", originalPrice);
+        map.put("price", price);
+
+        return ResponseEntity.ok(map);
     }
 
 }
