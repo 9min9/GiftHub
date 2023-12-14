@@ -11,8 +11,8 @@ public enum CategoryName {
 
     ALL("전체", "all"),
     CAFE("카페", "cafe"),
-    BAKERY_DONUT_DDEOK("베이커리/도넛", "bakery-donut"),
-    DEPARTMEN_MARK("백화점/마트", "department-mart"),
+    BAKERY_DONUT("베이커리/도넛", "bakery-donut"),
+    DEPARTMEN_MART("백화점/마트", "department-mart"),
     ICECREAM_ICE("아이스크림", "icecream"),
     CONVENIENT("편의점", "convenient"),
     BURGER_PIZZA("버거/피자", "burger-pizza"),
