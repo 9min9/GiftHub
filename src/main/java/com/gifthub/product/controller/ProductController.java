@@ -1,8 +1,10 @@
 package com.gifthub.product.controller;
 
 import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
+import com.gifthub.global.exception.ExceptionResponse;
 import com.gifthub.product.dto.ProductDto;
 import com.gifthub.product.enumeration.CategoryName;
+import com.gifthub.product.exception.NotFoundCategoryException;
 import com.gifthub.product.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -19,9 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 @RestController
@@ -29,6 +29,7 @@ import java.util.List;
 @RequestMapping("/api/product")
 public class ProductController {
     private final ProductService productService;
+    private final ExceptionResponse exceptionResponse;
 
     private final String path = "C:/OcrPractice/";
 
@@ -103,6 +104,30 @@ public class ProductController {
         return ResponseEntity.ok().body(result);
     }
 
+    @GetMapping("/categories")
+    public ResponseEntity<Object> getCategoryListContainAll(@RequestHeader HttpHeaders headers) {
+        List<String> categoryList = productService.getAllCategory();
+
+        categoryList.add(0, "전체");
+        categoryList.remove("기타");
+        categoryList.add("기타");
+
+        System.out.println(categoryList);
+
+        Map<Object, Object> result = new LinkedHashMap<>();
+
+        for (String kor : categoryList) {
+            CategoryName eng = CategoryName.ofKor(kor);
+            result.put(eng, kor);
+        }
+
+        if (categoryList == null || categoryList.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok().body(result);
+    }
+
     @GetMapping("/test")
     public void testProductDto() {
         List<ProductDto> productDtoList = productService.getAllProduct();
@@ -125,18 +150,29 @@ public class ProductController {
     // TODO : 금액별, 남은 유효기간별(임박순) 정렬하기
     @GetMapping("/{category}/brands")
     public ResponseEntity<Object> getBrand(@PathVariable("category") String category) {
-        boolean isEng = category.matches("[a-zA-Z]*");
+        try {
+            String cat = category.replace("-", "/");
 
-        CategoryName categoryName = null;
-        if (isEng) {
-            categoryName = CategoryName.ofEng(category);
-        } else {
-            categoryName = CategoryName.ofKor(category);
+            boolean isEng = cat.matches("[a-zA-Z\\-]*");
+
+            CategoryName categoryName = null;
+            if (isEng) {
+                categoryName = CategoryName.ofEng(cat);
+            } else {
+                categoryName = CategoryName.ofKor(cat);
+            }
+
+            if (categoryName == null) {
+                throw new NotFoundCategoryException();
+            }
+
+
+            List<String> gifticonBrandName = productService.getBrandName(categoryName);
+
+            return ResponseEntity.ok(gifticonBrandName);
+        } catch (NotFoundCategoryException e) {
+            return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
         }
-
-        List<String> gifticonBrandName = productService.getBrandName(categoryName);
-
-        return ResponseEntity.ok(gifticonBrandName);
     }
 
     @GetMapping("/brands/{brand}")
@@ -155,7 +191,10 @@ public class ProductController {
 
     @GetMapping("/category/{category}")
     public ResponseEntity<Object> getAllProductsByBrands(@PathVariable("category") String category) {
+
+        System.out.println("---------------------" + category);
         String cat = category.replaceAll("-", "/");
+        System.out.println("=====================" + cat);
 
         List<ProductDto> products = productService.getProductByCategory(cat);
 

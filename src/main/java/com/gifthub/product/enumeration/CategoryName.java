@@ -27,8 +27,8 @@ public enum CategoryName {
     HEALTH_LIVING_FOODS("건강/리빙/식품관", "health-living-foods"),
     LIFE_ELECTRONIC_ENTERTAIN("생활/가전/엔터", "life-electronic-entertain");
 
-    private String korName;
-    private String engName;
+    private final String korName;
+    private final String engName;
 
     CategoryName(String korName, String engName) {
         this.korName = korName;
@@ -44,6 +44,10 @@ public enum CategoryName {
             return productName.korName.equals(korName);
         }).collect(Collectors.toList());
 
+        if (collect.size() == 0) {
+            return null;
+        }
+
         return collect.get(0);
     }
 
@@ -51,6 +55,10 @@ public enum CategoryName {
         List<CategoryName> collect = Arrays.stream(CategoryName.values()).filter(productName -> {
             return productName.engName.equals(engName);
         }).collect(Collectors.toList());
+
+        if (collect.size() == 0) {
+            return null;
+        }
 
         return collect.get(0);
     }
