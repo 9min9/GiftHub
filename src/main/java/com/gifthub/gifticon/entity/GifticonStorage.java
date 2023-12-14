@@ -38,7 +38,7 @@ public class GifticonStorage extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "gifticon_image_id")
     private GifticonImage gifticonImage;
 

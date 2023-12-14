@@ -60,8 +60,9 @@ public class ProductService {
         Product product = productRepository.findProductByName(productName).orElse(null);
 
         if (product == null) {
-            throw new NotFoundProductNameException();
+            return null;
         }
+
         return product.toProductDto();
     }
 

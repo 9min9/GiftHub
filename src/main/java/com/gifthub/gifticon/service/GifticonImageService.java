@@ -6,7 +6,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.gifthub.gifticon.dto.GifticonImageDto;
 import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
 import com.gifthub.gifticon.entity.GifticonImage;
-import com.gifthub.gifticon.repository.GifticonImageRepository;
+import com.gifthub.gifticon.repository.image.GifticonImageRepository;
 import com.gifthub.gifticon.repository.storage.GifticonStorageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -94,14 +94,15 @@ public class GifticonImageService {
         return gifticonImageDto;
     }
 
-    // 연쇄 삭제( Storage 삭제 -> Image 서버에서 삭제 -> db Image entity 삭제)
+
+    @Transactional
     public void deleteFileByStorage(GifticonStorageDto storageDto){
-        
-        GifticonImage image = gifticonImageRepository.findGifticonImageByGifticonStorage(storageDto.toStorageEntity()).orElse(null);
+        GifticonImageDto image = gifticonImageRepository.findGifticonImageByGifticonStorageId(storageDto.getId()).orElse(null);
+
         if (image != null) {
-            DeleteObjectRequest request = new DeleteObjectRequest(bucketName, image.getStoreFileName());
-            amazonS3Client.deleteObject(request); // 서버에서 삭제
-            gifticonImageRepository.delete(image); // db에서 Gifticon_image삭제
+//            DeleteObjectRequest request = new DeleteObjectRequest(bucketName, image.getStoreFileName());
+//            amazonS3Client.deleteObject(request); // 서버에서 삭제
+            amazonS3Client.deleteObject(bucketName, image.getStoreFileName());
             storageRepository.delete(storageDto.toStorageEntity());// db에서 GifticonStorage 삭제
         }
     }

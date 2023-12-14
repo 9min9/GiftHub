@@ -274,13 +274,6 @@ function setGifticonAddModal(element) {
         productValidResult.innerText = "";
         addBtn.innerText = "등록"
         addBtn.setAttribute('onclick', "addGifticon(" + pk + ")");
-
-    // } else if (storageStatus == "WAIT_REGISTRATION") {
-    //     document.createElement('div');
-    //     productValidResult.innerText = "상품 정보가 없어 관리자의 확인이 필요합니다.";
-    //     addBtn.innerText = "등록 요청"
-    //     addBtn.setAttribute('onclick', "sendToAdmin(" + pk + ")");
-
     } else {
         document.createElement('div');
         productValidResult.innerText = "상품 정보가 없어 관리자의 확인이 필요합니다.";

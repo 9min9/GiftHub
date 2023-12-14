@@ -5,18 +5,17 @@ import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 @Builder
-public class ProductAddRequest {
+public class GifticonAppovalRequest {
     private String productName;
     private String brandName;
     private String due;
     private String barcode;
     private String storageId;
     private Long price;
-    private String category;
     private Boolean isConfirm;
+    private String category;
     private String cancelReason;
 
     public ProductDto toProductDto() {

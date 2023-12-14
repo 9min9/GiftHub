@@ -4,11 +4,16 @@ window.onload = function () {
     $("input[name='isConfirm']").change(function () {
         let isConfirm = $("input:radio[name='isConfirm']:checked").val();
 
-        if(isConfirm) {
+        if(isConfirm === 'true') {
+            $('#cancel-reason-div').hide();
+            $('#category-div').show();
+
             setCategory();
+        } else {
+            $('#category-div').hide();
+            $('#cancel-reason-div').show();
         }
     });
-
 }
 
 function getConfirmStorageList() {
@@ -23,10 +28,7 @@ function getConfirmStorageList() {
         // contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (jsonData) {
-            console.log("!!!")
             console.log(jsonData)
-            console.log(jsonData.content)
-            console.log(jsonData.totalElements)
             createTableBody(jsonData);
         },
         error: function (error) {
@@ -46,7 +48,6 @@ function createTableBody(jsonData) {
 }
 
 function createTable(content) {
-    console.log(content);
     let tr = document.createElement('tr');
     let product = document.createElement('td');
     let brandName = document.createElement('td');
@@ -92,7 +93,6 @@ function createTable(content) {
     btn.append("확인")
 
     btn.addEventListener('click', function () {
-        console.log(this)
         setGifticonAddModal(this);
         openModal(this);
     });
@@ -208,8 +208,9 @@ function addProductAndGifticon(pk) {
             alert("기프티콘 검수가 완료되었습니다");
             window.location.href = "/admin/index";
         },
-        error: function (xhr, status, error) {
+        error: function (error) {
             alert("기프티콘 검수에 실패했습니다");
+            console.log(error);
         }
     });
 }
