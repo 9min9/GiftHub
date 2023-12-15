@@ -150,9 +150,9 @@ public class ProductController {
 
         try {
             String cat = category.replace("-", "/").toLowerCase();
-            boolean isEng = cat.matches("[a-zA-Z\\-]*");
+            cat = cat.replaceAll("_", "-");
 
-            //todo categoryName Enum이 이상함 수정하면 에러 없을듯
+            boolean isEng = cat.matches("[a-zA-Z\\-_]*");
 
             CategoryName categoryName = null;
             if (isEng) {
