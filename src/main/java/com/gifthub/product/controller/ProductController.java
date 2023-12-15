@@ -106,19 +106,20 @@ public class ProductController {
 
     @GetMapping("/categories")
     public ResponseEntity<Object> getCategoryListContainAll(@RequestHeader HttpHeaders headers) {
+        List<Map<Object, Object>> result = new ArrayList<>();
         List<String> categoryList = productService.getAllCategory();
 
         categoryList.add(0, "전체");
         categoryList.remove("기타");
         categoryList.add("기타");
 
-        System.out.println(categoryList);
-
-        Map<Object, Object> result = new LinkedHashMap<>();
-
         for (String kor : categoryList) {
+            Map<Object, Object> category = new HashMap<>();
+
             CategoryName eng = CategoryName.ofKor(kor);
-            result.put(eng, kor);
+            category.put("engName", eng);
+            category.put("korName", kor);
+            result.add(category);
         }
 
         if (categoryList == null || categoryList.isEmpty()) {
@@ -128,36 +129,33 @@ public class ProductController {
         return ResponseEntity.ok().body(result);
     }
 
-    @GetMapping("/test")
-    public void testProductDto() {
-        List<ProductDto> productDtoList = productService.getAllProduct();
-        for (ProductDto productDto : productDtoList) {
-            System.out.println(productDto.getName());
-            System.out.println(productDto.getBrandName());
-            System.out.println(productDto.getPrice());
-            System.out.println(productDto.getId());
-            System.out.println(productDto.getCategory());
-        }
-    }
 
-    // TODO : 구매페이지의 해당 product 클릭시 해당 product_id를 갖는 GifticonList를 가져오기
-//    @GetMapping("/get/gifticon")
-//    public void getGifticonByProduct(@Param("productId") Long productId) {
-//        List<GifticonDto> gifticonDtoList = gifticonService.getGifticonByProduct(productId);
-//        //
+//    @GetMapping("/test")
+//    public void testProductDto() {
+//        List<ProductDto> productDtoList = productService.getAllProduct();
+//        for (ProductDto productDto : productDtoList) {
+//            System.out.println(productDto.getName());
+//            System.out.println(productDto.getBrandName());
+//            System.out.println(productDto.getPrice());
+//            System.out.println(productDto.getId());
+//            System.out.println(productDto.getCategory());
+//        }
 //    }
 
     // TODO : 금액별, 남은 유효기간별(임박순) 정렬하기
     @GetMapping("/{category}/brands")
     public ResponseEntity<Object> getBrand(@PathVariable("category") String category) {
-        try {
-            String cat = category.replace("-", "/");
 
+        try {
+            String cat = category.replace("-", "/").toLowerCase();
             boolean isEng = cat.matches("[a-zA-Z\\-]*");
+
+            //todo categoryName Enum이 이상함 수정하면 에러 없을듯
 
             CategoryName categoryName = null;
             if (isEng) {
                 categoryName = CategoryName.ofEng(cat);
+
             } else {
                 categoryName = CategoryName.ofKor(cat);
             }
@@ -166,12 +164,16 @@ public class ProductController {
                 throw new NotFoundCategoryException();
             }
 
-
             List<String> gifticonBrandName = productService.getBrandName(categoryName);
 
             return ResponseEntity.ok(gifticonBrandName);
+
         } catch (NotFoundCategoryException e) {
+            log.error("ProductController | getBrand | " + e);
             return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
+        } catch (Exception e) {
+            log.error("ProductController | getBrand | " + e);
+            return ResponseEntity.badRequest().body(exceptionResponse.getException(null, "Exception", e.getMessage()));
         }
     }
 
@@ -191,10 +193,7 @@ public class ProductController {
 
     @GetMapping("/category/{category}")
     public ResponseEntity<Object> getAllProductsByBrands(@PathVariable("category") String category) {
-
-        System.out.println("---------------------" + category);
         String cat = category.replaceAll("-", "/");
-        System.out.println("=====================" + cat);
 
         List<ProductDto> products = productService.getProductByCategory(cat);
 
@@ -216,7 +215,6 @@ public class ProductController {
             products = productService.getProductByBrand(pageable, brand);
         }
 
-
         return ResponseEntity.ok(products);
     }
 
@@ -235,7 +233,6 @@ public class ProductController {
         } else {
             products = productService.getProductByBrandByName(pageable, cat, brand, name);
         }
-
 
         return ResponseEntity.ok(products);
     }
