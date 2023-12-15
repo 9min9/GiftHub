@@ -7,6 +7,7 @@ import com.gifthub.product.enumeration.CategoryName;
 import com.gifthub.product.exception.NotFoundCategoryException;
 import com.gifthub.product.service.ProductService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -27,6 +28,7 @@ import java.util.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/product")
+@Slf4j
 public class ProductController {
     private final ProductService productService;
     private final ExceptionResponse exceptionResponse;
