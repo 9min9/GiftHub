@@ -195,10 +195,9 @@ public class ProductController {
 
     @GetMapping("/category/{category}")
     public ResponseEntity<Object> getAllProductsByBrands(@PathVariable("category") String category) {
-        String cat = category.replaceAll("-", "/");
+        String cat = category.replaceAll("_", "-");
 
-        List<ProductDto> products = productService.getProductByCategory(cat);
-
+        List<ProductDto> products = productService.getProductByCategory(CategoryName.getKorNameFromEng(cat));
         return ResponseEntity.ok(products);
     }
 
