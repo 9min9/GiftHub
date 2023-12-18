@@ -33,8 +33,11 @@ public class CartController {
     @GetMapping
     public ResponseEntity<Object> list(@RequestHeader HttpHeaders headers) {
         Long userId = null;
+
         try {
-            userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
+            if (!isNull(headers.get("Authorization"))) {
+                userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
+            }
 
             if (isNull(userId)) {
                 throw new NotLoginedException();
