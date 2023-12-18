@@ -63,4 +63,20 @@ public enum CategoryName {
         return collect.get(0);
     }
 
+    public static String getEngNameFromKor(String korName) {
+        return Arrays.stream(values())
+                .filter(categoryName -> categoryName.korName.equals(korName))
+                .findFirst()
+                .map(CategoryName::getEngName)
+                .orElse(null);
+    }
+
+    public static String getKorNameFromEng(String engName) {
+        return Arrays.stream(values())
+                .filter(categoryName -> categoryName.engName.equals(engName))
+                .findFirst()
+                .map(CategoryName::getKorName)
+                .orElse(null);
+    }
+
 }
