@@ -96,7 +96,7 @@ public class CartController {
 
             Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
 
-            if (!searched.getGifticonDto().getUser().getId().equals(userId)) {
+            if (!searched.getUserDto().getId().equals(userId)) {
                 throw new IdMismatchException();
             }
 
