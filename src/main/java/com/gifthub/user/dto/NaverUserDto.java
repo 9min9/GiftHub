@@ -1,7 +1,7 @@
 package com.gifthub.user.dto;
 
-
 import com.gifthub.user.entity.NaverUser;
+import com.gifthub.user.entity.enumeration.LoginType;
 import com.gifthub.user.entity.enumeration.UserType;
 import com.gifthub.user.service.UserAccountService;
 import lombok.AllArgsConstructor;
@@ -38,5 +38,14 @@ public class NaverUserDto {
                 .userType(UserType.USER)
                 .point(point)
                 .build();
+    }
+
+    public UserDto toUserDto() {
+        return UserDto.builder()
+                .id(id)
+                .email(email)
+                .naverId(NaverId)
+                .loginType(LoginType.NAVER.name())
+                .userType(UserType.USER.getRole()).build();
     }
 }
