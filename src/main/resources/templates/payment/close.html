@@ -7,7 +7,7 @@
 <body>
   <script th:inline="javascript">
       if ([[${param.redirect}]]) {
-          opener.location.href = "/";
+          opener.location.href = "http://localhost:3000";
       }
       window.close();
   </script>
