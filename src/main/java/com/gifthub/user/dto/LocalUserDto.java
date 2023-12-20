@@ -1,6 +1,7 @@
 package com.gifthub.user.dto;
 
 import com.gifthub.user.entity.LocalUser;
+import com.gifthub.user.entity.enumeration.LoginType;
 import com.gifthub.user.entity.enumeration.UserType;
 import com.gifthub.user.service.UserAccountService;
 import lombok.*;
@@ -41,6 +42,14 @@ public class LocalUserDto {
                 .userType(userType)
                 .point(point)
                 .build();
+    }
+
+    public UserDto toUserDto() {
+        return UserDto.builder()
+                .id(id)
+                .email(email)
+                .loginType(LoginType.KAKAO.name())
+                .userType(UserType.USER.getRole()).build();
     }
 
 }
