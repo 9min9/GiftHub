@@ -26,7 +26,8 @@ public class LocalUserDto {
     private String year;
     private String birthdate;
     private Long point;
-    private UserType userType = USER;       //todo : USER로 설정하는 부분을 변경해야 할듯
+    private LoginType loginType;
+    private UserType userType;       //todo : USER로 설정하는 부분을 변경해야 할듯
 
     public LocalUser toLocalUserEntity() {
         return LocalUser.builder()
@@ -49,7 +50,7 @@ public class LocalUserDto {
                 .id(id)
                 .email(email)
                 .loginType(LoginType.KAKAO.name())
-                .userType(UserType.USER.getRole()).build();
+                .userType(userType.getRole()).build();
     }
 
 }

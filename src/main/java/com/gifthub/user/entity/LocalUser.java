@@ -29,6 +29,7 @@ public class LocalUser extends User {
                 .year(super.getYear())
                 .birthdate(super.getBirthDate())
                 .point(super.getPoint())
+                .userType(super.getUserType())
                 .build();
     }
 
