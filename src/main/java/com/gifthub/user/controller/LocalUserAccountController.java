@@ -9,8 +9,7 @@ import com.gifthub.global.success.SuccessResponse;
 import com.gifthub.user.UserJwtTokenProvider;
 import com.gifthub.user.dto.LocalUserDto;
 import com.gifthub.user.dto.SignupRequest;
-import com.gifthub.user.dto.UserDto;
-import com.gifthub.user.entity.enumeration.LoginType;
+import com.gifthub.user.dto.TokenInfo;
 import com.gifthub.user.exception.*;
 import com.gifthub.user.service.LocalUserService;
 import com.gifthub.user.service.UserAccountService;
@@ -48,8 +47,6 @@ public class LocalUserAccountController {
 
     @PostMapping("/signup/submit")
     public ResponseEntity<Object> signup(@Valid @RequestBody SignupRequest signupRequest, BindingResult bindingResult) {
-        System.out.println("Submit Controller");
-
         try {
             userAccountService.validateDuplicateEmail(signupRequest.getEmail());
 
@@ -68,7 +65,7 @@ public class LocalUserAccountController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody Map<String, String> request, Errors errors) {
-        String token = "";
+        TokenInfo tokenInfo = null;
 
         try {
             String email = request.get("email");
@@ -88,13 +85,7 @@ public class LocalUserAccountController {
 
                 if (authentication.isAuthenticated()) {
                     LocalUserDto findLocalUserDto = localUserService.getLocalUserByEmail(email);
-
-                    token = jwtTokenProvider.generateJwtToken(
-                            UserDto.builder()
-                                    .id(findLocalUserDto.getId())
-                                    .email(findLocalUserDto.getEmail())
-                                    .id(findLocalUserDto.getId())
-                                    .loginType(LoginType.GIFT_HUB.name()).build());
+                    tokenInfo = jwtTokenProvider.generateTokenInfo(findLocalUserDto.toUserDto());
                 }
             }
 
@@ -119,8 +110,8 @@ public class LocalUserAccountController {
         }
 
         return ResponseEntity.ok()
-                .header("Authorization", "Bearer " + token)
-                .body(Collections.singletonMap("status", "200"));
+                .header("Authorization", "Bearer " + tokenInfo.getAccessToken())
+                .body(tokenInfo);
     }
 
     @PostMapping(value = "/signup/validate/email")
@@ -157,7 +148,6 @@ public class LocalUserAccountController {
             String confirmPassword = request.get("confirmPassword");
 
             if (passwrod.isEmpty() || passwrod == null) {
-                //todo : 필수 에러 던지고 catch 하기
                 throw new RequiredFieldException("password", "비밀번호를 입력해주세요");
             }
 
