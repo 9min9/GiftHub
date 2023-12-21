@@ -4,6 +4,7 @@ import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.service.GifticonService;
 import com.gifthub.global.exception.ExceptionResponse;
 import com.gifthub.movement.service.MovementService;
+import com.gifthub.point.PointBuyRequestDto;
 import com.gifthub.point.exception.NotEnoughPointException;
 import com.gifthub.point.exception.NotFoundGifticonException;
 import com.gifthub.point.service.PointService;
@@ -52,8 +53,7 @@ public class PointController {
 
     @PostMapping("/buy")
     @Transactional
-    public ResponseEntity<Object> usePoint(@RequestParam("point") Long point,
-                                           @RequestParam("gifticonIds") Long[] gifticonIds,
+    public ResponseEntity<Object> usePoint(@RequestBody PointBuyRequestDto dto,
                                            @RequestHeader HttpHeaders headers) {
         try {
             Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
@@ -61,13 +61,14 @@ public class PointController {
                 throw new NotLoginedException();
             }
 
-            UserDto toUser = pointService.usePoint(point, userId);
+            UserDto toUser = null;
+            for (Long gifticonId : dto.getGifticonIds()) {
+                toUser = pointService.usePoint(dto.getPoint(), userId);
 
-            if (isNull(toUser)) {
-                throw new NotEnoughPointException();
-            }
+                if (isNull(toUser)) {
+                    throw new NotEnoughPointException();
+                }
 
-            for (Long gifticonId : gifticonIds) {
                 GifticonDto gifticonDto = gifticonService.findGifticon(gifticonId);
 
                 if (isNull(gifticonDto)) {
@@ -75,7 +76,7 @@ public class PointController {
                 }
 
                 UserDto fromUser = gifticonDto.getUser();
-                pointService.plusPoint(point, fromUser.getId());
+                pointService.plusPoint(dto.getPoint(), fromUser.getId());
 
                 ProductDto productByGifticonId = productService.getProductByGifticonId(gifticonId);
                 gifticonDto.setProductDto(productByGifticonId);
