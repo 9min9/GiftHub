@@ -3,6 +3,7 @@ package com.gifthub.gifticon.dto.storage;
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.GifticonImageDto;
 import com.gifthub.gifticon.entity.GifticonStorage;
+import com.gifthub.gifticon.enumeration.RegistrationFailureReason;
 import com.gifthub.gifticon.enumeration.StorageStatus;
 import com.gifthub.product.dto.ProductDto;
 import com.gifthub.user.dto.UserDto;
@@ -26,6 +27,7 @@ public class GifticonStorageDto {
     private Long price;
     private GifticonImageDto gifticonImage;
     private StorageStatus storage_status;
+    private RegistrationFailureReason approvalFailReason;
 
     public GifticonStorage toStorageEntity() {
         return GifticonStorage.builder()
@@ -35,7 +37,8 @@ public class GifticonStorageDto {
                 .productName(productName)
                 .user(user.toEntity())
                 .gifticonImage(gifticonImage.toEntity())
-                .storage_status(storage_status).build();
+                .storage_status(storage_status)
+                .approvalFailReason(approvalFailReason).build();
     }
 
     public GifticonDto toGifticonDto(ProductDto productDto){

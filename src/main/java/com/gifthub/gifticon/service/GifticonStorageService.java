@@ -64,6 +64,7 @@ public class GifticonStorageService {
 
         if (findStorage != null) {
             findStorage.changeStatus(FAIL_REGISTRATION);
+            findStorage.changeApprovalFailReason(storageDto.getApprovalFailReason());
             gifticonStorageRepository.save(findStorage);
         }
     }
