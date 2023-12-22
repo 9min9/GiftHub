@@ -2,6 +2,7 @@ package com.gifthub.gifticon.entity;
 
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
+import com.gifthub.gifticon.enumeration.RegistrationFailureReason;
 import com.gifthub.gifticon.enumeration.StorageStatus;
 import com.gifthub.global.BaseTimeEntity;
 import com.gifthub.product.dto.ProductDto;
@@ -12,7 +13,9 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 
+import static com.gifthub.gifticon.enumeration.RegistrationFailureReason.*;
 import static com.gifthub.gifticon.enumeration.StorageStatus.WAIT_REGISTRATION;
+import static jakarta.persistence.EnumType.*;
 
 @Entity
 @Getter
@@ -43,8 +46,11 @@ public class GifticonStorage extends BaseTimeEntity {
     private GifticonImage gifticonImage;
 
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(STRING)
     private StorageStatus storage_status = WAIT_REGISTRATION;
+
+    @Enumerated(STRING)
+    private RegistrationFailureReason ApprovalFailReason = NOT_CANCELLED;
 
     public void changeBrandName(String brandName) {
         this.brandName = brandName;
