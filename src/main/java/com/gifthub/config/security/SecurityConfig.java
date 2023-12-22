@@ -52,7 +52,7 @@ public class SecurityConfig {
                         ).permitAll()
 
                         .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                        .requestMatchers("/", "/signup/**", "/error/**", "/login/**", "/api/local/login**", "api/local/signup/**", "/api/kakao/**", "/api/naver/**", "/logout", "/api/product/**", "/gifticons").permitAll()
+                        .requestMatchers("/", "/signup/**", "/error/**", "/login/**", "/api/local/login**", "api/local/signup/**", "/api/kakao/**", "/api/naver/**", "/logout", "/api/product/**", "/gifticons", "/message/check/sendSMS").permitAll()
                         .requestMatchers("/admin/**").hasRole(UserType.ADMIN.getRole())
                         .anyRequest().authenticated()
                 )
