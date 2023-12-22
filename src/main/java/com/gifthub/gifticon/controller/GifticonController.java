@@ -40,6 +40,7 @@ import static java.util.Objects.isNull;
 @RequestMapping("/api")
 public class GifticonController {
     private final GifticonService gifticonService;
+    private final GifticonStorageService gifticonStorageService;
     private final GifticonStorageService storageService;
     private final UserJwtTokenProvider userJwtTokenProvider;
     private final UserService userService;
@@ -74,8 +75,8 @@ public class GifticonController {
 
         Long storageId = request.getStorageId();
         String brandName = request.getBrandName();
-        String price = request.getPrice();
-        String due = request.getDue();
+        Long price = request.getPrice();
+        LocalDate due = request.getDue();
 
         log.error("request: "+ request);
 
@@ -88,8 +89,10 @@ public class GifticonController {
 
             UserDto findUser = userService.getUserById(userId);
             storageDto = storageService.getStorageById(storageId);
+            storageDto.setBrandName(brandName);
             storageDto.setUser(findUser);
-            storageDto.setDue(LocalDate.parse(due));
+            storageDto.setDue(due);
+            storageDto.setPrice(price);
 
             productDto = productService.getByProductName(storageDto.getProductName());
             CategoryName engCategory = CategoryName.ofKor(productDto.getCategory());
@@ -114,6 +117,23 @@ public class GifticonController {
             storageService.deleteStorage(storageDto.getId());
             return ResponseEntity.ok().body(Collections.singletonMap("status", "200"));
         }
+    }
+
+    @PostMapping("/gifticon/register/check")
+    public ResponseEntity<Object> confirmRegister(@Valid @RequestBody GifticonRegisterRequest request, BindingResult bindingResult, @RequestHeader HttpHeaders headers) {
+        try {
+            GifticonStorageDto gifticonStorageDto = request.storageDto();
+            gifticonStorageService.storageToAdmin(gifticonStorageDto);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if(bindingResult.hasErrors()) {
+            ResponseEntity.badRequest().body(errorResponse.getErrors(bindingResult));
+        }
+
+        return ResponseEntity.ok().body(Collections.singletonMap("status", "ok"));
     }
 
     @GetMapping("/gifticons")

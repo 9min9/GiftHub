@@ -18,6 +18,7 @@ import com.gifthub.product.dto.ProductDto;
 import com.gifthub.product.service.ProductService;
 import com.gifthub.user.UserJwtTokenProvider;
 import com.gifthub.user.exception.NotLoginedException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -49,8 +50,7 @@ public class AdminController {
     private final GifticonAppovalValidator gifticonConfirmRegister;
 
     @PostMapping("/gifticon/confirm/register")
-    public ResponseEntity<Object> registerGifticon(@RequestBody GifticonAppovalRequest request, BindingResult bindingResult,
-                                                   @RequestHeader HttpHeaders headers) {
+    public ResponseEntity<Object> registerGifticon(@Valid @RequestBody GifticonAppovalRequest request, BindingResult bindingResult, @RequestHeader HttpHeaders headers) {
         String productName = request.getProductName();
         String brandName = request.getBrandName();
         String due = request.getDue();
@@ -100,7 +100,9 @@ public class AdminController {
             }
 
             if (!isConfirm) {
-                gifticonStorageService.adminToStorage(storage);
+                //TODO : Reg fail Reason 전송하기
+
+                gifticonStorageService.adminToStorage(storageDto);
             }
 
         } catch (NotSelectConfirmFlagException e) {
@@ -127,26 +129,22 @@ public class AdminController {
         return null;
     }
 
-    @PostMapping("/gifticon/register")
-    public ResponseEntity<Object> confirmRegister(@RequestBody GifticonStorageDto gifticonStorageDto, @RequestHeader HttpHeaders headers) {
-        try {
-            Long storageId = gifticonStorageDto.getId();
-            String productName = gifticonStorageDto.getProductName();
-            String brandName = gifticonStorageDto.getBrandName();
-            String barcode = gifticonStorageDto.getBarcode();
-            LocalDate due = gifticonStorageDto.getDue();
-            Long price = gifticonStorageDto.getPrice();
-
-            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
-            gifticonStorageService.storageToAdmin(gifticonStorageDto);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
-        }
-
-        return ResponseEntity.ok().body(Collections.singletonMap("status", "ok"));
-    }
+//    @PostMapping("/gifticon/register")
+//    public ResponseEntity<Object> confirmRegister(@Valid @RequestBody GifticonRegisterRequest request, BindingResult bindingResult, @RequestHeader HttpHeaders headers) {
+//        try {
+//            GifticonStorageDto gifticonStorageDto = request.storageDto();
+//            gifticonStorageService.storageToAdmin(gifticonStorageDto);
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().build();
+//        }
+//
+//        if(bindingResult.hasErrors()) {
+//            ResponseEntity.badRequest().body(errorResponse.getErrors(bindingResult));
+//        }
+//
+//        return ResponseEntity.ok().body(Collections.singletonMap("status", "ok"));
+//    }
 
     @PostMapping("/gifticon/confirm/count")
     public ResponseEntity<Object> confirmRegisterCount(@RequestHeader HttpHeaders headers) {
