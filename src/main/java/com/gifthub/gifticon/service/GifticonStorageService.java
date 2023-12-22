@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import static com.gifthub.gifticon.enumeration.RegistrationFailureReason.NOT_CANCELLED;
 import static com.gifthub.gifticon.enumeration.StorageStatus.*;
 
 @Service
@@ -33,6 +34,7 @@ public class GifticonStorageService {
 
         if (storage != null) {
             storage.changeStatus(WAIT_REGISTRATION);
+            storage.changeApprovalFailReason(NOT_CANCELLED);
         }
 
         if (gifticonDto.getProductName() == null || gifticonDto.getBrandName() == null || gifticonDto.getBarcode() == null || gifticonDto.getDue() == null) {

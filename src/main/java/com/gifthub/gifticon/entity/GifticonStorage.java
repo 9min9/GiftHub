@@ -50,7 +50,7 @@ public class GifticonStorage extends BaseTimeEntity {
     private StorageStatus storage_status = WAIT_REGISTRATION;
 
     @Enumerated(STRING)
-    private RegistrationFailureReason ApprovalFailReason = NOT_CANCELLED;
+    private RegistrationFailureReason approvalFailReason = NOT_CANCELLED;
 
     public void changeBrandName(String brandName) {
         this.brandName = brandName;
@@ -74,6 +74,10 @@ public class GifticonStorage extends BaseTimeEntity {
 
     public void changePrice(Long price) {
         this.price = price;
+    }
+
+    public void changeApprovalFailReason(RegistrationFailureReason reason) {
+        this.approvalFailReason = reason;
     }
 
 
