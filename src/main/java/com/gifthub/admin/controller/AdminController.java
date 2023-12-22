@@ -63,7 +63,7 @@ public class AdminController {
                 throw new NotSelectConfirmFlagException();
             }
 
-            GifticonStorageDto storage = gifticonStorageService.getStorageById(storageId);
+            GifticonStorageDto storageDto = gifticonStorageService.getStorageById(storageId);
 
             if (isConfirm) {
                 gifticonConfirmRegister.validate(request, bindingResult);
@@ -76,11 +76,15 @@ public class AdminController {
                         productDto.setId(findProduct.getId());
                     }
 
-                    Long productId = productService.saveProduct(productDto);
-                    productDto.setId(productId);
+                    if (findProduct == null) {
+                        Long productId = productService.saveProduct(productDto);
+                        productDto.setId(productId);
+                    } else {
+                        productDto.setId(findProduct.getId());
+                    }
 
                     GifticonDto gifticonDto = GifticonDto.builder()
-                            .user(storage.getUser())
+                            .user(storageDto.getUser())
                             .barcode(barcode)
                             .due(LocalDate.parse(due))
                             .brandName(brandName)
@@ -188,13 +192,7 @@ public class AdminController {
             return ResponseEntity.ok().body(result);
 
         } catch (NotFoundProductNameException e) {
-            result.put("status", "error");
-            result.put("code", e.getCode());
-            result.put("message", e.getMessage());
-
-            return ResponseEntity.badRequest().body(result);
+            return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
         }
     }
-
-
 }
