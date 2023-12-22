@@ -4,6 +4,7 @@ import com.gifthub.payment.entity.Payment;
 import com.gifthub.payment.enumeration.PayMethod;
 import com.gifthub.payment.enumeration.PayStatus;
 import com.gifthub.payment.enumeration.Site;
+import com.gifthub.user.dto.UserDto;
 import lombok.*;
 
 @Getter
@@ -19,6 +20,7 @@ public class PaymentDto {
     private Site paymentSite;
     private String payCode;
     private PayStatus payStatus;
+    private UserDto userDto;
 
     public Payment toEntity() {
         return Payment.builder()
@@ -28,6 +30,7 @@ public class PaymentDto {
                 .paymentSite(paymentSite)
                 .payCode(payCode)
                 .payStatus(payStatus)
+                .user(userDto.toEntity())
                 .build();
     }
 

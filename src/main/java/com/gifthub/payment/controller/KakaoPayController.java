@@ -14,6 +14,8 @@ import com.gifthub.payment.exception.PaidIdMismatchException;
 import com.gifthub.payment.service.KakaoPayService;
 import com.gifthub.payment.service.PaymentService;
 import com.gifthub.user.UserJwtTokenProvider;
+import com.gifthub.user.dto.UserDto;
+import com.gifthub.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -38,6 +40,7 @@ public class KakaoPayController {
     private final PaymentService paymentService;
     private final UserJwtTokenProvider userJwtTokenProvider;
     private final ErrorResponse errorResponse;
+    private final UserService userService;
 
     private final String PARTNER_USER_ID = "Gifthub";
 
@@ -71,11 +74,14 @@ public class KakaoPayController {
 
             Integer taxFreeAmount = 0;
 
+            UserDto user = userService.getUserById(userId);
+
             PaymentDto paymentDto = PaymentDto.builder()
                     .price(totalAmount.longValue())
                     .payMethod(PayMethod.MONEY)
                     .paymentSite(Site.KAKAO)
                     .payStatus(PayStatus.PAYING)
+                    .userDto(user)
                     .build();
 
             // 결제 정보 저장

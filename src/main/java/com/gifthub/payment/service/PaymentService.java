@@ -33,8 +33,8 @@ public class PaymentService {
         paymentRepository.save(payment);
     }
 
-    public Page<PaymentDto> getAll(Pageable pageable) {
-        return paymentRepository.findAllByOrderByIdDesc(pageable)
+    public Page<PaymentDto> getAll(Long userId, Pageable pageable) {
+        return paymentRepository.findByUserIdOrderByIdDesc(userId, pageable)
                 .map(Payment::toDto);
     }
 
