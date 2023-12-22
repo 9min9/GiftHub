@@ -22,6 +22,7 @@ public class StorageAdminListDto {
     private Long price;
     private StorageStatus storageStatus;
     private LocalDate modifiedDate;
+    private Boolean isAdmin = true;
 
     @QueryProjection
     public StorageAdminListDto(Long id, String barcode, LocalDate due, String brandName, String productName, String userName, String imageUrl, StorageStatus storageStatus, Long price, LocalDateTime modifiedDate) {
