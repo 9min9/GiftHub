@@ -77,6 +77,8 @@ public class GifticonController {
         String price = request.getPrice();
         String due = request.getDue();
 
+        log.error("request: "+ request);
+
         try {
             Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
 

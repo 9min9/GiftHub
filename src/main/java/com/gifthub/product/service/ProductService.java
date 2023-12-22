@@ -57,13 +57,13 @@ public class ProductService {
     }
 
     public ProductDto getByProductName(String productName) throws NotFoundProductNameException{
-        Product product = productRepository.findProductByName(productName).orElse(null);
+        List<Product> productList = productRepository.findDistinctByName(productName);
 
-        if (product == null) {
+        if (productList.isEmpty()) {
             return null;
         }
 
-        return product.toProductDto();
+        return productList.get(0).toProductDto();
     }
 
     public List<String> getBrandName(CategoryName categoryName) {
