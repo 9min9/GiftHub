@@ -169,7 +169,7 @@ public class KakaoPayController {
             bindingResult.rejectValue(e.getField(), e.getCode(), e.getMessage());
         } finally {
             if (!bindingResult.hasErrors()) {
-                return new ResponseEntity<String>("<html><body><script>window.close();</script></body></html>", headers, HttpStatus.TEMPORARY_REDIRECT);
+                return new ResponseEntity<String>("<html><body><script>opener.location.href='/'; window.close();</script></body></html>", headers, HttpStatus.OK);
             } else {
                 System.out.println("KakaoPayController.approve");
                 for (ObjectError allError : bindingResult.getAllErrors()) {
