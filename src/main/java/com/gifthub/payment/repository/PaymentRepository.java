@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment, Long>, PaymentRepositorySupport {
 
-    Page<Payment> findAllByOrderByIdDesc(Pageable pageable);
+    Page<Payment> findByUserIdOrderByIdDesc(Long userId, Pageable pageable);
 
 }
