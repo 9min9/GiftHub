@@ -3,6 +3,7 @@ package com.gifthub.product.controller;
 import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
 import com.gifthub.global.exception.ExceptionResponse;
 import com.gifthub.product.dto.ProductDto;
+import com.gifthub.product.dto.ProductEngCategoryDto;
 import com.gifthub.product.enumeration.CategoryName;
 import com.gifthub.product.exception.NotFoundCategoryException;
 import com.gifthub.product.service.ProductService;
@@ -207,7 +208,7 @@ public class ProductController {
                                                                @PathVariable("brand") String brand) {
         String cat = category.replaceAll("-", "/");
 
-        Page<ProductDto> products = null;
+        Page<ProductEngCategoryDto> products = null;
         if (category.equals("전체")) {
             products = productService.getAllProduct(pageable);
         } else if (brand.equals("전체")) {
@@ -226,7 +227,7 @@ public class ProductController {
                                                                @PathVariable("name") String name) {
         String cat = category.replaceAll("-", "/");
 
-        Page<ProductDto> products = null;
+        Page<ProductEngCategoryDto> products = null;
         if (category.equals("전체")) {
             products = productService.getAllProductByName(pageable, name);
         } else if (brand.equals("전체")) {

@@ -3,6 +3,7 @@ package com.gifthub.product.entity;
 import com.gifthub.product.dto.ProductDto;
 import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.global.BaseTimeEntity;
+import com.gifthub.product.dto.ProductEngCategoryDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -58,5 +59,17 @@ public class Product extends BaseTimeEntity {
                 .category(this.category)
                 .build();
     }
+
+    public ProductEngCategoryDto toProductEngCategoryDto() {
+        return ProductEngCategoryDto.builder()
+                .id(this.id)
+                .name(this.name)
+                .price(this.price)
+                .brandName(this.brandName)
+                .category(this.category)
+                .build();
+    }
+
+
 
 }
