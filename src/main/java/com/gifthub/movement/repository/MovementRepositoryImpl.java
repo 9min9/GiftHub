@@ -55,6 +55,8 @@ public class MovementRepositoryImpl implements MovementRepositorySupport {
                 .from(movement)
                 .where(movement.fromUser.id.eq(userId).or(movement.toUser.id.eq(userId)))
                 .orderBy(movement.createDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
         Long count = jpaQueryFactory.select(movement.count())
