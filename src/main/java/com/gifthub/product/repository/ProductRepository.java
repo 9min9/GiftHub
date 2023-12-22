@@ -1,5 +1,6 @@
 package com.gifthub.product.repository;
 
+import com.gifthub.product.dto.ProductEngCategoryDto;
 import com.gifthub.product.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

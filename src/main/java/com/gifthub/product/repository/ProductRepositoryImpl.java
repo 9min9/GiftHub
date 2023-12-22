@@ -3,7 +3,9 @@ package com.gifthub.product.repository;
 
 import com.gifthub.gifticon.entity.QGifticon;
 import com.gifthub.product.dto.ProductDto;
+import com.gifthub.product.dto.ProductEngCategoryDto;
 import com.gifthub.product.dto.QProductDto;
+import com.gifthub.product.dto.QProductEngCategoryDto;
 import com.gifthub.product.enumeration.CategoryName;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -55,9 +57,9 @@ public class ProductRepositoryImpl implements ProductRepositorySupport {
     }
 
     @Override
-    public Page<ProductDto> findProductByBrand(Pageable pageable, String brand) {
-        List<ProductDto> fetch = queryFactory
-                .select(new QProductDto(product.id, product.name, product.price, product.brandName, product.category))
+    public Page<ProductEngCategoryDto> findProductByBrand(Pageable pageable, String brand) {
+        List<ProductEngCategoryDto> fetch = queryFactory
+                .select(new QProductEngCategoryDto(product.id, product.name, product.price, product.brandName, product.category))
                 .from(product)
                 .where(product.brandName.eq(brand))
                 .offset(pageable.getOffset())
@@ -74,9 +76,9 @@ public class ProductRepositoryImpl implements ProductRepositorySupport {
     }
 
     @Override
-    public Page<ProductDto> findAllProduct(Pageable pageable) {
-        List<ProductDto> fetch = queryFactory
-                .select(new QProductDto(product.id, product.name, product.price, product.brandName, product.category))
+    public Page<ProductEngCategoryDto> findAllProduct(Pageable pageable) {
+        List<ProductEngCategoryDto> fetch = queryFactory
+                .select(new QProductEngCategoryDto(product.id, product.name, product.price, product.brandName, product.category))
                 .from(product)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -91,9 +93,9 @@ public class ProductRepositoryImpl implements ProductRepositorySupport {
     }
 
     @Override
-    public Page<ProductDto> findAllProductByName(Pageable pageable, String name) {
-        List<ProductDto> fetch = queryFactory
-                .select(new QProductDto(product.id, product.name, product.price, product.brandName, product.category))
+    public Page<ProductEngCategoryDto> findAllProductByName(Pageable pageable, String name) {
+        List<ProductEngCategoryDto> fetch = queryFactory
+                .select(new QProductEngCategoryDto(product.id, product.name, product.price, product.brandName, product.category))
                 .from(product)
                 .where(product.name.contains(name))
                 .offset(pageable.getOffset())
@@ -124,8 +126,8 @@ public class ProductRepositoryImpl implements ProductRepositorySupport {
     }
 
     @Override
-    public Page<ProductDto> findProductByCategoryByName(Pageable pageable, String category, String name) {
-        List<ProductDto> fetch = queryFactory.select(new QProductDto(product.id, product.name, product.price, product.brandName, product.category))
+    public Page<ProductEngCategoryDto> findProductByCategoryByName(Pageable pageable, String category, String name) {
+        List<ProductEngCategoryDto> fetch = queryFactory.select(new QProductEngCategoryDto(product.id, product.name, product.price, product.brandName, product.category))
                 .from(product)
                 .where(product.category.eq(category), product.name.contains(name))
                 .offset(pageable.getOffset())
@@ -142,9 +144,9 @@ public class ProductRepositoryImpl implements ProductRepositorySupport {
     }
 
     @Override
-    public Page<ProductDto> findProductByBrandByName(Pageable pageable, String category, String brand, String name) {
-        List<ProductDto> fetch = queryFactory
-                .select(new QProductDto(product.id, product.name, product.price, product.brandName, product.category))
+    public Page<ProductEngCategoryDto> findProductByBrandByName(Pageable pageable, String category, String brand, String name) {
+        List<ProductEngCategoryDto> fetch = queryFactory
+                .select(new QProductEngCategoryDto(product.id, product.name, product.price, product.brandName, product.category))
                 .from(product)
                 .where(product.category.eq(category), product.brandName.eq(brand), product.name.contains(name))
                 .offset(pageable.getOffset())

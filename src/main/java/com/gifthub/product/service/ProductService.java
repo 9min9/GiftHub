@@ -2,6 +2,7 @@ package com.gifthub.product.service;
 
 import com.gifthub.gifticon.exception.NotFoundProductNameException;
 import com.gifthub.product.dto.ProductDto;
+import com.gifthub.product.dto.ProductEngCategoryDto;
 import com.gifthub.product.entity.Product;
 import com.gifthub.product.enumeration.CategoryName;
 import com.gifthub.product.repository.ProductRepository;
@@ -43,11 +44,11 @@ public class ProductService {
         return productRepository.findAllProduct();
     }
 
-    public Page<ProductDto> getAllProduct(Pageable pageable) {
+    public Page<ProductEngCategoryDto> getAllProduct(Pageable pageable) {
         return productRepository.findAllProduct(pageable);
     }
 
-    public Page<ProductDto> getAllProductByName(Pageable pageable, String name) {
+    public Page<ProductEngCategoryDto> getAllProductByName(Pageable pageable, String name) {
         return productRepository.findAllProductByName(pageable, name);
     }
 
@@ -74,7 +75,7 @@ public class ProductService {
         return productRepository.findProductByBrand(brand);
     }
 
-    public Page<ProductDto> getProductByBrand(Pageable pageable, String brand) {
+    public Page<ProductEngCategoryDto> getProductByBrand(Pageable pageable, String brand) {
         return productRepository.findProductByBrand(pageable, brand);
     }
 
@@ -82,19 +83,19 @@ public class ProductService {
         return productRepository.findProductByCategory(category).stream().map(Product::toProductDto).toList();
     }
 
-    public Page<ProductDto> getProductByCategory(Pageable pageable, String category) {
-        return productRepository.findProductByCategory(pageable, category).map(Product::toProductDto);
+    public Page<ProductEngCategoryDto> getProductByCategory(Pageable pageable, String category) {
+        return productRepository.findProductByCategory(pageable, category).map(Product::toProductEngCategoryDto);
     }
 
     public List<String> getAllCategory() {
         return productRepository.findAllCategory();
     }
 
-    public Page<ProductDto> getProductByCategoryByName(Pageable pageable, String category, String name) {
+    public Page<ProductEngCategoryDto> getProductByCategoryByName(Pageable pageable, String category, String name) {
         return productRepository.findProductByCategoryByName(pageable, category, name);
     }
 
-    public Page<ProductDto> getProductByBrandByName(Pageable pageable, String category, String brand, String name) {
+    public Page<ProductEngCategoryDto> getProductByBrandByName(Pageable pageable, String category, String brand, String name) {
         return productRepository.findProductByBrandByName(pageable, category, brand, name);
     }
 
