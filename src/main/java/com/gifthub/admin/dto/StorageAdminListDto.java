@@ -15,7 +15,7 @@ public class StorageAdminListDto {
     private Long id;
     private String barcode;
     private LocalDate due;
-    private String brandName; // 브랜드명(사용처)
+    private String brand; // 브랜드명(사용처)
     private String productName; // 상품명
     private String userName;
     private String imageUrl;
@@ -25,11 +25,11 @@ public class StorageAdminListDto {
     private Boolean isAdmin = true;
 
     @QueryProjection
-    public StorageAdminListDto(Long id, String barcode, LocalDate due, String brandName, String productName, String userName, String imageUrl, StorageStatus storageStatus, Long price, LocalDateTime modifiedDate) {
+    public StorageAdminListDto(Long id, String barcode, LocalDate due, String brand, String productName, String userName, String imageUrl, StorageStatus storageStatus, Long price, LocalDateTime modifiedDate) {
         this.id = id;
         this.barcode = barcode;
         this.due = due;
-        this.brandName = brandName;
+        this.brand = brand;
         this.productName = productName;
         this.userName = userName;
         this.imageUrl = imageUrl;
