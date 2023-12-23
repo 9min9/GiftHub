@@ -45,7 +45,6 @@ public class GifticonImageService {
 //        return resultList;
 //    }
 
-    @Transactional
     public GifticonImageDto saveImage(MultipartFile multipartFile) {
         String originalName = multipartFile.getOriginalFilename();
         GifticonImage image = new GifticonImage(originalName);
@@ -68,7 +67,7 @@ public class GifticonImageService {
 
         return gifticonImageDto;
     }
-    @Transactional
+
     public GifticonImageDto saveImage(File file) {
         String originalName = file.getName();
         GifticonImage image = new GifticonImage(originalName);
@@ -95,7 +94,6 @@ public class GifticonImageService {
     }
 
 
-    @Transactional
     public void deleteFileByStorage(GifticonStorageDto storageDto){
         GifticonImageDto image = gifticonImageRepository.findGifticonImageByGifticonStorageId(storageDto.getId()).orElse(null);
 
