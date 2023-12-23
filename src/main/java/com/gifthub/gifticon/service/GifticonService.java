@@ -5,32 +5,46 @@ import com.gifthub.gifticon.dto.GifticonQueryDto;
 import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.gifticon.enumeration.GifticonStatus;
 import com.gifthub.gifticon.repository.GifticonRepository;
+import com.gifthub.gifticon.util.GifticonImageUtil;
 import com.gifthub.user.entity.User;
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.NotFoundException;
-import com.google.zxing.Result;
+import com.google.zxing.*;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.oned.Code128Writer;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.krysalis.barcode4j.impl.code39.Code39Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Hashtable;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class GifticonService {
+    @Value("${static-path-pattern}")
+    private static String tempStorage;
 
     private final GifticonRepository gifticonRepository;
 
@@ -175,4 +189,37 @@ public class GifticonService {
 
         return null;
     }
+//    @GetMapping("/gifticon/use/{gifticonId}")
+//    public ResponseEntity<Object> useMyGifticonTest(@PathVariable("gifticonId") Long gifticonId) throws WriterException {
+//
+//        GifticonDto gifticon = gifticonService.findGifticon(gifticonId);
+//
+//        System.out.println("gifticonBarcode: " + gifticon.getBarcode());
+//
+//        int width = 200;
+//        int height = 200;
+//        BitMatrix encode = new MultiFormatWriter().encode(gifticon.getBarcode(), BarcodeFormat.CODE_39, width, height);
+//
+//        try {
+//            ByteArrayOutputStream out = new ByteArrayOutputStream();
+//
+//            MatrixToImageWriter.writeToStream(encode, "PNG", out);
+//
+//            return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(out.toByteArray());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+
+
+    public File getBarcodeImage(Long gifticonId, int width, int height){
+        GifticonDto gifticonDto = findGifticon(gifticonId);
+
+        byte[] bacodeArr = GifticonImageUtil.getBarcodeImage(gifticonDto.getBarcode(), width, height);
+        String filePath = tempStorage + gifticonId + "." + "png";
+        return GifticonImageUtil.barcodeArrToFile(bacodeArr, filePath);
+
+    }
+
 }

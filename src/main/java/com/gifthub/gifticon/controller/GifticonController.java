@@ -1,5 +1,6 @@
 package com.gifthub.gifticon.controller;
 
+import com.gifthub.gifticon.dto.BarcodeImageDto;
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.GifticonRegisterRequest;
 import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
@@ -16,6 +17,9 @@ import com.gifthub.user.UserJwtTokenProvider;
 import com.gifthub.user.dto.UserDto;
 import com.gifthub.user.exception.NotLoginedException;
 import com.gifthub.user.service.UserService;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.common.BitMatrix;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -29,6 +33,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -236,6 +241,36 @@ public class GifticonController {
         Page<GifticonDto> gifticons = gifticonService.getGifticonByProudctId(pageable, productId);  
 
         return ResponseEntity.ok(gifticons);
+    }
+
+    @PostMapping("/gifticon/use/{gifticonId}")
+    public ResponseEntity<Object> useMyGifticonTest(@PathVariable("gifticonId") Long gifticonId,
+                                                    @RequestHeader HttpHeaders headers){
+        // 먼저 이미지 만들어서 서버에 저장
+        try{
+            GifticonDto gifticon = gifticonService.findGifticon(gifticonId);
+            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
+
+            if(!gifticon.getUser().getId().equals(userId)){
+                ResponseEntity.badRequest().build();
+            }
+            int width = 200;
+            int height = 200;
+
+            File file = gifticonService.getBarcodeImage(gifticon.getId(), width, height);
+
+            BarcodeImageDto barcodeImage = imageService.saveBarcodeImage(file, gifticonId);
+
+            return ResponseEntity.ok(barcodeImage);
+
+
+
+        } catch (Exception e){
+            log.error("useMyGifticonTest | " + e);
+            return ResponseEntity.badRequest().build();
+        }
+//        return ResponseEntity.ok().build();
+
     }
 
 

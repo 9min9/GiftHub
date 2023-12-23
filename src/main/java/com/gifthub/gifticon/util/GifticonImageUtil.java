@@ -1,18 +1,30 @@
 package com.gifthub.gifticon.util;
 
+import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.exception.NotValidFileExtensionException;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.Writer;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.oned.Code128Writer;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -89,6 +101,38 @@ public class GifticonImageUtil {
         }
 
         return originalFileName.substring(index+1);
+    }
+
+    public static File barcodeArrToFile(byte[] barcodeArr, String filePath){
+        try {
+            File file = new File(filePath);
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(barcodeArr);
+            fos.close();
+            return file;
+
+        } catch (IOException e){
+            log.error("barcodeArrToFile" +
+                    " | "+ e);
+            return null;
+        }
+    }
+
+    public static byte[] getBarcodeImage(String text, int width, int height){
+        try {
+
+            Hashtable<EncodeHintType, ErrorCorrectionLevel> hintMap = new Hashtable<>();
+            hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+            Writer writer = new Code128Writer();
+            BitMatrix bitMatrix = writer.encode(text, BarcodeFormat.CODE_128, width, height);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            MatrixToImageWriter.writeToStream(bitMatrix, "png", byteArrayOutputStream);
+            return byteArrayOutputStream.toByteArray();
+
+        } catch (WriterException | IOException e) {
+            log.error("getBarcodeImage | "+e);
+            return null;
+        }
     }
 
 
