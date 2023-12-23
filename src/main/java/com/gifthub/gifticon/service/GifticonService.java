@@ -98,11 +98,6 @@ public class GifticonService {
         return gifticonRepository.findByUser(user).stream().map(Gifticon::toDto).toList();
     }
 
-    // TODO : 특정 product_id를 인자로 받아 GifticonList를 return
-    public Page<GifticonDto> getGifticonByProduct(Pageable pageable, Long productId){
-
-        return gifticonRepository.findByProduct(pageable, productId).map(Gifticon::toDto);
-    }
 
     public Page<GifticonQueryDto> getPurchasingGifticon(Pageable pageable, String type) {
         return gifticonRepository.findByGifticonStatusIsOnSale(pageable, type).map(Gifticon::toQueryDto);
@@ -162,8 +157,22 @@ public class GifticonService {
         }
     }
 
+    public Long notForSale(Long gifticonId) {
+        Long updated = gifticonRepository.updateNoneByGifticonId(gifticonId);
+
+        if(updated == 1){
+            return updated;
+        } else {
+            return (long) -1;
+        }
+    }
+
     public Page<GifticonDto> getGifticonByProudctId(Pageable pageable, Long productId) {
         return gifticonRepository.findGifticonByProductIdOrderByProductPrice(pageable, productId).map(Gifticon::toDtoWithProduct);
     }
 
+    public Long changePrice(Long gifticonId) {
+
+        return null;
+    }
 }

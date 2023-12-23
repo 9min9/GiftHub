@@ -189,7 +189,42 @@ public class GifticonController {
         } catch (NotLoginedException e) {
             return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
         }
+    }
+    @PostMapping("/gifticon/notForSale/{gifticonId}")
+    public ResponseEntity<Object> setNone(@PathVariable("gifticonId") Long gifticonId,
+                                             @RequestHeader HttpHeaders headers){
+        try{
+            GifticonDto gifticon = gifticonService.findGifticon(gifticonId);
+            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
 
+            if(!gifticon.getUser().getId().equals(userId)){
+                ResponseEntity.badRequest().build();
+            }
+            gifticonService.notForSale(gifticonId);
+
+        } catch (Exception e){
+            log.error("setNone | " + e);
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok().build();
+    }
+    @PostMapping("/gifticon/price/{gifticonId}")
+    public ResponseEntity<Object> changePrice(@PathVariable("gifticonId") Long gifticonId,
+                                              @RequestHeader HttpHeaders headers){
+        try{
+            GifticonDto gifticon = gifticonService.findGifticon(gifticonId);
+            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
+
+            if(!gifticon.getUser().getId().equals(userId)){
+                ResponseEntity.badRequest().build();
+            }
+            gifticonService.changePrice(gifticonId);
+
+        } catch (Exception e){
+            log.error("changePrice | " + e);
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/gifticon/products/{productId}")

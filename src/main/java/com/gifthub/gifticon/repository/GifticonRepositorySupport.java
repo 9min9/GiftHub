@@ -12,11 +12,11 @@ public interface GifticonRepositorySupport {
 
     List<String> findBrandNameByCategory(String category);
 
-    Page<Gifticon> findByProduct(Pageable pageable, Long productId);
-
     Page<Gifticon> findByUserId(Pageable pageable, Long userId);
 
     Long updateSaleByGifticonId(Long gifticonId);
+
+    Long updateNoneByGifticonId(Long gifticonId);
 
     Page<Gifticon> findGifticonByProductIdOrderByProductPrice(Pageable pageable, Long productId);
 }
