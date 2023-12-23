@@ -10,6 +10,7 @@ import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
 import com.gifthub.gifticon.enumeration.GifticonStatus;
 import com.gifthub.gifticon.exception.NotFoundProductNameException;
 import com.gifthub.gifticon.exception.NotFoundStorageException;
+import com.gifthub.gifticon.service.GifticonImageService;
 import com.gifthub.gifticon.service.GifticonService;
 import com.gifthub.gifticon.service.GifticonStorageService;
 import com.gifthub.global.error.ErrorResponse;
@@ -48,6 +49,7 @@ public class AdminController {
     private final ErrorResponse errorResponse;
     private final ExceptionResponse exceptionResponse;
     private final GifticonAppovalValidator gifticonConfirmRegister;
+    private final GifticonImageService imageService;
 
     @PostMapping("/gifticon/confirm/register")
     public ResponseEntity<Object> registerGifticon(@Valid @RequestBody GifticonAppovalRequest request, BindingResult bindingResult, @RequestHeader HttpHeaders headers) {
@@ -95,6 +97,7 @@ public class AdminController {
                             .build();
 
                     gifticonService.saveGifticon(gifticonDto);
+                    imageService.deleteFileByStorage(storageDto);
                     gifticonStorageService.deleteStorage(storageId);
                 }
             }

@@ -4,6 +4,7 @@ import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.GifticonRegisterRequest;
 import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
 import com.gifthub.gifticon.exception.NotFoundStorageException;
+import com.gifthub.gifticon.service.GifticonImageService;
 import com.gifthub.gifticon.service.GifticonService;
 import com.gifthub.gifticon.service.GifticonStorageService;
 import com.gifthub.global.error.ErrorResponse;
@@ -47,6 +48,7 @@ public class GifticonController {
     private final ProductService productService;
     private final ExceptionResponse exceptionResponse;
     private final ErrorResponse errorResponse;
+    private final GifticonImageService imageService;
 
     @GetMapping("/barcode/{barcode}")
     public void barcode(@PathVariable("barcode") String barcode, HttpServletResponse response) {
@@ -114,6 +116,7 @@ public class GifticonController {
 
         } else {
             gifticonService.saveGifticon(storageDto.toGifticonDto(productDto));
+            imageService.deleteFileByStorage(storageDto);
             storageService.deleteStorage(storageDto.getId());
             return ResponseEntity.ok().body(Collections.singletonMap("status", "200"));
         }
