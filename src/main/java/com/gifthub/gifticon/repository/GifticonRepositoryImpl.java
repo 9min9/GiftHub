@@ -51,19 +51,6 @@ public class GifticonRepositoryImpl implements GifticonRepositorySupport {
                 .fetch();
     }
 
-    // TODO : 검색 조건 클래스 만들기
-    @Override
-    public Page<Gifticon> findByProduct(Pageable pageable, Long productId) {
-
-//        List<Gifticon> content = jpaQueryFactory
-//                .selectFrom(gifticon)
-//                .join(gifticon.product, product)
-//                .where(product.id.eq(productId))
-//                .offset()
-//                .fetch()
-//                ))
-        return null;
-    }
 
     @Override
     public Page<Gifticon> findByUserId(Pageable pageable, Long userId) {
@@ -92,6 +79,17 @@ public class GifticonRepositoryImpl implements GifticonRepositorySupport {
 
         return execute;
     }
+
+    @Override
+    public Long updateNoneByGifticonId(Long gifticonId) {
+        long execute = jpaQueryFactory
+                .update(gifticon)
+                .set(gifticon.gifticonStatus, GifticonStatus.NONE)
+                .where(gifticon.id.eq(gifticonId))
+                .execute();
+        return execute;
+    }
+
 
     @Override
     public Page<Gifticon> findGifticonByProductIdOrderByProductPrice(Pageable pageable, Long productId) {

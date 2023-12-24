@@ -3,9 +3,12 @@ package com.gifthub.gifticon.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.gifthub.gifticon.dto.BarcodeImageDto;
 import com.gifthub.gifticon.dto.GifticonImageDto;
 import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
+import com.gifthub.gifticon.entity.BarcodeImage;
 import com.gifthub.gifticon.entity.GifticonImage;
+import com.gifthub.gifticon.repository.image.BarcodeImageRepository;
 import com.gifthub.gifticon.repository.image.GifticonImageRepository;
 import com.gifthub.gifticon.repository.storage.GifticonStorageRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +34,7 @@ public class GifticonImageService {
 
     private final GifticonImageRepository gifticonImageRepository;
     private final GifticonStorageRepository storageRepository;
+    private final BarcodeImageRepository barcodeImageRepository;
 
     // TODO : 파일 여러개 넣는 기능
 //    @Transactional
@@ -45,7 +49,6 @@ public class GifticonImageService {
 //        return resultList;
 //    }
 
-    @Transactional
     public GifticonImageDto saveImage(MultipartFile multipartFile) {
         String originalName = multipartFile.getOriginalFilename();
         GifticonImage image = new GifticonImage(originalName);
@@ -68,7 +71,7 @@ public class GifticonImageService {
 
         return gifticonImageDto;
     }
-    @Transactional
+
     public GifticonImageDto saveImage(File file) {
         String originalName = file.getName();
         GifticonImage image = new GifticonImage(originalName);
@@ -95,7 +98,6 @@ public class GifticonImageService {
     }
 
 
-    @Transactional
     public void deleteFileByStorage(GifticonStorageDto storageDto){
         GifticonImageDto image = gifticonImageRepository.findGifticonImageByGifticonStorageId(storageDto.getId()).orElse(null);
 
@@ -108,4 +110,31 @@ public class GifticonImageService {
     }
 
 
+    public BarcodeImageDto saveBarcodeImage(File file, Long gifticonId) {
+//        String originalName = file.getName();
+        BarcodeImage barcodeImage = new BarcodeImage(gifticonId);
+        String filename = barcodeImage.getId() + ".png";
+
+        try {
+            ObjectMetadata objectMetadata = new ObjectMetadata();
+            objectMetadata.setContentType("image/jpeg");
+            objectMetadata.setContentLength(file.length());
+
+            try(InputStream inputStream = new FileInputStream(file)){
+                amazonS3Client.putObject(bucketName, filename, inputStream, objectMetadata);
+            }
+
+            String accessUrl = amazonS3Client.getUrl(bucketName, filename).toString();
+            barcodeImage.setAccessUrl(accessUrl);
+        } catch(IOException e) {
+            log.error("서버에 저장 실패 | "+ e);
+        }
+
+//        GifticonImageDto gifticonImageDto = gifticonImageRepository.save(image).toGifticonImageDto();
+
+        BarcodeImageDto barcodeImageDto = barcodeImageRepository.save(barcodeImage).toDto();
+
+
+        return barcodeImageDto;
+    }
 }
