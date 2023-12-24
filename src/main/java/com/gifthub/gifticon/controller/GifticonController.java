@@ -318,16 +318,12 @@ public class GifticonController {
             if(!gifticon.getUser().getId().equals(userId)){
                 ResponseEntity.badRequest().build();
             }
-            int width = 200;
-            int height = 67;
-
-//            file = gifticonService.getBarcodeImage(gifticon.getId(), width, height);
 
             BarcodeImageDto barcodeImage = gifticonService.findBarcodeImage(gifticonId);
             log.error("reUseMyGifticon |"+barcodeImage.getId());
             Message message = new Message();
             message.setFrom(masterphone);
-            message.setText(tel);
+            message.setTo(tel);
             message.setText(barcodeImage.getAccessUrl());
             log.error("reUseMyGifticon |"+barcodeImage.getAccessUrl());
 
