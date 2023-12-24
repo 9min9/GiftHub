@@ -19,4 +19,6 @@ public interface GifticonRepositorySupport {
     Long updateNoneByGifticonId(Long gifticonId);
 
     Page<Gifticon> findGifticonByProductIdOrderByProductPrice(Pageable pageable, Long productId);
+
+    Long updateFinishedByGifticonId(Long gifticonId);
 }

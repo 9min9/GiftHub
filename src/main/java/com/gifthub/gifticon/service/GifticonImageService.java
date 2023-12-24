@@ -1,9 +1,9 @@
 package com.gifthub.gifticon.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.gifthub.gifticon.dto.BarcodeImageDto;
+import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.GifticonImageDto;
 import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
 import com.gifthub.gifticon.entity.BarcodeImage;
@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -36,18 +35,6 @@ public class GifticonImageService {
     private final GifticonStorageRepository storageRepository;
     private final BarcodeImageRepository barcodeImageRepository;
 
-    // TODO : 파일 여러개 넣는 기능
-//    @Transactional
-//    public List<String> saveImages(ImageSaveDto saveDto) {
-//        List<String> resultList = new ArrayList<>();
-//
-//        for(MultipartFile multipartFile : saveDto.getGifticonImages()) {
-//            String value = saveImage(multipartFile);
-//            resultList.add(value);
-//        }
-//
-//        return resultList;
-//    }
 
     public GifticonImageDto saveImage(MultipartFile multipartFile) {
         String originalName = multipartFile.getOriginalFilename();
@@ -110,9 +97,9 @@ public class GifticonImageService {
     }
 
 
-    public BarcodeImageDto saveBarcodeImage(File file, Long gifticonId) {
-//        String originalName = file.getName();
-        BarcodeImage barcodeImage = new BarcodeImage(gifticonId);
+    public BarcodeImageDto saveBarcodeImage(File file, GifticonDto gifticonDto) {
+
+        BarcodeImage barcodeImage = BarcodeImage.builder().gifticon(gifticonDto.toEntityWithKorCategoryName()).build();
         String filename = barcodeImage.getId() + ".png";
 
         try {
@@ -130,10 +117,7 @@ public class GifticonImageService {
             log.error("서버에 저장 실패 | "+ e);
         }
 
-//        GifticonImageDto gifticonImageDto = gifticonImageRepository.save(image).toGifticonImageDto();
-
         BarcodeImageDto barcodeImageDto = barcodeImageRepository.save(barcodeImage).toDto();
-
 
         return barcodeImageDto;
     }

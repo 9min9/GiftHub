@@ -87,6 +87,10 @@ dependencies {
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
 
+    // nurigo 문자인증
+    implementation 'net.nurigo:sdk:4.2.7'
+
+
 }
 
 tasks.named('test') {
