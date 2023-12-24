@@ -7,7 +7,6 @@ import com.gifthub.gifticon.dto.GifticonImageDto;
 import com.gifthub.gifticon.dto.GifticonStorageListDto;
 import com.gifthub.gifticon.dto.ImageSaveDto;
 import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
-import com.gifthub.gifticon.entity.GifticonStorage;
 import com.gifthub.gifticon.exception.NotExpiredDueException;
 import com.gifthub.gifticon.exception.NotValidFileExtensionException;
 import com.gifthub.gifticon.service.GifticonImageService;

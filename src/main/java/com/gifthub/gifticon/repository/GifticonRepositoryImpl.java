@@ -90,6 +90,15 @@ public class GifticonRepositoryImpl implements GifticonRepositorySupport {
         return execute;
     }
 
+    @Override
+    public Long updateFinishedByGifticonId(Long gifticonId) {
+        long excute = jpaQueryFactory
+                .update(gifticon)
+                .set(gifticon.gifticonStatus, GifticonStatus.FINISHED)
+                .where(gifticon.id.eq(gifticonId))
+                .execute();
+        return excute;
+    }
 
     @Override
     public Page<Gifticon> findGifticonByProductIdOrderByProductPrice(Pageable pageable, Long productId) {

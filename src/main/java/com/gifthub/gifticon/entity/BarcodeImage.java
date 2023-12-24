@@ -26,11 +26,7 @@ public class BarcodeImage extends BaseTimeEntity {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "gifticon_id")
     private Gifticon gifticon;
-    
-    public BarcodeImage(Long GifticonId){
-        this.id = GifticonId;
-        this.accessUrl = "";
-    }
+
     public void setAccessUrl(String accessUrl) {
         this.accessUrl = accessUrl;
     }
