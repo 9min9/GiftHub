@@ -96,6 +96,11 @@ public class GifticonImageService {
         }
     }
 
+    public void deleteFileByImage(GifticonImageDto imageDto){
+        amazonS3Client.deleteObject(bucketName, imageDto.getStoreFileName());
+        gifticonImageRepository.delete(imageDto.toEntity());
+    }
+
 
     public BarcodeImageDto saveBarcodeImage(File file, GifticonDto gifticonDto) {
 
