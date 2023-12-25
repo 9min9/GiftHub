@@ -163,6 +163,7 @@ public class GifticonService {
         }
     }
 
+    @Transactional
     public Long notForSale(Long gifticonId) {
         Long updated = gifticonRepository.updateNoneByGifticonId(gifticonId);
 
@@ -200,7 +201,6 @@ public class GifticonService {
     }
 
     public BarcodeImageDto findBarcodeImage(Long gifticonId){
-        GifticonDto gifticonDto = findGifticon(gifticonId);
 
         return barcodeRepository.findBarcodeImageByGifticon_Id(gifticonId).orElse(null).toDto();
     }
