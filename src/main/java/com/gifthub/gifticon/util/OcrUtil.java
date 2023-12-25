@@ -22,7 +22,12 @@ public class OcrUtil {
     }
 
     public static String parseStringByColon(String s){
-        return s.split(":")[1];
+        String[] parts = s.split(":");
+        if(parts.length >= 2) {
+            return parts[1].strip();
+        } else {
+            return "";
+        }
     }
 
     public static Map<String, String> parseArrayToMap(String[] tokens) {
