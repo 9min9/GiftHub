@@ -101,6 +101,7 @@ public class StorageController {
                                                     @RequestHeader HttpHeaders headers) {
 
         File file = null;
+        GifticonImageDto imageDto = null;
         try {
             file = GifticonImageUtil.convert(imageFile);
 
@@ -112,7 +113,7 @@ public class StorageController {
             if (gifticonDto.getDue() != null) {
                 OcrUtil.checkDueDate(gifticonDto.getDue());
             }
-            GifticonImageDto imageDto = imageService.saveImage(imageFile); // 이미지 서버에 저장 및 db에 경로저장
+            imageDto = imageService.saveImage(imageFile); // 이미지 서버에 저장 및 db에 경로저장
 
             String barcode = GifticonService.readBarcode(imageDto.getAccessUrl());
             gifticonDto.setBarcode(barcode);
@@ -127,7 +128,11 @@ public class StorageController {
 
         } catch (NotFoundException e) { // 바코드x
             log.error("addGifticonByFile | " + e);
-            Map<String, String> exception = exceptionResponse.getException("barcode", "NotFound.barcode", "바코드가 존재하지 않습니다");
+            Map<String, String> exception = exceptionResponse.getException("barcode", "NotFound.barcode", "바코드를 읽을 수 없습니다.\n 해상도를 높여주세요.");
+
+            if(imageDto != null){
+                imageService.deleteFileByImage(imageDto);
+            }
             return ResponseEntity.badRequest().body(exception);
 
         } catch (NotExpiredDueException e) { // 유효기간 체크
@@ -140,7 +145,9 @@ public class StorageController {
             return ResponseEntity.badRequest().body(exceptionResponse.getException(null, "Exception", e.getMessage()));
 
         } finally {
-            file.delete();
+            if (file != null) {
+                file.delete();
+            }
         }
         return ResponseEntity.ok().body(Collections.singletonMap("status", "200"));
     }
