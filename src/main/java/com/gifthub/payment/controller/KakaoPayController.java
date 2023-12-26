@@ -22,6 +22,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +44,9 @@ public class KakaoPayController {
     private final UserService userService;
 
     private final String PARTNER_USER_ID = "Gifthub";
+
+    @Value("${server.client.url}")
+    private String clientServer;
 
     @PostMapping("/ready")
     public ResponseEntity<Object> ready(@Valid @RequestBody KakaoPayRequestDto dto,
@@ -169,7 +173,7 @@ public class KakaoPayController {
             bindingResult.rejectValue(e.getField(), e.getCode(), e.getMessage());
         } finally {
             if (!bindingResult.hasErrors()) {
-                return new ResponseEntity<String>("<html><body><script>opener.location.href='/'; window.close();</script></body></html>", headers, HttpStatus.OK);
+                return new ResponseEntity<String>("<html><body><script>opener.location.href='" + clientServer + "'; window.close();</script></body></html>", headers, HttpStatus.OK);
             } else {
                 System.out.println("KakaoPayController.approve");
                 for (ObjectError allError : bindingResult.getAllErrors()) {
