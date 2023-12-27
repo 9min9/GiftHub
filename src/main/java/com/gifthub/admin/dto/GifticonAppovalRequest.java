@@ -23,7 +23,7 @@ public class GifticonAppovalRequest {
     private Long price;
     private Boolean isConfirm;
     private String category;
-    private String cancelReason;
+    private String rejectReason;
 
     public ProductDto toProductDto() {
         return ProductDto.builder()
