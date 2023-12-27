@@ -19,31 +19,42 @@
 ## Stacks 🐈
 
 ### Environment
+![intellij](https://img.shields.io/badge/intellij-000000?style=for-the-badge&logo=intellijidea&logoColor=white)
 ![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-007ACC?style=for-the-badge&logo=Visual%20Studio%20Code&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white)
 ![Github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white)             
 
 
-### Config
-![npm](https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)        
+[//]: # (### Config)
+
+[//]: # (![npm]&#40;https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white&#41;        )
 
 
-### Front-end
-![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=Bootstrap&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=Javascript&logoColor=white)
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![Thymeleaf](https://img.shields.io/badge/Thymeleaf-005E86?style=for-the-badge)
-![jQuery](https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jQuery&logoColor=white)
+[//]: # (### Front-end)
+
+[//]: # (![HTML]&#40;https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white&#41;)
+
+[//]: # (![Bootstrap]&#40;https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=Bootstrap&logoColor=white&#41;)
+
+[//]: # (![JavaScript]&#40;https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=Javascript&logoColor=white&#41;)
+
+[//]: # (![React]&#40;https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB&#41;)
+
+[//]: # (![Thymeleaf]&#40;https://img.shields.io/badge/Thymeleaf-005E86?style=for-the-badge&#41;)
+
+[//]: # (![jQuery]&#40;https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jQuery&logoColor=white&#41;)
 
 
 ### Back-end
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.3.15.RELEASE-green?style=for-the-badge&logo=Spring&logoColor=white)
-![Spring Data JPA](https://img.shields.io/badge/Spring%20Data%20JPA-2.3.15.RELEASE-green?style=for-the-badge&logo=Spring&logoColor=white)
-![Spring Security](https://img.shields.io/badge/Spring%20Security-5.3.4.RELEASE-green?style=for-the-badge&logo=Spring&logoColor=white)
-![QueryDSL](https://img.shields.io/badge/QueryDSL-5.0-green?style=for-the-badge&logo=Java&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15.3-336791?style=for-the-badge&logo=PostgreSQL&logoColor=white)
 ![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=Java&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.1.5.RELEASE-green?style=for-the-badge&logo=Spring&logoColor=white)
+![Spring Data JPA](https://img.shields.io/badge/Spring%20Data%20JPA-3.1.5.RELEASE-green?style=for-the-badge&logo=Spring&logoColor=white)
+![Spring Security](https://img.shields.io/badge/Spring%20Security-3.1.5.RELEASE-green?style=for-the-badge&logo=Spring&logoColor=white)
+![QueryDSL](https://img.shields.io/badge/QueryDSL-5.0-green?style=for-the-badge&logo=Java&logoColor=white)
+
+### DataBase
+
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15.3-336791?style=for-the-badge&logo=PostgreSQL&logoColor=white)
 
 
 
@@ -51,31 +62,34 @@
 ![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white)
 ![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=Discord&logoColor=white)
 
+### Server
+![AWS](https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS_S3-569A31?style=for-the-badge&logo=amazons3&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS_RDS-527FFF?style=for-the-badge&logo=amazonrds&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS_EC2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white)
 
----
-## 화면 구성 📺
-| 메인 페이지  |  소개 페이지   |
-| :-------------------------------------------: | :------------: |
-|  <img width="329" src=""/> |  <img width="329" src=""/>|  
-| 강좌 소개 페이지   |  강의 영상 페이지   |  
-| <img width="329" src=""/>   |  <img width="329" src=""/>     |
+AWS EC2 S3 
+
 
 ---
 ## 주요 기능 🎁
 
 ### 🛒 소셜 회원가입 및 Jwt토큰을 사용하여 보안강화
-- 호출한 소셜 로그인 Api를 통해 받은 토큰으로, GiftHub만의 Jwt provider를 직접 구현 
-- 매 로그인마다 소셜 로그인의 인증 토큰을 사용하지 않으므로 보안부담 감소
+- 소셜 로그인 시 API를 통해 받은 토큰을 사용하여 프로젝트 자체의 JWT를 구현
+- 소셜 로그인의 인증 토큰을 사용하지 않으므로 보안부담 감소
 
 ### 🛒 기프티콘 등록 및 거래, 선물
 - 카카오 챗봇, 파일로 등록시 Naver Cloud Ocr을 호출하여 db의 상품과 mapping
-- db에 존재하는 상품이면 바로 기프티콘등록. 존재하지 않는 상품이면 임시 저장소에 대기하여 관리자의 검수 대기
-- 카카오 페이를 통해 포인트 충전. 충전된 포인트로 기프티콘 구매
-- 등록완료된 기프티콘에 한해 판매 및 선물
+- 기프티콘 등록 시 DB의 Product 테이블에 존재하는 상품이면 바로 기프티콘 등록, 존재하지 않는 상품이면 관리자의 검수를 통해 등록 처리
+- 등록 처리된 기프티콘은 판매 가능
+- 카카오 페이를 통해 포인트 충전. 충전된 포인트로 기프티콘을 구매
 
 ### 🛒 기프티콘 목록 및 사용
-- '기프티콘'으로 등록되면 입력했던 사진은 보안상 문제로 서버에서 바로 삭제
-- 사용하기 클릭시 문자로 해당 정보를 받음
+- 기프티콘으로 등록되면 입력했던 사진은 보안상 이유로 서버에서 삭제
+- 사용 시 기프티콘 바코드 이미지를 생성하고 SMS를 통해 전송
+
+### 관리자
+- 검수 상태의 기프티콘을 확인하여 검수 완료 및 거절
 
 ---
 ## 아키텍쳐
@@ -208,3 +222,13 @@
 
 ```
 -->
+
+---
+## 화면 구성 📺
+| 메인 페이지  |  소개 페이지   |
+| :-------------------------------------------: | :------------: |
+|  <img width="329" src=""/> |  <img width="329" src=""/>|  
+| 강좌 소개 페이지   |  강의 영상 페이지   |  
+| <img width="329" src=""/>   |  <img width="329" src=""/>     |
+
+---
