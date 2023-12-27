@@ -50,8 +50,8 @@ public class UserJwtTokenProvider {
 
     private String generateAccessToken(UserDto userDto, Date now) {
         return Jwts.builder().setSubject(userDto.getEmail())
-                .setHeader(createHeader()).setClaims(createClaims(userDto)) // 클레임, 토큰에 포함될 정보
-                .setExpiration(new Date(now.getTime() + expiredTime))        // 만료일
+                .setHeader(createHeader()).setClaims(createClaims(userDto))
+                .setExpiration(new Date(now.getTime() + expiredTime))      
                 .signWith(key, SignatureAlgorithm.HS256).compact();
     }
 
@@ -85,9 +85,6 @@ public class UserJwtTokenProvider {
         return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
     }
 
-    /**
-     * User
-     */
     public String getUsernameFromToken(String token) {
         return (String) getClaims(token).get("username");
     }
@@ -96,8 +93,8 @@ public class UserJwtTokenProvider {
         return (String) getClaims(token).get("accountType");
     }
 
-    public int getRoleFromToken(String token) {
-        return (int) getClaims(token).get("roles");
+    public String getRoleFromToken(String token) {
+        return (String) getClaims(token).get("roles");
     }
 
     public Long getUserIdFromToken(String token) {
@@ -110,7 +107,6 @@ public class UserJwtTokenProvider {
 
         if (authorization != null) {
             log.info("Authorization header value: " + authorization);
-            System.out.println("Authorization header value: " + authorization);
         } else {
             log.warn("Authorization header not found");
         }

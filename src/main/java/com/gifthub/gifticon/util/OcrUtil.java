@@ -1,6 +1,5 @@
 package com.gifthub.gifticon.util;
 
-
 import com.gifthub.gifticon.exception.NotExpiredDueException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -51,7 +50,7 @@ public class OcrUtil {
             return Pattern.compile(pattern).matcher(parsedString).find();
 
         } catch (PatternSyntaxException e) {
-            log.error("findMatchString() |  | " +e);
+            log.error("OcrUtil | findMatchString | " +e);
             return false;
         }
         //완전히 똑같은지 아닌지 나눠야함!
@@ -59,15 +58,14 @@ public class OcrUtil {
 
 
     public static LocalDate localDateFormatterHyphen(String input) {
-//        System.out.println(input);
         try {
             return LocalDate.parse(input, DateTimeFormatter.ofPattern("yyyy-MM-dd").withLocale(Locale.KOREA));
 
         } catch (DateTimeParseException e) {
-            log.error("localDateFormatterHyphen() | yyyy-MM-dd 파싱 에러 | " +e);
+            log.error("OcrUtil | localDateFormatterHyphen | yyyy-MM-dd 파싱 에러 | " +e);
             return null;
         } catch (RuntimeException e){
-            log.error("localDateFormatterHyphen() | yyyy-MM-dd 파싱 에러 | " +e);
+            log.error("OcrUtil | localDateFormatterHyphen | yyyy-MM-dd 파싱 에러 | " +e);
             return null;
         }
     }
@@ -78,10 +76,10 @@ public class OcrUtil {
             return matcher.find() ? matcher.group(1) : null;
 
         } catch (PatternSyntaxException e) {
-            log.error("dateParserTilde() | ~ 파싱 에러 | " +e);
+            log.error("OcrUtil | dateParserTilde | ~ 파싱 에러 | " +e);
             return null;
         } catch (RuntimeException e){
-            log.error("dateParserTilde() | ~ 파싱 에러 | " +e);
+            log.error("OcrUtil | dateParserTilde | ~ 파싱 에러 | " +e);
             return null;
         }
     }
@@ -92,10 +90,10 @@ public class OcrUtil {
             return matcher.find() ? matcher.group(1) : null;
 
         } catch (PatternSyntaxException e) {
-            log.error("dateParserHangul() | regex년월일 파싱 에러 | " +e);
+            log.error("OcrUtil | dateParserHangul | regex년월일 파싱 에러 | " +e);
             return null;
         } catch (RuntimeException e){
-            log.error("dateParserHangul() | regex년월일 파싱 에러 | " +e);
+            log.error("OcrUtil | dateParserHangul | regex년월일 파싱 에러 | " +e);
             return null;
         }
     }
@@ -107,7 +105,7 @@ public class OcrUtil {
 
         }
         if (outputDateString == null) {
-            log.error("dateReplaceFromSpotToHyphen() | . -> - 파싱에러 | ");
+            log.error("OcrUtil | dateReplaceFromSpotToHyphen | . -> - 파싱에러 | ");
             return null;
         }
         return outputDateString;
@@ -122,7 +120,7 @@ public class OcrUtil {
                     .replaceAll("일", "");
         }
         if (outputDateString == null) {
-            log.error("dateReplaceFromHangulToHyphen() | 년월일 -> - 파싱에러 | ");
+            log.error("OcrUtil | dateReplaceFromHangulToHyphen | 년월일 -> - 파싱에러 | ");
             return null;
         }
         return outputDateString;

@@ -12,6 +12,7 @@ import com.gifthub.user.service.UserService;
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/api/kakao")
 @RequiredArgsConstructor
+@Slf4j
 public class KakaoAccountController {
     private final KakaoAccountService kakaoAccountService;
     private final UserService userService;
@@ -52,7 +54,7 @@ public class KakaoAccountController {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("KakaoAccountController | login | " +e);
             return ResponseEntity.badRequest().build();
         }
 
@@ -66,9 +68,6 @@ public class KakaoAccountController {
 
         try {
             Object accessToken = session.getAttribute("kakao_access_token");
-            System.out.println("logout");
-            System.out.println((String) accessToken);
-
             kakaoAccountService.kakaoLogout((String) session.getAttribute("kakao_access_token"));
             session.removeAttribute("kakao_access_Token");
 
@@ -76,6 +75,7 @@ public class KakaoAccountController {
             return ResponseEntity.ok().build();
 
         } catch (IOException e) {
+            log.error("KakaoAccountController | logout | " +e);
             return ResponseEntity.badRequest().build();
         }
     }

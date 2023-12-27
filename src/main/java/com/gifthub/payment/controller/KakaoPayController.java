@@ -158,9 +158,7 @@ public class KakaoPayController {
                     .build();
 
             log.info("[KakaoPay Approve Request]", requestDto);
-
             paymentService.setPaid(Long.parseLong(dto.getPaymentId()));
-
             approvedResponseDto = kakaoPayService.approve(requestDto, dto.getUserId());
 
 
@@ -175,9 +173,8 @@ public class KakaoPayController {
             if (!bindingResult.hasErrors()) {
                 return new ResponseEntity<String>("<html><body><script>opener.location.href='" + clientServer + "'; window.close();</script></body></html>", headers, HttpStatus.OK);
             } else {
-                System.out.println("KakaoPayController.approve");
                 for (ObjectError allError : bindingResult.getAllErrors()) {
-                    System.out.println(allError.getCode());
+                    log.error("KakaoPayController | approve | errorCode : " +allError.getCode());
                 }
                 return ResponseEntity.badRequest().body(errorResponse.getErrors(bindingResult));
             }

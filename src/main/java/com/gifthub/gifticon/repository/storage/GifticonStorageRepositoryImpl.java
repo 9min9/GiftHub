@@ -85,7 +85,6 @@ public class GifticonStorageRepositoryImpl implements GifticonStorageRepositoryS
 
     @Override
     public Page<GifticonStorageListDto> findGifticonStorageDtoByUserId(Long userId, Pageable pageable) {
-        System.out.println("repo!");
         List<GifticonStorageListDto> content = getGifticonStoargeList(userId, pageable);
         Long count = getGifticonStorageListCount(userId);
 
@@ -93,7 +92,6 @@ public class GifticonStorageRepositoryImpl implements GifticonStorageRepositoryS
     }
 
     private List<GifticonStorageListDto> getGifticonStoargeList(Long userId, Pageable pageable) {
-        System.out.println("content");
         return queryFactory
                 .select(new QGifticonStorageListDto(
                         gifticonStorage.id,
@@ -110,7 +108,6 @@ public class GifticonStorageRepositoryImpl implements GifticonStorageRepositoryS
                 .limit(pageable.getPageSize())
                 .leftJoin(gifticonStorage.user, user)
                 .leftJoin(gifticonStorage.gifticonImage, gifticonImage)
-//                .fetchJoin()
                 .fetch();
     }
 

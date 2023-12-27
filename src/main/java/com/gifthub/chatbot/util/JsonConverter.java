@@ -31,13 +31,7 @@ public class JsonConverter {
         while (matcher.find()) {
             String urls = matcher.group(1);
             String[] urlArray = urls.split(", ");
-            System.out.println(urls);
             urlList.addAll(Arrays.asList(urlArray));
-        }
-
-        System.out.println("urlList");
-        for (String s : urlList) {
-            System.out.println(s);
         }
 
         return urlList;

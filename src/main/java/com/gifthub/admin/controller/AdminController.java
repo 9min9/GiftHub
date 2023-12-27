@@ -104,7 +104,6 @@ public class AdminController {
 
             if (!isConfirm) {
                 //TODO : Reg fail Reason 전송하기
-
                 gifticonStorageService.adminToStorage(storageDto);
             }
 
@@ -132,23 +131,6 @@ public class AdminController {
         return null;
     }
 
-//    @PostMapping("/gifticon/register")
-//    public ResponseEntity<Object> confirmRegister(@Valid @RequestBody GifticonRegisterRequest request, BindingResult bindingResult, @RequestHeader HttpHeaders headers) {
-//        try {
-//            GifticonStorageDto gifticonStorageDto = request.storageDto();
-//            gifticonStorageService.storageToAdmin(gifticonStorageDto);
-//
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//
-//        if(bindingResult.hasErrors()) {
-//            ResponseEntity.badRequest().body(errorResponse.getErrors(bindingResult));
-//        }
-//
-//        return ResponseEntity.ok().body(Collections.singletonMap("status", "ok"));
-//    }
-
     @PostMapping("/gifticon/confirm/count")
     public ResponseEntity<Object> confirmRegisterCount(@RequestHeader HttpHeaders headers) {
         Long count = gifticonStorageService.getStorageCountByStatus(ADMIN_APPROVAL);
@@ -170,6 +152,7 @@ public class AdminController {
             return ResponseEntity.ok().body(findPage);
 
         } catch (NotLoginedException e) {
+            log.error("AdminController | confirmRegisterList | " +e);
             return ResponseEntity.badRequest().body(exceptionResponse.getException(null, e.getCode(), e.getMessage()));
         }
     }
@@ -178,7 +161,6 @@ public class AdminController {
     @PostMapping("/validate/product")
     public ResponseEntity<Object> productValidate(@RequestBody Map<String, String> request, @RequestHeader HttpHeaders headers) {
         Map<String, String> result = new HashMap<>();
-//        userJwtTokenProvider.validateToken(headers.get("Authorization").get(0));
 
         try {
             result.put("target", "product");
@@ -193,6 +175,7 @@ public class AdminController {
             return ResponseEntity.ok().body(result);
 
         } catch (NotFoundProductNameException e) {
+            log.error("AdminController | productValidate | " +e);
             return ResponseEntity.badRequest().body(exceptionResponse.getException(e.getField(), e.getCode(), e.getMessage()));
         }
     }

@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.net.URL;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class KakaoAccountService {
     private final UserRepository userRepository;
 
@@ -65,7 +67,7 @@ public class KakaoAccountService {
             bw.flush();
 
             int responseCode = conn.getResponseCode();
-            System.out.println("responseCode : " + responseCode);
+            log.info("kakaoAccountService | getKakaoAccessToken | responseCode : " +responseCode);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line = "";
@@ -74,7 +76,6 @@ public class KakaoAccountService {
             while ((line = br.readLine()) != null) {
                 result += line;
             }
-            System.out.println("response body : " + result);
 
             //Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
             JsonParser parser = new JsonParser();
@@ -83,14 +84,10 @@ public class KakaoAccountService {
             access_Token = element.getAsJsonObject().get("access_token").getAsString();     // access token : 유효기간 하루 ( 접속용 )
             refresh_Token = element.getAsJsonObject().get("refresh_token").getAsString();   // refresh token : 유효기간 2주~ 한달 ( 저장용 )
 
-            System.out.println("id_token: " + id_token);
-            System.out.println("access_token : " + access_Token);
-            System.out.println("refresh_token : " + refresh_Token);
-
             br.close();
             bw.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("KakaoAccountService | getKakaoAccessToken | " +e);
         }
         return access_Token;
     }
@@ -107,8 +104,6 @@ public class KakaoAccountService {
             conn.setRequestProperty("Authorization", "Bearer " + access_Token);
 
             int responseCode = conn.getResponseCode();
-            System.out.println("access_token :" + access_Token);
-            System.out.println("responseCode : " + responseCode);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line = "";
@@ -117,7 +112,6 @@ public class KakaoAccountService {
             while ((line = br.readLine()) != null) {
                 result += line;
             }
-            System.out.println("response body : " + result);
 
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
@@ -132,6 +126,7 @@ public class KakaoAccountService {
             String birthday = kakao_account.getAsJsonObject().get("birthday").getAsString();
             String gender = kakao_account.getAsJsonObject().get("gender").getAsString();
             String phone_number = kakao_account.getAsJsonObject().get("phone_number").getAsString();
+            phone_number = phone_number.replace("+82", "0");
 
             KakaoUserDto kakaoUserDto = KakaoUserDto.builder()
                     .kakaoAccountId(kakaoAccountId)
@@ -146,8 +141,7 @@ public class KakaoAccountService {
             return kakaoUserDto;
 
         } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("getKakaoUserInfo error");
+            log.error("KakaoAccountService | getKakaoUserInfo | " + e);
             return null;
         }
     }
@@ -168,9 +162,8 @@ public class KakaoAccountService {
             while ((line = br.readLine()) != null) {
                 result += line;
             }
-            System.out.println(result);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("KakaoAccountService | kakaoLogout | " +e);
         }
     }
 

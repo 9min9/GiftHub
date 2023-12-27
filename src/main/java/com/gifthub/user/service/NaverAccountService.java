@@ -9,6 +9,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ import java.net.URLDecoder;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class NaverAccountService {
     private final UserRepository userRepository;
 
@@ -32,8 +34,6 @@ public class NaverAccountService {
     private String NAVER_REDIRECT_URL;
     @Value("${naver.client.secret}")
     private String NAVER_CLIENT_SECRET;
-//    private final static String naverauthurl = "https://nid.naver.com";
-//    private final static String naverapiurl = "https://openapi.naver.com";
 
     public NaverUserDto getNaverUserByNaverId(String naverId) {
         NaverUser naverUser = userRepository.findByNaverId(naverId).orElse(null);
@@ -65,8 +65,7 @@ public class NaverAccountService {
             bw.flush();
 
             int responseCode = conn.getResponseCode();
-            System.out.println("responseCode : " + responseCode);
-            System.out.println("code : " + authorize_code);
+            log.info("NaverAccountService | getNaverAccessToken | responseCode : " +responseCode);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line = "";
@@ -74,7 +73,6 @@ public class NaverAccountService {
             while ((line = br.readLine()) != null) {
                 result += line;
             }
-//            System.out.println("response body : " + result);
             Gson gson = new Gson();
             NaverTokenDto tokenDto = gson.fromJson(result, NaverTokenDto.class);
 
@@ -83,17 +81,14 @@ public class NaverAccountService {
 
             return tokenDto;
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("NaverAccountService | getNaverAccessToken | " +e);
             return null;
         }
     }
 
     public NaverUserDto getNaverUserInfo(String naverAccessToken) {
         String token = naverAccessToken;
-        System.out.println(naverAccessToken+"test");
         String header = "Bearer " + token;
-        System.out.println("NaverUserInfoService");
-        System.out.println(token);
 
         String reqURL = "https://openapi.naver.com/v1/nid/me";
         Map<String, String> requestHeaders = new HashMap<>();
@@ -101,7 +96,6 @@ public class NaverAccountService {
         JsonParser parser = new JsonParser();
 
         String responseBody = getNaverAPi(reqURL, requestHeaders);
-        System.out.println(responseBody);
 
         JsonElement naverelement = parser.parse(responseBody);
         JsonObject response = naverelement.getAsJsonObject().get("response").getAsJsonObject();
@@ -115,13 +109,10 @@ public class NaverAccountService {
             String name = response.getAsJsonObject().get("name").getAsString();
             String birthyear = response.getAsJsonObject().get("birthyear").getAsString();
             String birthday = response.getAsJsonObject().get("birthday").getAsString();
-            System.out.println("id:"+id);
-
+            mobile = mobile.replace("+82", "0");
 
             String decodeStr_name = "";
             decodeStr_name = URLDecoder.decode(id, "utf-8");
-//            System.out.println("decode test:" + decodeStr_name);
-
 
             NaverUserDto naverUserDto = NaverUserDto.builder()
                     .NaverId(id)
@@ -135,8 +126,7 @@ public class NaverAccountService {
                     .build();
             return naverUserDto;
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-
+            log.error("NaverAccountService | getNaverUserInfo | " +e);
         }
         return null;
     }
@@ -157,6 +147,7 @@ public class NaverAccountService {
                 return readBody(con.getErrorStream());
             }
         } catch (IOException e) {
+            log.error("NaverAccountService | getNaverApi | " +e);
             throw new RuntimeException("API 요청과 응답 실패", e);
         } finally {
             con.disconnect();
@@ -168,8 +159,10 @@ public class NaverAccountService {
             URL url = new URL(apiUrl);
             return (HttpURLConnection) url.openConnection();
         } catch (MalformedURLException e) {
+            log.error("NaverAccountService | connect | " +e);
             throw new RuntimeException("API URL이 잘못되었습니다. : " + apiUrl, e);
         } catch (IOException e) {
+            log.error("NaverAccountService | connect | " +e);
             throw new RuntimeException("연결이 실패했습니다. : " + apiUrl, e);
         }
     }
@@ -186,6 +179,7 @@ public class NaverAccountService {
 
             return responseBody.toString();
         } catch (IOException e) {
+            log.error("NaverAccountService | readBody | " +e);
             throw new RuntimeException("API 응답을 읽는데 실패했습니다.", e);
         }
     }

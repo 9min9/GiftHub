@@ -80,14 +80,14 @@ public class ProductController {
 
             }
             Long countLine = productService.saveAll(productList);
-            System.out.println("총 라인수 :" + countLine);
 
         } catch (FileNotFoundException e) {
+            log.error("ProductController | AddProductFromExcel | " +e);
             throw new RuntimeException(e);
         } catch (IOException e) {
+            log.error("ProductController | AddProductFromExcel | " +e);
             throw new RuntimeException(e);
         }
-
     }
 
     @PostMapping("/get/category")
@@ -131,19 +131,6 @@ public class ProductController {
 
         return ResponseEntity.ok().body(result);
     }
-
-
-//    @GetMapping("/test")
-//    public void testProductDto() {
-//        List<ProductDto> productDtoList = productService.getAllProduct();
-//        for (ProductDto productDto : productDtoList) {
-//            System.out.println(productDto.getName());
-//            System.out.println(productDto.getBrandName());
-//            System.out.println(productDto.getPrice());
-//            System.out.println(productDto.getId());
-//            System.out.println(productDto.getCategory());
-//        }
-//    }
 
     // TODO : 금액별, 남은 유효기간별(임박순) 정렬하기
     @GetMapping("/{category}/brands")

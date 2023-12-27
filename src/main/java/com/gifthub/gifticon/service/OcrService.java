@@ -5,6 +5,7 @@ import com.gifthub.gifticon.util.OcrUtil;
 import com.gifthub.product.dto.ProductDto;
 import com.gifthub.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -22,6 +23,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OcrService {
 
     @Value("${ocrSecretKey}")
@@ -39,15 +41,12 @@ public class OcrService {
         List<String> brandNameList = productRepository.findAllBrandName();
         String ocrResult = readOcrUrl(barcodeurl);
 
-        System.out.println("읽은 Ocr결과:" + ocrResult);
-
+        log.info("OcrService | readOcrUrlToGifticonDto | 읽은 OCR 결과 : " + ocrResult);
 
         GifticonDto gifticonDto = findProductNameByBrandInDb(ocrResult, brandNameList);
-
         LocalDate due = dateFormattingByString(ocrResult);
 
-        System.out.println("읽은 유효기간:" + due);
-//        return gifticonDto.builder().due(due).build();
+        log.info("OcrService | readOcrUrlToGifticonDto | 읽은 유효 기간 : " + due);
         gifticonDto.setDue(due);
         return gifticonDto;
 
@@ -57,20 +56,17 @@ public class OcrService {
         List<String> brandNameList = productRepository.findAllBrandName();
         String ocrResult = readOcrMultipart(file);
 
-        System.out.println("읽은 Ocr결과:" + ocrResult);
-        System.out.println("브랜드 개수: "+ brandNameList.size());
-
+        log.info("OcrService | readOcrMultipartToGifticonDto | 읽은 OCR 결과 : " + ocrResult);
+        log.info("OcrService | readOcrMultipartToGifticonDto | 브랜드 개수 : " + brandNameList.size());
         GifticonDto gifticonDto = findProductNameByBrandInDb(ocrResult, brandNameList);
 
         LocalDate due = dateFormattingByString(ocrResult);
-        System.out.println("읽은 유효기간: " + due);
+        log.info("OcrService | readOcrMultipartToGifticonDto | 읽은 유효 기간 : " + due);
 
-//        return gifticonDto.builder().due(due).build();
         gifticonDto.setDue(due);
         return gifticonDto;
 
     }
-
 
     private GifticonDto findProductNameByBrandInDb(String ocrResult, List<String> brandNameList) {
         String brandName = null;
@@ -96,12 +92,11 @@ public class OcrService {
                 }
             }
         }
-        System.out.println("읽은 브랜드명:" + brandName);
-        System.out.println("읽은 상품명:" + productName);
+        log.info("OcrService | findProductNameByBrandInDb | 읽은 브랜드 이름 : " + brandName);
+        log.info("OcrService | findProductNameByBrandInDb | 읽은 상품 이름 : " + productName);
 
         return GifticonDto.builder().brandName(brandName).productName(productName).build();
     }
-
 
     private String readOcrUrl(String imageUrl) {
         try {
@@ -119,8 +114,7 @@ public class OcrService {
             json.put("requestId", UUID.randomUUID().toString());
             json.put("timestamp", System.currentTimeMillis());
             JSONObject image = new JSONObject();
-            image.put("format", "jpg");     // jpg가 아닌 다른타입일 경우는 어떻게?
-            // imageUrl이 들어가는부분
+            image.put("format", "jpg");
             image.put("url", imageUrl);
 
             image.put("name", "demo");
@@ -150,11 +144,10 @@ public class OcrService {
 
             return parseOcr(String.valueOf(response));
 
-
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            log.error("OcrService | readOcrUrl | " + e);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("OcrService | readOcrUrl | " + e);
         }
         return null;
     }
@@ -206,15 +199,16 @@ public class OcrService {
             br.close();
 
             return parseOcr(String.valueOf(response));
-        } catch (IOException e){
+        } catch (IOException e) {
+            log.error("OcrService | readOcrMultipart | " + e);
             throw new RuntimeException();
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
+            log.error("OcrService | readOcrMultipart | " + e);
             throw new IllegalArgumentException("파일이 존재하지 않습니다");
         }
     }
 
-    private void writeMultiPart(OutputStream out, String jsonMessage, File file, String boundary) throws
-            IOException {
+    private void writeMultiPart(OutputStream out, String jsonMessage, File file, String boundary) throws IOException {
         StringBuilder sb = new StringBuilder();
         sb.append("--").append(boundary).append("\r\n");
         sb.append("Content-Disposition:form-data; name=\"message\"\r\n\r\n");
@@ -227,8 +221,7 @@ public class OcrService {
         if (file != null && file.isFile()) {
             out.write(("--" + boundary + "\r\n").getBytes("UTF-8"));
             StringBuilder fileString = new StringBuilder();
-            fileString
-                    .append("Content-Disposition:form-data; name=\"file\"; filename=");
+            fileString.append("Content-Disposition:form-data; name=\"file\"; filename=");
             fileString.append("\"" + file.getName() + "\"\r\n");
             fileString.append("Content-Type: application/octet-stream\r\n\r\n");
             out.write(fileString.toString().getBytes("UTF-8"));
@@ -273,13 +266,14 @@ public class OcrService {
             }
             return sb.toString();
         } catch (ParseException e) {
+            log.error("OcrService | parseOcr | " +e);
             throw new RuntimeException(e);
         }
 
     }
 
     private LocalDate dateFormattingByString(String ocrResult) {
-        String capturedDueDate =null;
+        String capturedDueDate = null;
         String dueDate = null;
         if (OcrUtil.dateParserTilde(ocrResult) != null) {
             capturedDueDate = OcrUtil.dateParserTilde(ocrResult); // ~2024.02.10 ->
@@ -291,6 +285,4 @@ public class OcrService {
         LocalDate due = OcrUtil.localDateFormatterHyphen(dueDate);
         return due;
     }
-
-
 }

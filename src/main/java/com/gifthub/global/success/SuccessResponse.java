@@ -1,6 +1,5 @@
 package com.gifthub.global.success;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
