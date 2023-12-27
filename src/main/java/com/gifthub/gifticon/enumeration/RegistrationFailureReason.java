@@ -1,10 +1,12 @@
 package com.gifthub.gifticon.enumeration;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public enum RegistrationFailureReason {
 
     /**
