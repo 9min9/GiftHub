@@ -101,7 +101,8 @@ public class GifticonStorageRepositoryImpl implements GifticonStorageRepositoryS
                         gifticonStorage.due,
                         gifticonStorage.price,
                         gifticonStorage.storage_status,
-                        gifticonStorage.gifticonImage.accessUrl))
+                        gifticonStorage.gifticonImage.accessUrl,
+                        gifticonStorage.approvalFailReason))
                 .from(gifticonStorage)
                 .where(gifticonStorage.user.id.eq(userId))
                 .offset(pageable.getOffset())
