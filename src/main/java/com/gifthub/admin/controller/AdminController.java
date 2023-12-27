@@ -1,6 +1,5 @@
 package com.gifthub.admin.controller;
 
-
 import com.gifthub.admin.dto.GifticonAppovalRequest;
 import com.gifthub.admin.dto.StorageAdminListDto;
 import com.gifthub.admin.exception.NotSelectConfirmFlagException;
@@ -21,7 +20,6 @@ import com.gifthub.product.dto.ProductDto;
 import com.gifthub.product.service.ProductService;
 import com.gifthub.user.UserJwtTokenProvider;
 import com.gifthub.user.exception.NotLoginedException;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -35,6 +33,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.gifthub.gifticon.enumeration.StorageStatus.ADMIN_APPROVAL;
@@ -45,6 +44,7 @@ import static com.gifthub.gifticon.enumeration.StorageStatus.ADMIN_APPROVAL;
 @Slf4j
 public class AdminController {
     private final GifticonService gifticonService;
+    private final AdminService adminService;
     private final UserJwtTokenProvider userJwtTokenProvider;
     private final GifticonStorageService gifticonStorageService;
     private final ProductService productService;
@@ -54,7 +54,7 @@ public class AdminController {
     private final GifticonImageService imageService;
 
     @PostMapping("/gifticon/confirm/register")
-    public ResponseEntity<Object> registerGifticon(@Valid @RequestBody GifticonAppovalRequest request, BindingResult bindingResult, @RequestHeader HttpHeaders headers) {
+    public ResponseEntity<Object> registerGifticon(@RequestBody GifticonAppovalRequest request, BindingResult bindingResult, @RequestHeader HttpHeaders headers) {
         String productName = request.getProductName();
         String brandName = request.getBrandName();
         String due = request.getDue();
@@ -105,7 +105,8 @@ public class AdminController {
             }
 
             if (!isConfirm) {
-                //TODO : Reg fail Reason 전송하기
+                String rejectReason = request.getRejectReason();
+                storageDto.setApprovalFailReason(RegistrationFailureReason.valueOf(rejectReason));
                 gifticonStorageService.adminToStorage(storageDto);
             }
 
