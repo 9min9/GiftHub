@@ -130,11 +130,13 @@ public class AdminController {
 
     @PostMapping("/gifticon/confirm/reject/reason")
     public ResponseEntity<Object> getRejectReason() {
-        List<String> result = new ArrayList<>();
+        HashMap<Object, Object> result = new HashMap<>();
         List<RegistrationFailureReason> allFailureReason = adminService.getAllRegistrationFailureReason();
 
         for (RegistrationFailureReason reason : allFailureReason) {
-            result.add(reason.getErrorMessage());
+            if (reason != RegistrationFailureReason.NOT_CANCELLED) {
+                result.put(reason, reason.getErrorMessage());
+            }
         }
 
         return ResponseEntity.ok().body(result);
