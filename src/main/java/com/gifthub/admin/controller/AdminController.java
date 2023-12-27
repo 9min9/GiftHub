@@ -5,9 +5,11 @@ import com.gifthub.admin.dto.GifticonAppovalRequest;
 import com.gifthub.admin.dto.StorageAdminListDto;
 import com.gifthub.admin.exception.NotSelectConfirmFlagException;
 import com.gifthub.admin.exception.validator.GifticonAppovalValidator;
+import com.gifthub.admin.service.AdminService;
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
 import com.gifthub.gifticon.enumeration.GifticonStatus;
+import com.gifthub.gifticon.enumeration.RegistrationFailureReason;
 import com.gifthub.gifticon.exception.NotFoundProductNameException;
 import com.gifthub.gifticon.exception.NotFoundStorageException;
 import com.gifthub.gifticon.service.GifticonImageService;
@@ -126,9 +128,16 @@ public class AdminController {
         return ResponseEntity.ok(Collections.singletonMap("status", "ok"));
     }
 
-    @PostMapping("/get/cancel/reason")
+    @PostMapping("/gifticon/confirm/reject/reason")
     public ResponseEntity<Object> getRejectReason() {
-        return null;
+        List<String> result = new ArrayList<>();
+        List<RegistrationFailureReason> allFailureReason = adminService.getAllRegistrationFailureReason();
+
+        for (RegistrationFailureReason reason : allFailureReason) {
+            result.add(reason.getErrorMessage());
+        }
+
+        return ResponseEntity.ok().body(result);
     }
 
     @PostMapping("/gifticon/confirm/count")
