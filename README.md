@@ -1,6 +1,7 @@
 
 
-# GiftHub Web Project
+# Web Project
+# GiftHub Backend Server
 
 > **KOSTA 266기 최종 프로젝트** <br/> **개발기간: 2023.11 ~ 2023.12** <br/> 팀원 : 4명
 
@@ -12,7 +13,7 @@
 - 바코드로 결제가 가능한 모바일 상품권을 대상으로 함. 3사(카카오톡, kt기프티쇼, sk기프티콘)
 - 웹 프로젝트의 백엔드 서버
 
-Client github : https://github.com/9min9/Gifthub-Client
+Frontend github : https://github.com/9min9/Gifthub-Client
 
 Notion : 
 
@@ -83,6 +84,7 @@ Notion :
 ## 아키텍쳐
 
 ### 테이블 관계도
+![Table](https://github.com/9min9/GiftHub/assets/130825350/2fa9bd9a-0311-4ffb-a998-4bead43b2210)
 
 <details><summary>프로젝트 구조</summary>
 
