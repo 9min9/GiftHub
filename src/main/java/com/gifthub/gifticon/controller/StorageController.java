@@ -64,7 +64,7 @@ public class StorageController {
 
             for (String barcodeUrl : barcodeUrlList) {
                 String barcode = GifticonService.readBarcode(barcodeUrl);
-                GifticonDto gifticonDto = ocrService.readOcrUrlToGifticonDto(barcodeUrl);
+                GifticonDto gifticonDto = ocrService.readOcr(barcodeUrl);
 
                 if (gifticonDto.getDue() != null) {
                     OcrUtil.checkDueDate(gifticonDto.getDue());
@@ -108,7 +108,7 @@ public class StorageController {
             if (!GifticonImageUtil.checkInvalidFileType(file)) {
                 throw new NotValidFileExtensionException();
             }
-            GifticonDto gifticonDto = ocrService.readOcrMultipartToGifticonDto(file); // 파일
+            GifticonDto gifticonDto = ocrService.readOcr(file); // 파일
 
             if (gifticonDto.getDue() != null) {
                 OcrUtil.checkDueDate(gifticonDto.getDue());

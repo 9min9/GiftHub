@@ -37,38 +37,39 @@ public class OcrService {
 
     private final ProductRepository productRepository;
 
-    public GifticonDto readOcrUrlToGifticonDto(String barcodeurl) {
-        List<String> brandNameList = productRepository.findAllBrandName();
-        String ocrResult = readOcrUrl(barcodeurl);
+    public GifticonDto readOcr(String imageUrl) {
+        List<String> brandNameList = productRepository.loadBrandNames();
+        String ocrResult = ocrGeneralAPI(imageUrl);
 
-        log.info("OcrService | readOcrUrlToGifticonDto | 읽은 OCR 결과 : " + ocrResult);
+        log.info("OcrService | readOcr_imageUrl | 읽은 OCR 결과 : " + ocrResult);
 
-        GifticonDto gifticonDto = findProductNameByBrandInDb(ocrResult, brandNameList);
+        GifticonDto gifticonDto = findProductFromDbByBrand(ocrResult, brandNameList);
         LocalDate due = dateFormattingByString(ocrResult);
 
-        log.info("OcrService | readOcrUrlToGifticonDto | 읽은 유효 기간 : " + due);
+        log.info("OcrService | readOcr_imageUrl | 읽은 유효 기간 : " + due);
         gifticonDto.setDue(due);
         return gifticonDto;
 
     }
 
-    public GifticonDto readOcrMultipartToGifticonDto(File file) {
-        List<String> brandNameList = productRepository.findAllBrandName();
-        String ocrResult = readOcrMultipart(file);
+    public GifticonDto readOcr(File file) {
+        List<String> brandNameList = productRepository.loadBrandNames();
+        String ocrResult = ocrGeneralAPI(file);
 
-        log.info("OcrService | readOcrMultipartToGifticonDto | 읽은 OCR 결과 : " + ocrResult);
-        log.info("OcrService | readOcrMultipartToGifticonDto | 브랜드 개수 : " + brandNameList.size());
-        GifticonDto gifticonDto = findProductNameByBrandInDb(ocrResult, brandNameList);
+        log.info("OcrService | readOcr_file | 읽은 OCR 결과 : " + ocrResult);
+        log.info("OcrService | readOcr_file | 브랜드 개수 : " + brandNameList.size());
+        GifticonDto gifticonDto = findProductFromDbByBrand(ocrResult, brandNameList);
 
         LocalDate due = dateFormattingByString(ocrResult);
-        log.info("OcrService | readOcrMultipartToGifticonDto | 읽은 유효 기간 : " + due);
+        log.info("OcrService | readOcr | 읽은 유효 기간 : " + due);
 
         gifticonDto.setDue(due);
         return gifticonDto;
 
     }
 
-    private GifticonDto findProductNameByBrandInDb(String ocrResult, List<String> brandNameList) {
+    // TODO : 리팩토링
+    private GifticonDto findProductFromDbByBrand(String ocrResult, List<String> brandNameList) {
         String brandName = null;
         String productName = null;
         for (String s : brandNameList) {
@@ -92,13 +93,16 @@ public class OcrService {
                 }
             }
         }
-        log.info("OcrService | findProductNameByBrandInDb | 읽은 브랜드 이름 : " + brandName);
-        log.info("OcrService | findProductNameByBrandInDb | 읽은 상품 이름 : " + productName);
+        log.info("OcrService | findProductFromDbByBrand | 읽은 브랜드 이름 : " + brandName);
+        log.info("OcrService | findProductFromDbByBrand | 읽은 상품 이름 : " + productName);
 
-        return GifticonDto.builder().brandName(brandName).productName(productName).build();
+        return GifticonDto.builder()
+                .brandName(brandName)
+                .productName(productName)
+                .build();
     }
 
-    private String readOcrUrl(String imageUrl) {
+    private String ocrGeneralAPI(String imageUrl) {
         try {
             URL url = new URL(ocrAPIURL);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -142,17 +146,17 @@ public class OcrService {
             }
             br.close();
 
-            return parseOcr(String.valueOf(response));
+            return parseOcrResult(String.valueOf(response));
 
         } catch (MalformedURLException e) {
-            log.error("OcrService | readOcrUrl | " + e);
+            log.error("OcrService | ocrGeneralAPI | " + e);
         } catch (IOException e) {
-            log.error("OcrService | readOcrUrl | " + e);
+            log.error("OcrService | ocrGeneralAPI | " + e);
         }
         return null;
     }
 
-    private String readOcrMultipart(File file) {
+    private String ocrGeneralAPI(File file) {
         try {
             URL url = new URL(ocrAPIURL);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -198,12 +202,12 @@ public class OcrService {
             }
             br.close();
 
-            return parseOcr(String.valueOf(response));
+            return parseOcrResult(String.valueOf(response));
         } catch (IOException e) {
-            log.error("OcrService | readOcrMultipart | " + e);
+            log.error("OcrService | ocrGeneralAPI | " + e);
             throw new RuntimeException();
         } catch (NullPointerException e) {
-            log.error("OcrService | readOcrMultipart | " + e);
+            log.error("OcrService | ocrGeneralAPI | " + e);
             throw new IllegalArgumentException("파일이 존재하지 않습니다");
         }
     }
@@ -242,7 +246,7 @@ public class OcrService {
     }
 
 
-    private String parseOcr(String response) {
+    private String parseOcrResult(String response) { // 개행, 스페이스 기준으로 ocrResult수정
         try {
             JSONParser parser = new JSONParser();
             JSONObject jsonResponse = (JSONObject) parser.parse(response);
@@ -266,12 +270,13 @@ public class OcrService {
             }
             return sb.toString();
         } catch (ParseException e) {
-            log.error("OcrService | parseOcr | " +e);
+            log.error("OcrService | parseOcrResult | " +e);
             throw new RuntimeException(e);
         }
 
     }
 
+    // TODO : hasDueDate, 포맷변경하는 메서드로 분리(포멧 변경 메서드는 util로)
     private LocalDate dateFormattingByString(String ocrResult) {
         String capturedDueDate = null;
         String dueDate = null;

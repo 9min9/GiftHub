@@ -12,7 +12,7 @@ public interface ProductRepositorySupport {
 
     List<String> findAllCategory();
 
-    List<String> findAllBrandName();
+    List<String> loadBrandNames();
     List<ProductDto> findProductByBrand(String brand);
     List<ProductDto> findAllProduct();
 
