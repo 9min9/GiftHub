@@ -69,7 +69,7 @@ public class StorageController {
                 if (gifticonDto.getDue() != null) {
                     OcrUtil.checkDueDate(gifticonDto.getDue());
                 }
-                file = GifticonImageUtil.convertKakaoUrlToFile(barcodeUrl); // url -> File
+                file = GifticonImageUtil.writeFileByUrl(barcodeUrl); // url -> File
 
                 GifticonImageDto imageDto = imageService.saveImage(file); // File -> 서버에 저장
                 gifticonDto.setBarcode(barcode);
@@ -103,9 +103,9 @@ public class StorageController {
         File file = null;
         GifticonImageDto imageDto = null;
         try {
-            file = GifticonImageUtil.convert(imageFile);
+            file = GifticonImageUtil.convertMultipartFileToFile(imageFile);
 
-            if (!GifticonImageUtil.checkInvalidFileType(file)) {
+            if (!GifticonImageUtil.isInvalidFileExtension(file)) {
                 throw new NotValidFileExtensionException();
             }
             GifticonDto gifticonDto = ocrService.readOcr(file); // 파일

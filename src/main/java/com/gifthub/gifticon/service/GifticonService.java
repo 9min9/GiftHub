@@ -194,9 +194,9 @@ public class GifticonService {
 
     public File getBarcodeImage(Long gifticonId, int width, int height){
         GifticonDto gifticonDto = findGifticon(gifticonId);
-        byte[] bacodeArr = GifticonImageUtil.getBarcodeImage(gifticonDto.getBarcode(), width, height);
+//        byte[] bacodeArr = GifticonImageUtil.getBarcodeImage(gifticonDto.getBarcode(), width, height);
         String filePath = tempStorage + gifticonId + "." + "png";
-        return GifticonImageUtil.barcodeArrToFile(bacodeArr, filePath);
+        return GifticonImageUtil.generateBarcodeImageFile(gifticonDto.getBarcode(), width, height, filePath);
 
     }
 
