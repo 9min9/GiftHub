@@ -87,7 +87,7 @@ public class MessageController {
 
             Message message = new Message();
             message.setFrom(masterphone);
-            message.setText(tel);
+            message.setTo(tel);
             message.setText(barcodeImage.getAccessUrl());
 
             messageService.send(message);
