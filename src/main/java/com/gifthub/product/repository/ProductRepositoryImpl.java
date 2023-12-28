@@ -31,7 +31,7 @@ public class ProductRepositoryImpl implements ProductRepositorySupport {
     }
 
     @Override
-    public List<String> findAllBrandName() {
+    public List<String> loadBrandNames() {
         return queryFactory
                 .select(product.brandName)
                 .distinct()

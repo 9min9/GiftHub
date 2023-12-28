@@ -1,6 +1,5 @@
 package com.gifthub.gifticon.controller;
 
-import com.gifthub.gifticon.dto.BarcodeImageDto;
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.GifticonRegisterRequest;
 import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
@@ -22,12 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.nurigo.sdk.NurigoApp;
-import net.nurigo.sdk.message.exception.NurigoMessageNotReceivedException;
-import net.nurigo.sdk.message.model.Message;
-import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.apache.http.entity.ContentType;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -35,11 +29,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.Map;
 
 import static java.util.Objects.isNull;
 
@@ -48,16 +40,6 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class GifticonController {
-
-    @Value("${coolsms.api.key}")
-    private String apiKey;
-    @Value("${coolsms.api.secret}")
-    private String apiSecret;
-    @Value("${phone.number}")
-    private String masterphone;
-
-    final DefaultMessageService messageService = NurigoApp.INSTANCE.initialize("NCSYGCMKQ4XE3UCI", "NDMX45JDHISWSGRCZIIVV9YJ7FRDBPBU", "https://api.coolsms.co.kr");
-
 
     private final GifticonService gifticonService;
     private final GifticonStorageService gifticonStorageService;
@@ -257,95 +239,95 @@ public class GifticonController {
         return ResponseEntity.ok(gifticons);
     }
 
-    @PostMapping("/gifticon/use/{gifticonId}")
-    public ResponseEntity<Object> useMyGifticon(@PathVariable("gifticonId") Long gifticonId,
-                                                    @RequestHeader HttpHeaders headers){
-        File file = null;
-        try{
-            GifticonDto gifticon = gifticonService.findGifticon(gifticonId);
-            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
-            String tel = userService.getUserById(userId).getTel();
-            log.error("tel | useMyGifticonTest : "+ tel);
-
-
-            if(!gifticon.getUser().getId().equals(userId)){
-                ResponseEntity.badRequest().build();
-            }
-            int width = 200;
-            int height = 67;
-
-            file = gifticonService.getBarcodeImage(gifticon.getId(), width, height);
-
-            BarcodeImageDto barcodeImage = imageService.saveBarcodeImage(file, gifticon);
-
-            Message message = new Message();
-            message.setFrom(masterphone);
-            message.setText(tel);
-            message.setText(barcodeImage.getAccessUrl());
-
-            messageService.send(message);
-
-        } catch (NurigoMessageNotReceivedException e){
-            log.error("NurigoMessageNotReceivedException | "+ e);
-            Map<String, String> exception = exceptionResponse.getException("barcode", "Failure.message", e.getMessage());
-            return ResponseEntity.badRequest().body(exception);
-
-        } catch (Exception e){
-            log.error("useMyGifticonTest | " + e);
-            return ResponseEntity.badRequest().body(exceptionResponse.getException(null, "Exception", e.getMessage()));
-
-        } finally {
-            if(file != null) {
-                file.delete();
-            }
-            gifticonService.setUsed(gifticonId);
-        }
-        return ResponseEntity.ok().body(Collections.singletonMap("status", "200"));
-
-    }
-
-    @PostMapping("/gifticon/reUse/{gifticonId}")
-    public ResponseEntity<Object> reUseMyGifticon(@PathVariable("gifticonId") Long gifticonId,
-                                                @RequestHeader HttpHeaders headers){
-        File file = null;
-        try{
-            GifticonDto gifticon = gifticonService.findGifticon(gifticonId);
-            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
-            String tel = userService.getUserById(userId).getTel();
-            log.error("tel | useMyGifticonTest : "+ tel);
-
-
-            if(!gifticon.getUser().getId().equals(userId)){
-                ResponseEntity.badRequest().build();
-            }
-
-            BarcodeImageDto barcodeImage = gifticonService.findBarcodeImage(gifticonId);
-            log.error("reUseMyGifticon |"+barcodeImage.getId());
-            Message message = new Message();
-            message.setFrom(masterphone);
-            message.setTo(tel);
-            message.setText(barcodeImage.getAccessUrl());
-            log.error("reUseMyGifticon |"+barcodeImage.getAccessUrl());
-
-            messageService.send(message);
-
-        } catch (NurigoMessageNotReceivedException e){
-            log.error("NurigoMessageNotReceivedException | "+ e);
-            Map<String, String> exception = exceptionResponse.getException("barcode", "Failure.message", e.getMessage());
-            return ResponseEntity.badRequest().body(exception);
-
-        } catch (Exception e){
-            log.error("reUseMyGifticon | " + e);
-            return ResponseEntity.badRequest().body(exceptionResponse.getException(null, "Exception", e.getMessage()));
-
-        } finally {
-            if(file != null) {
-                file.delete();
-            }
-        }
-        return ResponseEntity.ok().body(Collections.singletonMap("status", "200"));
-
-    }
+//    @PostMapping("/gifticon/use/{gifticonId}")
+//    public ResponseEntity<Object> useMyGifticon(@PathVariable("gifticonId") Long gifticonId,
+//                                                    @RequestHeader HttpHeaders headers){
+//        File file = null;
+//        try{
+//            GifticonDto gifticon = gifticonService.findGifticon(gifticonId);
+//            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
+//            String tel = userService.getUserById(userId).getTel();
+//            log.error("tel | useMyGifticonTest : "+ tel);
+//
+//
+//            if(!gifticon.getUser().getId().equals(userId)){
+//                ResponseEntity.badRequest().build();
+//            }
+//            int width = 200;
+//            int height = 67;
+//
+//            file = gifticonService.getBarcodeImage(gifticon.getId(), width, height);
+//
+//            BarcodeImageDto barcodeImage = imageService.saveBarcodeImage(file, gifticon);
+//
+//            Message message = new Message();
+//            message.setFrom(masterphone);
+//            message.setText(tel);
+//            message.setText(barcodeImage.getAccessUrl());
+//
+//            messageService.send(message);
+//
+//        } catch (NurigoMessageNotReceivedException e){
+//            log.error("NurigoMessageNotReceivedException | "+ e);
+//            Map<String, String> exception = exceptionResponse.getException("barcode", "Failure.message", e.getMessage());
+//            return ResponseEntity.badRequest().body(exception);
+//
+//        } catch (Exception e){
+//            log.error("useMyGifticonTest | " + e);
+//            return ResponseEntity.badRequest().body(exceptionResponse.getException(null, "Exception", e.getMessage()));
+//
+//        } finally {
+//            if(file != null) {
+//                file.delete();
+//            }
+//            gifticonService.setUsed(gifticonId);
+//        }
+//        return ResponseEntity.ok().body(Collections.singletonMap("status", "200"));
+//
+//    }
+//
+//    @PostMapping("/gifticon/reUse/{gifticonId}")
+//    public ResponseEntity<Object> reUseMyGifticon(@PathVariable("gifticonId") Long gifticonId,
+//                                                @RequestHeader HttpHeaders headers){
+//        File file = null;
+//        try{
+//            GifticonDto gifticon = gifticonService.findGifticon(gifticonId);
+//            Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
+//            String tel = userService.getUserById(userId).getTel();
+//            log.error("tel | useMyGifticonTest : "+ tel);
+//
+//
+//            if(!gifticon.getUser().getId().equals(userId)){
+//                ResponseEntity.badRequest().build();
+//            }
+//
+//            BarcodeImageDto barcodeImage = gifticonService.findBarcodeImage(gifticonId);
+//            log.error("reUseMyGifticon |"+barcodeImage.getId());
+//            Message message = new Message();
+//            message.setFrom(masterphone);
+//            message.setTo(tel);
+//            message.setText(barcodeImage.getAccessUrl());
+//            log.error("reUseMyGifticon |"+barcodeImage.getAccessUrl());
+//
+//            messageService.send(message);
+//
+//        } catch (NurigoMessageNotReceivedException e){
+//            log.error("NurigoMessageNotReceivedException | "+ e);
+//            Map<String, String> exception = exceptionResponse.getException("barcode", "Failure.message", e.getMessage());
+//            return ResponseEntity.badRequest().body(exception);
+//
+//        } catch (Exception e){
+//            log.error("reUseMyGifticon | " + e);
+//            return ResponseEntity.badRequest().body(exceptionResponse.getException(null, "Exception", e.getMessage()));
+//
+//        } finally {
+//            if(file != null) {
+//                file.delete();
+//            }
+//        }
+//        return ResponseEntity.ok().body(Collections.singletonMap("status", "200"));
+//
+//    }
 
 
 

@@ -49,7 +49,7 @@ public class GifticonImageUtil {
 
     }
 
-    public static File convert(MultipartFile multipartFile) throws IOException {
+    public static File convertMultipartFileToFile(MultipartFile multipartFile) throws IOException {
         File convFile = new File(tempStorage + multipartFile.getOriginalFilename());
         convFile.createNewFile();
         FileOutputStream fos = new FileOutputStream(convFile);
@@ -58,19 +58,19 @@ public class GifticonImageUtil {
         return convFile;
     }
 
-    public static File convertKakaoUrlToFile(String kakaoSecretUrl) {
+    public static File writeFileByUrl(String imageUrl) {
         try {
-            URL imgURL = new URL(kakaoSecretUrl);
+            URL imgURL = new URL(imageUrl);
             String extension = "jpg";
-            String fileName = parseImgUrlToFilename(kakaoSecretUrl);
+            String fileName = parseImgUrlToFilename(imageUrl);
 
             BufferedImage image = ImageIO.read(imgURL);
-            File file = new File(tempStorage + fileName + "." + extension); // 파일을 생성
+            File file = new File(tempStorage + fileName + "." + extension);
             if (!file.exists()) {
                 file.mkdir();
             }
 
-            ImageIO.write(image, extension, file); // image를 file로 업로드
+            ImageIO.write(image, extension, file);
             return file;
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -80,8 +80,7 @@ public class GifticonImageUtil {
         return null;
     }
 
-    // 확장자가 이미지타입인지 체크
-    public static boolean checkInvalidFileType(File file){
+    public static boolean isInvalidFileExtension(File file){
         String extension = getFileExtension(file.getName());
 
         for(String ext : imageExtensions){
@@ -103,37 +102,28 @@ public class GifticonImageUtil {
         return originalFileName.substring(index+1);
     }
 
-    public static File barcodeArrToFile(byte[] barcodeArr, String filePath){
+
+    public static File generateBarcodeImageFile(String text, int width, int height, String filePath) {
         try {
-            File file = new File(filePath);
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(barcodeArr);
-            fos.close();
-            return file;
-
-        } catch (IOException e){
-            log.error("barcodeArrToFile" +
-                    " | "+ e);
-            return null;
-        }
-    }
-
-    public static byte[] getBarcodeImage(String text, int width, int height){
-        try {
-
             Hashtable<EncodeHintType, ErrorCorrectionLevel> hintMap = new Hashtable<>();
             hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
             Writer writer = new Code128Writer();
             BitMatrix bitMatrix = writer.encode(text, BarcodeFormat.CODE_128, width, height);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             MatrixToImageWriter.writeToStream(bitMatrix, "png", byteArrayOutputStream);
-            return byteArrayOutputStream.toByteArray();
 
+            File file = new File(filePath);
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(byteArrayOutputStream.toByteArray());
+            fos.close();
+
+            return file;
         } catch (WriterException | IOException e) {
-            log.error("getBarcodeImage | "+e);
+            log.error("generateBarcodeImageFile | " + e);
             return null;
         }
     }
+
 
 
 
