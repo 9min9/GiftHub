@@ -58,7 +58,7 @@ public class GifticonController {
         try {
             outputStream = response.getOutputStream();
 
-            response.setContentType(ContentType.IMAGE_PNG.getMimeType());
+            response.setContentType(ContentType.IMAGE_JPEG.getMimeType());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -1,5 +1,6 @@
 package com.gifthub.gifticon.repository;
 
+import com.gifthub.gifticon.dto.GifticonMessageDto;
 import com.gifthub.gifticon.entity.Gifticon;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,4 +22,6 @@ public interface GifticonRepositorySupport {
     Page<Gifticon> findGifticonByProductIdOrderByProductPrice(Pageable pageable, Long productId);
 
     Long updateFinishedByGifticonId(Long gifticonId);
+
+    GifticonMessageDto findGifticonMessageDtoByGifticonId(Long gifticonId);
 }

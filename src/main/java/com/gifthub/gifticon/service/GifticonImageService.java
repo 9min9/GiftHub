@@ -106,7 +106,7 @@ public class GifticonImageService {
 
         BarcodeImage barcodeImage = BarcodeImage.builder().gifticon(gifticonDto.toEntityWithKorCategoryName()).build();
 //        String filename = barcodeImage.getId() + ".png";
-        String filename = "Gifticon.png";
+        String filename = "Gifticon.jpeg";
         try {
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentType("image/jpeg");
