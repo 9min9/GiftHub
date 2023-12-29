@@ -2,6 +2,7 @@ package com.gifthub.gifticon.service;
 
 import com.gifthub.gifticon.dto.BarcodeImageDto;
 import com.gifthub.gifticon.dto.GifticonDto;
+import com.gifthub.gifticon.dto.GifticonMessageDto;
 import com.gifthub.gifticon.dto.GifticonQueryDto;
 import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.gifticon.enumeration.GifticonStatus;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +43,6 @@ public class GifticonService {
 
     @Value("${static-path-pattern}")
     private static String tempStorage;
-
     private final GifticonRepository gifticonRepository;
     private final BarcodeImageRepository barcodeRepository;
 
@@ -75,7 +76,7 @@ public class GifticonService {
         try {
             //Set up the canvas provider for monochrome PNG output
             BitmapCanvasProvider canvas = new BitmapCanvasProvider(
-                    outputStream, "image/x-png", dpi, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+                    outputStream, "image/jpeg", dpi, BufferedImage.TYPE_INT_RGB, false, 0);
 
             //Generate the barcode
             bean.generateBarcode(canvas, str);
@@ -195,14 +196,30 @@ public class GifticonService {
     public File getBarcodeImage(Long gifticonId, int width, int height){
         GifticonDto gifticonDto = findGifticon(gifticonId);
 //        byte[] bacodeArr = GifticonImageUtil.getBarcodeImage(gifticonDto.getBarcode(), width, height);
-        String filePath = tempStorage + gifticonId + "." + "png";
-        return GifticonImageUtil.generateBarcodeImageFile(gifticonDto.getBarcode(), width, height, filePath);
+        String filePath = tempStorage + gifticonId ;
 
+        File file = GifticonImageUtil.generateBarcodeImageFile(gifticonDto.getBarcode(), width, height, filePath);
+
+        File afterFile = new File(file.getName()+".jpg");
+
+        try {
+            BufferedImage beforeImg = ImageIO.read(file);
+            BufferedImage afterImg = new BufferedImage(beforeImg.getWidth(), beforeImg.getHeight(), BufferedImage.TYPE_INT_RGB);
+            afterImg.createGraphics().drawImage(beforeImg,0,0,Color.white, null);
+            ImageIO.write(afterImg, "jpg", afterFile);
+            return  afterFile;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public BarcodeImageDto findBarcodeImage(Long gifticonId){
 
         return barcodeRepository.findBarcodeImageByGifticon_Id(gifticonId).orElse(null).toDto();
+    }
+
+    public GifticonMessageDto findGifticonMessageDtoByGifticonId(Long gifticonId) {
+        return gifticonRepository.findGifticonMessageDtoByGifticonId(gifticonId);
     }
 
 }

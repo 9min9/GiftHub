@@ -2,6 +2,7 @@ package com.gifthub.user.controller;
 
 import com.gifthub.gifticon.dto.BarcodeImageDto;
 import com.gifthub.gifticon.dto.GifticonDto;
+import com.gifthub.gifticon.dto.GifticonMessageDto;
 import com.gifthub.gifticon.service.GifticonImageService;
 import com.gifthub.gifticon.service.GifticonService;
 import com.gifthub.global.exception.ExceptionResponse;
@@ -13,21 +14,25 @@ import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.exception.NurigoMessageNotReceivedException;
 import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.model.StorageType;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
 import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/message")
+@RequestMapping("/api")
 @Slf4j
 public class MessageController {
 
@@ -49,12 +54,19 @@ public class MessageController {
 
     @PostMapping(value = "/check/sendSMS")
     @ResponseBody
-    SingleMessageSentResponse sendSMS(@RequestBody LocalUserDto localUserDto) {
+    SingleMessageSentResponse sendSMS(@RequestBody LocalUserDto localUserDto) throws IOException {
+        String path = "static/images/categorylogo/test.jpg";
+
+        ClassPathResource resource = new ClassPathResource(path);
+        File file = resource.getFile();
+        String imageId = messageService.uploadFile(file, StorageType.MMS, null);
         String tel = localUserDto.getTel().replace("-", "");
 
         Message message = new Message();
+        message.setSubject("제목");
         message.setFrom(masterphone);
         message.setTo(tel);
+        message.setImageId(imageId);
         message.setText("https://myawsimgbucket.s3.ap-northeast-2.amazonaws.com/59c7a3ac-9b48-49de-9bf6-75f8b7022155.jpg");
         log.info("MessageController | sendSMS | 정상 출력");
         SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
@@ -64,10 +76,13 @@ public class MessageController {
 
     }
 
+
     @PostMapping("/gifticon/use/{gifticonId}")
     public ResponseEntity<Object> useMyGifticon(@PathVariable("gifticonId") Long gifticonId,
-                                                @RequestHeader HttpHeaders headers) {
+                                                @RequestHeader HttpHeaders headers) throws IOException {
+
         File file = null;
+
         try {
             GifticonDto gifticon = gifticonService.findGifticon(gifticonId);
             Long userId = userJwtTokenProvider.getUserIdFromToken(headers.get("Authorization").get(0));
@@ -86,11 +101,34 @@ public class MessageController {
             BarcodeImageDto barcodeImage = imageService.saveBarcodeImage(file, gifticon);
 
             Message message = new Message();
+            message.setSubject("GiftHub");
             message.setFrom(masterphone);
             message.setTo(tel);
-            message.setText(barcodeImage.getAccessUrl());
+//          message.setText(barcodeImage.getAccessUrl());
+
+            GifticonMessageDto gifticonMessageDto = gifticonService.findGifticonMessageDtoByGifticonId(gifticonId);
+
+            message.setText("사용신청한 기프티콘 : "
+                    + gifticonMessageDto.getProductName()
+                    + " 입니다.\n교환처 " + gifticonMessageDto.getBrand()
+                    + "\n바코드: " + gifticonMessageDto.getBarcode()
+                    + "\n유효기간 : ~" + gifticonMessageDto.getDue());
+
+            String path = "null" + gifticonId + ".jpg";
+
+            File SmsFile = new File(path);
+            File dummyFile = new File("null" + gifticonId);
+
+            String imageId = messageService.uploadFile(SmsFile, StorageType.MMS, null);
+
+            message.setImageId(imageId);
 
             messageService.send(message);
+
+
+            System.gc();
+            SmsFile.delete();
+            dummyFile.delete();
 
         } catch (NurigoMessageNotReceivedException e) {
             log.error("NurigoMessageNotReceivedException | " + e);
@@ -102,9 +140,7 @@ public class MessageController {
             return ResponseEntity.badRequest().body(exceptionResponse.getException(null, "Exception", e.getMessage()));
 
         } finally {
-            if (file != null) {
-                file.delete();
-            }
+
             gifticonService.setUsed(gifticonId);
         }
         return ResponseEntity.ok().body(Collections.singletonMap("status", "200"));
@@ -147,7 +183,7 @@ public class MessageController {
 
         } finally {
             if (file != null) {
-                file.delete();
+//                file.delete();
             }
         }
         return ResponseEntity.ok().body(Collections.singletonMap("status", "200"));

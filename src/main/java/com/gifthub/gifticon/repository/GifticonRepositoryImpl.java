@@ -1,5 +1,7 @@
 package com.gifthub.gifticon.repository;
 
+import com.gifthub.gifticon.dto.GifticonMessageDto;
+import com.gifthub.gifticon.dto.QGifticonMessageDto;
 import com.gifthub.gifticon.entity.Gifticon;
 import com.gifthub.gifticon.entity.QGifticon;
 import com.gifthub.gifticon.enumeration.GifticonStatus;
@@ -98,6 +100,14 @@ public class GifticonRepositoryImpl implements GifticonRepositorySupport {
                 .where(gifticon.id.eq(gifticonId))
                 .execute();
         return excute;
+    }
+
+    @Override
+    public GifticonMessageDto findGifticonMessageDtoByGifticonId(Long gifticonId) {
+        return jpaQueryFactory.select(new QGifticonMessageDto(gifticon.product.name, gifticon.brandName, gifticon.barcode, gifticon.due))
+                .from(gifticon)
+                .where(gifticon.id.eq(gifticonId))
+                .fetchOne();
     }
 
     @Override
