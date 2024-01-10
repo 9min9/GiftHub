@@ -1,6 +1,5 @@
 package com.gifthub.gifticon.dto;
 
-import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
 import com.gifthub.gifticon.entity.GifticonImage;
 import com.gifthub.gifticon.entity.GifticonStorage;
 import com.querydsl.core.annotations.QueryProjection;

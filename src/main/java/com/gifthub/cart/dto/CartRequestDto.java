@@ -1,7 +1,5 @@
 package com.gifthub.cart.dto;
 
-import com.gifthub.gifticon.entity.Gifticon;
-import com.gifthub.user.entity.User;
 import lombok.*;
 
 @AllArgsConstructor

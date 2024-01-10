@@ -68,7 +68,6 @@ public class OcrService {
 
     }
 
-    // TODO : 리팩토링
     private GifticonDto findProductFromDbByBrand(String ocrResult, List<String> brandNameList) {
         String brandName = null;
         String productName = null;
@@ -276,7 +275,6 @@ public class OcrService {
 
     }
 
-    // TODO : hasDueDate, 포맷변경하는 메서드로 분리(포멧 변경 메서드는 util로)
     private LocalDate dateFormattingByString(String ocrResult) {
         String capturedDueDate = null;
         String dueDate = null;

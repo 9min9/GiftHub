@@ -209,7 +209,7 @@ public class LocalUserAccountController {
             if (userAccountService.isDuplicateTel(tel)) {
                 throw new DuplicateTelException();
             }
-            // todo : 패턴 검증
+
             return ResponseEntity.ok().body(successResponse.getSuccess("tel", "사용 가능한 전화번호 입니다"));
 
         } catch (RequiredFieldException e) {

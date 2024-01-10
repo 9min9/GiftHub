@@ -1,11 +1,8 @@
 package com.gifthub.user.service;
 
 import com.gifthub.user.dto.LocalUserDto;
-import com.gifthub.user.dto.UserDto;
 import com.gifthub.user.entity.LocalUser;
 import com.gifthub.user.repository.UserRepository;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,6 @@
 package com.gifthub.user.exception;
 
 import com.gifthub.global.exception.BaseException;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter

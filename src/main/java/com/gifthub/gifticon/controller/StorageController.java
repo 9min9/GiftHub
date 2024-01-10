@@ -1,6 +1,6 @@
 package com.gifthub.gifticon.controller;
 
-import com.gifthub.chatbot.util.JsonConverter;
+import com.gifthub.global.util.JsonConverter;
 import com.gifthub.config.jwt.JwtContext;
 import com.gifthub.gifticon.dto.GifticonDto;
 import com.gifthub.gifticon.dto.GifticonImageDto;

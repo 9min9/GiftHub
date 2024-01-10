@@ -1,7 +1,5 @@
 package com.gifthub.gifticon.util;
 
-import com.gifthub.gifticon.dto.GifticonDto;
-import com.gifthub.gifticon.exception.NotValidFileExtensionException;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.Writer;
@@ -11,9 +9,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.oned.Code128Writer;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;

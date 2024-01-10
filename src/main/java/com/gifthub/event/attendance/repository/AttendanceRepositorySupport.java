@@ -1,7 +1,6 @@
 package com.gifthub.event.attendance.repository;
 
 import com.gifthub.event.attendance.entity.Attendance;
-import com.gifthub.user.entity.User;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;

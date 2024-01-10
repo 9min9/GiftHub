@@ -1,23 +1,16 @@
 package com.gifthub.event.attendance.service;
 
 import com.gifthub.event.attendance.dto.AttendanceDto;
-import com.gifthub.event.attendance.repository.AttendanceRepository;
 import com.gifthub.event.attendance.entity.Attendance;
-import com.gifthub.point.service.PointService;
-import com.gifthub.user.UserJwtTokenProvider;
+import com.gifthub.event.attendance.repository.AttendanceRepository;
 import com.gifthub.user.entity.User;
 import com.gifthub.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestHeader;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j

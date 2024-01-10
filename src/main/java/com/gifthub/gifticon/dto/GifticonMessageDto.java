@@ -1,7 +1,6 @@
 package com.gifthub.gifticon.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

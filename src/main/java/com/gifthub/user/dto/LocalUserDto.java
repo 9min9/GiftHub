@@ -6,8 +6,6 @@ import com.gifthub.user.entity.enumeration.UserType;
 import com.gifthub.user.service.UserAccountService;
 import lombok.*;
 
-import static com.gifthub.user.entity.enumeration.UserType.USER;
-
 @Getter
 @Setter
 @Builder
@@ -27,7 +25,7 @@ public class LocalUserDto {
     private String birthdate;
     private Long point;
     private LoginType loginType;
-    private UserType userType;       //todo : USER로 설정하는 부분을 변경해야 할듯
+    private UserType userType;
 
     public LocalUser toLocalUserEntity() {
         return LocalUser.builder()

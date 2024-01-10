@@ -27,7 +27,6 @@ public class GifticonDto {
     private GifticonStatus gifticonStatus;
     private Long price;
 
-    //TODO : 한글 변환오류
     public Gifticon toEntity() {
         return Gifticon.builder()
                 .id(this.id)

@@ -1,7 +1,6 @@
 package com.gifthub.payment.controller;
 
 import com.gifthub.global.error.ErrorResponse;
-import com.gifthub.global.exception.ExceptionResponse;
 import com.gifthub.payment.dto.PaymentDto;
 import com.gifthub.payment.dto.kakao.*;
 import com.gifthub.payment.enumeration.PayMethod;
@@ -10,7 +9,6 @@ import com.gifthub.payment.enumeration.Site;
 import com.gifthub.payment.exception.EmptyItemNameException;
 import com.gifthub.payment.exception.EmptyPgTokenException;
 import com.gifthub.payment.exception.EmptyTotalAmountException;
-import com.gifthub.payment.exception.PaidIdMismatchException;
 import com.gifthub.payment.service.KakaoPayService;
 import com.gifthub.payment.service.PaymentService;
 import com.gifthub.user.UserJwtTokenProvider;
@@ -19,7 +17,6 @@ import com.gifthub.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +24,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 

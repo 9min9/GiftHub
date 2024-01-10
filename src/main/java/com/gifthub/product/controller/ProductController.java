@@ -1,6 +1,5 @@
 package com.gifthub.product.controller;
 
-import com.gifthub.gifticon.dto.storage.GifticonStorageDto;
 import com.gifthub.global.exception.ExceptionResponse;
 import com.gifthub.product.dto.ProductDto;
 import com.gifthub.product.dto.ProductEngCategoryDto;
@@ -23,7 +22,10 @@ import org.springframework.web.bind.annotation.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -132,7 +134,6 @@ public class ProductController {
         return ResponseEntity.ok().body(result);
     }
 
-    // TODO : 금액별, 남은 유효기간별(임박순) 정렬하기
     @GetMapping("/{category}/brands")
     public ResponseEntity<Object> getBrand(@PathVariable("category") String category) {
 
