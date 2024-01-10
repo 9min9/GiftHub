@@ -1,4 +1,4 @@
-package com.gifthub.chatbot.util;
+package com.gifthub.global.util;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
