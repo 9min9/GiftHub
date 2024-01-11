@@ -1,6 +1,3 @@
-
-
-# Web Project
 # GiftHub Backend Server
 
 > **KOSTA 266기 최종 프로젝트** <br/> **개발기간: 2023.11 ~ 2023.12** <br/> 팀원 : 4명
@@ -13,9 +10,8 @@
 - 바코드로 결제가 가능한 모바일 상품권을 대상으로 함. 3사(카카오톡, kt기프티쇼, sk기프티콘)
 - 웹 프로젝트의 백엔드 서버
 
-Frontend github : https://github.com/9min9/Gifthub-Client
+👉 [Frontend Server](https://github.com/9min9/Gifthub-Client)
 
-Notion : 
 
 ---
 
@@ -43,10 +39,10 @@ Notion :
 
 ### Server
 
-![AWS](https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS_EC2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white)
 ![AWS](https://img.shields.io/badge/AWS_S3-569A31?style=for-the-badge&logo=amazons3&logoColor=white)
 ![AWS](https://img.shields.io/badge/AWS_RDS-527FFF?style=for-the-badge&logo=amazonrds&logoColor=white)
-![AWS](https://img.shields.io/badge/AWS_EC2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white)
+
 
 ### Api
 [![Kakao Login API](https://img.shields.io/badge/Kakao%20Login%20API-FFCD00?style=for-the-badge&logo=kakao&logoColor=black)](https://developers.kakao.com/docs/latest/ko/kakaologin/)
