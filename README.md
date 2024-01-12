@@ -85,9 +85,106 @@
 
 ---
 
+## 기능 구현
+
+### 회원가입 로그인
+- 회원가입, 로그인 CRUD 구현
+- 동적 입력 검증을 위한 Controller 작성
+- Kakao 로그인, Naver 로그인 API를 사용하여 OAuth2 인증
+- 로그인 시 JWT를 발급하여 header 방식으로 사용자를 검증
+
+---
+
+### 기프티콘 등록 및 사용
+- 이미지 URL 또는 파일을 받아 기프티콘을 등록
+- 등록 과정에서 OCR을 통해 기프티콘 이미지의 텍스트를 추출
+- 다양한 기프티콘의 텍스트를 추출하기 위해 Product DB의 brand와 값을 매칭
+
+---
+
+### 기프티콘 거래 및 포인트 충전
+- 카카오 페이 API를 사용하여 포인트를 충전
+- 판매중인 기프티콘을 구매 시 Movement
+---
 
 
 ## 아키텍쳐
+
+
+### 에러 처리
+
+- @Valid, Validator를 사용하여 상황에 따른 사용자 입력값을 검증
+- 사용자 정의 Exception을 만들어 Exception을 처리
+- error.properties를 MessageSource Bean으로 등록하여 에러 메세지를 출력
+
+```java
+
+@Data @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class SignupRequest {
+    @NotBlank @Email
+    private String email;
+    @NotBlank @Pattern(regexp = "^(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,20}$")
+    private String password;
+    @NotBlank
+    private String confirmPassword;
+    @NotBlank @Pattern(regexp = "^\\S*$")
+    private String name;
+    @NotBlank @Pattern(regexp = "^\\S*$")
+    private String nickname;
+    @NotBlank @Pattern(regexp = "^010[0-9]{7,8}$")
+    private String tel;
+    @NotBlank @Pattern(regexp = "^(19|20)\\d{2}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])$")
+    private String birthDate;
+    @NotBlank
+    private String gender;
+
+    ...
+
+```
+
+```java
+
+@Component
+public class GifticonAppovalValidator implements Validator {
+
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return GifticonAppovalRequest.class.equals(clazz);
+    }
+
+    @Override
+    public void validate(Object target, Errors errors) {
+        GifticonAppovalRequest request = (GifticonAppovalRequest) target;
+
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "storageId", "NotBlank");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "productName", "NotBlank");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "brandName", "NotBlank");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "due", "NotBlank");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "barcode", "NotBlank");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "price", "NotNull");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "category", "NotSelect");
+    }
+}
+
+```
+
+```java
+
+    @Bean
+    public ReloadableResourceBundleMessageSource messageSource() {
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasename("classpath:/errors");
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
+    }
+
+```
+
+👉 [자세히 보기](https://github.com/9min9/GiftHub/wiki/%EC%97%90%EB%9F%AC%EC%B2%98%EB%A6%AC)
+---
+
 
 ### 테이블 관계도
 ![Table](https://github.com/9min9/GiftHub/assets/130825350/2fa9bd9a-0311-4ffb-a998-4bead43b2210)
