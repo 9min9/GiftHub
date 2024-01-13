@@ -93,18 +93,25 @@
 - Kakao 로그인, Naver 로그인 API를 사용하여 OAuth2 인증
 - 로그인 시 JWT를 발급하여 header 방식으로 사용자를 검증
 
+👉 [자세히 보기](https://github.com/9min9/GiftHub/wiki/%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85,-%EB%A1%9C%EA%B7%B8%EC%9D%B8)
+
 ---
 
 ### 기프티콘 등록 및 사용
 - 이미지 URL 또는 파일을 받아 기프티콘을 등록
 - 등록 과정에서 OCR을 통해 기프티콘 이미지의 텍스트를 추출
-- 다양한 기프티콘의 텍스트를 추출하기 위해 Product DB의 brand와 값을 매칭
+- 다양한 형식의 기프티콘의 텍스트를 추출하기 위해 기프티콘의 브랜드와 Product DB의 brand와 값을 매칭
+
+👉 [자세히 보기](https://github.com/9min9/GiftHub/wiki/%EA%B8%B0%ED%94%84%ED%8B%B0%EC%BD%98-%EB%93%B1%EB%A1%9D-%EB%B0%8F-%EC%82%AC%EC%9A%A9)
 
 ---
 
 ### 기프티콘 거래 및 포인트 충전
 - 카카오 페이 API를 사용하여 포인트를 충전
-- 판매중인 기프티콘을 구매 시 Movement
+- 판매중인 기프티콘을 구매 시 기프티콘의 소유권을 변경
+
+👉 [자세히 보기](https://github.com/9min9/GiftHub/wiki/%EA%B8%B0%ED%94%84%ED%8B%B0%EC%BD%98-%EA%B1%B0%EB%9E%98-%EB%B0%8F-%ED%8F%AC%EC%9D%B8%ED%8A%B8-%EC%B6%A9%EC%A0%84)
+
 ---
 
 
